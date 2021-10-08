@@ -7,7 +7,7 @@
 
 Compiled using Hardhat with Solidity 0.8.7
 
-# Smart Contract Deployed
+# Smart Contract Deployments:
 * Mainnet: 
 1. PawnContract: 		https://bscscan.com/address/0xe42389C5186C30857F793479b82EE177E9E74bA9
 2. PawnNFTContract: 	https://bscscan.com/address/0x2CFd86376139B990e7Ff7286498DC25E98F7457E
