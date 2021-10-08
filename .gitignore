@@ -1,0 +1,19 @@
+#Hardhat files
+artifacts
+builds
+cache
+
+#secret file
+.secret.json
+
+#Node modules
+node_modules
+package-lock.json
+
+#Compiled files
+.flattened
+bin
+
+#.Env file
+.env
+
