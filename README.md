@@ -1,6 +1,6 @@
 # Smart Contracts for DFY Pawn
 1. PawnContract: P2P Lending
-2. PawnNFTContract: NFT marketplace
+2. PawnNFTContract: P2P Pawn service using physical NFTs as collaterals
 3. DFY_Physical_NFTs: Hard NFT collection
 4. AssetEvaluation: Evaluation service for DFY physical NFTs
 5. Reputation: Reputation score for Borrower and Lender

@@ -118,38 +118,46 @@ enum ContractLiquidedReasonType { LATE, RISK, UNPAID }
 
 library PawnLib {
     using SafeERC20 for IERC20;
-    
-    function safeTransfer(address asset, address from, address to, uint256 amount) internal {
+
+    function safeTransfer(
+        address asset,
+        address from,
+        address to,
+        uint256 amount
+    ) internal {
         if (asset == address(0)) {
-            require(from.balance >= amount, 'balance');
-            // Handle BNB            
+            require(from.balance >= amount, "balance");
+            // Handle BNB
             if (to == address(this)) {
                 // Send to this contract
             } else if (from == address(this)) {
                 // Send from this contract
-                (bool success, ) = to.call{value:amount}('');
-                require(success, 'fail-trans-bnb');
+                (bool success, ) = to.call{value: amount}("");
+                require(success, "fail-trans-bnb");
             } else {
                 // Send from other address to another address
-                require(false, 'not-allow-transfer');
+                require(false, "not-allow-transfer");
             }
         } else {
             // Handle ERC20
             uint256 prebalance = IERC20(asset).balanceOf(to);
-            require(IERC20(asset).balanceOf(from) >= amount, 'not-enough-balance');
+            require(IERC20(asset).balanceOf(from) >= amount, "not-enough-balance");
             if (from == address(this)) {
                 // transfer direct to to
                 IERC20(asset).safeTransfer(to, amount);
             } else {
-                require(IERC20(asset).allowance(from, address(this)) >= amount, 'not-allowance');
+                require(IERC20(asset).allowance(from, address(this)) >= amount, "not-allowance");
                 IERC20(asset).safeTransferFrom(from, to, amount);
             }
-            require(IERC20(asset).balanceOf(to) - amount == prebalance, 'not-trans-enough');
+            require(IERC20(asset).balanceOf(to) - amount == prebalance, "not-trans-enough");
         }
     }
 
-    function calculateAmount(address _token, address from) 
-    internal view returns (uint256 _amount) {
+    function calculateAmount(address _token, address from)
+        internal
+        view
+        returns (uint256 _amount)
+    {
         if (_token == address(0)) {
             // BNB
             _amount = from.balance;
@@ -160,21 +168,314 @@ library PawnLib {
     }
 
     function calculateSystemFee(
-        uint256 amount, 
+        uint256 amount,
         uint256 feeRate,
         uint256 zoom
     ) internal pure returns (uint256 feeAmount) {
         feeAmount = (amount * feeRate) / (zoom * 100);
     }
 
-    function calculateContractDuration(LoanDurationType durationType, uint256 duration)
-    internal pure
-    returns (uint256 inSeconds)
-    {
+    function calculateContractDuration(
+        LoanDurationType durationType,
+        uint256 duration
+    ) internal pure returns (uint256 inSeconds) {
         if (durationType == LoanDurationType.WEEK) {
-            inSeconds = 7 * 24 * 3600 * duration;
+            // inSeconds = 7 * 24 * 3600 * duration;
+            inSeconds = 600 * duration; // test
         } else {
-            inSeconds = 30 * 24 * 3600 * duration;
+            // inSeconds = 30 * 24 * 3600 * duration;
+            inSeconds = 900 * duration; // test
         }
+    }
+}
+
+library PawnEventLib {
+    event SubmitPawnShopPackage(
+        uint256 packageId,
+        uint256 collateralId,
+        LoanRequestStatus status
+    );
+
+    event ChangeStatusPawnShopPackage(
+        uint256 packageId,
+        PawnShopPackageStatus status
+    );
+
+    event CreateCollateralEvent(uint256 collateralId, Collateral data);
+
+    event WithdrawCollateralEvent(
+        uint256 collateralId,
+        address collateralOwner
+    );
+
+    event CreateOfferEvent(uint256 offerId, uint256 collateralId, Offer data);
+
+    event CancelOfferEvent(
+        uint256 offerId,
+        uint256 collateralId,
+        address offerOwner
+    );
+}
+
+library CollateralLib {
+    
+    function create(
+        Collateral storage self,
+        address _collateralAddress,
+        uint256 _amount,
+        address _loanAsset,
+        uint256 _expectedDurationQty,
+        LoanDurationType _expectedDurationType
+    ) internal {
+        self.owner = msg.sender;
+        self.amount = _amount;
+        self.collateralAddress = _collateralAddress;
+        self.loanAsset = _loanAsset;
+        self.status = CollateralStatus.OPEN;
+        self.expectedDurationQty = _expectedDurationQty;
+        self.expectedDurationType = _expectedDurationType;
+    }
+
+    function withdraw(
+        Collateral storage self,
+        uint256 _collateralId,
+        CollateralOfferList storage _collateralOfferList
+    ) internal {
+        for (uint256 i = 0; i < _collateralOfferList.offerIdList.length; i++) {
+            uint256 offerId = _collateralOfferList.offerIdList[i];
+            Offer storage offer = _collateralOfferList.offerMapping[offerId];
+            emit PawnEventLib.CancelOfferEvent(
+                offerId,
+                _collateralId,
+                offer.owner
+            );
+        }
+    }
+
+    function submitToLoanPackage(
+        Collateral storage self,
+        uint256 _packageId,
+        CollateralAsLoanRequestListStruct storage _loanRequestListStruct
+    ) internal {
+        if (!_loanRequestListStruct.isInit) {
+            _loanRequestListStruct.isInit = true;
+        }
+
+        LoanRequestStatusStruct storage statusStruct = _loanRequestListStruct.loanRequestToPawnShopPackageMapping[_packageId];
+        require(statusStruct.isInit == false);
+        statusStruct.isInit = true;
+        statusStruct.status = LoanRequestStatus.PENDING;
+
+        _loanRequestListStruct.pawnShopPackageIdList.push(_packageId);
+    }
+
+    function removeFromLoanPackage(
+        Collateral storage self,
+        uint256 _packageId,
+        CollateralAsLoanRequestListStruct storage _loanRequestListStruct
+    ) internal {
+        delete _loanRequestListStruct.loanRequestToPawnShopPackageMapping[_packageId];
+
+        uint256 lastIndex = _loanRequestListStruct.pawnShopPackageIdList.length - 1;
+
+        for (uint256 i = 0; i <= lastIndex; i++) {
+            if (_loanRequestListStruct.pawnShopPackageIdList[i] == _packageId) {
+                _loanRequestListStruct.pawnShopPackageIdList[i] = _loanRequestListStruct.pawnShopPackageIdList[lastIndex];
+                break;
+            }
+        }
+    }
+
+    function checkCondition(
+        Collateral storage self,
+        uint256 _packageId,
+        PawnShopPackage storage _pawnShopPackage,
+        CollateralAsLoanRequestListStruct storage _loanRequestListStruct,
+        CollateralStatus _requiredCollateralStatus,
+        LoanRequestStatus _requiredLoanRequestStatus
+    ) 
+        internal 
+        view 
+        returns (LoanRequestStatusStruct storage _statusStruct) 
+    {
+        // Check for owner of packageId
+        // _pawnShopPackage = pawnShopPackages[_packageId];
+        require(_pawnShopPackage.status == PawnShopPackageStatus.ACTIVE, "0"); // pack
+
+        // Check for collateral status is open
+        // _collateral = collaterals[_collateralId];
+        require(self.status == _requiredCollateralStatus, "1"); // col
+
+        // Check for collateral-package status is PENDING (waiting for accept)
+        // _loanRequestListStruct = collateralAsLoanRequestMapping[_collateralId];
+        require(_loanRequestListStruct.isInit == true, "2"); // col-loan-req
+        _statusStruct = _loanRequestListStruct
+            .loanRequestToPawnShopPackageMapping[_packageId];
+        require(_statusStruct.isInit == true, "3"); // col-loan-req-pack
+        require(_statusStruct.status == _requiredLoanRequestStatus, "4"); // stt
+    }
+}
+
+library OfferLib {
+    function create(
+        Offer storage self,
+        address _repaymentAsset,
+        uint256 _loanAmount,
+        uint256 _duration,
+        uint256 _interest,
+        uint256 _loanDurationType,
+        uint256 _repaymentCycleType,
+        uint256 _liquidityThreshold
+    ) internal {
+        self.isInit = true;
+        self.owner = msg.sender;
+        self.loanAmount = _loanAmount;
+        self.interest = _interest;
+        self.duration = _duration;
+        self.loanDurationType = LoanDurationType(_loanDurationType);
+        self.repaymentAsset = _repaymentAsset;
+        self.repaymentCycleType = LoanDurationType(_repaymentCycleType);
+        self.liquidityThreshold = _liquidityThreshold;
+        self.status = OfferStatus.PENDING;
+    }
+
+    function cancel(
+        Offer storage self,
+        uint256 _id,
+        CollateralOfferList storage _collateralOfferList
+    ) internal {
+        require(self.isInit == true, "1"); // offer-col
+        require(self.owner == msg.sender, "2"); // owner
+        require(self.status == OfferStatus.PENDING, "3"); // offer
+
+        delete _collateralOfferList.offerMapping[_id];
+        uint256 lastIndex = _collateralOfferList.offerIdList.length - 1;
+        for (uint256 i = 0; i <= lastIndex; i++) {
+            if (_collateralOfferList.offerIdList[i] == _id) {
+                _collateralOfferList.offerIdList[i] = _collateralOfferList
+                    .offerIdList[lastIndex];
+                break;
+            }
+        }
+
+        delete _collateralOfferList.offerIdList[lastIndex];
+    }
+}
+
+library PawnPackageLib {
+    function create(
+        PawnShopPackage storage self,
+        PawnShopPackageType _packageType,
+        address _loanToken,
+        Range calldata _loanAmountRange,
+        address[] calldata _collateralAcceptance,
+        uint256 _interest,
+        uint256 _durationType,
+        Range calldata _durationRange,
+        address _repaymentAsset,
+        LoanDurationType _repaymentCycleType,
+        uint256 _loanToValue,
+        uint256 _loanToValueLiquidationThreshold
+    ) internal {
+        self.owner = msg.sender;
+        self.status = PawnShopPackageStatus.ACTIVE;
+        self.packageType = _packageType;
+        self.loanToken = _loanToken;
+        self.loanAmountRange = _loanAmountRange;
+        self.collateralAcceptance = _collateralAcceptance;
+        self.interest = _interest;
+        self.durationType = _durationType;
+        self.durationRange = _durationRange;
+        self.repaymentAsset = _repaymentAsset;
+        self.repaymentCycleType = _repaymentCycleType;
+        self.loanToValue = _loanToValue;
+        self.loanToValueLiquidationThreshold = _loanToValueLiquidationThreshold;
+    }
+
+    // function activate(
+    //     PawnShopPackage storage self,
+    //     uint256 _packageId
+    // ) internal {
+    //     require(self.owner == msg.sender, "0"); // owner
+    //     require(self.status == PawnShopPackageStatus.INACTIVE, "1"); // pack
+
+    //     self.status = PawnShopPackageStatus.ACTIVE;
+    //     emit PawnEventLib.ChangeStatusPawnShopPackage(
+    //         _packageId,
+    //         PawnShopPackageStatus.ACTIVE
+    //     );
+    // }
+
+    // function deactivate(
+    //     PawnShopPackage storage self,
+    //     uint256 _packageId
+    // ) internal {
+    //     require(self.owner == msg.sender, "0"); // owner
+    //     require(self.status == PawnShopPackageStatus.ACTIVE, "1"); // pack
+
+    //     self.status = PawnShopPackageStatus.INACTIVE;
+    //     emit PawnEventLib.ChangeStatusPawnShopPackage(
+    //         _packageId,
+    //         PawnShopPackageStatus.INACTIVE
+    //     );
+    // }
+}
+
+library LoanContractLib {
+    function create(
+        Contract storage self,
+        uint256 _collateralId,
+        int256 _packageId,
+        int256 _offerId
+    )
+        internal
+    {
+        self.collateralId = _collateralId;
+        self.offerId = _offerId;
+        self.pawnShopPackageId = int256(_packageId);
+        self.status = ContractStatus.ACTIVE;
+        self.lateCount = 0;
+    }
+}
+
+library ContractTermsLib {
+    function createContractTerms(
+        ContractTerms storage self,
+        Collateral storage _collateral,
+        address _lender,
+        uint256 _loanAmount,
+        uint256 _interest,
+        uint256 _liquidityThreshold,
+        uint256 _loanDurationQty,        
+        address _repaymentAsset,
+        LoanDurationType _repaymentCycleType,
+        uint256 _lateThreshold,
+        uint256 _systemFeeRate,
+        uint256 _penaltyRate,
+        uint256 _prepaidFeeRate
+    )
+        internal
+    {
+        self.borrower             = _collateral.owner;
+        self.lender               = _lender;
+        self.collateralAsset      = _collateral.collateralAddress;
+        self.collateralAmount     = _collateral.amount;
+        self.loanAsset            = _collateral.loanAsset;
+        self.loanAmount           = _loanAmount;
+        self.repaymentCycleType   = _repaymentCycleType;
+        self.repaymentAsset       = _repaymentAsset;
+        self.interest             = _interest;
+        self.liquidityThreshold   = _liquidityThreshold;
+        self.contractStartDate    = block.timestamp;
+        self.contractEndDate      =
+            block.timestamp +
+            PawnLib.calculateContractDuration(
+                _repaymentCycleType,
+                _loanDurationQty
+            );
+        self.lateThreshold        = _lateThreshold;
+        self.systemFeeRate        = _systemFeeRate;
+        self.penaltyRate          = _penaltyRate;
+        self.prepaidFeeRate       = _prepaidFeeRate;
     }
 }
