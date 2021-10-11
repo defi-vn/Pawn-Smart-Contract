@@ -707,6 +707,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     
     /** ================================ 1. ACCEPT OFFER (FOR P2P WORKFLOWS) ============================= */
     event LoanContractCreatedEvent(
+        uint256 exchangeRate,
         address fromAddress,
         uint256 contractId,
         Contract data
@@ -768,7 +769,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         delete collateralOfferList.offerIdList;
         collateralOfferList.offerIdList.push(_offerId);
 
-        emit LoanContractCreatedEvent(msg.sender, contractId, newContract);
+        emit LoanContractCreatedEvent(0,msg.sender, contractId, newContract);
 
         // transfer loan asset to collateral owner
         PawnLib.safeTransfer(
@@ -834,7 +835,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
             collateral.expectedDurationQty
         );
         Contract storage newContract = contracts[contractId];
-        emit LoanContractCreatedEvent(msg.sender, contractId, newContract);
+        emit LoanContractCreatedEvent(_exchangeRate,msg.sender, contractId, newContract);
 
         // Change status of collateral loan request to package to CONTRACTED
         statusStruct.status == LoanRequestStatus.CONTRACTED;
@@ -860,6 +861,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
 
         //ki dau tien BEId = 0
         closePaymentRequestAndStartNew(0,contractId,PaymentRequestTypeEnum.INTEREST);
+        
     }
 
     function createContract(
@@ -915,13 +917,13 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     mapping(uint256 => PaymentRequest[]) public contractPaymentRequestMapping;
     
     event PaymentRequestEvent (
-        int paymentRequestId,
+        int256 paymentRequestId,
         uint256 contractId,
         PaymentRequest data
     );
 
     function closePaymentRequestAndStartNew(
-        int _paymentRequestId,
+        int256 _paymentRequestId,
         uint256 _contractId,
         PaymentRequestTypeEnum _paymentRequestType
     ) 
