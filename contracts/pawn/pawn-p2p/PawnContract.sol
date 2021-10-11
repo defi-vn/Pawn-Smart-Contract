@@ -915,13 +915,13 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     mapping(uint256 => PaymentRequest[]) public contractPaymentRequestMapping;
     
     event PaymentRequestEvent (
-        int paymentRequestId,
+        int256 paymentRequestId,
         uint256 contractId,
         PaymentRequest data
     );
 
     function closePaymentRequestAndStartNew(
-        int _paymentRequestId,
+        int256 _paymentRequestId,
         uint256 _contractId,
         PaymentRequestTypeEnum _paymentRequestType
     ) 

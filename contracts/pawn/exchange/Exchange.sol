@@ -2,8 +2,38 @@
 pragma solidity ^0.8.4;
 import "../pawn-p2p/PawnLib.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 
-contract Exchange {
+contract Exchange is AccessControlUpgradeable{
+    using AddressUpgradeable for address;
+   
+
+    function __DFYAccessControl_init() internal initializer {
+        __AccessControl_init();
+
+        __DFYAccessControl_init_unchained();
+    }
+
+    function __DFYAccessControl_init_unchained() internal initializer {
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+    }
+
+    event ContractAdminChanged(address from, address to);
+
+    /**
+    * @dev change contract's admin to a new address
+    */
+    function changeContractAdmin(address newAdmin) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
+        // Check if the new Admin address is a contract address
+        require(!newAdmin.isContract(), "New admin must not be a contract");
+        
+        grantRole(DEFAULT_ADMIN_ROLE, newAdmin);
+        renounceRole(DEFAULT_ADMIN_ROLE, _msgSender());
+
+        emit ContractAdminChanged(_msgSender(), newAdmin);
+    }
+
     constructor(){}
     mapping(address => address) public ListcryptoExchange;
 
@@ -12,14 +42,14 @@ contract Exchange {
         address _cryptoAddress, 
         address _latestPriceAddress
     ) 
-    public 
+    public onlyRole(DEFAULT_ADMIN_ROLE)
     {
         ListcryptoExchange[_cryptoAddress] = _latestPriceAddress;
     }
 
     // lay gia cua dong BNB
     function RateBNBwithUSD ()
-    public view 
+    internal view 
     returns(int)
     {
         AggregatorV3Interface getPriceToUSD = AggregatorV3Interface(0x2514895c72f50D8bd4B4F9b1110F0D6bD2c97526);
@@ -33,7 +63,7 @@ contract Exchange {
     }
     // lay ti gia dong BNB + timestamp
     function RateBNBwithUSDAttimestamp() 
-    public view 
+    internal view 
     returns(int price, uint timeStamp)
     {
         AggregatorV3Interface getPriceToUSD = AggregatorV3Interface(0x2514895c72f50D8bd4B4F9b1110F0D6bD2c97526);
@@ -50,7 +80,7 @@ contract Exchange {
     function getLatesPriceToUSD (
         address _adcrypto
     ) 
-    public view 
+    internal view 
     returns(int)
     {
         AggregatorV3Interface  priceFeed = AggregatorV3Interface(ListcryptoExchange[_adcrypto]);
@@ -69,7 +99,7 @@ contract Exchange {
     function getRateAndTimestamp (
         address _adcrypto
     ) 
-    public view 
+    internal view 
     returns(int price, uint timeStamp) 
     {
         AggregatorV3Interface  priceFeed = AggregatorV3Interface(ListcryptoExchange[_adcrypto]);
@@ -89,7 +119,7 @@ contract Exchange {
         Collateral memory _col,
         PawnShopPackage memory _pkg
     )
-    public view 
+    external view 
     returns (uint256 loanAmount, uint256 exchangeRate)
     {
         uint256 collateralToUSD;
@@ -125,7 +155,7 @@ contract Exchange {
     function calculateInteres (
         Contract memory _contract
     )
-    public view 
+    external view 
     returns (uint256 interest)
     {
         uint256 interestToUSD;
@@ -162,7 +192,7 @@ contract Exchange {
         Contract memory _contract, 
         uint256 _penaltyRate
     )
-    public view
+    external view
     returns (uint256 valuePenalty)
     {
         uint256 _interestByLoanDurationType;
@@ -180,7 +210,7 @@ contract Exchange {
     function RateAndTimestamp (
         Contract memory _contract
     )
-    public view 
+    external view 
     returns (uint256 _collateralExchangeRate, uint256 _loanExchangeRate, uint256 _repaymemtExchangeRate, uint256 _rateUpdateTime)
     {
         int priceCollateral;
