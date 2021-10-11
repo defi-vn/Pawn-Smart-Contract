@@ -15,7 +15,6 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     using OfferLib for Offer;
     using PawnPackageLib for PawnShopPackage;
     using LoanContractLib for Contract;
-    using ContractTermsLib for ContractTerms;
 
     mapping(address => uint256) public whitelistCollateral;
     address public operator; 
@@ -94,6 +93,14 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         whitelistCollateral[_token] = _status;
     }
 
+    function _onlyOperator() private view {
+        require(operator == msg.sender, "operator");
+    }
+
+    function _onlyAdmin() private view {
+        require(admin == msg.sender, "admin");
+    }
+
     modifier notInitialized() {
         require(!initialized, "initialized");
         _;
@@ -105,12 +112,14 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     }
 
     modifier onlyOperator() {
-        require(operator == msg.sender, "operator");
+        // require(operator == msg.sender, "operator");
+        _onlyOperator();
         _;
     }
 
     modifier onlyAdmin() {
-        require(admin == msg.sender, "admin");
+        // require(admin == msg.sender, "admin");
+        _onlyAdmin();
         _;
     }
 
@@ -675,7 +684,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     }
 
     /** ========================= CONTRACT RELATED FUNCTIONS & STATES ============================= */
-    uint256 public numberContracts;    
+    uint256 public numberContracts;
     mapping(uint256 => Contract) public contracts;
     
     /** ================================ 1. ACCEPT OFFER (FOR P2P WORKFLOWS) ============================= */

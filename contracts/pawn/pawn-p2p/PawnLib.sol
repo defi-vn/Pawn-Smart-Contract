@@ -352,8 +352,7 @@ library OfferLib {
         uint256 lastIndex = _collateralOfferList.offerIdList.length - 1;
         for (uint256 i = 0; i <= lastIndex; i++) {
             if (_collateralOfferList.offerIdList[i] == _id) {
-                _collateralOfferList.offerIdList[i] = _collateralOfferList
-                    .offerIdList[lastIndex];
+                _collateralOfferList.offerIdList[i] = _collateralOfferList.offerIdList[lastIndex];
                 break;
             }
         }
@@ -435,6 +434,30 @@ library LoanContractLib {
         self.pawnShopPackageId = int256(_packageId);
         self.status = ContractStatus.ACTIVE;
         self.lateCount = 0;
+    }
+
+    function calculateRemainingLoanAndRepayment (
+        Contract storage self,
+        PaymentRequest[] storage _requests
+    )
+        internal 
+        view
+        returns (
+            uint256 remainingRepayment, 
+            uint256 remainingLoan
+        )
+    {
+        if (_requests.length > 0) {
+            // Have payment request
+            uint256 lastIndexOfRequest = _requests.length - 1;
+            PaymentRequest memory paymentRequest = _requests[lastIndexOfRequest];
+            remainingRepayment = paymentRequest.remainingInterest + paymentRequest.remainingPenalty;
+            remainingLoan = paymentRequest.remainingLoan;
+        } else {
+            // Haven't had payment request
+            remainingRepayment = 0;
+            remainingLoan = self.terms.loanAmount;
+        }
     }
 }
 
