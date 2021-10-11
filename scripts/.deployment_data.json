@@ -1,0 +1,107 @@
+{
+    "PawnConfig": {
+        "DEFAULT_ADMIN_ROLE": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "OPERATOR_ROLE": "0x97667070c54ef182b0f5858b034beac1b6f3089aa2d3188bb1e8929f4fa9b929",
+        "PAUSER_ROLE": "0x65d7a28e3265b37a6474929f336521b332c1681b933f6cb9f3376673440d862a",
+        "Admin": "0x26d971FfeCA2546BfdB021c4e7a4b5b047C8c593",
+        "Operator": "0xA120581F875A201E8f779280332a19C0f7974dDd",
+        "EvaluationOperator": "0x0d8E1dd1C9BC92559F8317dfc50F2ADD080D3f24",
+        "FeeWallet": "0xfb352202e1aad6d0f0b7d0e50abd4ad2bae4d81b",
+        "IpfsUri": "https://defiforyou.mypinata.cloud/ipfs/",
+        "DFYToken": "0x20f1dE452e9057fe863b99d33CF82DBeE0C45B14",
+        "LateThreshold": 3,
+        "PenaltyRate": 15000000,
+        "PrepaidFee": 300000,
+        "SystemFee": 2000000
+    },
+    "Proxies": {
+        "Test1": {
+            "PAWN_CONTRACT_ADDRESS":        "0x21993F486b2E2c0b4c04A16d3037A31EF2eeB3e1",
+            "EVALUATION_CONTRACT_ADDRESS":  "0xE7264Ba3661cc2449777813e80d1DC98994FDB7b",
+            "NFT_CONTRACT_ADDRESS":         "0xf24a68C5528830E4c5F8Cb6fDcAE067e382200d3",
+            "REPUTATION_CONTRACT_ADDRESS":  "0x7f224AC90200c02410EE2E652b382FF9F226F0a2",
+            "PAWN_NFT_CONTRACT_ADDRESS":    "0xe1ac11563Bc205a0f529F808cd460989ad74CA2d",
+            "EXCHANGE_CONTRACT_ADDRESS":    ""
+        },
+        "Dev1": {
+            "PAWN_CONTRACT_ADDRESS":        "0x86fd8b8c6a6937fb980a3c3091a3cb13a5bf424d",
+            "EVALUATION_CONTRACT_ADDRESS":  "0x628B5131cf093add54aa71f08a2B2aee59ca52A1",
+            "NFT_CONTRACT_ADDRESS":         "0xB52221CD8287f3e8F6736a9e8286881163095B47",
+            "REPUTATION_CONTRACT_ADDRESS":  "0x82665827dFacd09a36C7859C63b8AD41Ff8158e4",
+            "PAWN_NFT_CONTRACT_ADDRESS":    "0x413755c0cC5994f955B2d3a96c5d5c665256bd4B",
+            "EXCHANGE_CONTRACT_ADDRESS":    ""
+        },
+        "Dev2": {
+            "PAWN_CONTRACT_ADDRESS":        "0x85e63AAA2CE9144bf7E716dF8CfAB1EcaE1E203A",
+            "EVALUATION_CONTRACT_ADDRESS":  "0xC7f661Fb135Ff78C357C4eE766cDAB7c92792C26",
+            "NFT_CONTRACT_ADDRESS":         "0x361CBba044fD1bAb42bf1C1cefa1802e615D0C3e",
+            "REPUTATION_CONTRACT_ADDRESS":  "0x19e85f01F0Cb9780a212C30E89820AF65B952B8C",
+            "PAWN_NFT_CONTRACT_ADDRESS":    "0x71890b942f1cDb198C643d2D199FFe5303925DeC",
+            "EXCHANGE_CONTRACT_ADDRESS":    ""
+        },
+        "Staging": {
+            "PAWN_CONTRACT_ADDRESS":        "0x14d64D2BdA4388Ac2055852133F4693ebf741bDA",
+            "EVALUATION_CONTRACT_ADDRESS":  "0x96E41a9c1B2AAcfa688139CBc9999b1d84b21e78",
+            "NFT_CONTRACT_ADDRESS":         "0x4353926B99247b04E45504BB9Caec748E2432b35",
+            "REPUTATION_CONTRACT_ADDRESS":  "0xBf7d1C39baeF1E329830854eD8Bbe0BadcBA7A2C",
+            "PAWN_NFT_CONTRACT_ADDRESS":    "0x2d35BD30315903d37165E5985B18185b66e4FF3C",
+            "EXCHANGE_CONTRACT_ADDRESS":    ""
+        },
+        "Beta": {
+            "PAWN_CONTRACT_ADDRESS":        "0x150224495a16d339623e52853679819Ff20e1946",
+            "EVALUATION_CONTRACT_ADDRESS":  "0x3838F2FDb5CF86CdB3349cBc004B664d475c9549",
+            "NFT_CONTRACT_ADDRESS":         "0xC4E1bc3e905b0f02E93b2dEE8499B3163221e7aD",
+            "REPUTATION_CONTRACT_ADDRESS":  "0x047792c742e1fBb2619454B9e1969c249DB2C07d",
+            "PAWN_NFT_CONTRACT_ADDRESS":    "0x8118E973E958f4bB3a20bf9D84890d9B8fD4cA97",
+            "EXCHANGE_CONTRACT_ADDRESS":    ""
+        }
+    },
+    "Implementations": {
+        "Test1": {
+            "PAWN_CONTRACT_ADDRESS":        "0x50b9ae41d8315E46B5030f6E4CC6832E18e22fc0",
+            "EVALUATION_CONTRACT_ADDRESS":  "0x38b4eACeBAB24adD3Ba1202e9B1EE4E28307e13A",
+            "NFT_CONTRACT_ADDRESS":         "0xd362cB0f8E20F387310d739e6Dd4592aD64C2960",
+            "REPUTATION_CONTRACT_ADDRESS":  "0x26421289D13B92794a2DD985E0643f768Ce51fFA",
+            "PAWN_NFT_CONTRACT_ADDRESS":    "0x773185c869e995CbA8534f123b4fBdd786339e5c",
+            "EXCHANGE_CONTRACT_ADDRESS":    ""
+        }
+    },
+    "Tokens": [
+        {
+            "Symbol": "DFY", 
+            "Address": "0x20f1dE452e9057fe863b99d33CF82DBeE0C45B14"
+        },
+        {
+            "Symbol": "XRP", 
+            "Address": "0x653b5410E4a15062cdEF91f9CEe930ca9B1832C4"
+        },
+        {
+            "Symbol": "ETH", 
+            "Address": "0xf827916F754297d7fF595e77c8dF8287fDE74BA4"
+        },
+        {
+            "Symbol": "LTC", 
+            "Address": "0x395998D21d4Dd230f38247F84145Bd4d9afAaCa2"
+        },
+        {
+            "Symbol": "BTC", 
+            "Address": "0x52D2848E79861492795a2635B76493999F1EdB1F"
+        },
+        {
+            "Symbol": "DOT", 
+            "Address": "0x62950ba1AdB2C867A24599a3666bf83Cf84c29Ed"
+        },
+        {
+            "Symbol": "ADA", 
+            "Address": "0xCE89CFcca3fedD566C7574902137eD31A4C9Ea40"
+        },
+        {
+            "Symbol": "WBNB", 
+            "Address": "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"
+        },
+        {
+            "Symbol": "BNB", 
+            "Address": "0x0000000000000000000000000000000000000000"
+        }
+    ]
+}
