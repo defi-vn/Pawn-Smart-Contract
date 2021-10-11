@@ -3,39 +3,32 @@ pragma solidity ^0.8.4;
 import "../pawn-p2p/PawnLib.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-contract Exchange is AccessControlUpgradeable{
-    using AddressUpgradeable for address;
-   
-
-    function __DFYAccessControl_init() internal initializer {
-        __AccessControl_init();
-
-        __DFYAccessControl_init_unchained();
-    }
-
-    function __DFYAccessControl_init_unchained() internal initializer {
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-    }
-
-    event ContractAdminChanged(address from, address to);
-
-    /**
-    * @dev change contract's admin to a new address
-    */
-    function changeContractAdmin(address newAdmin) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
-        // Check if the new Admin address is a contract address
-        require(!newAdmin.isContract(), "New admin must not be a contract");
-        
-        grantRole(DEFAULT_ADMIN_ROLE, newAdmin);
-        renounceRole(DEFAULT_ADMIN_ROLE, _msgSender());
-
-        emit ContractAdminChanged(_msgSender(), newAdmin);
-    }
-
-    constructor(){}
+contract Exchange is 
+    Initializable,
+    UUPSUpgradeable,
+    AccessControlUpgradeable
+{    
     mapping(address => address) public ListcryptoExchange;
+    
+    function initialize() public initializer {
+        __AccessControl_init();
+        __UUPSUpgradeable_init();
+
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);        
+    }
+
+    function _authorizeUpgrade(address) internal override onlyRole(DEFAULT_ADMIN_ROLE) {}
+
+    function supportsInterface(bytes4 interfaceId) 
+        public view 
+        override(AccessControlUpgradeable) 
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
 
     // set dia chi cac token ( crypto) tuong ung voi dia chi chuyen doi ra USD tren chain link
     function setCryptoExchange (
