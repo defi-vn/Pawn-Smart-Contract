@@ -94,14 +94,6 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         whitelistCollateral[_token] = _status;
     }
 
-    function _onlyOperator() private view {
-        require(operator == msg.sender, "-0"); //operator
-    }
-
-    function _onlyAdmin() private view {
-        require(admin == msg.sender, "-1");  //admin
-    }
-
     modifier notInitialized() {
         require(!initialized, "-2");  //initialized
         _;
@@ -112,15 +104,33 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         _;
     }
 
+    function _onlyOperator() private view {
+        require(operator == msg.sender, "-0"); //operator
+    }
+
     modifier onlyOperator() {
         // require(operator == msg.sender, "operator");
         _onlyOperator();
         _;
     }
 
+    function _onlyAdmin() private view {
+        require(admin == msg.sender, "-1");  //admin
+    }
+
     modifier onlyAdmin() {
         // require(admin == msg.sender, "admin");
         _onlyAdmin();
+        _;
+    }
+
+    function _whenNotPaused() private view {
+        require(!paused(), "Pausable: paused");
+    }
+    
+    modifier whenContractNotPaused() {
+        // require(!paused(), "Pausable: paused");
+        _whenNotPaused();
         _;
     }
 
@@ -166,7 +176,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     ) 
         external 
         payable 
-        whenNotPaused 
+        whenContractNotPaused 
         returns (uint256 _idx) 
     {
         //check whitelist collateral token
@@ -231,7 +241,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     * @dev cancel collateral function and return back collateral
     * @param  _collateralId is id of collateral
     */
-    function withdrawCollateral(uint256 _collateralId) external whenNotPaused {
+    function withdrawCollateral(uint256 _collateralId) external whenContractNotPaused {
         Collateral storage collateral = collaterals[_collateralId];
         require(collateral.owner == msg.sender, '0'); //owner
         require(collateral.status == CollateralStatus.OPEN, '1'); //col
@@ -305,7 +315,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         uint256 _liquidityThreshold
     )
         external 
-        whenNotPaused 
+        whenContractNotPaused 
         returns (uint256 _idx)
     {
         Collateral storage collateral = collaterals[_collateralId];
@@ -356,7 +366,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     */
     function cancelOffer(uint256 _offerId, uint256 _collateralId)
         external
-        whenNotPaused
+        whenContractNotPaused
     {
         CollateralOfferList storage collateralOfferList = collateralOffersMapping[_collateralId];
         require(collateralOfferList.isInit == true, '0'); // col
@@ -403,7 +413,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         uint256 _loanToValueLiquidationThreshold
     ) 
         external 
-        whenNotPaused
+        whenContractNotPaused
         returns (uint256 _idx)
     {
         _idx = numberPawnShopPackages;
@@ -449,7 +459,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         );
     }
 
-    function activePawnShopPackage(uint256 _packageId) external whenNotPaused {
+    function activePawnShopPackage(uint256 _packageId) external whenContractNotPaused {
         PawnShopPackage storage pawnShopPackage = pawnShopPackages[_packageId];
         require(pawnShopPackage.owner == msg.sender, '0'); // owner
         require(pawnShopPackage.status == PawnShopPackageStatus.INACTIVE, '1'); // pack
@@ -469,7 +479,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
 
     function deactivePawnShopPackage(uint256 _packageId)
         external
-        whenNotPaused
+        whenContractNotPaused
     {
         PawnShopPackage storage pawnShopPackage = pawnShopPackages[_packageId];
         
@@ -509,7 +519,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         uint256 _packageId
     ) 
         external 
-        whenNotPaused
+        whenContractNotPaused
     {
         Collateral storage collateral = collaterals[_collateralId];
         require(collateral.owner == msg.sender, '0'); // owner
@@ -541,7 +551,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         uint256 _packageId
     ) 
         external 
-        whenNotPaused 
+        whenContractNotPaused 
     {
         // Collateral must OPEN
         Collateral storage collateral = collaterals[_collateralId];
@@ -568,7 +578,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         uint256 _packageId
     ) 
         external 
-        whenNotPaused 
+        whenContractNotPaused 
     {
         (
             Collateral storage collateral,
@@ -639,7 +649,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         uint256 _packageId
     ) 
         external 
-        whenNotPaused 
+        whenContractNotPaused 
     {
         (
             Collateral storage collateral,
@@ -709,7 +719,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     */
     function acceptOffer(uint256 _collateralId, uint256 _offerId)
         external
-        whenNotPaused
+        whenContractNotPaused
     {
         Collateral storage collateral = collaterals[_collateralId];
         require(msg.sender == collateral.owner, '0'); // owner
@@ -794,7 +804,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         uint256 _exchangeRate
     ) 
         internal 
-        whenNotPaused 
+        whenContractNotPaused 
         onlyOperator 
     {
         (
@@ -916,7 +926,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         PaymentRequestTypeEnum _paymentRequestType
     ) 
         public 
-        whenNotPaused 
+        whenContractNotPaused 
         onlyOperator 
     {
         Contract storage currentContract = contractMustActive(_contractId);
@@ -1087,7 +1097,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         uint256 _paidPenaltyAmount,
         uint256 _paidInterestAmount,
         uint256 _paidLoanAmount
-    ) external whenNotPaused {
+    ) external whenContractNotPaused {
         // Get contract & payment request
         Contract storage _contract = contractMustActive(_contractId);
         PaymentRequest[] storage requests = contractPaymentRequestMapping[_contractId];
@@ -1199,7 +1209,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
 
     function collateralRiskLiquidationExecution(
         uint256 _contractId
-    ) external whenNotPaused onlyOperator {
+    ) external whenContractNotPaused onlyOperator {
         // Validate: Contract must active
         Contract storage _contract = contractMustActive(_contractId);
 
@@ -1251,7 +1261,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
 
     function lateLiquidationExecution(uint256 _contractId)
         external
-        whenNotPaused
+        whenContractNotPaused
     {
         // Validate: Contract must active
         Contract storage _contract = contractMustActive(_contractId);
@@ -1275,7 +1285,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
 
     function notPaidFullAtEndContractLiquidation(uint256 _contractId)
         external
-        whenNotPaused
+        whenContractNotPaused
     {
         Contract storage _contract = contractMustActive(_contractId);
         // validate: current is over contract end date
