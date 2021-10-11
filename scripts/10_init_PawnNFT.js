@@ -7,9 +7,11 @@ const proxies = Proxies.Test1;
 const NFTProxyAddr      = proxies.NFT_CONTRACT_ADDRESS;
 const EvaProxyAddr      = proxies.EVALUATION_CONTRACT_ADDRESS;
 const PawnNFTProxyAddr  = proxies.PAWN_NFT_CONTRACT_ADDRESS;
+const RepuProxyAddr     = proxies.REPUTATION_CONTRACT_ADDRESS;
 const NFTBuildName      = "DFY_Physical_NFTs";
 const EvaBuildName      = "AssetEvaluation";
 const PawnBuildName     = "PawnNFTContract";
+const RepuBuildName     = "Reputation";
 
 const lateThreshold     = 3;
 const penaltyRate       = 15000000;
@@ -39,6 +41,10 @@ async function main() {
     const EvaFactory    = await hre.ethers.getContractFactory(EvaBuildName);
     const EvaArtifact   = await hre.artifacts.readArtifact(EvaBuildName);
     const EvaContract   = EvaFactory.attach(EvaProxyAddr);
+
+    const RepuFactory   = await hre.ethers.getContractFactory(RepuBuildName);
+    const RepuArtifact  = await hre.artifacts.readArtifact(RepuBuildName);
+    const RepuContract  = RepuFactory.attach(RepuProxyAddr);
     
     console.log(`Initializing ${PawnArtifact.contractName}...`);
     console.log(`Setting Fee wallet...`);
@@ -86,6 +92,13 @@ async function main() {
     console.log(`Setting Operator address...`);
     await EvaContract.grantRole(PawnConfig.OPERATOR_ROLE, PawnConfig.EvaluationOperator);
     console.log(`Operator address: ${PawnConfig.EvaluationOperator}`);
+
+    console.log("============================================================\n\r");
+    
+    console.log(`Initializing ${RepuArtifact.contractName}...`);
+    console.log(`Setting contract caller...`);
+    await RepuContract.addWhitelistedContractCaller(PawnNFTProxyAddr);
+    console.log(`Contract caller set at address: ${PawnArtifact.contractName} - ${PawnNFTProxyAddr}\n\r`);
     
     console.log("============================================================\n\r");
 }

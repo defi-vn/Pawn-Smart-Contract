@@ -10,6 +10,7 @@ const RepuBuildName     = "contracts/pawn/reputation/Reputation.sol:Reputation";
 const NFTBuildName      = "contracts/pawn/nft/DFY_Physical_NFTs.sol:DFY_Physical_NFTs";
 const EvaBuildName      = "contracts/pawn/evaluation/EvaluationContract.sol:AssetEvaluation";
 const PawnNFTBuildName  = "contracts/pawn/pawn-nft/PawnNFTContract.sol:PawnNFTContract";
+const ExchangeBuildName = "Exchange";
 
 const proxyType = { kind: "uups" };
 
@@ -134,6 +135,19 @@ async function main() {
     await proxyDeploy.deployed();
   
     console.log(`PAWN_CONTRACT_ADDRESS: ${proxyDeploy.address}`);
+    console.log("============================================================\n\r");
+    
+    const ExchangeFactory   = await hre.ethers.getContractFactory(ExchangeBuildName);
+    const ExchangeArtifact  = await hre.artifacts.readArtifact(ExchangeBuildName);
+    const ExchangeContract  = await hre.upgrades.deployProxy(ExchangeFactory, proxyType);
+
+    await ExchangeContract.deployed();
+
+    console.log(`EXCHANGE_CONTRACT_ADDRESS: ${ExchangeContract.address}`);
+
+    implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(ExchangeContract.address);
+    console.log(`${ExchangeArtifact.contractName} implementation address: ${implementationAddress}`);
+
     console.log("============================================================\n\r");
 }
   

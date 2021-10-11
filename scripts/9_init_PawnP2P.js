@@ -18,7 +18,7 @@ const lateThreshold     = PawnConfig.LateThreshold;
 const penaltyRate       = PawnConfig.PenaltyRate;
 const prepaidFeeRate    = PawnConfig.PrepaidFee;
 const systemFeeRate     = PawnConfig.SystemFee;
-const operator          = "0x0d8E1dd1C9BC92559F8317dfc50F2ADD080D3f24";
+const operator          = PawnConfig.EvaluationOperator;
 const feeWallet         = PawnConfig.FeeWallet;
 
 const decimals          = 10**18;
@@ -26,16 +26,17 @@ const decimals          = 10**18;
 async function main() {
     const [deployer] = await hre.ethers.getSigners();
 
-    console.log(`Initialize contracts with the account: ${deployer.address}`);
-  
-    console.log("Account balance:", ((await deployer.getBalance())/decimals).toString(), "");
-    console.log("================\n\r");
+    console.log("============================================================");
+    console.log(`Initialize contracts with the account: ${deployer.address}`);  
+    console.log("Account balance:", ((await deployer.getBalance())/decimals).toString());
+    console.log("============================================================");
 
     const PawnFactory   = await hre.ethers.getContractFactory(PawnBuildName);
     const PawnArtifact  = await hre.artifacts.readArtifact(PawnBuildName);
     const PawnContract  = PawnFactory.attach(PawnProxyAddr);
 
     const RepuFactory   = await hre.ethers.getContractFactory(RepuBuildName);
+    const RepuArtifact  = await hre.artifacts.readArtifact(RepuBuildName);
     const RepuContract  = RepuFactory.attach(RepuProxyAddr);
 
     console.log("Initializing...");
@@ -81,7 +82,7 @@ async function main() {
     }
 
     console.log("============================================================\n\r");
-    console.log(`Initializing Reputation contract...`)
+    console.log(`Initializing ${RepuArtifact.contractName}...`);
     console.log(`Setting contract caller...`);
     await RepuContract.addWhitelistedContractCaller(PawnProxyAddr);
     console.log(`Contract caller set at address: ${PawnArtifact.contractName} - ${PawnProxyAddr}\n\r`);

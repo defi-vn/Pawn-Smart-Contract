@@ -24,16 +24,11 @@ async function main() {
     const RepuFactory   = await hre.ethers.getContractFactory(RepuBuildName);
     const RepuArtifact  = await hre.artifacts.readArtifact(RepuBuildName);
 
-    const RepuContract  = await hre.upgrades.deployProxy(RepuFactory, proxyType ?? "");
+    const RepuContract  = await hre.upgrades.deployProxy(RepuFactory, proxyType);
     
     await RepuContract.deployed();
 
     console.log(`REPUTATION_CONTRACT_ADDRESS: ${RepuContract.address}`);
-
-    if(proxyType?.kind?.toLowerCase() != "uups") {
-        proxyAdmin = await hre.upgrades.erc1967.getAdminAddress(RepuContract.address);
-        console.log(`Proxy Admin: ${proxyAdmin}`);
-    }
 
     implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(RepuContract.address);
     console.log(`${RepuArtifact.contractName} implementation address: ${implementationAddress}`);
@@ -63,12 +58,14 @@ async function main() {
 
     const ExchangeFactory   = await hre.ethers.getContractFactory(ExchangeBuildName);
     const ExchangeArtifact  = await hre.artifacts.readArtifact(ExchangeBuildName);
+    const ExchangeContract  = await hre.upgrades.deployProxy(ExchangeFactory, proxyType);
 
-    const exchangeDeploy   = await ExchangeFactory.deploy();
-    
-    await exchangeDeploy.deployed();
-  
-    console.log(`${ExchangeArtifact.contractName} implementation address: ${exchangeDeploy.address}`);
+    await ExchangeContract.deployed();
+
+    console.log(`EXCHANGE_CONTRACT_ADDRESS: ${ExchangeContract.address}`);
+
+    implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(ExchangeContract.address);
+    console.log(`${ExchangeArtifact.contractName} implementation address: ${implementationAddress}`);
 
     console.log("============================================================\n\r");
 }
