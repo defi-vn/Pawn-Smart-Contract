@@ -70,6 +70,10 @@ async function main() {
     await PawnContract.setReputationContract(RepuProxyAddr);
     console.log(`Reputation contract set at address: ${RepuProxyAddr}\n\r`);
 
+    console.log(`Setting Exchange contract...`);
+    await PawnContract.setExchangeContract(ExchangeAddr);
+    console.log(`Exchange contract set at address: ${ExchangeAddr}\n\r`);
+
     console.log(`Setting Whitelisted collateral...`);
     for await (let token of Tokens) {
         await PawnContract.setWhitelistCollateral(token.Address, 1);
