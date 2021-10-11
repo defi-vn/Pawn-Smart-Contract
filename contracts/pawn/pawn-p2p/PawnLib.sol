@@ -187,6 +187,79 @@ library PawnLib {
             inSeconds = 900 * duration; // test
         }
     }
+
+    function calculatedueDateTimestampInterest(LoanDurationType durationType) 
+    internal pure 
+    returns(uint256 duedateTimestampInterest)
+    {
+        if(durationType == LoanDurationType.WEEK) {
+           // duedateTimestampInterest = 3*24*3600;
+            duedateTimestampInterest = 300;  // test
+        }
+        else {
+            // duedateTimestampInterest = 7 * 24 * 3600;
+            duedateTimestampInterest = 500;  // test
+        }
+    }
+
+    function calculatedueDateTimestampPenalty(LoanDurationType durationType) 
+    internal pure 
+    returns(uint256 duedateTimestampInterest)
+    {
+        if(durationType == LoanDurationType.WEEK) {
+           // duedateTimestampInterest = 7 * 24 *3600 - 3 * 24 * 3600;
+            duedateTimestampInterest = 600 - 300;  // test
+        }
+        else {
+          //  duedateTimestampInterest = 30 * 24 *3600 - 7 * 24 * 3600;
+            duedateTimestampInterest = 900 - 500;  // test
+        }
+    }
+
+    function add(uint256 a, uint256 b) internal pure returns (uint256) {
+        uint256 c = a + b;
+        require(c >= a, "0");//SafeMath: addition overflow
+
+        return c;
+    }
+
+    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+        return sub(a, b, "1"); //SafeMath: subtraction overflow
+    }
+
+    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+        require(b <= a, errorMessage);
+        uint256 c = a - b;
+
+        return c;
+    }
+
+    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
+        // Gas optimization: this is cheaper than requiring 'a' not being zero, but the
+        // benefit is lost if 'b' is also tested.
+        // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
+        if (a == 0) {
+            return 0;
+        }
+
+        uint256 c = a * b;
+        require(c / a == b, "2"); //SafeMath: multiplication overflow
+
+        return c;
+    }
+
+    function div(uint256 a, uint256 b) internal pure returns (uint256) {
+        return div(a, b, "3");  //SafeMath: division by zero
+    }
+
+    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+        require(b > 0, errorMessage);
+        uint256 c = a / b;
+        // assert(a == b * c + a % b); // There is no case in which this doesn't hold
+
+        return c;
+    }
+
 }
 
 library PawnEventLib {
