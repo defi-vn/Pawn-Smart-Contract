@@ -17,7 +17,7 @@ import "../access/DFY-AccessControl.sol";
 import "../reputation/IReputation.sol";
 
 abstract contract PawnModel is
-    IPawn,
+    IPawnV2,
     Initializable,
     UUPSUpgradeable,
     DFYAccessControl,

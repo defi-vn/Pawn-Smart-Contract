@@ -4,17 +4,17 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "./PawnModel.sol";
-import "../pawn-p2p/PawnContract.sol";
+import "../pawn-p2p/IPawn.sol";
 import "../access/DFY-AccessControl.sol";
 import "../reputation/IReputation.sol";
 
-contract PawnLoanContract is PawnModel
+contract PawnP2PLoanContract is PawnModel
 {
     using CountersUpgradeable for CountersUpgradeable.Counter;
     using AddressUpgradeable for address;
     using SafeMathUpgradeable for uint;
 
-    PawnContract public pawnContract;
+    IPawn public pawnContract;
 
     /** ==================== Loan contract & Payment related state variables ==================== */
     uint256 public numberContracts;
@@ -51,17 +51,6 @@ contract PawnLoanContract is PawnModel
     );
 
     /** ==================== Liquidate & Default related events ==================== */
-    // event ContractLiquidedEvent(
-    //     uint256 contractId,
-    //     uint256 liquidedAmount,
-    //     uint256 feeAmount,
-    //     uint256 collateralExchangeRate,
-    //     uint256 loanExchangeRate,
-    //     uint256 repaymentExchangeRate,
-    //     uint256 rateUpdatedTime,
-    //     ContractLiquidedReasonType reasonType
-    // );
-
     event ContractLiquidedEvent(ContractLiquidationData liquidationData);
 
     event LoanContractCompletedEvent(uint256 contractId);
@@ -80,7 +69,7 @@ contract PawnLoanContract is PawnModel
         external
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
-        pawnContract = PawnContract(_pawnAddress);
+        pawnContract = IPawn(_pawnAddress);
     }
 
     /** ================================ CREATE LOAN CONTRACT ============================= */
@@ -123,7 +112,12 @@ contract PawnLoanContract is PawnModel
         newContract.terms.prepaidFeeRate = prepaidFeeRate;
         ++numberContracts;
 
-        emit LoanContractCreatedEvent(contractData.exchangeRate, msg.sender, _idx, newContract);
+        emit LoanContractCreatedEvent(
+            contractData.exchangeRate, 
+            _msgSender(), 
+            _idx, 
+            newContract
+        );
     }
 
     function contractMustActive(uint256 _contractId)
@@ -245,7 +239,7 @@ contract PawnLoanContract is PawnModel
                 }
             }
 
-            emit PaymentRequestEvent(-1,_contractId, previousRequest);
+            emit PaymentRequestEvent(-1, _contractId, previousRequest);
         } else {
             // Validate: remaining loan must valid
             // require(currentContract.terms.loanAmount == _remainingLoan, '4'); // remain
@@ -299,7 +293,7 @@ contract PawnLoanContract is PawnModel
             chargePrepaidFee: _chargePrepaidFee
         });
         requests.push(newRequest);
-        emit PaymentRequestEvent(_paymentRequestId,_contractId, newRequest);
+        emit PaymentRequestEvent(_paymentRequestId, _contractId, newRequest);
     }
 
     /** ===================================== 3.2. REPAYMENT ============================= */

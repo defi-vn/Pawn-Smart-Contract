@@ -66,7 +66,6 @@ contract Exchange is
         (, price, , , ) = priceFeed.latestRoundData();
     }
 
-
     // lay ti gia va timestamp cua cac crypto va token da duoc them vao ListcryptoExchange
     function getRateAndTimestamp(address _adcrypto) 
         public view 
@@ -133,9 +132,6 @@ contract Exchange is
         }
         
     }
-
-
-
 
     // tinh tien lai: interest = loanAmount * interestByLoanDurationType (interestByLoanDurationType = % lãi * số kì * loại kì / (365*100))
     function calculateInteres(Contract memory _contract)

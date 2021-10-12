@@ -6,17 +6,16 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "./PawnLib.sol";
+import "./IPawn.sol";
 import "../reputation/IReputation.sol";
 import "../exchange/Exchange.sol";
-import "../pawn-p2p-v2/PawnLoanContract.sol";
+import "../pawn-p2p-v2/PawnP2PLoanContract.sol";
 
-contract PawnContract is Ownable, Pausable, ReentrancyGuard {
+contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     using SafeERC20 for IERC20;
     using CollateralLib for Collateral;
     using OfferLib for Offer;
     using PawnPackageLib for PawnShopPackage;
-    using LoanContractLib for Contract;
 
     mapping(address => uint256) public whitelistCollateral;
     address public operator; 
@@ -135,7 +134,12 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         _;
     }
 
-    function emergencyWithdraw(address _token) external onlyAdmin whenPaused {
+    function emergencyWithdraw(address _token) 
+        external 
+        override
+        onlyAdmin 
+        whenPaused 
+    {
         PawnLib.safeTransfer(
             _token,
             address(this),
@@ -286,7 +290,8 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         uint256 _collateralId,
         CollateralStatus _status
     )
-        external
+        external 
+        override
         whenContractNotPaused
     {
         require(_msgSender() == address(pawnLoanContract) || _msgSender() == operator || _msgSender() == admin, "not-allow");
@@ -774,8 +779,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
 
         // Create Contract
         uint256 contractId = pawnLoanContract.createContract(contractData);
-        emit LoanContractDestination(contractId, address(pawnLoanContract));
-
+        
         // change status of offer and collateral
         offer.status = OfferStatus.ACCEPTED;
         collateral.status = CollateralStatus.DOING;
@@ -835,10 +839,6 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     }
 
     /** ================================ 2. ACCEPT COLLATERAL (FOR PAWNSHOP PACKAGE WORKFLOWS) ============================= */
-    event LoanContractDestination(
-        uint contractId,
-        address pawnLoanAddress
-    );
     
     /**
     * @dev create contract between package and collateral
@@ -894,7 +894,6 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         );
         // Create Contract
         uint256 contractId = pawnLoanContract.createContract(contractData);
-        emit LoanContractDestination(contractId, address(pawnLoanContract));
         
         // Change status of collateral loan request to package to CONTRACTED
         statusStruct.status == LoanRequestStatus.CONTRACTED;
@@ -1439,12 +1438,12 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     }
 
     /** ==================== Loan Contract functions & states ==================== */
-    PawnLoanContract public pawnLoanContract;
+    PawnP2PLoanContract public pawnLoanContract;
 
     function setPawnLoanContract(address _pawnLoanAddress)
         external
         onlyAdmin
     {
-        pawnLoanContract = PawnLoanContract(_pawnLoanAddress);
+        pawnLoanContract = PawnP2PLoanContract(_pawnLoanAddress);
     }
 }
