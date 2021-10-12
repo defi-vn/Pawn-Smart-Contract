@@ -113,7 +113,25 @@ struct PaymentRequest {
     PaymentRequestStatusEnum status;
 }
 
-enum ContractLiquidedReasonType { LATE, RISK, UNPAID }
+enum ContractLiquidedReasonType {LATE, RISK, UNPAID}
+
+struct ContractRawData {
+    uint256 collateralId;
+    address borrower;
+    address loanAsset;
+    address collateralAsset;
+    uint256 collateralAmount;
+    int256 packageId;
+    int256 offerId;
+    uint256 exchangeRate;
+    uint256 loanAmount;
+    address lender;
+    address repaymentAsset;
+    uint256 interest;
+    LoanDurationType repaymentCycleType;
+    uint256 liquidityThreshold;
+    uint256 loanDurationQty;    
+}
 
 
 library PawnLib {

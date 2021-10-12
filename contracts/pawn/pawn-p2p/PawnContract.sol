@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./PawnLib.sol";
 import "../reputation/IReputation.sol";
 import "../exchange/Exchange.sol";
+import "../pawn-p2p-v2/PawnLoanContract.sol";
 
 contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     using SafeERC20 for IERC20;
@@ -637,11 +638,11 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         );
 
         emit SubmitPawnShopPackage(_packageId, _collateralId, LoanRequestStatus.ACCEPTED);
-        uint loanAmount;
-        uint exchangeRate;
-        // function tinh loanAmount va Exchange Rate trong contract Exchange.
-        (loanAmount,exchangeRate) = _exchange.calculateLoanAmountAndExchangeRate(collaterals[_collateralId],pawnShopPackages[_packageId]);
-        generateContractForCollateralAndPackage(_collateralId, _packageId, loanAmount, exchangeRate);
+        
+        generateContractForCollateralAndPackage(
+            _collateralId, 
+            _packageId
+        );
     }
 
     function rejectCollateralOfPackage(
@@ -732,13 +733,18 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         require(offer.isInit == true, '3'); // not-sent
         require(offer.status == OfferStatus.PENDING, '4'); // unavail
 
-        // Create Contract
-        uint256 contractId = createContract(
-            _collateralId, 
-            collateral, 
-            -1, 
-            int256(_offerId), 
-            offer.loanAmount, 
+        // Prepare contract raw data
+        // TODO: @QuangVM: Calculate Exchange rate
+        ContractRawData memory contractData = ContractRawData(
+            _collateralId,
+            collateral.owner,
+            collateral.loanAsset,
+            collateral.collateralAddress,
+            collateral.amount,
+            -1,
+            int256(_offerId),
+            0, /* Exchange rate */
+            offer.loanAmount,
             offer.owner, 
             offer.repaymentAsset, 
             offer.interest, 
@@ -746,7 +752,25 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
             offer.liquidityThreshold,
             offer.duration
         );
-        Contract storage newContract = contracts[contractId];
+
+        // Create Contract
+        uint256 contractId = pawnLoanContract.createContract(contractData);
+        
+        // uint256 contractId = pawnLoanContract.createContract(
+        //     _collateralId, 
+        //     collateral, 
+        //     -1, 
+        //     int256(_offerId),
+        //     0,
+        //     offer.loanAmount,
+        //     offer.owner, 
+        //     offer.repaymentAsset, 
+        //     offer.interest, 
+        //     offer.loanDurationType, 
+        //     offer.liquidityThreshold,
+        //     offer.duration
+        // );
+        // Contract storage newContract = contracts[contractId];
         
         // change status of offer and collateral
         offer.status = OfferStatus.ACCEPTED;
@@ -769,15 +793,22 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         delete collateralOfferList.offerIdList;
         collateralOfferList.offerIdList.push(_offerId);
 
-        emit LoanContractCreatedEvent(0,msg.sender, contractId, newContract);
+        // emit LoanContractCreatedEvent(0,msg.sender, contractId, newContract);
 
         // transfer loan asset to collateral owner
         PawnLib.safeTransfer(
-            newContract.terms.loanAsset,
-            newContract.terms.lender,
-            newContract.terms.borrower,
-            newContract.terms.loanAmount
+            collateral.loanAsset,
+            offer.owner,
+            collateral.owner,
+            offer.loanAmount
         );
+
+        // PawnLib.safeTransfer(
+        //     newContract.terms.loanAsset,
+        //     newContract.terms.lender,
+        //     newContract.terms.borrower,
+        //     newContract.terms.loanAmount
+        // );
 
         // Adjust reputation score
         reputation.adjustReputationScore(
@@ -795,14 +826,10 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     * @dev create contract between package and collateral
     * @param  _collateralId is id of collateral
     * @param  _packageId is id of package
-    * @param  _loanAmount is number of loan amout for lend
-    * @param  _exchangeRate is exchange rate between collateral asset and loan asset, use for validate loan amount again loan to value configuration of package
     */
     function generateContractForCollateralAndPackage(
         uint256 _collateralId,
-        uint256 _packageId,
-        uint256 _loanAmount,
-        uint256 _exchangeRate
+        uint256 _packageId
     ) 
         internal 
         whenContractNotPaused 
@@ -820,22 +847,51 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
                 LoanRequestStatus.ACCEPTED
             );
 
-        // Create Contract
-        uint256 contractId = createContract(
-            _collateralId, 
-            collateral, 
-            int256(_packageId), 
-            -1, 
-            _loanAmount, 
-            pawnShopPackage.owner, 
-            pawnShopPackage.repaymentAsset, 
-            pawnShopPackage.interest, 
+        // function tinh loanAmount va Exchange Rate trong contract Exchange.
+        (
+            uint256 loanAmount, 
+            uint256 exchangeRate
+        ) = exchange.calculateLoanAmountAndExchangeRate(
+                collaterals[_collateralId], 
+                pawnShopPackages[_packageId]
+            );
+
+        // Prepare contract raw data
+        ContractRawData memory contractData = ContractRawData(
+            _collateralId,
+            collateral.owner,
+            collateral.loanAsset,
+            collateral.collateralAddress,
+            collateral.amount,
+            int256(_packageId),
+            -1,
+            exchangeRate,
+            loanAmount,
+            pawnShopPackage.owner,
+            pawnShopPackage.repaymentAsset,
+            pawnShopPackage.interest,
             pawnShopPackage.repaymentCycleType, 
             pawnShopPackage.loanToValueLiquidationThreshold,
             collateral.expectedDurationQty
         );
-        Contract storage newContract = contracts[contractId];
-        emit LoanContractCreatedEvent(_exchangeRate,msg.sender, contractId, newContract);
+        // Create Contract
+        uint256 contractId = pawnLoanContract.createContract(contractData);
+        // uint256 contractId = pawnLoanContract.createContract(
+        //     _collateralId, 
+        //     collateral, 
+        //     int256(_packageId), 
+        //     -1, 
+        //     exchangeRate,
+        //     loanAmount, 
+        //     pawnShopPackage.owner, 
+        //     pawnShopPackage.repaymentAsset, 
+        //     pawnShopPackage.interest, 
+        //     pawnShopPackage.repaymentCycleType, 
+        //     pawnShopPackage.loanToValueLiquidationThreshold,
+        //     collateral.expectedDurationQty
+        // );
+        // Contract storage newContract = contracts[contractId];
+        // emit LoanContractCreatedEvent(_exchangeRate, msg.sender, contractId, newContract);
 
         // Change status of collateral loan request to package to CONTRACTED
         statusStruct.status == LoanRequestStatus.CONTRACTED;
@@ -847,11 +903,18 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
 
         // Transfer loan token from lender to borrower
         PawnLib.safeTransfer(
-            newContract.terms.loanAsset,
-            newContract.terms.lender,
-            newContract.terms.borrower,
-            newContract.terms.loanAmount
+            collateral.loanAsset,
+            pawnShopPackage.owner,
+            collateral.owner,
+            loanAmount
         );
+
+        // PawnLib.safeTransfer(
+        //     newContract.terms.loanAsset,
+        //     newContract.terms.lender,
+        //     newContract.terms.borrower,
+        //     newContract.terms.loanAmount
+        // );
         
         // Adjust reputation score
         reputation.adjustReputationScore(
@@ -860,57 +923,57 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         );
 
         //ki dau tien BEId = 0
-        closePaymentRequestAndStartNew(0,contractId,PaymentRequestTypeEnum.INTEREST);
+        pawnLoanContract.closePaymentRequestAndStartNew(0, contractId, PaymentRequestTypeEnum.INTEREST);
         
     }
 
-    function createContract(
-        uint256 _collateralId,
-        Collateral storage _collateral,
-        int256 _packageId,
-        int256 _offerId,
-        uint256 _loanAmount,
-        address _lender,
-        address _repaymentAsset,
-        uint256 _interest,
-        LoanDurationType _repaymentCycleType,
-        uint256 _liquidityThreshold,
-        uint256 _loanDurationQty
-    ) 
-        internal 
-        returns (uint256 _idx) 
-    {
-        _idx = numberContracts;
-        Contract storage newContract = contracts[_idx];
+    // function createContract(
+    //     uint256 _collateralId,
+    //     Collateral storage _collateral,
+    //     int256 _packageId,
+    //     int256 _offerId,
+    //     uint256 _loanAmount,
+    //     address _lender,
+    //     address _repaymentAsset,
+    //     uint256 _interest,
+    //     LoanDurationType _repaymentCycleType,
+    //     uint256 _liquidityThreshold,
+    //     uint256 _loanDurationQty
+    // ) 
+    //     internal 
+    //     returns (uint256 _idx) 
+    // {
+    //     _idx = numberContracts;
+    //     Contract storage newContract = contracts[_idx];
         
-        newContract.collateralId = _collateralId;
-        newContract.offerId = _offerId;
-        newContract.pawnShopPackageId = int256(_packageId);
-        newContract.status = ContractStatus.ACTIVE;
-        newContract.lateCount = 0;
-        newContract.terms.borrower = _collateral.owner;
-        newContract.terms.lender = _lender;
-        newContract.terms.collateralAsset = _collateral.collateralAddress;
-        newContract.terms.collateralAmount = _collateral.amount;
-        newContract.terms.loanAsset = _collateral.loanAsset;
-        newContract.terms.loanAmount = _loanAmount;
-        newContract.terms.repaymentCycleType = _repaymentCycleType;
-        newContract.terms.repaymentAsset = _repaymentAsset;
-        newContract.terms.interest = _interest;
-        newContract.terms.liquidityThreshold = _liquidityThreshold;
-        newContract.terms.contractStartDate = block.timestamp;
-        newContract.terms.contractEndDate =
-            block.timestamp +
-            PawnLib.calculateContractDuration(
-                _repaymentCycleType,
-                _loanDurationQty
-            );
-        newContract.terms.lateThreshold = lateThreshold;
-        newContract.terms.systemFeeRate = systemFeeRate;
-        newContract.terms.penaltyRate = penaltyRate;
-        newContract.terms.prepaidFeeRate = prepaidFeeRate;
-        ++numberContracts;
-    }
+    //     newContract.collateralId = _collateralId;
+    //     newContract.offerId = _offerId;
+    //     newContract.pawnShopPackageId = int256(_packageId);
+    //     newContract.status = ContractStatus.ACTIVE;
+    //     newContract.lateCount = 0;
+    //     newContract.terms.borrower = _collateral.owner;
+    //     newContract.terms.lender = _lender;
+    //     newContract.terms.collateralAsset = _collateral.collateralAddress;
+    //     newContract.terms.collateralAmount = _collateral.amount;
+    //     newContract.terms.loanAsset = _collateral.loanAsset;
+    //     newContract.terms.loanAmount = _loanAmount;
+    //     newContract.terms.repaymentCycleType = _repaymentCycleType;
+    //     newContract.terms.repaymentAsset = _repaymentAsset;
+    //     newContract.terms.interest = _interest;
+    //     newContract.terms.liquidityThreshold = _liquidityThreshold;
+    //     newContract.terms.contractStartDate = block.timestamp;
+    //     newContract.terms.contractEndDate =
+    //         block.timestamp +
+    //         PawnLib.calculateContractDuration(
+    //             _repaymentCycleType,
+    //             _loanDurationQty
+    //         );
+    //     newContract.terms.lateThreshold = lateThreshold;
+    //     newContract.terms.systemFeeRate = systemFeeRate;
+    //     newContract.terms.penaltyRate = penaltyRate;
+    //     newContract.terms.prepaidFeeRate = prepaidFeeRate;
+    //     ++numberContracts;
+    // }
 
     /** ================================ 3. PAYMENT REQUEST & REPAYMENT WORKLOWS ============================= */
     /** ===================================== 3.1. PAYMENT REQUEST ============================= */
@@ -922,162 +985,163 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         PaymentRequest data
     );
 
-    function closePaymentRequestAndStartNew(
-        int256 _paymentRequestId,
-        uint256 _contractId,
-        PaymentRequestTypeEnum _paymentRequestType
-    ) 
-        public 
-        whenContractNotPaused 
-        onlyOperator 
-    {
-        Contract storage currentContract = contractMustActive(_contractId);
-        bool _chargePrepaidFee;
-        uint256 _remainingLoan;
-        uint256 _nextPhrasePenalty;
-        uint256 _nextPhraseInterest;
-        uint256 _dueDateTimestamp;
+//     function closePaymentRequestAndStartNew(
+//         int256 _paymentRequestId,
+//         uint256 _contractId,
+//         PaymentRequestTypeEnum _paymentRequestType
+//     ) 
+//         public 
+//         whenContractNotPaused 
+//         onlyOperator 
+//     {
+//         Contract storage currentContract = contractMustActive(_contractId);
+//         bool _chargePrepaidFee;
+//         uint256 _remainingLoan;
+//         uint256 _nextPhrasePenalty;
+//         uint256 _nextPhraseInterest;
+//         uint256 _dueDateTimestamp;
 
-        // Check if number of requests is 0 => create new requests, if not then update current request as LATE or COMPLETE and create new requests
-        PaymentRequest[] storage requests = contractPaymentRequestMapping[_contractId];
-        if (requests.length > 0) {
-            // not first phrase, get previous request
-            PaymentRequest storage previousRequest = requests[requests.length - 1];
+//         // Check if number of requests is 0 => create new requests, if not then update current request as LATE or COMPLETE and create new requests
+//         PaymentRequest[] storage requests = contractPaymentRequestMapping[_contractId];
+//         if (requests.length > 0) {
+//             // not first phrase, get previous request
+//             PaymentRequest storage previousRequest = requests[requests.length - 1];
             
-            // Validate: time must over due date of current payment
-            require(block.timestamp >= previousRequest.dueDateTimestamp, '0'); // time-not-due
+//             // Validate: time must over due date of current payment
+//             require(block.timestamp >= previousRequest.dueDateTimestamp, '0'); // time-not-due
 
-            // Validate: remaining loan must valid
-//            require(previousRequest.remainingLoan == _remainingLoan, '1'); // remain
-            _remainingLoan = previousRequest.remainingLoan;
-            _nextPhrasePenalty = _exchange.calculatePenalty(previousRequest,currentContract,penaltyRate);
-            if(_paymentRequestType == PaymentRequestTypeEnum.INTEREST)
-            {
-                _dueDateTimestamp = PawnLib.add(previousRequest.dueDateTimestamp,PawnLib.calculatedueDateTimestampInterest(currentContract.terms.repaymentCycleType));
-                _nextPhraseInterest = _exchange.calculateInteres(currentContract); 
-            } else {
-               _dueDateTimestamp = PawnLib.add(previousRequest.dueDateTimestamp,PawnLib.calculatedueDateTimestampInterest(currentContract.terms.repaymentCycleType));
-                _nextPhraseInterest = 0;  
-            }
+//             // Validate: remaining loan must valid
+//             // require(previousRequest.remainingLoan == _remainingLoan, '1'); // remain
+//             _remainingLoan = previousRequest.remainingLoan;
+//             _nextPhrasePenalty = exchange.calculatePenalty(previousRequest,currentContract,penaltyRate);
+            
+//             if(_paymentRequestType == PaymentRequestTypeEnum.INTEREST)
+//             {
+//                 _dueDateTimestamp = PawnLib.add(previousRequest.dueDateTimestamp,PawnLib.calculatedueDateTimestampInterest(currentContract.terms.repaymentCycleType));
+//                 _nextPhraseInterest = exchange.calculateInteres(currentContract); 
+//             } else {
+//                _dueDateTimestamp = PawnLib.add(previousRequest.dueDateTimestamp,PawnLib.calculatedueDateTimestampInterest(currentContract.terms.repaymentCycleType));
+//                 _nextPhraseInterest = 0;  
+//             }
 
-            if(_dueDateTimestamp >= currentContract.terms.contractEndDate) {
-                _chargePrepaidFee = true;
-            } else {
-                _chargePrepaidFee = false;
-            }
+//             if(_dueDateTimestamp >= currentContract.terms.contractEndDate) {
+//                 _chargePrepaidFee = true;
+//             } else {
+//                 _chargePrepaidFee = false;
+//             }
 
-            // Validate: Due date timestamp of next payment request must not over contract due date
-            require(_dueDateTimestamp <= currentContract.terms.contractEndDate, '2'); // contr-end
-//            require(_dueDateTimestamp > previousRequest.dueDateTimestamp || _dueDateTimestamp == 0, '3'); // less-th-prev
+//             // Validate: Due date timestamp of next payment request must not over contract due date
+//             require(_dueDateTimestamp <= currentContract.terms.contractEndDate, '2'); // contr-end
+// //            require(_dueDateTimestamp > previousRequest.dueDateTimestamp || _dueDateTimestamp == 0, '3'); // less-th-prev
 
-            // update previous
-            // check for remaining penalty and interest, if greater than zero then is Lated, otherwise is completed
-            if (
-                previousRequest.remainingInterest > 0 ||
-                previousRequest.remainingPenalty > 0
-            ) {
-                previousRequest.status = PaymentRequestStatusEnum.LATE;
+//             // update previous
+//             // check for remaining penalty and interest, if greater than zero then is Lated, otherwise is completed
+//             if (
+//                 previousRequest.remainingInterest > 0 ||
+//                 previousRequest.remainingPenalty > 0
+//             ) {
+//                 previousRequest.status = PaymentRequestStatusEnum.LATE;
 
-                // Adjust reputation score
-                reputation.adjustReputationScore(
-                    currentContract.terms.borrower,
-                    IReputation.ReasonType.BR_LATE_PAYMENT
-                );
+//                 // Adjust reputation score
+//                 reputation.adjustReputationScore(
+//                     currentContract.terms.borrower,
+//                     IReputation.ReasonType.BR_LATE_PAYMENT
+//                 );
 
-                // Update late counter of contract
-                currentContract.lateCount += 1;
+//                 // Update late counter of contract
+//                 currentContract.lateCount += 1;
 
-                // Check for late threshold reach
-                if (currentContract.terms.lateThreshold <= currentContract.lateCount) {
-                    // Execute liquid
-                    _liquidationExecution(
-                        _contractId,
-                        ContractLiquidedReasonType.LATE
-                    );
-                    return;
-                }
-            } else {
-                previousRequest.status = PaymentRequestStatusEnum.COMPLETE;
+//                 // Check for late threshold reach
+//                 if (currentContract.terms.lateThreshold <= currentContract.lateCount) {
+//                     // Execute liquid
+//                     _liquidationExecution(
+//                         _contractId,
+//                         ContractLiquidedReasonType.LATE
+//                     );
+//                     return;
+//                 }
+//             } else {
+//                 previousRequest.status = PaymentRequestStatusEnum.COMPLETE;
 
-                // Adjust reputation score
-                reputation.adjustReputationScore(
-                    currentContract.terms.borrower,
-                    IReputation.ReasonType.BR_ONTIME_PAYMENT
-                );
-            }
+//                 // Adjust reputation score
+//                 reputation.adjustReputationScore(
+//                     currentContract.terms.borrower,
+//                     IReputation.ReasonType.BR_ONTIME_PAYMENT
+//                 );
+//             }
 
-            // Check for last repayment, if last repayment, all paid
-            if (block.timestamp > currentContract.terms.contractEndDate) {
-                if (previousRequest.remainingInterest + previousRequest.remainingPenalty + previousRequest.remainingLoan > 0) {
-                    // unpaid => liquid
-                    _liquidationExecution(
-                        _contractId,
-                        ContractLiquidedReasonType.UNPAID
-                    );
-                    return;
-                } else {
-                    // paid full => release collateral
-                    _returnCollateralToBorrowerAndCloseContract(_contractId);
-                    return;
-                }
-            }
+//             // Check for last repayment, if last repayment, all paid
+//             if (block.timestamp > currentContract.terms.contractEndDate) {
+//                 if (previousRequest.remainingInterest + previousRequest.remainingPenalty + previousRequest.remainingLoan > 0) {
+//                     // unpaid => liquid
+//                     _liquidationExecution(
+//                         _contractId,
+//                         ContractLiquidedReasonType.UNPAID
+//                     );
+//                     return;
+//                 } else {
+//                     // paid full => release collateral
+//                     _returnCollateralToBorrowerAndCloseContract(_contractId);
+//                     return;
+//                 }
+//             }
 
-            emit PaymentRequestEvent(-1,_contractId, previousRequest);
-        } else {
-            // Validate: remaining loan must valid
-//            require(currentContract.terms.loanAmount == _remainingLoan, '4'); // remain
-                _remainingLoan = currentContract.terms.loanAmount;
-                _nextPhraseInterest = _exchange.calculateInteres(currentContract);
-                _nextPhrasePenalty = 0;
-                _dueDateTimestamp = PawnLib.add(block.timestamp,PawnLib.calculatedueDateTimestampInterest(currentContract.terms.repaymentCycleType));
+//             emit PaymentRequestEvent(-1,_contractId, previousRequest);
+//         } else {
+//             // Validate: remaining loan must valid
+//             // require(currentContract.terms.loanAmount == _remainingLoan, '4'); // remain
+//                 _remainingLoan = currentContract.terms.loanAmount;
+//                 _nextPhraseInterest = exchange.calculateInteres(currentContract);
+//                 _nextPhrasePenalty = 0;
+//                 _dueDateTimestamp = PawnLib.add(block.timestamp, PawnLib.calculatedueDateTimestampInterest(currentContract.terms.repaymentCycleType));
 
-                if(currentContract.terms.repaymentCycleType == LoanDurationType.WEEK)
-                {
-                    if(currentContract.terms.contractEndDate - currentContract.terms.contractStartDate == 600)
-                    {
-                        _chargePrepaidFee = true;
-                    } else {
-                        _chargePrepaidFee = false;
-                }
-                } else {
-                    if(currentContract.terms.contractEndDate - currentContract.terms.contractStartDate == 900)
-                    {
-                        _chargePrepaidFee = true;
+//                 if(currentContract.terms.repaymentCycleType == LoanDurationType.WEEK)
+//                 {
+//                     if(currentContract.terms.contractEndDate - currentContract.terms.contractStartDate == 600)
+//                     {
+//                         _chargePrepaidFee = true;
+//                     } else {
+//                         _chargePrepaidFee = false;
+//                 }
+//                 } else {
+//                     if(currentContract.terms.contractEndDate - currentContract.terms.contractStartDate == 900)
+//                     {
+//                         _chargePrepaidFee = true;
                         
-                    } else {
-                        _chargePrepaidFee = false;
-                    }
-                }
+//                     } else {
+//                         _chargePrepaidFee = false;
+//                     }
+//                 }
 
-            // Validate: Due date timestamp of next payment request must not over contract due date
-            require(_dueDateTimestamp <= currentContract.terms.contractEndDate, '5'); // contr-end
-            require(_dueDateTimestamp > currentContract.terms.contractStartDate || _dueDateTimestamp == 0, '6'); // less-th-prev
-            require(block.timestamp < _dueDateTimestamp || _dueDateTimestamp == 0, '7'); // over
+//             // Validate: Due date timestamp of next payment request must not over contract due date
+//             require(_dueDateTimestamp <= currentContract.terms.contractEndDate, '5'); // contr-end
+//             require(_dueDateTimestamp > currentContract.terms.contractStartDate || _dueDateTimestamp == 0, '6'); // less-th-prev
+//             require(block.timestamp < _dueDateTimestamp || _dueDateTimestamp == 0, '7'); // over
 
-            // Check for last repayment, if last repayment, all paid
-            if (block.timestamp > currentContract.terms.contractEndDate) {
-                // paid full => release collateral
-                _returnCollateralToBorrowerAndCloseContract(_contractId);
-                return;
-            }
-        }
+//             // Check for last repayment, if last repayment, all paid
+//             if (block.timestamp > currentContract.terms.contractEndDate) {
+//                 // paid full => release collateral
+//                 _returnCollateralToBorrowerAndCloseContract(_contractId);
+//                 return;
+//             }
+//         }
 
-        // Create new payment request and store to contract
-        PaymentRequest memory newRequest = PaymentRequest({
-            requestId: requests.length,
-            paymentRequestType: _paymentRequestType,
-            remainingLoan: _remainingLoan,
-            penalty: _nextPhrasePenalty,
-            interest: _nextPhraseInterest,
-            remainingPenalty: _nextPhrasePenalty,
-            remainingInterest: _nextPhraseInterest,
-            dueDateTimestamp: _dueDateTimestamp,
-            status: PaymentRequestStatusEnum.ACTIVE,
-            chargePrepaidFee: _chargePrepaidFee
-        });
-        requests.push(newRequest);
-        emit PaymentRequestEvent(_paymentRequestId,_contractId, newRequest);
-    }
+//         // Create new payment request and store to contract
+//         PaymentRequest memory newRequest = PaymentRequest({
+//             requestId: requests.length,
+//             paymentRequestType: _paymentRequestType,
+//             remainingLoan: _remainingLoan,
+//             penalty: _nextPhrasePenalty,
+//             interest: _nextPhraseInterest,
+//             remainingPenalty: _nextPhrasePenalty,
+//             remainingInterest: _nextPhraseInterest,
+//             dueDateTimestamp: _dueDateTimestamp,
+//             status: PaymentRequestStatusEnum.ACTIVE,
+//             chargePrepaidFee: _chargePrepaidFee
+//         });
+//         requests.push(newRequest);
+//         emit PaymentRequestEvent(_paymentRequestId,_contractId, newRequest);
+//     }
 
     /** ===================================== 3.2. REPAYMENT ============================= */
     event RepaymentEvent(
@@ -1209,217 +1273,222 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     );
     event LoanContractCompletedEvent(uint256 contractId);
 
-    function collateralRiskLiquidationExecution(
-        uint256 _contractId
-    ) external whenContractNotPaused onlyOperator {
-        // Validate: Contract must active
-        Contract storage _contract = contractMustActive(_contractId);
+    // function collateralRiskLiquidationExecution(
+    //     uint256 _contractId
+    // ) external whenContractNotPaused onlyOperator {
+    //     // Validate: Contract must active
+    //     Contract storage _contract = contractMustActive(_contractId);
 
-        uint256 collateralExchangeRate;
-        uint256 loanExchangeRate;
-        uint256 repaymentExchangeRate;
-        uint256 rateUpdatedTime;
-        (collateralExchangeRate,loanExchangeRate,repaymentExchangeRate,rateUpdatedTime) = _exchange.RateAndTimestamp(_contract);
+    //     uint256 collateralExchangeRate;
+    //     uint256 loanExchangeRate;
+    //     uint256 repaymentExchangeRate;
+    //     uint256 rateUpdatedTime;
+    //     (
+    //         collateralExchangeRate,
+    //         loanExchangeRate,
+    //         repaymentExchangeRate,
+    //         rateUpdatedTime
+    //     ) = exchange.RateAndTimestamp(_contract);
 
-        (
-            uint256 remainingRepayment,
-            uint256 remainingLoan
-        ) = calculateRemainingLoanAndRepaymentFromContract(
-                _contractId,
-                _contract
-            );
+    //     (
+    //         uint256 remainingRepayment,
+    //         uint256 remainingLoan
+    //     ) = calculateRemainingLoanAndRepaymentFromContract(
+    //             _contractId,
+    //             _contract
+    //         );
 
-        uint256 valueOfRemainingRepayment = (repaymentExchangeRate * remainingRepayment) / ZOOM;
-        uint256 valueOfRemainingLoan = (loanExchangeRate * remainingLoan) / ZOOM;
-        uint256 valueOfCollateralLiquidationThreshold = (_contract.terms.collateralAmount * _contract.terms.liquidityThreshold) / (100 * ZOOM);
+    //     uint256 valueOfRemainingRepayment = (repaymentExchangeRate * remainingRepayment) / ZOOM;
+    //     uint256 valueOfRemainingLoan = (loanExchangeRate * remainingLoan) / ZOOM;
+    //     uint256 valueOfCollateralLiquidationThreshold = (_contract.terms.collateralAmount * _contract.terms.liquidityThreshold) / (100 * ZOOM);
 
-        require(valueOfRemainingLoan + valueOfRemainingRepayment >= valueOfCollateralLiquidationThreshold, '0'); // under-thres
+    //     require(valueOfRemainingLoan + valueOfRemainingRepayment >= valueOfCollateralLiquidationThreshold, '0'); // under-thres
 
-        // Execute: call internal liquidation
-        _liquidationExecution(_contractId, ContractLiquidedReasonType.RISK);        
-    }
+    //     // Execute: call internal liquidation
+    //     _liquidationExecution(_contractId, ContractLiquidedReasonType.RISK);
+    // }
 
-    function calculateRemainingLoanAndRepaymentFromContract(
-        uint256 _contractId,
-        Contract storage _contract
-    )
-        internal
-        view
-        returns (uint256 remainingRepayment, uint256 remainingLoan)
-    {
-        // Validate: sum of unpaid interest, penalty and remaining loan in value must reach liquidation threshold of collateral value
-        PaymentRequest[] storage requests = contractPaymentRequestMapping[_contractId];
-        if (requests.length > 0) {
-            // Have payment request
-            PaymentRequest storage _paymentRequest = requests[requests.length - 1];
-            remainingRepayment = _paymentRequest.remainingInterest + _paymentRequest.remainingPenalty;
-            remainingLoan = _paymentRequest.remainingLoan;
-        } else {
-            // Haven't had payment request
-            remainingRepayment = 0;
-            remainingLoan = _contract.terms.loanAmount;
-        }
-    }
+    // function calculateRemainingLoanAndRepaymentFromContract(
+    //     uint256 _contractId,
+    //     Contract storage _contract
+    // )
+    //     internal
+    //     view
+    //     returns (uint256 remainingRepayment, uint256 remainingLoan)
+    // {
+    //     // Validate: sum of unpaid interest, penalty and remaining loan in value must reach liquidation threshold of collateral value
+    //     PaymentRequest[] storage requests = contractPaymentRequestMapping[_contractId];
+    //     if (requests.length > 0) {
+    //         // Have payment request
+    //         PaymentRequest storage _paymentRequest = requests[requests.length - 1];
+    //         remainingRepayment = _paymentRequest.remainingInterest + _paymentRequest.remainingPenalty;
+    //         remainingLoan = _paymentRequest.remainingLoan;
+    //     } else {
+    //         // Haven't had payment request
+    //         remainingRepayment = 0;
+    //         remainingLoan = _contract.terms.loanAmount;
+    //     }
+    // }
 
-    function lateLiquidationExecution(uint256 _contractId)
-        external
-        whenContractNotPaused
-    {
-        // Validate: Contract must active
-        Contract storage _contract = contractMustActive(_contractId);
+    // function lateLiquidationExecution(uint256 _contractId)
+    //     external
+    //     whenContractNotPaused
+    // {
+    //     // Validate: Contract must active
+    //     Contract storage _contract = contractMustActive(_contractId);
 
-        // validate: contract have lateCount == lateThreshold
-        require(_contract.lateCount >= _contract.terms.lateThreshold, '0'); // not-reach
+    //     // validate: contract have lateCount == lateThreshold
+    //     require(_contract.lateCount >= _contract.terms.lateThreshold, '0'); // not-reach
 
-        // Execute: call internal liquidation
-        _liquidationExecution(_contractId, ContractLiquidedReasonType.LATE);
-    }
+    //     // Execute: call internal liquidation
+    //     _liquidationExecution(_contractId, ContractLiquidedReasonType.LATE);
+    // }
 
-    function contractMustActive(uint256 _contractId)
-        internal
-        view
-        returns (Contract storage _contract)
-    {
-        // Validate: Contract must active
-        _contract = contracts[_contractId];
-        require(_contract.status == ContractStatus.ACTIVE, '0'); // contr-act
-    }
+    // function contractMustActive(uint256 _contractId)
+    //     internal
+    //     view
+    //     returns (Contract storage _contract)
+    // {
+    //     // Validate: Contract must active
+    //     _contract = contracts[_contractId];
+    //     require(_contract.status == ContractStatus.ACTIVE, '0'); // contr-act
+    // }
 
-    function notPaidFullAtEndContractLiquidation(uint256 _contractId)
-        external
-        whenContractNotPaused
-    {
-        Contract storage _contract = contractMustActive(_contractId);
-        // validate: current is over contract end date
-        require(block.timestamp >= _contract.terms.contractEndDate, '0'); // due
+    // function notPaidFullAtEndContractLiquidation(uint256 _contractId)
+    //     external
+    //     whenContractNotPaused
+    // {
+    //     Contract storage _contract = contractMustActive(_contractId);
+    //     // validate: current is over contract end date
+    //     require(block.timestamp >= _contract.terms.contractEndDate, '0'); // due
 
-        // validate: remaining loan, interest, penalty haven't paid in full
-        (
-            uint256 remainingRepayment,
-            uint256 remainingLoan
-        ) = calculateRemainingLoanAndRepaymentFromContract(
-                _contractId,
-                _contract
-            );
-        require(remainingRepayment + remainingLoan > 0, '1'); // paid
+    //     // validate: remaining loan, interest, penalty haven't paid in full
+    //     (
+    //         uint256 remainingRepayment,
+    //         uint256 remainingLoan
+    //     ) = calculateRemainingLoanAndRepaymentFromContract(
+    //             _contractId,
+    //             _contract
+    //         );
+    //     require(remainingRepayment + remainingLoan > 0, '1'); // paid
         
-        // Execute: call internal liquidation
-        _liquidationExecution(_contractId, ContractLiquidedReasonType.UNPAID);
-    }
+    //     // Execute: call internal liquidation
+    //     _liquidationExecution(_contractId, ContractLiquidedReasonType.UNPAID);
+    // }
 
-    function _liquidationExecution(
-        uint256 _contractId,
-        ContractLiquidedReasonType _reasonType
-    ) internal {
-        Contract storage _contract = contracts[_contractId];
+    // function _liquidationExecution(
+    //     uint256 _contractId,
+    //     ContractLiquidedReasonType _reasonType
+    // ) internal {
+    //     Contract storage _contract = contracts[_contractId];
 
-        // Execute: calculate system fee of collateral and transfer collateral except system fee amount to lender
-        uint256 _systemFeeAmount = PawnLib.calculateSystemFee(
-            _contract.terms.collateralAmount,
-            _contract.terms.systemFeeRate,
-            ZOOM
-        );
-        uint256 _liquidAmount = _contract.terms.collateralAmount - _systemFeeAmount;
+    //     // Execute: calculate system fee of collateral and transfer collateral except system fee amount to lender
+    //     uint256 _systemFeeAmount = PawnLib.calculateSystemFee(
+    //         _contract.terms.collateralAmount,
+    //         _contract.terms.systemFeeRate,
+    //         ZOOM
+    //     );
+    //     uint256 _liquidAmount = _contract.terms.collateralAmount - _systemFeeAmount;
 
-        // Execute: update status of contract to DEFAULT, collateral to COMPLETE
-        _contract.status = ContractStatus.DEFAULT;
-        PaymentRequest[] storage _paymentRequests = contractPaymentRequestMapping[_contractId];
-        PaymentRequest storage _lastPaymentRequest = _paymentRequests[_paymentRequests.length - 1];
-        _lastPaymentRequest.status = PaymentRequestStatusEnum.DEFAULT;
-        Collateral storage _collateral = collaterals[_contract.collateralId];
-        _collateral.status = CollateralStatus.COMPLETED;
+    //     // Execute: update status of contract to DEFAULT, collateral to COMPLETE
+    //     _contract.status = ContractStatus.DEFAULT;
+    //     PaymentRequest[] storage _paymentRequests = contractPaymentRequestMapping[_contractId];
+    //     PaymentRequest storage _lastPaymentRequest = _paymentRequests[_paymentRequests.length - 1];
+    //     _lastPaymentRequest.status = PaymentRequestStatusEnum.DEFAULT;
+    //     Collateral storage _collateral = collaterals[_contract.collateralId];
+    //     _collateral.status = CollateralStatus.COMPLETED;
 
-        // Emit Event ContractLiquidedEvent & PaymentRequest event
-        emit ContractLiquidedEvent(
-            _contractId,
-            _liquidAmount,
-            _systemFeeAmount,
-            _reasonType
-        );
+    //     // Emit Event ContractLiquidedEvent & PaymentRequest event
+    //     emit ContractLiquidedEvent(
+    //         _contractId,
+    //         _liquidAmount,
+    //         _systemFeeAmount,
+    //         _reasonType
+    //     );
 
-        emit PaymentRequestEvent(-1,_contractId, _lastPaymentRequest);
+    //     emit PaymentRequestEvent(-1,_contractId, _lastPaymentRequest);
 
-        // Transfer to lender liquid amount
-        PawnLib.safeTransfer(
-            _contract.terms.collateralAsset,
-            address(this),
-            _contract.terms.lender,
-            _liquidAmount
-        );
+    //     // Transfer to lender liquid amount
+    //     PawnLib.safeTransfer(
+    //         _contract.terms.collateralAsset,
+    //         address(this),
+    //         _contract.terms.lender,
+    //         _liquidAmount
+    //     );
 
-        // Transfer to system fee wallet fee amount
-        PawnLib.safeTransfer(
-            _contract.terms.collateralAsset,
-            address(this),
-            feeWallet,
-            _systemFeeAmount
-        );
+    //     // Transfer to system fee wallet fee amount
+    //     PawnLib.safeTransfer(
+    //         _contract.terms.collateralAsset,
+    //         address(this),
+    //         feeWallet,
+    //         _systemFeeAmount
+    //     );
 
-        // Adjust reputation score
-        reputation.adjustReputationScore(
-            _contract.terms.borrower,
-            IReputation.ReasonType.BR_LATE_PAYMENT
-        );
-        reputation.adjustReputationScore(
-            _contract.terms.borrower,
-            IReputation.ReasonType.BR_CONTRACT_DEFAULTED
-        );
-    }
+    //     // Adjust reputation score
+    //     reputation.adjustReputationScore(
+    //         _contract.terms.borrower,
+    //         IReputation.ReasonType.BR_LATE_PAYMENT
+    //     );
+    //     reputation.adjustReputationScore(
+    //         _contract.terms.borrower,
+    //         IReputation.ReasonType.BR_CONTRACT_DEFAULTED
+    //     );
+    // }
 
-    function _returnCollateralToBorrowerAndCloseContract(uint256 _contractId)
-        internal
-    {
-        Contract storage _contract = contracts[_contractId];
+    // function _returnCollateralToBorrowerAndCloseContract(uint256 _contractId)
+    //     internal
+    // {
+    //     Contract storage _contract = contracts[_contractId];
 
-        // Execute: Update status of contract to COMPLETE, collateral to COMPLETE
-        _contract.status = ContractStatus.COMPLETED;
-        PaymentRequest[] storage _paymentRequests = contractPaymentRequestMapping[_contractId];
-        PaymentRequest storage _lastPaymentRequest = _paymentRequests[_paymentRequests.length - 1];
-        _lastPaymentRequest.status = PaymentRequestStatusEnum.COMPLETE;
-        Collateral storage _collateral = collaterals[_contract.collateralId];
-        _collateral.status = CollateralStatus.COMPLETED;
+    //     // Execute: Update status of contract to COMPLETE, collateral to COMPLETE
+    //     _contract.status = ContractStatus.COMPLETED;
+    //     PaymentRequest[] storage _paymentRequests = contractPaymentRequestMapping[_contractId];
+    //     PaymentRequest storage _lastPaymentRequest = _paymentRequests[_paymentRequests.length - 1];
+    //     _lastPaymentRequest.status = PaymentRequestStatusEnum.COMPLETE;
+    //     Collateral storage _collateral = collaterals[_contract.collateralId];
+    //     _collateral.status = CollateralStatus.COMPLETED;
 
-        // Emit event ContractCompleted
-        emit LoanContractCompletedEvent(_contractId);
-        emit PaymentRequestEvent(-1,_contractId, _lastPaymentRequest);
+    //     // Emit event ContractCompleted
+    //     emit LoanContractCompletedEvent(_contractId);
+    //     emit PaymentRequestEvent(-1,_contractId, _lastPaymentRequest);
 
-        // Execute: Transfer collateral to borrower
-        PawnLib.safeTransfer(
-            _contract.terms.collateralAsset,
-            address(this),
-            _contract.terms.borrower,
-            _contract.terms.collateralAmount
-        );
+    //     // Execute: Transfer collateral to borrower
+    //     PawnLib.safeTransfer(
+    //         _contract.terms.collateralAsset,
+    //         address(this),
+    //         _contract.terms.borrower,
+    //         _contract.terms.collateralAmount
+    //     );
 
-        // Adjust reputation score
-        reputation.adjustReputationScore(
-            _contract.terms.borrower,
-            IReputation.ReasonType.BR_ONTIME_PAYMENT
-        );
-        reputation.adjustReputationScore(
-            _contract.terms.borrower,
-            IReputation.ReasonType.BR_CONTRACT_COMPLETE
-        );
-    }
+    //     // Adjust reputation score
+    //     reputation.adjustReputationScore(
+    //         _contract.terms.borrower,
+    //         IReputation.ReasonType.BR_ONTIME_PAYMENT
+    //     );
+    //     reputation.adjustReputationScore(
+    //         _contract.terms.borrower,
+    //         IReputation.ReasonType.BR_CONTRACT_COMPLETE
+    //     );
+    // }
 
-    function findContractOfCollateral(
-        uint256 _collateralId,
-        uint256 _contractStart,
-        uint256 _contractEnd
-    ) external view returns (int256 _idx) {
-        _idx = -1;
-        uint256 endIdx = _contractEnd;
-        if (_contractEnd >= numberContracts - 1) {
-            endIdx = numberContracts - 1;
-        }
-        for (uint256 i = _contractStart; i < endIdx; i++) {
-            Contract storage mContract = contracts[i];
-            if (mContract.collateralId == _collateralId) {
-                _idx = int256(i);
-                break;
-            }
-        }
-    }
+    // function findContractOfCollateral(
+    //     uint256 _collateralId,
+    //     uint256 _contractStart,
+    //     uint256 _contractEnd
+    // ) external view returns (int256 _idx) {
+    //     _idx = -1;
+    //     uint256 endIdx = _contractEnd;
+    //     if (_contractEnd >= numberContracts - 1) {
+    //         endIdx = numberContracts - 1;
+    //     }
+    //     for (uint256 i = _contractStart; i < endIdx; i++) {
+    //         Contract storage mContract = contracts[i];
+    //         if (mContract.collateralId == _collateralId) {
+    //             _idx = int256(i);
+    //             break;
+    //         }
+    //     }
+    // }
     
     function releaseTrappedCollateralLockedWithoutContract(
         uint256 _collateralId,
@@ -1467,8 +1536,23 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         reputation = IReputation(_reputationAddress);
     }
 
-    Exchange public _exchange;
-    function setExchangeContract(address _exchangeAddress) external {
-        _exchange = Exchange(_exchangeAddress);
+    /** ==================== Exchange functions & states ==================== */
+    Exchange public exchange;
+
+    function setExchangeContract(address _exchangeAddress) 
+        external 
+        onlyAdmin
+    {
+        exchange = Exchange(_exchangeAddress);
+    }
+
+    /** ==================== Loan Contract functions & states ==================== */
+    PawnLoanContract public pawnLoanContract;
+
+    function setPawnLoanContract(address _pawnLoanAddress)
+        external
+        onlyAdmin
+    {
+        pawnLoanContract = PawnLoanContract(_pawnLoanAddress);
     }
 }
