@@ -170,10 +170,16 @@ contract PawnLoanContract is PawnModel
             
             if(_paymentRequestType == PaymentRequestTypeEnum.INTEREST)
             {
-                _dueDateTimestamp = PawnLib.add(previousRequest.dueDateTimestamp,PawnLib.calculatedueDateTimestampInterest(currentContract.terms.repaymentCycleType));
+                _dueDateTimestamp = PawnLib.add(
+                    previousRequest.dueDateTimestamp, 
+                    PawnLib.calculatedueDateTimestampInterest(currentContract.terms.repaymentCycleType)
+                );
                 _nextPhraseInterest = exchange.calculateInteres(currentContract); 
             } else {
-               _dueDateTimestamp = PawnLib.add(previousRequest.dueDateTimestamp,PawnLib.calculatedueDateTimestampInterest(currentContract.terms.repaymentCycleType));
+                _dueDateTimestamp = PawnLib.add(
+                    previousRequest.dueDateTimestamp, 
+                    PawnLib.calculatedueDateTimestampInterest(currentContract.terms.repaymentCycleType)
+                );
                 _nextPhraseInterest = 0;  
             }
 
@@ -185,7 +191,7 @@ contract PawnLoanContract is PawnModel
 
             // Validate: Due date timestamp of next payment request must not over contract due date
             require(_dueDateTimestamp <= currentContract.terms.contractEndDate, '2'); // contr-end
-//            require(_dueDateTimestamp > previousRequest.dueDateTimestamp || _dueDateTimestamp == 0, '3'); // less-th-prev
+            // require(_dueDateTimestamp > previousRequest.dueDateTimestamp || _dueDateTimestamp == 0, '3'); // less-th-prev
 
             // update previous
             // check for remaining penalty and interest, if greater than zero then is Lated, otherwise is completed
