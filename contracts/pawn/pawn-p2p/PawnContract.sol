@@ -125,7 +125,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     }
 
     function _whenNotPaused() private view {
-        require(!paused(), "Pausable: paused");
+        require(!paused(), "-4"); //Pausable: paused
     }
     
     modifier whenContractNotPaused() {
@@ -1205,9 +1205,15 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         uint256 contractId,
         uint256 liquidedAmount,
         uint256 feeAmount,
-        ContractLiquidedReasonType reasonType
+        ContractLiquidedReasonType reasonType         
     );
     event LoanContractCompletedEvent(uint256 contractId);
+    // event collateralRiskLiquidation (
+    //     uint256 _collateralExchangeRate,
+    //     uint256 _loanExchangeRate,
+    //     uint256 _repaymentExchangeRate,
+    //     uint256 _rateUpdatedTime
+    //     );
 
     function collateralRiskLiquidationExecution(
         uint256 _contractId
@@ -1236,7 +1242,9 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         require(valueOfRemainingLoan + valueOfRemainingRepayment >= valueOfCollateralLiquidationThreshold, '0'); // under-thres
 
         // Execute: call internal liquidation
-        _liquidationExecution(_contractId, ContractLiquidedReasonType.RISK);        
+        _liquidationExecution(_contractId, ContractLiquidedReasonType.RISK);      
+
+    //    emit collateralRiskLiquidation(collateralExchangeRate,loanExchangeRate,repaymentExchangeRate,rateUpdatedTime);
     }
 
     function calculateRemainingLoanAndRepaymentFromContract(
