@@ -45,7 +45,8 @@ contract PawnLoanContract is PawnModel
         uint256 paidPenaltyFeeAmount,
         uint256 paidInterestFeeAmount,
         uint256 prepaidAmount,
-        uint256 paymentRequestId
+        uint256 paymentRequestId,
+        uint256 UID
     );
 
     /** ==================== Liquidate & Default related events ==================== */
@@ -357,7 +358,8 @@ contract PawnLoanContract is PawnModel
         uint256 _contractId,
         uint256 _paidPenaltyAmount,
         uint256 _paidInterestAmount,
-        uint256 _paidLoanAmount
+        uint256 _paidLoanAmount,
+        uint256 _UID
     ) external whenContractNotPaused {
         // Get contract & payment request
         Contract storage _contract = contractMustActive(_contractId);
@@ -422,7 +424,8 @@ contract PawnLoanContract is PawnModel
             _feePenalty, 
             _feeInterest, 
             _prepaidFee,
-            _paymentRequest.requestId
+            _paymentRequest.requestId,
+            _UID
         );
 
         // If remaining loan = 0 => paidoff => execute release collateral

@@ -819,6 +819,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
             offer.owner,
             IReputation.ReasonType.LD_ACCEPT_OFFER
         );
+       pawnLoanContract.closePaymentRequestAndStartNew(0, contractId, PaymentRequestTypeEnum.INTEREST); 
     }
 
     /** ================================ 2. ACCEPT COLLATERAL (FOR PAWNSHOP PACKAGE WORKFLOWS) ============================= */
@@ -1152,7 +1153,8 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         uint256 paidPenaltyFeeAmount,
         uint256 paidInterestFeeAmount,
         uint256 prepaidAmount,
-        uint256 paymentRequestId
+        uint256 paymentRequestId,
+        uint256 UID
     );
 
     /**
@@ -1162,7 +1164,8 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
         uint256 _contractId,
         uint256 _paidPenaltyAmount,
         uint256 _paidInterestAmount,
-        uint256 _paidLoanAmount
+        uint256 _paidLoanAmount,
+        uint256 _UID
     ) external whenContractNotPaused {
         // Get contract & payment request
         Contract storage _contract = contractMustActive(_contractId);
@@ -1227,7 +1230,8 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
             _feePenalty, 
             _feeInterest, 
             _prepaidFee,
-            _paymentRequest.requestId
+            _paymentRequest.requestId,
+            _UID
         );
 
         // If remaining loan = 0 => paidoff => execute release collateral
@@ -1279,103 +1283,6 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     //     uint256 _rateUpdatedTime
     //     );
 
-<<<<<<< HEAD
-    function collateralRiskLiquidationExecution(
-        uint256 _contractId
-    ) external whenContractNotPaused onlyOperator {
-        // Validate: Contract must active
-        Contract storage _contract = contractMustActive(_contractId);
-
-        uint256 collateralExchangeRate;
-        uint256 loanExchangeRate;
-        uint256 repaymentExchangeRate;
-        uint256 rateUpdatedTime;
-        (collateralExchangeRate,loanExchangeRate,repaymentExchangeRate,rateUpdatedTime) = _exchange.RateAndTimestamp(_contract);
-
-        (
-            uint256 remainingRepayment,
-            uint256 remainingLoan
-        ) = calculateRemainingLoanAndRepaymentFromContract(
-                _contractId,
-                _contract
-            );
-
-        uint256 valueOfRemainingRepayment = (repaymentExchangeRate * remainingRepayment) / ZOOM;
-        uint256 valueOfRemainingLoan = (loanExchangeRate * remainingLoan) / ZOOM;
-        uint256 valueOfCollateralLiquidationThreshold = (_contract.terms.collateralAmount * _contract.terms.liquidityThreshold) / (100 * ZOOM);
-
-        require(valueOfRemainingLoan + valueOfRemainingRepayment >= valueOfCollateralLiquidationThreshold, '0'); // under-thres
-
-        // Execute: call internal liquidation
-        _liquidationExecution(_contractId, ContractLiquidedReasonType.RISK);      
-
-    //    emit collateralRiskLiquidation(collateralExchangeRate,loanExchangeRate,repaymentExchangeRate,rateUpdatedTime);
-    }
-
-    function calculateRemainingLoanAndRepaymentFromContract(
-        uint256 _contractId,
-        Contract storage _contract
-    )
-        internal
-        view
-        returns (uint256 remainingRepayment, uint256 remainingLoan)
-    {
-        // Validate: sum of unpaid interest, penalty and remaining loan in value must reach liquidation threshold of collateral value
-        PaymentRequest[] storage requests = contractPaymentRequestMapping[_contractId];
-        if (requests.length > 0) {
-            // Have payment request
-            PaymentRequest storage _paymentRequest = requests[requests.length - 1];
-            remainingRepayment = _paymentRequest.remainingInterest + _paymentRequest.remainingPenalty;
-            remainingLoan = _paymentRequest.remainingLoan;
-        } else {
-            // Haven't had payment request
-            remainingRepayment = 0;
-            remainingLoan = _contract.terms.loanAmount;
-        }
-    }
-
-    function lateLiquidationExecution(uint256 _contractId)
-        external
-        whenContractNotPaused
-    {
-        // Validate: Contract must active
-        Contract storage _contract = contractMustActive(_contractId);
-
-        // validate: contract have lateCount == lateThreshold
-        require(_contract.lateCount >= _contract.terms.lateThreshold, '0'); // not-reach
-
-        // Execute: call internal liquidation
-        _liquidationExecution(_contractId, ContractLiquidedReasonType.LATE);
-    }
-
-    function contractMustActive(uint256 _contractId)
-        internal
-        view
-        returns (Contract storage _contract)
-    {
-        // Validate: Contract must active
-        _contract = contracts[_contractId];
-        require(_contract.status == ContractStatus.ACTIVE, '0'); // contr-act
-    }
-
-    function notPaidFullAtEndContractLiquidation(uint256 _contractId)
-        external
-        whenContractNotPaused
-    {
-        Contract storage _contract = contractMustActive(_contractId);
-        // validate: current is over contract end date
-        require(block.timestamp >= _contract.terms.contractEndDate, '0'); // due
-
-        // validate: remaining loan, interest, penalty haven't paid in full
-        (
-            uint256 remainingRepayment,
-            uint256 remainingLoan
-        ) = calculateRemainingLoanAndRepaymentFromContract(
-                _contractId,
-                _contract
-            );
-        require(remainingRepayment + remainingLoan > 0, '1'); // paid
-=======
     // function collateralRiskLiquidationExecution(
     //     uint256 _contractId
     // ) external whenContractNotPaused onlyOperator {
@@ -1474,7 +1381,6 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
     //             _contract
     //         );
     //     require(remainingRepayment + remainingLoan > 0, '1'); // paid
->>>>>>> 821780ee5595ecbf2090cd9172297306f78b802f
         
     //     // Execute: call internal liquidation
     //     _liquidationExecution(_contractId, ContractLiquidedReasonType.UNPAID);
