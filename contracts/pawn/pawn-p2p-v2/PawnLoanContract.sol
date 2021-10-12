@@ -51,12 +51,18 @@ contract PawnLoanContract is PawnModel
     );
 
     /** ==================== Liquidate & Default related events ==================== */
-    event ContractLiquidedEvent(
-        uint256 contractId,
-        uint256 liquidedAmount,
-        uint256 feeAmount,
-        ContractLiquidedReasonType reasonType
-    );
+    // event ContractLiquidedEvent(
+    //     uint256 contractId,
+    //     uint256 liquidedAmount,
+    //     uint256 feeAmount,
+    //     uint256 collateralExchangeRate,
+    //     uint256 loanExchangeRate,
+    //     uint256 repaymentExchangeRate,
+    //     uint256 rateUpdatedTime,
+    //     ContractLiquidedReasonType reasonType
+    // );
+
+    event ContractLiquidedEvent(ContractLiquidationData liquidationData);
 
     event LoanContractCompletedEvent(uint256 contractId);
 
@@ -405,7 +411,7 @@ contract PawnLoanContract is PawnModel
     }
 
     /** ===================================== 3.3. LIQUIDITY & DEFAULT ============================= */
-
+    
     function collateralRiskLiquidationExecution(
         uint256 _contractId
     ) 
@@ -416,15 +422,11 @@ contract PawnLoanContract is PawnModel
         // Validate: Contract must active
         Contract storage _contract = contractMustActive(_contractId);
 
-        uint256 collateralExchangeRate;
-        uint256 loanExchangeRate;
-        uint256 repaymentExchangeRate;
-        uint256 rateUpdatedTime;
         (
-            collateralExchangeRate,
-            loanExchangeRate,
-            repaymentExchangeRate,
-            rateUpdatedTime
+            , 
+            uint256 loanExchangeRate, 
+            uint256 repaymentExchangeRate, 
+
         ) = exchange.RateAndTimestamp(_contract);
 
         (
@@ -528,15 +530,28 @@ contract PawnLoanContract is PawnModel
         // _collateral.status = CollateralStatus.COMPLETED;
         pawnContract.updateCollateralStatus(_contract.collateralId, CollateralStatus.COMPLETED);
 
+        (
+            uint256 _collateralExchangeRate,
+            uint256 _loanExchangeRate,
+            uint256 _repaymentExchangeRate,
+            uint256 _rateUpdatedTime
+        ) = exchange.RateAndTimestamp(_contract);
+        
         // Emit Event ContractLiquidedEvent & PaymentRequest event
-        emit ContractLiquidedEvent(
+        ContractLiquidationData memory liquidationData = ContractLiquidationData(
             _contractId,
             _liquidAmount,
             _systemFeeAmount,
+            _collateralExchangeRate,
+            _loanExchangeRate,
+            _repaymentExchangeRate,
+            _rateUpdatedTime,
             _reasonType
         );
 
-        emit PaymentRequestEvent(-1,_contractId, _lastPaymentRequest);
+        emit ContractLiquidedEvent(liquidationData);
+
+        emit PaymentRequestEvent(-1, _contractId, _lastPaymentRequest);
 
         // Transfer to lender liquid amount
         PawnLib.safeTransfer(

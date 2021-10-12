@@ -153,36 +153,6 @@ abstract contract PawnModel is
         );
     }
 
-    /** Common functions of Pawn workflow */
-
-    // function verifyCollateralPackageData(
-    //     uint256 _collateralId,
-    //     uint256 _packageId,
-    //     CollateralStatus _requiredCollateralStatus,
-    //     LoanRequestStatus _requiredLoanRequestStatus
-    // )
-    //     internal
-    //     view
-    //     returns (
-    //         Collateral storage collateral,
-    //         PawnShopPackage storage pawnShopPackage,
-    //         CollateralAsLoanRequestListStruct storage loanRequestListStruct,
-    //         LoanRequestStatusStruct storage statusStruct
-    //     )
-    // {
-    //     collateral = collaterals[_collateralId];
-    //     pawnShopPackage = pawnShopPackages[_packageId];
-    //     loanRequestListStruct = collateralAsLoanRequestMapping[_collateralId];
-
-    //     statusStruct = collateral.checkCondition(
-    //         _packageId,
-    //         pawnShopPackage,
-    //         loanRequestListStruct,
-    //         _requiredCollateralStatus,
-    //         _requiredLoanRequestStatus
-    //     );
-    // }
-
     /** ==================== Reputation ==================== */
     
     function setReputationContract(address _reputationAddress)

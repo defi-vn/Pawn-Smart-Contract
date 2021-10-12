@@ -133,6 +133,16 @@ struct ContractRawData {
     uint256 loanDurationQty;    
 }
 
+struct ContractLiquidationData {
+    uint256 contractId;
+    uint256 liquidAmount;
+    uint256 systemFeeAmount;
+    uint256 collateralExchangeRate;
+    uint256 loanExchangeRate;
+    uint256 repaymentExchangeRate;
+    uint256 rateUpdateTime;
+    ContractLiquidedReasonType reasonType;
+}
 
 library PawnLib {
     using SafeERC20 for IERC20;
