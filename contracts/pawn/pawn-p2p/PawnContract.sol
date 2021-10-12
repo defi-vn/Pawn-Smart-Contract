@@ -735,6 +735,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
 
         // Prepare contract raw data
         // TODO: @QuangVM: Calculate Exchange rate
+        uint256 exchangeRate = exchange.exchangeRateofOffer(collateral.loanAsset,offer.repaymentAsset);
         ContractRawData memory contractData = ContractRawData(
             _collateralId,
             collateral.owner,
@@ -743,7 +744,7 @@ contract PawnContract is Ownable, Pausable, ReentrancyGuard {
             collateral.amount,
             -1,
             int256(_offerId),
-            0, /* Exchange rate */
+            exchangeRate, /* Exchange rate */
             offer.loanAmount,
             offer.owner, 
             offer.repaymentAsset, 

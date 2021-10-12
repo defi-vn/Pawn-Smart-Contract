@@ -112,6 +112,31 @@ contract Exchange is
         exchangeRate = (10**5 * RateLoanAsset) / RateRepaymentAsset;       
     }
 
+    function exchangeRateofOffer (
+        address _adLoanAsset,
+        address _adRepayment
+    )
+        external view
+        returns (uint256 exchangeRateOfOffer)
+    {
+        if(_adLoanAsset == address(0))
+        {
+            exchangeRateOfOffer = (uint256(RateBNBwithUSD())*10**10) /  (uint256(getLatesPriceToUSD(_adRepayment))*10**10);
+        }
+        else if(_adRepayment == address(0))
+        {
+            exchangeRateOfOffer =  (uint256(getLatesPriceToUSD(_adLoanAsset))*10**10) / (uint256(RateBNBwithUSD())*10**10);
+        }
+        else 
+        {
+            exchangeRateOfOffer =  (uint256(getLatesPriceToUSD(_adLoanAsset))*10**10) / (uint256(getLatesPriceToUSD(_adRepayment))*10**10);
+        }
+        
+    }
+
+
+
+
     // tinh tien lai: interest = loanAmount * interestByLoanDurationType (interestByLoanDurationType = % lãi * số kì * loại kì / (365*100))
     function calculateInteres(Contract memory _contract)
         public view 
