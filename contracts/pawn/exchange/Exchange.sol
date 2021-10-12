@@ -35,14 +35,14 @@ contract Exchange is
         address _cryptoAddress, 
         address _latestPriceAddress
     ) 
-    public onlyRole(DEFAULT_ADMIN_ROLE)
+    external onlyRole(DEFAULT_ADMIN_ROLE)
     {
         ListcryptoExchange[_cryptoAddress] = _latestPriceAddress;
     }
 
     // lay gia cua dong BNB
     function RateBNBwithUSD()
-        public view 
+        internal view 
         returns(int price)
     {
         AggregatorV3Interface getPriceToUSD = AggregatorV3Interface(0x2514895c72f50D8bd4B4F9b1110F0D6bD2c97526);
@@ -50,7 +50,7 @@ contract Exchange is
     }
     // lay ti gia dong BNB + timestamp
     function RateBNBwithUSDAttimestamp() 
-        public view 
+        internal view 
         returns(int price, uint timeStamp)
     {
         AggregatorV3Interface getPriceToUSD = AggregatorV3Interface(0x2514895c72f50D8bd4B4F9b1110F0D6bD2c97526);
@@ -59,7 +59,7 @@ contract Exchange is
 
     // lay gia cua cac crypto va token khac da duoc them vao ListcryptoExchange
     function getLatesPriceToUSD(address _adcrypto) 
-        public view 
+        internal view 
         returns(int price)
     {
         AggregatorV3Interface  priceFeed = AggregatorV3Interface(ListcryptoExchange[_adcrypto]);
@@ -69,7 +69,7 @@ contract Exchange is
 
     // lay ti gia va timestamp cua cac crypto va token da duoc them vao ListcryptoExchange
     function getRateAndTimestamp(address _adcrypto) 
-        public view 
+        internal view 
         returns(int price, uint timeStamp) 
     {
         AggregatorV3Interface  priceFeed = AggregatorV3Interface(ListcryptoExchange[_adcrypto]);
@@ -82,7 +82,7 @@ contract Exchange is
         Collateral memory _col,
         PawnShopPackage memory _pkg
     )
-        public view 
+        external view 
         returns (uint256 loanAmount, uint256 exchangeRate)
     {
         uint256 collateralToUSD;
@@ -139,7 +139,7 @@ contract Exchange is
 
     // tinh tien lai: interest = loanAmount * interestByLoanDurationType (interestByLoanDurationType = % lãi * số kì * loại kì / (365*100))
     function calculateInteres(Contract memory _contract)
-        public view 
+        external view 
         returns (uint256 interest)
     {
         uint256 interestToUSD;
@@ -173,7 +173,7 @@ contract Exchange is
         Contract memory _contract, 
         uint256 _penaltyRate
     )
-        public pure
+        external pure
         returns (uint256 valuePenalty)
     {
         uint256 _interestByLoanDurationType;
