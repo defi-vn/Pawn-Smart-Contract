@@ -231,4 +231,30 @@ contract Reputation is
 
         emit ReputationPointReduced(_from, _points, _reasonType);
     }
+
+    /**
+    * @dev Adjust reputation score base on the input reason
+    * @param _user is the address of the user whose reputation score is being adjusted.
+    * @param _reasonType is the reason of the adjustment.
+    */
+    function kycReputation(
+        address _user, 
+        ReasonType _reasonType) 
+        external override
+        whenNotPaused isNotZeroAddress(_user) onlyRole(OPERATOR_ROLE)
+    {
+        int8 pointsByReason     = _rewardByReason[_reasonType];
+        uint256 points          = abs(pointsByReason);
+
+        // Check if the points mapped by _reasonType is greater than 0 or not
+        if(pointsByReason >= 0) {
+            // If pointsByReason is greater than 0, reward points to the user.
+            _rewardReputationScore(_user, points, _reasonType);
+        }
+        else {
+            // If pointByReason is lesser than 0, substract the points from user's current score.
+            _reduceReputationScore(_user, points, _reasonType);
+        }
+    }
+
 }
