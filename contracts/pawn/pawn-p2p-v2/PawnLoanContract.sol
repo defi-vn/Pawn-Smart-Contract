@@ -4,6 +4,7 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "./PawnModel.sol";
+import "../pawn-p2p/PawnContract.sol";
 import "../access/DFY-AccessControl.sol";
 import "../reputation/IReputation.sol";
 
@@ -13,7 +14,7 @@ contract PawnLoanContract is PawnModel
     using AddressUpgradeable for address;
     using SafeMathUpgradeable for uint;
 
-    mapping(address => bool) whitelistedPawnContract;
+    PawnContract public pawnContract;
 
     /** ==================== Loan contract & Payment related state variables ==================== */
     uint256 public numberContracts;
@@ -45,7 +46,8 @@ contract PawnLoanContract is PawnModel
         uint256 paidPenaltyFeeAmount,
         uint256 paidInterestFeeAmount,
         uint256 prepaidAmount,
-        uint256 paymentRequestId
+        uint256 paymentRequestId,
+        uint256 UID
     );
 
     /** ==================== Liquidate & Default related events ==================== */
@@ -68,75 +70,15 @@ contract PawnLoanContract is PawnModel
         __PawnModel_init(_zoom);
     }
 
-    /** ================================ 2. ACCEPT COLLATERAL (FOR PAWNSHOP PACKAGE WORKFLOWS) ============================= */
+    function setPawnContract(address _pawnAddress) 
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
+        pawnContract = PawnContract(_pawnAddress);
+    }
+
+    /** ================================ CREATE LOAN CONTRACT ============================= */
     
-    // /**
-    // * @dev Create loan contract based on collateral & package info
-    // * @param _collateralId is the ID of collateral
-    // * @param _collateral is a copy of the collateral in memory
-    // * @param _packageId is the ID of pawnshop package, can be lesser than 0
-    // * @param _offerId is the ID of the offer, can be lesser than 0
-    // * @param _loanAmount is the amount of crypto token being loaned
-    // * @param _exchangeRate is the calculated exchange rate using Chainlink service
-    // * @param _lender is the address of lender
-    // * @param _repaymentAsset is the address of repayment token
-    // * @param _interest is the interest rate of pawn package
-    // * @param _repaymentCycleType is the cycle of payment, in weeks or months
-    // * @param _liquidityThreshold is the threshold at which the contract will be liquidated
-    // * @param _loanDurationQty is the duration the loan contract
-    // */
-    // function createContract(
-    //     uint256 _collateralId,
-    //     Collateral memory _collateral,
-    //     int256 _packageId,
-    //     int256 _offerId,
-    //     uint256 _exchangeRate,
-    //     uint256 _loanAmount,
-    //     address _lender,
-    //     address _repaymentAsset,
-    //     uint256 _interest,
-    //     LoanDurationType _repaymentCycleType,
-    //     uint256 _liquidityThreshold,
-    //     uint256 _loanDurationQty
-    // ) 
-    //     external
-    //     onlyRole(OPERATOR_ROLE) 
-    //     returns (uint256 _idx) 
-    // {
-    //     _idx = numberContracts;
-    //     Contract storage newContract = contracts[_idx];
-        
-    //     newContract.collateralId = _collateralId;
-    //     newContract.offerId = _offerId;
-    //     newContract.pawnShopPackageId = int256(_packageId);
-    //     newContract.status = ContractStatus.ACTIVE;
-    //     newContract.lateCount = 0;
-    //     newContract.terms.borrower = _collateral.owner;
-    //     newContract.terms.lender = _lender;
-    //     newContract.terms.collateralAsset = _collateral.collateralAddress;
-    //     newContract.terms.collateralAmount = _collateral.amount;
-    //     newContract.terms.loanAsset = _collateral.loanAsset;
-    //     newContract.terms.loanAmount = _loanAmount;
-    //     newContract.terms.repaymentCycleType = _repaymentCycleType;
-    //     newContract.terms.repaymentAsset = _repaymentAsset;
-    //     newContract.terms.interest = _interest;
-    //     newContract.terms.liquidityThreshold = _liquidityThreshold;
-    //     newContract.terms.contractStartDate = block.timestamp;
-    //     newContract.terms.contractEndDate =
-    //         block.timestamp +
-    //         PawnLib.calculateContractDuration(
-    //             _repaymentCycleType,
-    //             _loanDurationQty
-    //         );
-    //     newContract.terms.lateThreshold = lateThreshold;
-    //     newContract.terms.systemFeeRate = systemFeeRate;
-    //     newContract.terms.penaltyRate = penaltyRate;
-    //     newContract.terms.prepaidFeeRate = prepaidFeeRate;
-    //     ++numberContracts;
-
-    //     emit LoanContractCreatedEvent(_exchangeRate, msg.sender, _idx, newContract);
-    // }
-
     function createContract(
         ContractRawData memory contractData
     ) 
@@ -357,7 +299,8 @@ contract PawnLoanContract is PawnModel
         uint256 _contractId,
         uint256 _paidPenaltyAmount,
         uint256 _paidInterestAmount,
-        uint256 _paidLoanAmount
+        uint256 _paidLoanAmount,
+        uint256 _UID
     ) external whenContractNotPaused {
         // Get contract & payment request
         Contract storage _contract = contractMustActive(_contractId);
@@ -422,7 +365,8 @@ contract PawnLoanContract is PawnModel
             _feePenalty, 
             _feeInterest, 
             _prepaidFee,
-            _paymentRequest.requestId
+            _paymentRequest.requestId,
+            _UID
         );
 
         // If remaining loan = 0 => paidoff => execute release collateral
@@ -440,11 +384,12 @@ contract PawnLoanContract is PawnModel
             );
 
             // Transfer penalty and interest to lender except fee amount
+            uint256 transferAmount = _paidPenaltyAmount + _paidInterestAmount - _feePenalty - _feeInterest;
             PawnLib.safeTransfer(
                 _contract.terms.repaymentAsset,
                 msg.sender,
                 _contract.terms.lender,
-                _paidPenaltyAmount + _paidInterestAmount - _feePenalty - _feeInterest
+                transferAmount
             );
         }
 
@@ -577,8 +522,11 @@ contract PawnLoanContract is PawnModel
         PaymentRequest[] storage _paymentRequests = contractPaymentRequestMapping[_contractId];
         PaymentRequest storage _lastPaymentRequest = _paymentRequests[_paymentRequests.length - 1];
         _lastPaymentRequest.status = PaymentRequestStatusEnum.DEFAULT;
-        Collateral storage _collateral = collaterals[_contract.collateralId];
-        _collateral.status = CollateralStatus.COMPLETED;
+        
+        // Update collateral status in Pawn contract
+        // Collateral storage _collateral = collaterals[_contract.collateralId];
+        // _collateral.status = CollateralStatus.COMPLETED;
+        pawnContract.updateCollateralStatus(_contract.collateralId, CollateralStatus.COMPLETED);
 
         // Emit Event ContractLiquidedEvent & PaymentRequest event
         emit ContractLiquidedEvent(
@@ -627,8 +575,11 @@ contract PawnLoanContract is PawnModel
         PaymentRequest[] storage _paymentRequests = contractPaymentRequestMapping[_contractId];
         PaymentRequest storage _lastPaymentRequest = _paymentRequests[_paymentRequests.length - 1];
         _lastPaymentRequest.status = PaymentRequestStatusEnum.COMPLETE;
-        Collateral storage _collateral = collaterals[_contract.collateralId];
-        _collateral.status = CollateralStatus.COMPLETED;
+        
+        // Update Pawn contract's collateral status
+        // Collateral storage _collateral = collaterals[_contract.collateralId];
+        // _collateral.status = CollateralStatus.COMPLETED;
+        pawnContract.updateCollateralStatus(_contract.collateralId, CollateralStatus.COMPLETED);
 
         // Emit event ContractCompleted
         emit LoanContractCompletedEvent(_contractId);
