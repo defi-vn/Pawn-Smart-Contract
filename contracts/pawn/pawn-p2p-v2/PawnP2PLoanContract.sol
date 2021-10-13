@@ -169,10 +169,12 @@ contract PawnP2PLoanContract is PawnModel
                     PawnLib.calculatedueDateTimestampInterest(currentContract.terms.repaymentCycleType)
                 );
                 _nextPhraseInterest = exchange.calculateInteres(currentContract); 
-            } else {
+            } 
+            if(_paymentRequestType == PaymentRequestTypeEnum.OVERDUE) 
+            {
                 _dueDateTimestamp = PawnLib.add(
                     previousRequest.dueDateTimestamp, 
-                    PawnLib.calculatedueDateTimestampInterest(currentContract.terms.repaymentCycleType)
+                    PawnLib.calculatedueDateTimestampPenalty(currentContract.terms.repaymentCycleType)
                 );
                 _nextPhraseInterest = 0;  
             }
