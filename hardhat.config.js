@@ -86,7 +86,7 @@ task("balance", "Prints an account's balance")
   contractSizer: {
     alphaSort: true,
     disambiguatePaths: true,
-    runOnCompile: true,
+    runOnCompile: false,
     strict: false,
   }
   // mocha: {

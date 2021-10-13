@@ -305,6 +305,56 @@
       "address": "0xAEF8413160C293e2f990db245822C5381EdA72D1",
       "txHash": "0x9adf1ac6db82cb03ccc49728b3e15d22a7ac51b2ccfa7df800d63508dc50b5da",
       "kind": "uups"
+    },
+    {
+      "address": "0xf24a68C5528830E4c5F8Cb6fDcAE067e382200d3",
+      "txHash": "0x77983a53ff728f4317f99e346f31f121bbcff53abd7101062b15bde35ea81c28",
+      "kind": "uups"
+    },
+    {
+      "address": "0xE7264Ba3661cc2449777813e80d1DC98994FDB7b",
+      "txHash": "0x235c61b81099e45d01cc4760053620d7654900b1b3fb4291dfac583bf803c4ee",
+      "kind": "uups"
+    },
+    {
+      "address": "0xe1ac11563Bc205a0f529F808cd460989ad74CA2d",
+      "txHash": "0xa40bcf2edcf81305a714acf9de84c0c749853f8ec2324ba9442dbafbcafc19ff",
+      "kind": "uups"
+    },
+    {
+      "address": "0x7f224AC90200c02410EE2E652b382FF9F226F0a2",
+      "txHash": "0x81aa3170d00cfe2e4a2e783cb3db7fbe868763d91bf9c952d5ea1cd2e821a6fa",
+      "kind": "uups"
+    },
+    {
+      "address": "0x307B75237B61431C5d4d3e7F361f1eFF3Ee4ccd2",
+      "txHash": "0x5c37838509113f4864dedebfe87e14c11e18f022ea5a1ec47ee980443420bae0",
+      "kind": "uups"
+    },
+    {
+      "address": "0x0FD4c874f28422d76F5410f2b22654cA5C99C4B8",
+      "txHash": "0x79926382ebdb8d7473fc890a7ad2fd0ad9efeaccf462a97a5b3f4a502326829a",
+      "kind": "uups"
+    },
+    {
+      "address": "0x8e6eE309767347108553E0f5ADE71FDF4CaeDf86",
+      "txHash": "0x1c6783bd0701ebd7f1e342058a41e8f559fbf65d962d07adda0b54330a2a46f6",
+      "kind": "uups"
+    },
+    {
+      "address": "0x07C04cE7ad98C90f168310E1995deB6272Ca4d42",
+      "txHash": "0x5e353a259e4448859a7b6bb84b4c38cbc24159799e109111a8945638a04a38b3",
+      "kind": "uups"
+    },
+    {
+      "address": "0x90C3764c2998b57E215704938EDA227a8466b3aA",
+      "txHash": "0x19b7184ef35333c030113b620684c3ff7cfbb4009707671c0e206c790100b273",
+      "kind": "uups"
+    },
+    {
+      "address": "0x2fb8d65a817f32E6334dAA25D8CFe5fdE2027e30",
+      "txHash": "0xa348a57b0d727b0c280268671dc4ce5c2747e289ac62b0d181f07176b35b3055",
+      "kind": "uups"
     }
   ],
   "impls": {
@@ -5351,6 +5401,110 @@
           },
           "t_mapping(t_address,t_bool)": {
             "label": "mapping(address => bool)"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "b3eac9b575e077711ccdbfa975ea5a6d9f6dc872cd6cd0a9d3c82f019736d112": {
+      "address": "0x650D243f81387Fb847E1457eea9801A273315eF2",
+      "txHash": "0x13f077173c70f52a579b205666e521f0a37e09c82bc22124255e1eeecff4c53a",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)89_storage)",
+            "src": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:63"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:219"
+          },
+          {
+            "contract": "Exchange",
+            "label": "ListcryptoExchange",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "contracts/pawn/exchange/Exchange.sol:14"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)89_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(RoleData)89_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_uint256": {
+            "label": "uint256"
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"

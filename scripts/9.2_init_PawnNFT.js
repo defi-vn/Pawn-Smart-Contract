@@ -10,7 +10,7 @@ const PawnNFTProxyAddr  = proxies.PAWN_NFT_CONTRACT_ADDRESS;
 const RepuProxyAddr     = proxies.REPUTATION_CONTRACT_ADDRESS;
 const NFTBuildName      = "DFY_Physical_NFTs";
 const EvaBuildName      = "AssetEvaluation";
-const PawnBuildName     = "PawnNFTContract";
+const PawnNFTBuildName  = "PawnNFTContract";
 const RepuBuildName     = "Reputation";
 
 const lateThreshold     = 3;
@@ -30,9 +30,9 @@ async function main() {
     console.log("Account balance:", ((await deployer.getBalance())/decimals).toString());
     console.log("============================================================");
 
-    const PawnFactory   = await hre.ethers.getContractFactory(PawnBuildName);
-    const PawnArtifact  = await hre.artifacts.readArtifact(PawnBuildName);
-    const PawnContract  = PawnFactory.attach(PawnNFTProxyAddr);
+    const PawnNFTFactory   = await hre.ethers.getContractFactory(PawnNFTBuildName);
+    const PawnNFTArtifact  = await hre.artifacts.readArtifact(PawnNFTBuildName);
+    const PawnNFTContract  = PawnNFTFactory.attach(PawnNFTProxyAddr);
 
     const NFTFactory    = await hre.ethers.getContractFactory(NFTBuildName);
     const NFTArtifact   = await hre.artifacts.readArtifact(NFTBuildName);
@@ -46,33 +46,33 @@ async function main() {
     const RepuArtifact  = await hre.artifacts.readArtifact(RepuBuildName);
     const RepuContract  = RepuFactory.attach(RepuProxyAddr);
     
-    console.log(`Initializing ${PawnArtifact.contractName}...`);
+    console.log(`Initializing ${PawnNFTArtifact.contractName}...`);
     console.log(`Setting Fee wallet...`);
-    await PawnContract.setFeeWallet(feeWallet);
+    await PawnNFTContract.setFeeWallet(feeWallet);
     console.log(`Fee wallet set at: ${feeWallet}\n\r`);
 
     console.log(`Setting contract operator...`);
-    await PawnContract.setOperator(operator);
+    await PawnNFTContract.setOperator(operator);
     console.log(`Contract operator: ${operator}\n\r`);
 
     console.log(`Setting Late threshold...`);
-    await PawnContract.setLateThreshold(lateThreshold);
+    await PawnNFTContract.setLateThreshold(lateThreshold);
     console.log(`Late threshold: ${lateThreshold}\n\r`);
 
     console.log(`Setting Penalty rate...`);
-    await PawnContract.setPenaltyRate(penaltyRate);
+    await PawnNFTContract.setPenaltyRate(penaltyRate);
     console.log(`Penalty rate: ${penaltyRate}\n\r`);
 
     console.log(`Setting Prepaid fee rate...`);
-    await PawnContract.setPrepaidFeeRate(prepaidFeeRate);
+    await PawnNFTContract.setPrepaidFeeRate(prepaidFeeRate);
     console.log(`Prepaid fee rate: ${prepaidFeeRate}\n\r`);
 
     console.log(`Setting System fee rate...`);
-    await PawnContract.setSystemFeeRate(systemFeeRate);
+    await PawnNFTContract.setSystemFeeRate(systemFeeRate);
     console.log(`System fee rate: ${systemFeeRate}\n\r`);
 
     console.log(`Setting Whitelisted NFT collateral...`);
-    await PawnContract.setWhitelistCollateral(proxies.NFT_CONTRACT_ADDRESS, 1);
+    await PawnNFTContract.setWhitelistCollateral(proxies.NFT_CONTRACT_ADDRESS, 1);
     console.log(`\tWhitelisted token as collateral: ${proxies.NFT_CONTRACT_ADDRESS}`);
 
     console.log("============================================================\n\r");
@@ -86,8 +86,8 @@ async function main() {
 
     console.log(`Initializing ${EvaArtifact.contractName}...`);
     console.log(`Setting Fee wallet...`);
-    await EvaContract.setFeeWallet(EvaProxyAddr);
-    console.log(`Fee wallet address: ${EvaProxyAddr}`);
+    await EvaContract.setFeeWallet(PawnConfig.FeeWallet);
+    console.log(`Fee wallet address: ${PawnConfig.FeeWallet}`);
 
     console.log(`Setting Operator address...`);
     await EvaContract.grantRole(PawnConfig.OPERATOR_ROLE, PawnConfig.EvaluationOperator);
@@ -98,7 +98,7 @@ async function main() {
     console.log(`Initializing ${RepuArtifact.contractName}...`);
     console.log(`Setting contract caller...`);
     await RepuContract.addWhitelistedContractCaller(PawnNFTProxyAddr);
-    console.log(`Contract caller set at address: ${PawnArtifact.contractName} - ${PawnNFTProxyAddr}\n\r`);
+    console.log(`Contract caller set at address: ${PawnNFTArtifact.contractName} - ${PawnNFTProxyAddr}\n\r`);
     
     console.log("============================================================\n\r");
 }

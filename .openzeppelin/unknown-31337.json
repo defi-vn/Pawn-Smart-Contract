@@ -13,7 +13,7 @@
     },
     {
       "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
-      "txHash": "0xc8a6848f6685d904caf212bfa54a85ee5f70965e78b7f76dd661e213aa9e314a",
+      "txHash": "0xac68dce66293c4736f5332e2e63a7a508f459a65fdc82be161efd4ae4b61537d",
       "kind": "uups"
     }
   ],
@@ -819,7 +819,7 @@
     },
     "3faf1477ab144b8bb7f9a4c3235bb1313364652caed31dfd50a2157ce87f275c": {
       "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
-      "txHash": "0x51fc7d799951e2ef2c552f87f8ff3c4a6079e1cea6974f9077c855fd4bf1a019",
+      "txHash": "0x0bbdde65b3e560b6b109181171f7ed2aa92b9f6ba6e27a742d7c016ab7ec0217",
       "layout": {
         "storage": [
           {
@@ -891,7 +891,7 @@
           {
             "contract": "Reputation",
             "label": "_rewardByReason",
-            "type": "t_mapping(t_enum(ReasonType)20779,t_int8)",
+            "type": "t_mapping(t_enum(ReasonType)20271,t_int8)",
             "src": "contracts/pawn/reputation/Reputation.sol:35"
           },
           {
@@ -911,10 +911,10 @@
           "t_uint32": {
             "label": "uint32"
           },
-          "t_mapping(t_enum(ReasonType)20779,t_int8)": {
+          "t_mapping(t_enum(ReasonType)20271,t_int8)": {
             "label": "mapping(enum IReputation.ReasonType => int8)"
           },
-          "t_enum(ReasonType)20779": {
+          "t_enum(ReasonType)20271": {
             "label": "enum IReputation.ReasonType",
             "members": [
               "LD_CREATE_PACKAGE",
