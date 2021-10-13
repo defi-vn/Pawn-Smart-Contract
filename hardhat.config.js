@@ -88,8 +88,8 @@ task("balance", "Prints an account's balance")
     disambiguatePaths: true,
     runOnCompile: false,
     strict: false,
+  },
+  mocha: {
+    timeout: 200000
   }
-  // mocha: {
-  //   timeout: 20000
-  // }
 };

@@ -11,7 +11,7 @@ const DFYBuild          = "DFY";
 
 before("Pawn For testing", async () => {
     this.DFYFactory     = await ethers.getContractFactory(DFYBuild);
-    this.DFYInstance    = await this.DFYFactory.deploy();
+    this.DFYInstance    = await upgrades.deployProxy(this.DFYFactory, { kind: 'uups' });
     await this.DFYInstance.deployed();
     console.log(`DFY address: ${this.DFYInstance.address}`);
 
@@ -31,7 +31,7 @@ before("Pawn For testing", async () => {
     console.log(`Exchange address: ${this.ExchangeInstance.address}`);
 
     this.PawnP2PLoanContractFactory  = await ethers.getContractFactory(PawnP2PLoanContract);
-    this.PawnP2PLoanContractInstance = await upgrades.deployProxy(this.PawnP2PLoanContractFactory, { kind: 'uups' });
+    this.PawnP2PLoanContractInstance = await upgrades.deployProxy(this.PawnP2PLoanContractFactory, [100000], { kind: 'uups' });
     await this.PawnP2PLoanContractInstance.deployed();
     console.log(`PawnP2PLoanContract address: ${this.PawnP2PLoanContractInstance.address}`);
 
@@ -73,6 +73,8 @@ before("Pawn For testing", async () => {
     // Transfer from Admin to Borrower
     const transferAmount = BigInt(10 ** 21); // 1000 * 10 ** 18 = 1000 DFY
     await this.DFYInstance.transfer(this.BorrowerAccount.address, transferAmount);
+
+    await this.PawnP2PLoanContractInstance.setExchangeContract(this.ExchangeInstance.address);
     
 })
 
@@ -169,11 +171,12 @@ describe("Pawn For testing", () => {
     it("Should accept collateral for package", async () => {
         const pawnshop = this.PawnFactory.connect(this.operator);
         this.PawnInstance = pawnshop.attach(this.PawnInstance.address);
-        console.log(this.PawnInstance.address)
+        console.log(this.PawnInstance.address);
+        console.log(await this.PawnP2PLoanContractInstance.exchange());
         const checkConditionTx = await this.PawnInstance.acceptCollateralOfPackage(0,0);
 
-        // let receipt = await checkConditionTx.wait();
-        // console.log(receipt.events);
+        let receipt = await checkConditionTx.wait();
+        console.log(receipt.events);
     })
 
 })
