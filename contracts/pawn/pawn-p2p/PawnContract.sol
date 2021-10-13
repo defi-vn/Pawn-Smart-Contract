@@ -1060,7 +1060,6 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
     /** ===================================== 3.2. REPAYMENT ============================= */
     
-    // Old RepaymentEvent
     event RepaymentEvent(
         uint256 contractId,
         uint256 paidPenaltyAmount,
@@ -1069,7 +1068,8 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         uint256 paidPenaltyFeeAmount,
         uint256 paidInterestFeeAmount,
         uint256 prepaidAmount,
-        uint256 paymentRequestId
+        uint256 paymentRequestId,
+        uint256 UID
     );
 
     /**
@@ -1079,7 +1079,8 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         uint256 _contractId,
         uint256 _paidPenaltyAmount,
         uint256 _paidInterestAmount,
-        uint256 _paidLoanAmount
+        uint256 _paidLoanAmount,
+        uint256 _UID
     ) external whenNotPaused {
         // Get contract & payment request
         Contract storage _contract = contractMustActive(_contractId);
@@ -1144,7 +1145,8 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             _feePenalty, 
             _feeInterest, 
             _prepaidFee,
-            _paymentRequest.requestId
+            _paymentRequest.requestId,
+            _UID
         );
 
         // If remaining loan = 0 => paidoff => execute release collateral
@@ -1162,11 +1164,12 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             );
 
             // Transfer penalty and interest to lender except fee amount
+            uint256 transferAmount = _paidPenaltyAmount + _paidInterestAmount - _feePenalty - _feeInterest;
             PawnLib.safeTransfer(
                 _contract.terms.repaymentAsset,
                 msg.sender,
                 _contract.terms.lender,
-                _paidPenaltyAmount + _paidInterestAmount - _feePenalty - _feeInterest
+                transferAmount
             );
         }
 
