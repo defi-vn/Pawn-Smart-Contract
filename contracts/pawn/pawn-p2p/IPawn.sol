@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.4;
 
-import "./PawnLib.sol";
+import "../pawn-p2p-v2/PawnLib.sol";
 
 interface IPawn {
     /** General functions */

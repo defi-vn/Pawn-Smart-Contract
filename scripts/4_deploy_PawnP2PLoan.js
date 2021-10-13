@@ -22,16 +22,11 @@ async function main() {
     const PawnP2PLoanFactory    = await hre.ethers.getContractFactory(PawnP2PLoanBuildName);
     const PawnP2PLoanArtifact   = await hre.artifacts.readArtifact(PawnP2PLoanBuildName);
 
-    const PawnP2PLoanContract   = await hre.upgrades.deployProxy(PawnP2PLoanFactory, proxyType ?? "");
+    const PawnP2PLoanContract   = await hre.upgrades.deployProxy(PawnP2PLoanFactory, [PawnConfig.ZOOM], proxyType ?? "");
 
     await PawnP2PLoanContract.deployed();
 
-    console.log(`PAWN_NFT_CONTRACT_ADDRESS: ${PawnP2PLoanContract.address}`);
-
-    if(proxyType?.kind?.toLowerCase() != "uups") {
-        proxyAdmin = await hre.upgrades.erc1967.getAdminAddress(PawnP2PLoanContract.address);
-        console.log(`Proxy Admin: ${proxyAdmin}`);
-    }
+    console.log(`PAWN_P2PLOAN_CONTRACT_ADDRESS: ${PawnP2PLoanContract.address}`);
 
     implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(PawnP2PLoanContract.address);
     console.log(`${PawnP2PLoanArtifact.contractName} implementation address: ${implementationAddress}`);

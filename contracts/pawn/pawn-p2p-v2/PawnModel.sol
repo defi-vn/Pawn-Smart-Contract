@@ -11,7 +11,7 @@ import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "./IPawn.sol";
-import "../pawn-p2p/PawnLib.sol";
+import "./PawnLib.sol";
 import "../exchange/Exchange.sol";
 import "../access/DFY-AccessControl.sol";
 import "../reputation/IReputation.sol";

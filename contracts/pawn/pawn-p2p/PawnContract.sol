@@ -5,14 +5,14 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "./IPawn.sol";
 import "../reputation/IReputation.sol";
 import "../exchange/Exchange.sol";
 import "../pawn-p2p-v2/PawnP2PLoanContract.sol";
 
 contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
-    using SafeERC20 for IERC20;
+    using SafeERC20Upgradeable for IERC20Upgradeable;
     using CollateralLib for Collateral;
     using OfferLib for Offer;
     using PawnPackageLib for PawnShopPackage;
@@ -334,8 +334,8 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         uint256 _loanAmount,
         uint256 _duration,
         uint256 _interest,
-        uint256 _loanDurationType,
-        uint256 _repaymentCycleType,
+        uint8 _loanDurationType,
+        uint8 _repaymentCycleType,
         uint256 _liquidityThreshold
     )
         external 
@@ -347,7 +347,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         // validate not allow for collateral owner to create offer
         require(collateral.owner != msg.sender, '1'); // owner
         // Validate ower already approve for this contract to withdraw
-        require(IERC20(collateral.loanAsset).allowance(msg.sender, address(this)) >= _loanAmount, '2'); // not-apr
+        require(IERC20Upgradeable(collateral.loanAsset).allowance(msg.sender, address(this)) >= _loanAmount, '2'); // not-apr
 
         // Get offers of collateral
         CollateralOfferList storage collateralOfferList = collateralOffersMapping[_collateralId];

@@ -6,7 +6,6 @@ const { PawnConfig } = require('./.deployment_data.json');
 const PawnBuildName     = "contracts/pawn/pawn-p2p/PawnContract.sol:PawnContract";
 const ProxyBuildName    = "AdminUpgradeabilityProxy";
 const ProxyData         = "0x";
-const RepuBuildName     = "contracts/pawn/reputation/Reputation.sol:Reputation";
 const ExchangeBuildName = "Exchange";
 
 const proxyType = { kind: "uups" };
@@ -21,20 +20,6 @@ async function main() {
     console.log("Account balance:", ((await deployer.getBalance())/decimals).toString());
     console.log("============================================================\n\r");
   
-    const RepuFactory   = await hre.ethers.getContractFactory(RepuBuildName);
-    const RepuArtifact  = await hre.artifacts.readArtifact(RepuBuildName);
-
-    const RepuContract  = await hre.upgrades.deployProxy(RepuFactory, proxyType);
-    
-    await RepuContract.deployed();
-
-    console.log(`REPUTATION_CONTRACT_ADDRESS: ${RepuContract.address}`);
-
-    implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(RepuContract.address);
-    console.log(`${RepuArtifact.contractName} implementation address: ${implementationAddress}`);
-    
-    console.log("============================================================\n\r");
-
     const PawnFactory   = await hre.ethers.getContractFactory(PawnBuildName);
     const PawnArtifact  = await hre.artifacts.readArtifact(PawnBuildName);
 
