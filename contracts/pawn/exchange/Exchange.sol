@@ -157,7 +157,7 @@ contract Exchange is
         if(_contract.terms.repaymentAsset == address(0)) {
             repaymentAssetToUSD = uint256(RateBNBwithUSD()) * 10**10;
         } else {
-            repaymentAssetToUSD = uint256(getLatesPriceToUSD(_contract.terms.loanAsset));
+            repaymentAssetToUSD = uint256(getLatesPriceToUSD(_contract.terms.loanAsset)) * 10**10;
         }
 
         interest = (interestToUSD * _interestByLoanDurationType) / (repaymentAssetToUSD * 10**5);
