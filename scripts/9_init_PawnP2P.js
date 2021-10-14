@@ -1,5 +1,6 @@
 require('@nomiclabs/hardhat-ethers');
 const hre = require('hardhat');
+const { PawnContract } = require('../test/Pawn.test');
 
 const { PawnConfig, Proxies, Tokens } = require('./.deployment_data.json');
 const proxies = Proxies.Beta;
@@ -11,11 +12,10 @@ const RepuProxyAddr     = proxies.REPUTATION_CONTRACT_ADDRESS;
 const RepuBuildName     = "contracts/pawn/reputation/Reputation.sol:Reputation";
 
 const ExchangeProxyAddr = proxies.EXCHANGE_CONTRACT_ADDRESS;
-const ExchangeBuildName = "Exchange";
 
 const LoanProxyAddr     = proxies.PAWN_P2PLOAN_CONTRACT_ADDRESS;
 
-const zoom              = 100000;
+const zoom              = PawnConfig.ZOOM;
 const lateThreshold     = PawnConfig.LateThreshold;
 const penaltyRate       = PawnConfig.PenaltyRate;
 const prepaidFeeRate    = PawnConfig.PrepaidFee;
@@ -41,7 +41,7 @@ async function main() {
     const RepuArtifact  = await hre.artifacts.readArtifact(RepuBuildName);
     const RepuContract  = RepuFactory.attach(RepuProxyAddr);
 
-    console.log("Initializing...");
+    console.log(`Initializing ${PawnArtifact.contractName}...`);
     await PawnContract.initialize(zoom);
     console.log(`Initialized contract with Zoom factor of ${zoom}\n\r`);
 
