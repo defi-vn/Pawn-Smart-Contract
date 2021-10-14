@@ -90,6 +90,6 @@ task("balance", "Prints an account's balance")
     strict: false,
   },
   mocha: {
-    timeout: 200000
+    timeout: 600000
   }
 };
