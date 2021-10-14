@@ -19,7 +19,7 @@ import "../nft/IDFY_Physical_NFTs.sol";
 import "../evaluation/EvaluationContract.sol";
 import "../evaluation/IBEP20.sol";
 import "../reputation/IReputation.sol";
-import "../exchange/ExchangeNFT.sol";
+import "../exchange/Exchange.sol";
 
 contract PawnNFTContract is 
     IPawnNFT, 
@@ -566,7 +566,7 @@ contract PawnNFTContract is
             if(_paymentRequestType == PaymentRequestTypeEnum.INTEREST)
             {
                 _dueDateTimestamp = PawnNFTLib.add(previousRequest.dueDateTimestamp, PawnNFTLib.calculatedueDateTimestampInterest(currentContract.terms.repaymentCycleType));
-                _nextPhraseInterest = exchange.calculateInterest(currentContract);
+                _nextPhraseInterest = exchange.calculateInterestNFT(currentContract);
             }
             if(_paymentRequestType == PaymentRequestTypeEnum.OVERDUE)
             {
@@ -627,7 +627,7 @@ contract PawnNFTContract is
             // Validate: remaining loan must valid
 //            require(currentContract.terms.loanAmount == _remainingLoan, '4');
             _remainingLoan = currentContract.terms.loanAmount;
-            _nextPhraseInterest = exchange.calculateInterest(currentContract);
+            _nextPhraseInterest = exchange.calculateInterestNFT(currentContract);
             _nextPhrasePenalty = 0;
             _dueDateTimestamp = PawnNFTLib.add(block.timestamp, PawnNFTLib.calculatedueDateTimestampInterest(currentContract.terms.repaymentCycleType));
 
@@ -972,12 +972,12 @@ contract PawnNFTContract is
         reputation = IReputation(_reputationAddress);
     }
 
-    ExchangeNFT public exchange;
+    Exchange public exchange;
 
     function setExchangeContract(address _exchangeAddress) 
         external 
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
-        exchange = ExchangeNFT(_exchangeAddress);
+        exchange = Exchange(_exchangeAddress);
     }
 }
