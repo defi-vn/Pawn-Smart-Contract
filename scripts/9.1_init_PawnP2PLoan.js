@@ -10,10 +10,10 @@ const LoanBuildName     = "contracts/pawn/pawn-p2p-v2/PawnP2PLoanContract.sol:Pa
 const RepuProxyAddr     = proxies.REPUTATION_CONTRACT_ADDRESS;
 const RepuBuildName     = "contracts/pawn/reputation/Reputation.sol:Reputation";
 
-const ExchangeAddr      = proxies.EXCHANGE_CONTRACT_ADDRESS;
-const ExchangeBuildName = "Exchange";
+const ExchangeProxyAddr = proxies.EXCHANGE_CONTRACT_ADDRESS;
+const PawnProxyAddr     = proxies.PAWN_CONTRACT_ADDRESS;
 
-const zoom              = 100000;
+// const zoom              = 100000; // Initialized on proxy deployment
 const lateThreshold     = PawnConfig.LateThreshold;
 const penaltyRate       = PawnConfig.PenaltyRate;
 const prepaidFeeRate    = PawnConfig.PrepaidFee;
@@ -69,8 +69,16 @@ async function main() {
     console.log(`Reputation contract set at address: ${RepuProxyAddr}\n\r`);
 
     console.log(`Setting Exchange contract...`);
-    await LoanContract.setExchangeContract(ExchangeAddr);
-    console.log(`Exchange contract set at address: ${ExchangeAddr}\n\r`);
+    await LoanContract.setExchangeContract(ExchangeProxyAddr);
+    console.log(`Exchange contract set at address: ${ExchangeProxyAddr}\n\r`);
+
+    console.log(`Setting Pawn contract address...`);
+    await LoanContract.setPawnContract(PawnProxyAddr);
+    console.log(`Pawn contract set at address: ${PawnProxyAddr}`);
+    
+    console.log(`Setting Pawn contract as operator...`);
+    await LoanContract.setOperator(PawnProxyAddr);
+    console.log(`Pawn contract as operator: ${PawnProxyAddr}\n\r`);
 
     console.log(`Setting Whitelisted collateral...`);
     for await (let token of Tokens) {
@@ -78,11 +86,13 @@ async function main() {
         console.log(`\tWhitelisted token as collateral: ${token.Symbol}: ${token.Address}`);
     }
 
+    // console.log("============================================================\n\r");
+    // console.log(`Initializing ${RepuArtifact.contractName}...`);
+    // console.log(`Setting contract caller...`);
+    // await RepuContract.addWhitelistedContractCaller(LoanProxyAddr);
+    // console.log(`Contract caller set at address: ${LoanArtifact.contractName} - ${LoanProxyAddr}\n\r`);
+
     console.log("============================================================\n\r");
-    console.log(`Initializing ${RepuArtifact.contractName}...`);
-    console.log(`Setting contract caller...`);
-    await RepuContract.addWhitelistedContractCaller(LoanProxyAddr);
-    console.log(`Contract caller set at address: ${LoanArtifact.contractName} - ${LoanProxyAddr}\n\r`);
 
 }
 
