@@ -166,9 +166,53 @@
         },
         {
             "Symbol": "ADA",
-            "Name": "DOT/USD",
+            "Name": "ADA/USD",
             "Address": "0xCE89CFcca3fedD566C7574902137eD31A4C9Ea40",
             "Exchange": "0x5e66a1775BbC249b5D51C13d29245522582E671C"
+        },
+        {
+            "Symbol": "XRP",
+            "Name": "XRP/USD",
+            "Address": "0x653b5410E4a15062cdEF91f9CEe930ca9B1832C4",
+            "Exchange": "0x4046332373C24Aed1dC8bAd489A04E187833B28d"
+        },
+        {
+            "Symbol": "FIL",
+            "Name": "FIL/USD",
+            "Address": "0x0D8Ce2A99Bb6e3B7Db580eD848240e4a0F9aE153",
+            "Exchange": "0x17308A18d4a50377A4E1C37baaD424360025C74D"
+        },
+        {
+            "Symbol": "SXP",
+            "Name": "SXP/USD",
+            "Address": "0x47BEAd2563dCBf3bF2c9407fEa4dC236fAbA485A",
+            "Exchange": "0x678AC35ACbcE272651874E782DB5343F9B8a7D66"
+        },
+        {
+            "Symbol": "LINK",
+            "Name": "LINK/USD",
+            "Address": "0xF8A0BF9cF54Bb92F17374d9e9A321E6a111a51bD",
+            "Exchange": "0x1B329402Cb1825C6F30A0d92aB9E2862BE47333f"
+        },
+        {
+            "Symbol": "BCH",
+            "Name": "BCH/USD",
+            "Address": "0x8fF795a6F4D97E7887C79beA79aba5cc76444aDf",
+            "Exchange": "0x887f177CBED2cf555a64e7bF125E1825EB69dB82"
+        },
+        {
+            "Symbol": "DAI",
+            "Name": "DAI/USD",
+            "Address": "0xaeeFfB36f4F8f0603AF63607f839D9457fc8b292",
+            "Exchange": "0xE4eE17114774713d2De0eC0f035d4F7665fc025D"
+        },
+        {
+            "Symbol": "BUSD",
+            "Name": "BUSD/USD",
+            "Address": "0x544D0AD6BdDa001630941f6523D935E32cCAb604",
+            "Exchange": "0x9331b55D9830EF609A2aBCfAc0FBCE050A52fdEa"
         }
+        
+
     ]
 }
