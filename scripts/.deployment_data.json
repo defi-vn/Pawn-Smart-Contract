@@ -124,5 +124,38 @@
             "Symbol": "BNB", 
             "Address": "0x0000000000000000000000000000000000000000"
         }
+    ],
+
+    "Exchange": [
+        {
+            "Symbol": "USDT", 
+            "Address": "0x362F62b601E80221abb8013c496055fbD297b0B5",
+            "USDT/USD": "0xEca2605f0BCF2BA5966372C99837b1F182d3D620"
+        },
+        {
+            "Symbol": "ETH", 
+            "Address": "0xf827916F754297d7fF595e77c8dF8287fDE74BA4",
+            "ETH/USD": "0x143db3CEEfbdfe5631aDD3E50f7614B6ba708BA7"
+        },
+        {
+            "Symbol": "LTC", 
+            "Address": "0x395998D21d4Dd230f38247F84145Bd4d9afAaCa2",
+            "LTC/USD": "0x9Dcf949BCA2F4A8a62350E0065d18902eE87Dca3"
+        },
+        {
+            "Symbol": "BTC", 
+            "Address": "0x52D2848E79861492795a2635B76493999F1EdB1F",
+            "BTC/USD": "0x5741306c21795FdCBb9b265Ea0255F499DFe515C"
+        },
+        {
+            "Symbol": "DOT", 
+            "Address": "0x62950ba1AdB2C867A24599a3666bf83Cf84c29Ed",
+            "DOT/USD": "0xEA8731FD0685DB8AeAde9EcAE90C4fdf1d8164ed"
+        },
+        {
+            "Symbol": "ADA", 
+            "Address": "0xCE89CFcca3fedD566C7574902137eD31A4C9Ea40",
+            "DOT/USD": "0x5e66a1775BbC249b5D51C13d29245522582E671C"
+        }
     ]
 }
