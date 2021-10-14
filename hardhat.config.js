@@ -86,10 +86,10 @@ task("balance", "Prints an account's balance")
   contractSizer: {
     alphaSort: true,
     disambiguatePaths: true,
-    runOnCompile: true,
+    runOnCompile: false,
     strict: false,
+  },
+  mocha: {
+    timeout: 200000
   }
-  // mocha: {
-  //   timeout: 20000
-  // }
 };

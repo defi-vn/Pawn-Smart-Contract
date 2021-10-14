@@ -1,7 +1,7 @@
 const hre = require('hardhat');
 
 const { Proxies } = require('./.deployment_data.json');
-const proxies = Proxies.Staging;
+const proxies = Proxies.Beta;
 
 const PawnProxyAddr     = proxies.PAWN_CONTRACT_ADDRESS;
 const PawnBuildName     = "contracts/pawn/pawn-p2p/PawnContract.sol:PawnContract";

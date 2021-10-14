@@ -5,11 +5,13 @@ const { expect } = require('chai');
 
 const PawnBuild         = "contracts/pawn/pawn-p2p/PawnContract.sol:PawnContract";
 const ReputationBuild   = "contracts/pawn/reputation/Reputation.sol:Reputation";
+const Exchange          = "Exchange";
+const PawnP2PLoanContract   = "PawnP2PLoanContract";
 const DFYBuild          = "DFY";
 
 before("Pawn For testing", async () => {
     this.DFYFactory     = await ethers.getContractFactory(DFYBuild);
-    this.DFYInstance    = await this.DFYFactory.deploy();
+    this.DFYInstance    = await upgrades.deployProxy(this.DFYFactory, { kind: 'uups' });
     await this.DFYInstance.deployed();
     console.log(`DFY address: ${this.DFYInstance.address}`);
 
@@ -20,9 +22,18 @@ before("Pawn For testing", async () => {
 
     this.ReputationFactory  = await ethers.getContractFactory(ReputationBuild);
     this.ReputationInstance = await upgrades.deployProxy(this.ReputationFactory, { kind: 'uups' });
-    
     await this.ReputationInstance.deployed();
     console.log(`Reputation address: ${this.ReputationInstance.address}`);
+
+    this.ExchangeFactory  = await ethers.getContractFactory(Exchange);
+    this.ExchangeInstance = await upgrades.deployProxy(this.ExchangeFactory, { kind: 'uups' });
+    await this.ExchangeInstance.deployed();
+    console.log(`Exchange address: ${this.ExchangeInstance.address}`);
+
+    this.PawnP2PLoanContractFactory  = await ethers.getContractFactory(PawnP2PLoanContract);
+    this.PawnP2PLoanContractInstance = await upgrades.deployProxy(this.PawnP2PLoanContractFactory, [100000], { kind: 'uups' });
+    await this.PawnP2PLoanContractInstance.deployed();
+    console.log(`PawnP2PLoanContract address: ${this.PawnP2PLoanContractInstance.address}`);
 
     // Setting accounts
     [admin, ope, feeCollector, pawnShopAccount, borrowerAccount] = await ethers.getSigners();
@@ -31,8 +42,9 @@ before("Pawn For testing", async () => {
     this.feeWallet = feeCollector;
     this.PawnShopAccount = pawnShopAccount;
     this.BorrowerAccount = borrowerAccount;
-    console.log(`Pawnshop accounts: ${this.PawnShopAccount.address}`);
-    console.log(`Borrower accounts: ${this.BorrowerAccount.address}`);
+
+   
+
 
     // Initialize Pawn contract
     const zoom              = 100000;
@@ -52,6 +64,7 @@ before("Pawn For testing", async () => {
     await this.PawnInstance.setPrepaidFeeRate(prepaidFeeRate);
     await this.PawnInstance.setSystemFeeRate(systemFeeRate);
     await this.PawnInstance.setWhitelistCollateral(whitelistedToken, 1);
+    await this.PawnInstance.setExchangeContract(this.ExchangeInstance.address);
 
     // Setting connections
     await this.PawnInstance.setReputationContract(this.ReputationInstance.address);
@@ -60,64 +73,63 @@ before("Pawn For testing", async () => {
     // Transfer from Admin to Borrower
     const transferAmount = BigInt(10 ** 21); // 1000 * 10 ** 18 = 1000 DFY
     await this.DFYInstance.transfer(this.BorrowerAccount.address, transferAmount);
+
+    await this.PawnP2PLoanContractInstance.setExchangeContract(this.ExchangeInstance.address);
     
 })
 
 describe("Pawn For testing", () => {
     it("Should return balance of Borrower account", async () => {
         const balance = await this.DFYInstance.balanceOf(this.BorrowerAccount.address);
-        console.log(balance.toString());
     })
     it("Should return Reputation address", async () => {
-        console.log(await this.PawnInstance.reputation());
         expect(await this.PawnInstance.reputation()).to.equal(this.ReputationInstance.address);
     })
 
     it("Should return 1 for whitelisted token", async () => {
-        console.log(`Whitelisted token: ${this.DFYInstance.address}`);
         expect(await this.PawnInstance.whitelistCollateral(this.DFYInstance.address)).to.equal(1);
     })
     
     it(`Should return Reputation score = 3 for Pawnshop account - create package`, async () => {
         const pawnshop = this.PawnFactory.connect(this.PawnShopAccount);
         this.PawnInstance = pawnshop.attach(this.PawnInstance.address);
+        let scoreOfPawnShopBeforeCreat = await this.ReputationInstance.getReputationScore(this.PawnShopAccount.address)
+        
         const createPkgTx = await this.PawnInstance.createPawnShopPackage(
             0, 
             this.DFYInstance.address, 
-            [1,1000000000000000],
+            [1,BigInt(10000*10**18)],
             [this.DFYInstance.address],
-            10,
-            1,
-            [1,20],
+            150000,
+            0,
+            [1,10],
             this.DFYInstance.address,
-            1,
-            70,
-            90
+            0,
+            600000,
+            700000,
         );
         
         let receipt = await createPkgTx.wait();
         let packageId = receipt.events[0].args.packageId.toNumber();
-        
-        // console.log(receipt.events[0].args);
-        // console.log(`Package owner: ${receipt.events[0].args.data.owner}`);
-        // console.log(`Package ID: ${packageId}`);
-
-        console.log(`\n\rPawnshop loan package created with Package ID: ${packageId}`);
+        let scoreOfPawnShopAfterCreat = await this.ReputationInstance.getReputationScore(this.PawnShopAccount.address)
     
         const pkgObj = await this.PawnInstance.pawnShopPackages(packageId);
-        console.log(`Owner: ${pkgObj.owner}`);
-        console.log(`Package type: ${pkgObj.packageType == 0 ? "Auto" : "Semi"}`);
-        console.log(`Loan token: ${pkgObj.loanToken}`);
-        console.log(`Loan amount range: from ${pkgObj.loanAmountRange.lowerBound.toNumber()} to ${pkgObj.loanAmountRange.upperBound.toNumber()}`);
-        console.log(`Interest: ${pkgObj.interest.toNumber()}`);
-        console.log(`Duration type: ${pkgObj.durationType.toNumber() == 0 ? "Week" : "Month"}`);
-        console.log(`Duration range: from ${pkgObj.durationRange.lowerBound.toNumber()} to ${pkgObj.durationRange.upperBound.toNumber()}`);
-        console.log(`Repayment asset: ${pkgObj.repaymentAsset}`);
-        console.log(`Repayment cycle: ${pkgObj.repaymentCycleType == 0 ? "Weekly" : "Monthly"}`);
-        console.log(`Loan to value: ${pkgObj.loanToValue.toNumber()}`);
-        console.log(`Liquidation threshold: ${pkgObj.loanToValueLiquidationThreshold.toNumber()}`);
 
-        expect(await this.ReputationInstance.getReputationScore(this.PawnShopAccount.address)).to.equal(3);
+        expect(packageId == 0)
+        expect(pkgObj.owner == this.PawnShopAccount.address)
+        expect(pkgObj.packageType == 0)
+        expect(pkgObj.loanToken == this.DFYInstance.address)
+        expect(pkgObj.loanAmountRange.lowerBound == 1)
+        expect(pkgObj.loanAmountRange.upperBound == BigInt(10000*10**18))
+        expect(pkgObj.interest == 150000)
+        expect(pkgObj.durationType == 0)
+        expect(pkgObj.durationRange.lowerBound == 1)
+        expect(pkgObj.durationRange.upperBound == 10)
+        expect(pkgObj.repaymentAsset == this.DFYInstance.address)
+        expect(pkgObj.repaymentCycleType == 0)
+        expect(pkgObj.loanToValue == 600000)
+        expect(pkgObj.loanToValueLiquidationThreshold == 700000)
+        expect(scoreOfPawnShopAfterCreat == scoreOfPawnShopBeforeCreat + 3);
     })
 
     it("Should return Reputation score = 3 for Borrower account - Create Collateral", async () => {
@@ -129,71 +141,42 @@ describe("Pawn For testing", () => {
 
         const pawnshop = this.PawnFactory.connect(this.BorrowerAccount);
         this.PawnInstance = pawnshop.attach(this.PawnInstance.address);
+
+        let scoreOfBorrowerBeforeCreat = await this.ReputationInstance.getReputationScore(this.BorrowerAccount.address)
+        
         const createColtTx = await this.PawnInstance.createCollateral(
             this.DFYInstance.address, 
             0,
-            BigInt(10 ** 20),
+            BigInt(100*10**18),
             this.DFYInstance.address,
-            1,
-            1
+            3,
+            0
         );
 
         let receipt = await createColtTx.wait();
-
-        let topics = receipt.events[1];
-
-        console.log(`Number of events: ${receipt.events.length}`);
-        for(let i = 0; i < receipt.events.length; i++) {
-            console.log(`Event number ${i}:`);
-            console.log(receipt.events[i]);
-        }
-
-        console.log(topics);
-
         let collateralId = receipt.events[0].args.collateralId.toNumber();
-        
-        // console.log(receipt.events);
-        // console.log(receipt.events[0]);
-        // console.log(receipt.events[1]);
-
-        console.log(`Collateral has been created with Collateral ID: ${collateralId}`);
-    
         const coltObj = await this.PawnInstance.collaterals(collateralId);
-        let cltStatus;
-        switch(coltObj.status) {
-            case(0): 
-                cltStatus = "OPEN";
-                break;
-            case(c1): 
-                cltStatus = "DOING";
-                break;
-            case(2):
-                cltStatus = "COMPLETED";
-                break;
-            case(3):
-                cltStatus = "CANCEL";
-                break;
-        }
-
-        console.log(`Owner: ${coltObj.owner}`);
-        console.log(`Collateral amount: ${coltObj.amount}`);
-        console.log(`Collateral asset token: ${coltObj.collateralAddress}`);
-        console.log(`Loan asset token: ${coltObj.loanAsset}`);
-        console.log(`Expected duration: ${coltObj.expectedDurationQty.toNumber()}`);
-        console.log(`Duration type: ${coltObj.expectedDurationType == 0 ? "Week" : "Month"}`);
-        console.log(`Collateral status: ${cltStatus}`);
-
-        expect(await this.ReputationInstance.getReputationScore(this.BorrowerAccount.address)).to.equal(3)
+        let scoreOfBorrowerAfterCreat = await this.ReputationInstance.getReputationScore(this.BorrowerAccount.address)
+        
+        expect(coltObj.owner == this.BorrowerAccount.address)
+        expect(coltObj.amount == BigInt(100*10**18).toString())
+        expect(coltObj.collateralAddress == this.DFYInstance.address)
+        expect(coltObj.loanAsset == this.DFYInstance.address)
+        expect(coltObj.expectedDurationQty == 3)
+        expect(coltObj.expectedDurationType == 0)
+        expect(coltObj.status == 0)
+        expect(scoreOfBorrowerAfterCreat == scoreOfBorrowerBeforeCreat + 3);
     })
 
-    // it("Should accept collateral for package", async () => {
-    //     const pawnshop = this.PawnFactory.connect(this.operator);
-    //     this.PawnInstance = pawnshop.attach(this.PawnInstance.address);
-    //     const checkConditionTx = await this.PawnInstance.acceptCollateralOfPackage(0, 0);
+    it("Should accept collateral for package", async () => {
+        const pawnshop = this.PawnFactory.connect(this.operator);
+        this.PawnInstance = pawnshop.attach(this.PawnInstance.address);
+        console.log(this.PawnInstance.address);
+        console.log(await this.PawnP2PLoanContractInstance.exchange());
+        const checkConditionTx = await this.PawnInstance.acceptCollateralOfPackage(0,0);
 
-    //     let receipt = await checkConditionTx.wait();
-
-    //     console.log(receipt.events);
-    // })
+        let receipt = await checkConditionTx.wait();
+        console.log(receipt.events);
+    })
 
 })
