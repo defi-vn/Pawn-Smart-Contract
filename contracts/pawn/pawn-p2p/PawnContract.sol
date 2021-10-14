@@ -659,8 +659,6 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             _collateralId,
             LoanRequestStatus.ACCEPTED
         );
-
-        emit SubmitPawnShopPackage(_packageId, _collateralId, LoanRequestStatus.ACCEPTED);
         
         generateContractForCollateralAndPackage(
             _collateralId, 

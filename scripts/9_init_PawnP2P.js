@@ -2,7 +2,7 @@ require('@nomiclabs/hardhat-ethers');
 const hre = require('hardhat');
 
 const { PawnConfig, Proxies, Tokens } = require('./.deployment_data.json');
-const proxies = Proxies.Staging;
+const proxies = Proxies.Beta;
 
 const PawnProxyAddr     = proxies.PAWN_CONTRACT_ADDRESS;
 const PawnBuildName     = "contracts/pawn/pawn-p2p/PawnContract.sol:PawnContract";
@@ -10,8 +10,10 @@ const PawnBuildName     = "contracts/pawn/pawn-p2p/PawnContract.sol:PawnContract
 const RepuProxyAddr     = proxies.REPUTATION_CONTRACT_ADDRESS;
 const RepuBuildName     = "contracts/pawn/reputation/Reputation.sol:Reputation";
 
-const ExchangeAddr      = proxies.EXCHANGE_CONTRACT_ADDRESS;
+const ExchangeProxyAddr = proxies.EXCHANGE_CONTRACT_ADDRESS;
 const ExchangeBuildName = "Exchange";
+
+const LoanProxyAddr     = proxies.PAWN_P2PLOAN_CONTRACT_ADDRESS;
 
 const zoom              = 100000;
 const lateThreshold     = PawnConfig.LateThreshold;
@@ -72,8 +74,12 @@ async function main() {
     console.log(`Reputation contract set at address: ${RepuProxyAddr}\n\r`);
 
     console.log(`Setting Exchange contract...`);
-    await PawnContract.setExchangeContract(ExchangeAddr);
-    console.log(`Exchange contract set at address: ${ExchangeAddr}\n\r`);
+    await PawnContract.setExchangeContract(ExchangeProxyAddr);
+    console.log(`Exchange contract set at address: ${ExchangeProxyAddr}\n\r`);
+
+    console.log(`Setting Loan contract...`);
+    await PawnContract.setPawnLoanContract(LoanProxyAddr);
+    console.log(`Loan contract set at address: ${LoanProxyAddr}\n\r`);
 
     console.log(`Setting Whitelisted collateral...`);
     for await (let token of Tokens) {
@@ -81,12 +87,13 @@ async function main() {
         console.log(`\tWhitelisted token as collateral: ${token.Symbol}: ${token.Address}`);
     }
 
-    console.log("============================================================\n\r");
-    console.log(`Initializing ${RepuArtifact.contractName}...`);
-    console.log(`Setting contract caller...`);
-    await RepuContract.addWhitelistedContractCaller(PawnProxyAddr);
-    console.log(`Contract caller set at address: ${PawnArtifact.contractName} - ${PawnProxyAddr}\n\r`);
+    // console.log("============================================================\n\r");
+    // console.log(`Initializing ${RepuArtifact.contractName}...`);
+    // console.log(`Setting contract caller...`);
+    // await RepuContract.addWhitelistedContractCaller(PawnProxyAddr);
+    // console.log(`Contract caller set at address: ${PawnArtifact.contractName} - ${PawnProxyAddr}\n\r`);
 
+    console.log("============================================================\n\r");
 }
 
 main()

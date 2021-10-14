@@ -4,8 +4,7 @@ const hre = require('hardhat');
 const { Proxies, PawnConfig } = require('./.deployment_data.json');
 const proxies = Proxies.Staging;
 
-const PawnP2PLoanBuildName = "PawnP2PLoanContract";
-const PawnProxyAddr = proxies.PAWN_CONTRACT_ADDRESS;
+const LoanBuildName = "PawnP2PLoanContract";
 
 const proxyType = { kind: "uups" };
 
@@ -19,8 +18,8 @@ async function main() {
     console.log("Account balance:", ((await deployer.getBalance())/decimals).toString());
     console.log("============================================================\n\r");
 
-    const PawnP2PLoanFactory    = await hre.ethers.getContractFactory(PawnP2PLoanBuildName);
-    const PawnP2PLoanArtifact   = await hre.artifacts.readArtifact(PawnP2PLoanBuildName);
+    const PawnP2PLoanFactory    = await hre.ethers.getContractFactory(LoanBuildName);
+    const PawnP2PLoanArtifact   = await hre.artifacts.readArtifact(LoanBuildName);
 
     const PawnP2PLoanContract   = await hre.upgrades.deployProxy(PawnP2PLoanFactory, [PawnConfig.ZOOM], proxyType ?? "");
 
@@ -30,12 +29,6 @@ async function main() {
 
     implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(PawnP2PLoanContract.address);
     console.log(`${PawnP2PLoanArtifact.contractName} implementation address: ${implementationAddress}`);
-
-    console.log("============================================================\n\r");
-
-    console.log(`Setting Pawn contract address...`);
-    await PawnP2PLoanContract.setPawnContract(PawnProxyAddr);
-    console.log(`Pawn contract set at address: ${PawnProxyAddr}`);
 
     console.log("============================================================\n\r");
 }
