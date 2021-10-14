@@ -425,7 +425,7 @@ contract PawnP2PLoanContract is PawnModel
         Contract storage _contract = contractMustActive(_contractId);
 
         (
-            , 
+            uint256 collateralExchangeRate, 
             uint256 loanExchangeRate, 
             uint256 repaymentExchangeRate, 
 
@@ -441,7 +441,7 @@ contract PawnP2PLoanContract is PawnModel
 
         uint256 valueOfRemainingRepayment = (repaymentExchangeRate * remainingRepayment) / ZOOM;
         uint256 valueOfRemainingLoan = (loanExchangeRate * remainingLoan) / ZOOM;
-        uint256 valueOfCollateralLiquidationThreshold = (_contract.terms.collateralAmount * _contract.terms.liquidityThreshold) / (100 * ZOOM);
+        uint256 valueOfCollateralLiquidationThreshold = (collateralExchangeRate * _contract.terms.collateralAmount * _contract.terms.liquidityThreshold) / (100 * ZOOM);
 
         require(valueOfRemainingLoan + valueOfRemainingRepayment >= valueOfCollateralLiquidationThreshold, '0'); // under-thres
 
