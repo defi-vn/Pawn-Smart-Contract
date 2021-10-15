@@ -70,6 +70,7 @@ contract PawnP2PLoanContract is PawnModel {
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
         pawnContract = IPawn(_pawnAddress);
+        grantRole(OPERATOR_ROLE, _pawnAddress);
     }
 
     /** ================================ CREATE LOAN CONTRACT ============================= */

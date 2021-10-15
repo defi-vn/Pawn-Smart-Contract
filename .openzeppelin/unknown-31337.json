@@ -28,585 +28,24 @@
     },
     {
       "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
-      "txHash": "0xeaaa2caeaf62d719ce2376bd46aa8096863b7ce35c73fb4cc887a10c961f2776",
+      "txHash": "0x71a450d1415403d21e87f1f92e8f149dab444ccad850f630d09f49c0df693654",
       "kind": "uups"
     },
     {
       "address": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
-      "txHash": "0xb30287c19238b88cd9ac5d3c3b48fb527508ebaad63cd9278aa367369ddab3c9",
+      "txHash": "0xddfc6675615b0458d69856ba4e5a5a2602b704258bb94f7b61004960040a2090",
       "kind": "uups"
     },
     {
       "address": "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
-      "txHash": "0x9ee3e3fe3b2f84b5dfabce0d984e41e943520ae221fa90a24e63a1aebd04372d",
+      "txHash": "0x7ab532f96b84d38c6cf16f1b70e22d0f1e0462895e1c5b55550d362846113a43",
       "kind": "uups"
     }
   ],
   "impls": {
-    "b3eac9b575e077711ccdbfa975ea5a6d9f6dc872cd6cd0a9d3c82f019736d112": {
-      "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
-      "txHash": "0x5b7e4c5a1f7d1f4717876a0f31192355af37665f440ae4c7ef88c6f3f274d376",
-      "layout": {
-        "storage": [
-          {
-            "contract": "Initializable",
-            "label": "_initialized",
-            "type": "t_bool",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:21"
-          },
-          {
-            "contract": "Initializable",
-            "label": "_initializing",
-            "type": "t_bool",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:26"
-          },
-          {
-            "contract": "ERC1967UpgradeUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:214"
-          },
-          {
-            "contract": "UUPSUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:80"
-          },
-          {
-            "contract": "ContextUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:30"
-          },
-          {
-            "contract": "ERC165Upgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol:35"
-          },
-          {
-            "contract": "AccessControlUpgradeable",
-            "label": "_roles",
-            "type": "t_mapping(t_bytes32,t_struct(RoleData)89_storage)",
-            "src": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:63"
-          },
-          {
-            "contract": "AccessControlUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)49_storage",
-            "src": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:219"
-          },
-          {
-            "contract": "Exchange",
-            "label": "ListcryptoExchange",
-            "type": "t_mapping(t_address,t_address)",
-            "src": "contracts/pawn/exchange/Exchange.sol:14"
-          }
-        ],
-        "types": {
-          "t_mapping(t_address,t_address)": {
-            "label": "mapping(address => address)"
-          },
-          "t_address": {
-            "label": "address"
-          },
-          "t_mapping(t_bytes32,t_struct(RoleData)89_storage)": {
-            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
-          },
-          "t_bytes32": {
-            "label": "bytes32"
-          },
-          "t_struct(RoleData)89_storage": {
-            "label": "struct AccessControlUpgradeable.RoleData",
-            "members": [
-              {
-                "label": "members",
-                "type": "t_mapping(t_address,t_bool)"
-              },
-              {
-                "label": "adminRole",
-                "type": "t_bytes32"
-              }
-            ]
-          },
-          "t_mapping(t_address,t_bool)": {
-            "label": "mapping(address => bool)"
-          },
-          "t_bool": {
-            "label": "bool"
-          },
-          "t_array(t_uint256)49_storage": {
-            "label": "uint256[49]"
-          },
-          "t_uint256": {
-            "label": "uint256"
-          },
-          "t_array(t_uint256)50_storage": {
-            "label": "uint256[50]"
-          }
-        }
-      }
-    },
-    "42d8211901ada6d2ea3b50f5b632318caa9a332a8c931e89c31d6bcc42e9be77": {
-      "address": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
-      "txHash": "0x6098abf58dd6c266fcea2a313c77924d5b35d5540af1fa03c3af38367b38678f",
-      "layout": {
-        "storage": [
-          {
-            "contract": "Initializable",
-            "label": "_initialized",
-            "type": "t_bool",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:21"
-          },
-          {
-            "contract": "Initializable",
-            "label": "_initializing",
-            "type": "t_bool",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:26"
-          },
-          {
-            "contract": "ERC1967UpgradeUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:214"
-          },
-          {
-            "contract": "UUPSUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:80"
-          },
-          {
-            "contract": "ContextUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:30"
-          },
-          {
-            "contract": "ERC165Upgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol:35"
-          },
-          {
-            "contract": "AccessControlUpgradeable",
-            "label": "_roles",
-            "type": "t_mapping(t_bytes32,t_struct(RoleData)89_storage)",
-            "src": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:63"
-          },
-          {
-            "contract": "AccessControlUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)49_storage",
-            "src": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:219"
-          },
-          {
-            "contract": "PausableUpgradeable",
-            "label": "_paused",
-            "type": "t_bool",
-            "src": "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:28"
-          },
-          {
-            "contract": "PausableUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)49_storage",
-            "src": "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:96"
-          },
-          {
-            "contract": "ReentrancyGuardUpgradeable",
-            "label": "_status",
-            "type": "t_uint256",
-            "src": "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:37"
-          },
-          {
-            "contract": "ReentrancyGuardUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)49_storage",
-            "src": "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:67"
-          },
-          {
-            "contract": "PawnModel",
-            "label": "whitelistCollateral",
-            "type": "t_mapping(t_address,t_uint256)",
-            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:30"
-          },
-          {
-            "contract": "PawnModel",
-            "label": "feeWallet",
-            "type": "t_address",
-            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:31"
-          },
-          {
-            "contract": "PawnModel",
-            "label": "lateThreshold",
-            "type": "t_uint8",
-            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:32"
-          },
-          {
-            "contract": "PawnModel",
-            "label": "penaltyRate",
-            "type": "t_uint32",
-            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:33"
-          },
-          {
-            "contract": "PawnModel",
-            "label": "systemFeeRate",
-            "type": "t_uint32",
-            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:34"
-          },
-          {
-            "contract": "PawnModel",
-            "label": "prepaidFeeRate",
-            "type": "t_uint32",
-            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:35"
-          },
-          {
-            "contract": "PawnModel",
-            "label": "ZOOM",
-            "type": "t_uint32",
-            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:36"
-          },
-          {
-            "contract": "PawnModel",
-            "label": "reputation",
-            "type": "t_contract(IReputation)18523",
-            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:38"
-          },
-          {
-            "contract": "PawnModel",
-            "label": "exchange",
-            "type": "t_contract(Exchange)7604",
-            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:166"
-          },
-          {
-            "contract": "PawnP2PLoanContract",
-            "label": "pawnContract",
-            "type": "t_contract(IPawn)15126",
-            "src": "contracts/pawn/pawn-p2p-v2/PawnP2PLoanContract.sol:17"
-          },
-          {
-            "contract": "PawnP2PLoanContract",
-            "label": "numberContracts",
-            "type": "t_uint256",
-            "src": "contracts/pawn/pawn-p2p-v2/PawnP2PLoanContract.sol:20"
-          },
-          {
-            "contract": "PawnP2PLoanContract",
-            "label": "contracts",
-            "type": "t_mapping(t_uint256,t_struct(Contract)11986_storage)",
-            "src": "contracts/pawn/pawn-p2p-v2/PawnP2PLoanContract.sol:21"
-          },
-          {
-            "contract": "PawnP2PLoanContract",
-            "label": "contractPaymentRequestMapping",
-            "type": "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)12018_storage)dyn_storage)",
-            "src": "contracts/pawn/pawn-p2p-v2/PawnP2PLoanContract.sol:23"
-          },
-          {
-            "contract": "PawnP2PLoanContract",
-            "label": "collateralAsLoanRequestMapping",
-            "type": "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)11933_storage)",
-            "src": "contracts/pawn/pawn-p2p-v2/PawnP2PLoanContract.sol:25"
-          }
-        ],
-        "types": {
-          "t_contract(IPawn)15126": {
-            "label": "contract IPawn"
-          },
-          "t_uint256": {
-            "label": "uint256"
-          },
-          "t_mapping(t_uint256,t_struct(Contract)11986_storage)": {
-            "label": "mapping(uint256 => struct Contract)"
-          },
-          "t_struct(Contract)11986_storage": {
-            "label": "struct Contract",
-            "members": [
-              {
-                "label": "collateralId",
-                "type": "t_uint256"
-              },
-              {
-                "label": "offerId",
-                "type": "t_int256"
-              },
-              {
-                "label": "pawnShopPackageId",
-                "type": "t_int256"
-              },
-              {
-                "label": "terms",
-                "type": "t_struct(ContractTerms)11971_storage"
-              },
-              {
-                "label": "status",
-                "type": "t_enum(ContractStatus)11937"
-              },
-              {
-                "label": "lateCount",
-                "type": "t_uint8"
-              }
-            ]
-          },
-          "t_int256": {
-            "label": "int256"
-          },
-          "t_struct(ContractTerms)11971_storage": {
-            "label": "struct ContractTerms",
-            "members": [
-              {
-                "label": "borrower",
-                "type": "t_address"
-              },
-              {
-                "label": "lender",
-                "type": "t_address"
-              },
-              {
-                "label": "collateralAsset",
-                "type": "t_address"
-              },
-              {
-                "label": "collateralAmount",
-                "type": "t_uint256"
-              },
-              {
-                "label": "loanAsset",
-                "type": "t_address"
-              },
-              {
-                "label": "loanAmount",
-                "type": "t_uint256"
-              },
-              {
-                "label": "repaymentAsset",
-                "type": "t_address"
-              },
-              {
-                "label": "interest",
-                "type": "t_uint256"
-              },
-              {
-                "label": "repaymentCycleType",
-                "type": "t_enum(LoanDurationType)11804"
-              },
-              {
-                "label": "liquidityThreshold",
-                "type": "t_uint256"
-              },
-              {
-                "label": "contractStartDate",
-                "type": "t_uint256"
-              },
-              {
-                "label": "contractEndDate",
-                "type": "t_uint256"
-              },
-              {
-                "label": "lateThreshold",
-                "type": "t_uint256"
-              },
-              {
-                "label": "systemFeeRate",
-                "type": "t_uint256"
-              },
-              {
-                "label": "penaltyRate",
-                "type": "t_uint256"
-              },
-              {
-                "label": "prepaidFeeRate",
-                "type": "t_uint256"
-              }
-            ]
-          },
-          "t_enum(ContractStatus)11937": {
-            "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
-          },
-          "t_uint8": {
-            "label": "uint8"
-          },
-          "t_address": {
-            "label": "address"
-          },
-          "t_enum(LoanDurationType)11804": {
-            "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
-          },
-          "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)12018_storage)dyn_storage)": {
-            "label": "mapping(uint256 => struct PaymentRequest[])"
-          },
-          "t_array(t_struct(PaymentRequest)12018_storage)dyn_storage": {
-            "label": "struct PaymentRequest[]"
-          },
-          "t_struct(PaymentRequest)12018_storage": {
-            "label": "struct PaymentRequest",
-            "members": [
-              {
-                "label": "requestId",
-                "type": "t_uint256"
-              },
-              {
-                "label": "paymentRequestType",
-                "type": "t_enum(PaymentRequestTypeEnum)11995"
-              },
-              {
-                "label": "remainingLoan",
-                "type": "t_uint256"
-              },
-              {
-                "label": "penalty",
-                "type": "t_uint256"
-              },
-              {
-                "label": "interest",
-                "type": "t_uint256"
-              },
-              {
-                "label": "remainingPenalty",
-                "type": "t_uint256"
-              },
-              {
-                "label": "remainingInterest",
-                "type": "t_uint256"
-              },
-              {
-                "label": "dueDateTimestamp",
-                "type": "t_uint256"
-              },
-              {
-                "label": "chargePrepaidFee",
-                "type": "t_bool"
-              },
-              {
-                "label": "status",
-                "type": "t_enum(PaymentRequestStatusEnum)11991"
-              }
-            ]
-          },
-          "t_enum(PaymentRequestTypeEnum)11995": {
-            "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
-          },
-          "t_bool": {
-            "label": "bool"
-          },
-          "t_enum(PaymentRequestStatusEnum)11991": {
-            "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
-          },
-          "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)11933_storage)": {
-            "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
-          },
-          "t_struct(CollateralAsLoanRequestListStruct)11933_storage": {
-            "label": "struct CollateralAsLoanRequestListStruct",
-            "members": [
-              {
-                "label": "loanRequestToPawnShopPackageMapping",
-                "type": "t_mapping(t_uint256,t_struct(LoanRequestStatusStruct)11922_storage)"
-              },
-              {
-                "label": "pawnShopPackageIdList",
-                "type": "t_array(t_uint256)dyn_storage"
-              },
-              {
-                "label": "isInit",
-                "type": "t_bool"
-              }
-            ]
-          },
-          "t_mapping(t_uint256,t_struct(LoanRequestStatusStruct)11922_storage)": {
-            "label": "mapping(uint256 => struct LoanRequestStatusStruct)"
-          },
-          "t_struct(LoanRequestStatusStruct)11922_storage": {
-            "label": "struct LoanRequestStatusStruct",
-            "members": [
-              {
-                "label": "isInit",
-                "type": "t_bool"
-              },
-              {
-                "label": "status",
-                "type": "t_enum(LoanRequestStatus)11916"
-              }
-            ]
-          },
-          "t_array(t_uint256)dyn_storage": {
-            "label": "uint256[]"
-          },
-          "t_enum(LoanRequestStatus)11916": {
-            "label": "enum LoanRequestStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "REJECTED",
-              "CONTRACTED",
-              "CANCEL"
-            ]
-          },
-          "t_mapping(t_address,t_uint256)": {
-            "label": "mapping(address => uint256)"
-          },
-          "t_uint32": {
-            "label": "uint32"
-          },
-          "t_contract(IReputation)18523": {
-            "label": "contract IReputation"
-          },
-          "t_contract(Exchange)7604": {
-            "label": "contract Exchange"
-          },
-          "t_array(t_uint256)49_storage": {
-            "label": "uint256[49]"
-          },
-          "t_mapping(t_bytes32,t_struct(RoleData)89_storage)": {
-            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
-          },
-          "t_bytes32": {
-            "label": "bytes32"
-          },
-          "t_struct(RoleData)89_storage": {
-            "label": "struct AccessControlUpgradeable.RoleData",
-            "members": [
-              {
-                "label": "members",
-                "type": "t_mapping(t_address,t_bool)"
-              },
-              {
-                "label": "adminRole",
-                "type": "t_bytes32"
-              }
-            ]
-          },
-          "t_mapping(t_address,t_bool)": {
-            "label": "mapping(address => bool)"
-          },
-          "t_array(t_uint256)50_storage": {
-            "label": "uint256[50]"
-          }
-        }
-      }
-    },
     "3faf1477ab144b8bb7f9a4c3235bb1313364652caed31dfd50a2157ce87f275c": {
       "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
-      "txHash": "0xf14582d4d1ff29a416b98854e13784d69d261a36cc43619ee652fd74611702ea",
+      "txHash": "0x7b004af820057c17e8e969d099ce4aa6bf0d068bca691d01d6b9fd02968a53ac",
       "layout": {
         "storage": [
           {
@@ -678,7 +117,7 @@
           {
             "contract": "Reputation",
             "label": "_rewardByReason",
-            "type": "t_mapping(t_enum(ReasonType)18506,t_int8)",
+            "type": "t_mapping(t_enum(ReasonType)19340,t_int8)",
             "src": "contracts/pawn/reputation/Reputation.sol:35"
           },
           {
@@ -698,10 +137,10 @@
           "t_uint32": {
             "label": "uint32"
           },
-          "t_mapping(t_enum(ReasonType)18506,t_int8)": {
+          "t_mapping(t_enum(ReasonType)19340,t_int8)": {
             "label": "mapping(enum IReputation.ReasonType => int8)"
           },
-          "t_enum(ReasonType)18506": {
+          "t_enum(ReasonType)19340": {
             "label": "enum IReputation.ReasonType",
             "members": [
               "LD_CREATE_PACKAGE",
@@ -883,6 +322,567 @@
           },
           "t_bool": {
             "label": "bool"
+          }
+        }
+      }
+    },
+    "e21e3f348ce22c0ccc598781d8c027c52391a32ee549c687fc6c796a3be05304": {
+      "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+      "txHash": "0x2fdc8ef146c8c563011c7a4bbd699db82a67db621fba1cef8150d5c28a8eb905",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)89_storage)",
+            "src": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:63"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:219"
+          },
+          {
+            "contract": "Exchange",
+            "label": "ListCryptoExchange",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "contracts/pawn/exchange/Exchange.sol:11"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)89_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(RoleData)89_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "e5882a881ee0238db47a47f1a1186fed94c0f4ae5d7217c95468f07335962ee4": {
+      "address": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+      "txHash": "0xa67f1d699b38f8fe033a1c7ad94ab74d478c2097691a8b9e711171badca52ebd",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)89_storage)",
+            "src": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:63"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:219"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "_status",
+            "type": "t_uint256",
+            "src": "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:37"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:67"
+          },
+          {
+            "contract": "PawnModel",
+            "label": "whitelistCollateral",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:30"
+          },
+          {
+            "contract": "PawnModel",
+            "label": "feeWallet",
+            "type": "t_address",
+            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:31"
+          },
+          {
+            "contract": "PawnModel",
+            "label": "lateThreshold",
+            "type": "t_uint8",
+            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:32"
+          },
+          {
+            "contract": "PawnModel",
+            "label": "penaltyRate",
+            "type": "t_uint32",
+            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:33"
+          },
+          {
+            "contract": "PawnModel",
+            "label": "systemFeeRate",
+            "type": "t_uint32",
+            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:34"
+          },
+          {
+            "contract": "PawnModel",
+            "label": "prepaidFeeRate",
+            "type": "t_uint32",
+            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:35"
+          },
+          {
+            "contract": "PawnModel",
+            "label": "ZOOM",
+            "type": "t_uint32",
+            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:36"
+          },
+          {
+            "contract": "PawnModel",
+            "label": "reputation",
+            "type": "t_contract(IReputation)19357",
+            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:38"
+          },
+          {
+            "contract": "PawnModel",
+            "label": "exchange",
+            "type": "t_contract(Exchange)8001",
+            "src": "contracts/pawn/pawn-p2p-v2/PawnModel.sol:166"
+          },
+          {
+            "contract": "PawnP2PLoanContract",
+            "label": "pawnContract",
+            "type": "t_contract(IPawn)15950",
+            "src": "contracts/pawn/pawn-p2p-v2/PawnP2PLoanContract.sol:17"
+          },
+          {
+            "contract": "PawnP2PLoanContract",
+            "label": "numberContracts",
+            "type": "t_uint256",
+            "src": "contracts/pawn/pawn-p2p-v2/PawnP2PLoanContract.sol:20"
+          },
+          {
+            "contract": "PawnP2PLoanContract",
+            "label": "contracts",
+            "type": "t_mapping(t_uint256,t_struct(Contract)12801_storage)",
+            "src": "contracts/pawn/pawn-p2p-v2/PawnP2PLoanContract.sol:21"
+          },
+          {
+            "contract": "PawnP2PLoanContract",
+            "label": "contractPaymentRequestMapping",
+            "type": "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)12833_storage)dyn_storage)",
+            "src": "contracts/pawn/pawn-p2p-v2/PawnP2PLoanContract.sol:23"
+          },
+          {
+            "contract": "PawnP2PLoanContract",
+            "label": "collateralAsLoanRequestMapping",
+            "type": "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)12748_storage)",
+            "src": "contracts/pawn/pawn-p2p-v2/PawnP2PLoanContract.sol:25"
+          }
+        ],
+        "types": {
+          "t_contract(IPawn)15950": {
+            "label": "contract IPawn"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(Contract)12801_storage)": {
+            "label": "mapping(uint256 => struct Contract)"
+          },
+          "t_struct(Contract)12801_storage": {
+            "label": "struct Contract",
+            "members": [
+              {
+                "label": "collateralId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "offerId",
+                "type": "t_int256"
+              },
+              {
+                "label": "pawnShopPackageId",
+                "type": "t_int256"
+              },
+              {
+                "label": "terms",
+                "type": "t_struct(ContractTerms)12786_storage"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(ContractStatus)12752"
+              },
+              {
+                "label": "lateCount",
+                "type": "t_uint8"
+              }
+            ]
+          },
+          "t_int256": {
+            "label": "int256"
+          },
+          "t_struct(ContractTerms)12786_storage": {
+            "label": "struct ContractTerms",
+            "members": [
+              {
+                "label": "borrower",
+                "type": "t_address"
+              },
+              {
+                "label": "lender",
+                "type": "t_address"
+              },
+              {
+                "label": "collateralAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "collateralAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType)12619"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractStartDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractEndDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "lateThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "systemFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penaltyRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "prepaidFeeRate",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_enum(ContractStatus)12752": {
+            "label": "enum ContractStatus",
+            "members": [
+              "ACTIVE",
+              "COMPLETED",
+              "DEFAULT"
+            ]
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_enum(LoanDurationType)12619": {
+            "label": "enum LoanDurationType",
+            "members": [
+              "WEEK",
+              "MONTH"
+            ]
+          },
+          "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)12833_storage)dyn_storage)": {
+            "label": "mapping(uint256 => struct PaymentRequest[])"
+          },
+          "t_array(t_struct(PaymentRequest)12833_storage)dyn_storage": {
+            "label": "struct PaymentRequest[]"
+          },
+          "t_struct(PaymentRequest)12833_storage": {
+            "label": "struct PaymentRequest",
+            "members": [
+              {
+                "label": "requestId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "paymentRequestType",
+                "type": "t_enum(PaymentRequestTypeEnum)12810"
+              },
+              {
+                "label": "remainingLoan",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingPenalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingInterest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "dueDateTimestamp",
+                "type": "t_uint256"
+              },
+              {
+                "label": "chargePrepaidFee",
+                "type": "t_bool"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(PaymentRequestStatusEnum)12806"
+              }
+            ]
+          },
+          "t_enum(PaymentRequestTypeEnum)12810": {
+            "label": "enum PaymentRequestTypeEnum",
+            "members": [
+              "INTEREST",
+              "OVERDUE",
+              "LOAN"
+            ]
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_enum(PaymentRequestStatusEnum)12806": {
+            "label": "enum PaymentRequestStatusEnum",
+            "members": [
+              "ACTIVE",
+              "LATE",
+              "COMPLETE",
+              "DEFAULT"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)12748_storage)": {
+            "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
+          },
+          "t_struct(CollateralAsLoanRequestListStruct)12748_storage": {
+            "label": "struct CollateralAsLoanRequestListStruct",
+            "members": [
+              {
+                "label": "loanRequestToPawnShopPackageMapping",
+                "type": "t_mapping(t_uint256,t_struct(LoanRequestStatusStruct)12737_storage)"
+              },
+              {
+                "label": "pawnShopPackageIdList",
+                "type": "t_array(t_uint256)dyn_storage"
+              },
+              {
+                "label": "isInit",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(LoanRequestStatusStruct)12737_storage)": {
+            "label": "mapping(uint256 => struct LoanRequestStatusStruct)"
+          },
+          "t_struct(LoanRequestStatusStruct)12737_storage": {
+            "label": "struct LoanRequestStatusStruct",
+            "members": [
+              {
+                "label": "isInit",
+                "type": "t_bool"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(LoanRequestStatus)12731"
+              }
+            ]
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_enum(LoanRequestStatus)12731": {
+            "label": "enum LoanRequestStatus",
+            "members": [
+              "PENDING",
+              "ACCEPTED",
+              "REJECTED",
+              "CONTRACTED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_contract(IReputation)19357": {
+            "label": "contract IReputation"
+          },
+          "t_contract(Exchange)8001": {
+            "label": "contract Exchange"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)89_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(RoleData)89_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
           }
         }
       }
