@@ -9,7 +9,7 @@ const LoanBuildName     = "contracts/pawn/pawn-p2p-v2/PawnP2PLoanContract.sol:Pa
 const decimals  = 10**18;
 
 async function main() {
-    const [deployer, proxyAdmin] = await hre.ethers.getSigners();
+    const [deployer] = await hre.ethers.getSigners();
   
     console.log("============================================================\n\r");
     console.log("Deploying contracts with the account:", deployer.address);  

@@ -172,7 +172,7 @@ contract PawnP2PLoanContract is PawnModel {
                         currentContract.terms.repaymentCycleType
                     )
                 );
-                _nextPhraseInterest = exchange.calculateInteres(
+                _nextPhraseInterest = exchange.calculateInterest(
                     currentContract
                 );
             }
@@ -240,12 +240,8 @@ contract PawnP2PLoanContract is PawnModel {
 
             // Check for last repayment, if last repayment, all paid
             if (block.timestamp > currentContract.terms.contractEndDate) {
-                if (
-                    previousRequest.remainingInterest +
-                        previousRequest.remainingPenalty +
-                        previousRequest.remainingLoan >
-                    0
-                ) {
+                uint256 remainingAmount = previousRequest.remainingInterest + previousRequest.remainingPenalty + previousRequest.remainingLoan;
+                if (remainingAmount > 0) {
                     // unpaid => liquid
                     _liquidationExecution(
                         _contractId,
@@ -264,7 +260,7 @@ contract PawnP2PLoanContract is PawnModel {
             // Validate: remaining loan must valid
             // require(currentContract.terms.loanAmount == _remainingLoan, '4'); // remain
             _remainingLoan = currentContract.terms.loanAmount;
-            _nextPhraseInterest = exchange.calculateInteres(currentContract);
+            _nextPhraseInterest = exchange.calculateInterest(currentContract);
             _nextPhrasePenalty = 0;
             _dueDateTimestamp = PawnLib.add(
                 block.timestamp,

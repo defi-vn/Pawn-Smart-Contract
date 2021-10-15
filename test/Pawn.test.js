@@ -3,13 +3,14 @@ require('@nomiclabs/hardhat-ethers');
 
 const { ethers, upgrades } = require('hardhat');
 const { expect } = require('chai');
+const decimals = 10**18;
 const { PawnConfig, Tokens, Exchanges } = require('../scripts/.deployment_data.json');
 
 const PawnBuild        = "contracts/pawn/pawn-p2p/PawnContract.sol:PawnContract";
 const ReputationBuild  = "contracts/pawn/reputation/Reputation.sol:Reputation";
 const Exchange         = "Exchange";
 const LoanBuild        = "PawnP2PLoanContract";
-const DFYBuild         = "DFY";
+const DFYBuild         = "contracts/erc20/Mock-DFY.sol:DFY";
 
 before("Pawn For testing", async () => {
     this.DFYFactory     = await ethers.getContractFactory(DFYBuild);
@@ -275,16 +276,26 @@ describe("Pawn For testing", () => {
         await this.DFYContract.transfer(this.PawnShopAccount.address, BigInt(10 ** 23)); // 100000 * 10 ** 18 = 1000 DFY
         await this.DFYContract.transfer(this.BorrowerAccount.address, BigInt(10 ** 21)); // 1000 * 10 ** 18 = 1000 DFY
 
-        const collateralAmount = BigInt(10 ** 21); // 1000 * 10 ** 18 = 100 DFY
+        const collateralAmount = BigInt(200000 * decimals); // 1000 * 10 ** 18 = 100 DFY
         const pawnshop = this.PawnFactory.connect(this.operator);
         this.PawnContract = pawnshop.attach(this.PawnContract.address);
         console.log("Pawn contract: ", this.PawnContract.address);
-        // console.log(await this.LoanContract.exchange());
 
         DFY = this.DFYFactory.connect(this.BorrowerAccount);
         this.DFYContract = DFY.attach(this.DFYContract.address);
-        console.log(`Current balance: `, (await this.DFYContract.balanceOf(this.BorrowerAccount.address)).toString());
         await this.DFYContract.approve(this.PawnContract.address, collateralAmount);
+        
+        DFY = this.DFYFactory.connect(this.PawnShopAccount);
+        this.DFYContract = DFY.attach(this.DFYContract.address);
+        await this.DFYContract.approve(this.PawnContract.address, collateralAmount);
+        
+        console.log(`Current lender balance: `, ((await this.DFYContract.balanceOf(this.PawnShopAccount.address))/decimals).toString());
+        console.log(`Current borrower balance: `, ((await this.DFYContract.balanceOf(this.BorrowerAccount.address))/decimals).toString());
+
+        console.log("Allowance: ", ((await this.DFYContract.allowance(this.PawnShopAccount.address, this.PawnContract.address))/decimals).toString());
+        console.log("Allowance: ", ((await this.DFYContract.allowance(this.BorrowerAccount.address, this.PawnContract.address))/decimals).toString());
+        
+        console.log("Loan's exchange contract: ", await this.LoanContract.exchange());
         const checkConditionTx = await this.PawnContract.acceptCollateralOfPackage(0,0);
 
         // let receipt = await checkConditionTx.wait();

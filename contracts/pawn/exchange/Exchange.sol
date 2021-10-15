@@ -5,9 +5,11 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "../pawn-nft/IPawnNFT.sol";
 
 contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
+    
     mapping(address => address) public ListCryptoExchange;
 
     function initialize() public initializer {
@@ -91,44 +93,106 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         PawnShopPackage memory _pkg
     ) external view returns (uint256 loanAmount, uint256 exchangeRate) {
         uint256 collateralToUSD;
-        uint256 RateLoanAsset;
-        uint256 RateRepaymentAsset;
+        uint256 rateLoanAsset;
+        uint256 rateRepaymentAsset;
 
         if (_col.collateralAddress == address(0)) {
-            collateralToUSD =
-                (uint256(RateBNBwithUSD()) *
-                    10**10 *
-                    _pkg.loanToValue *
-                    _col.amount) /
-                100;
-        } else {
-            collateralToUSD =
-                (uint256(getLatesPriceToUSD(_col.collateralAddress)) *
-                    10**10 *
-                    _pkg.loanToValue *
-                    _col.amount) /
-                100;
-        }
+            // If collateral address is address(0), check BNB exchange rate with USD
+            // collateralToUSD = (uint256(RateBNBwithUSD()) * 10**10 * _pkg.loanToValue * _col.amount) / 100;
+            (, uint256 _ltvAmount)  = SafeMathUpgradeable.tryMul(_pkg.loanToValue, _col.amount);
+            (, uint256 _collRate)   = SafeMathUpgradeable.tryMul(_ltvAmount, uint256(RateBNBwithUSD()));
+            (, uint256 _collToUSD)  = SafeMathUpgradeable.tryDiv(_collRate, (100 * 10**5));
 
+            collateralToUSD = _collToUSD;
+        } else {
+            // If collateral address is not BNB, get latest price in USD of collateral crypto
+            // collateralToUSD = (uint256(getLatesPriceToUSD(_col.collateralAddress)) * 10**10 * _pkg.loanToValue * _col.amount) / 100;
+            (, uint256 _ltvAmount)  = SafeMathUpgradeable.tryMul(_pkg.loanToValue, _col.amount);
+            (, uint256 _collRate)   = SafeMathUpgradeable.tryMul(_ltvAmount, uint256(getLatesPriceToUSD(_col.collateralAddress)));
+            (, uint256 _collToUSD)  = SafeMathUpgradeable.tryDiv(_collRate, (100 * 10**5));
+
+            collateralToUSD = _collToUSD;
+        }
+        
         if (_col.loanAsset == address(0)) {
-            RateLoanAsset = uint256(RateBNBwithUSD()) * 10**10;
+            // get price of BNB in USD
+            rateLoanAsset = uint256(RateBNBwithUSD());
         } else {
-            RateLoanAsset =
-                uint256(getLatesPriceToUSD(_col.loanAsset)) *
-                10**10;
+            // get price in USD of crypto as loan asset
+            rateLoanAsset = uint256(getLatesPriceToUSD(_col.loanAsset));
         }
 
-        loanAmount = collateralToUSD / RateLoanAsset;
+        // Calculate Loan amount
+        (, uint256 _loanAmount) = SafeMathUpgradeable.tryDiv(collateralToUSD, rateLoanAsset); 
+        loanAmount = _loanAmount;
 
         if (_pkg.repaymentAsset == address(0)) {
-            RateRepaymentAsset = uint256(RateBNBwithUSD()) * 10**10;
+            // get price in USD of BNB as repayment asset 
+            rateRepaymentAsset = uint256(RateBNBwithUSD());
         } else {
-            RateRepaymentAsset =
-                uint256(getLatesPriceToUSD(_pkg.repaymentAsset)) *
-                10**10;
+            // get latest price in USD of crypto as repayment asset
+            rateRepaymentAsset = uint256(getLatesPriceToUSD(_pkg.repaymentAsset));
         }
 
-        exchangeRate = (10**5 * RateLoanAsset) / RateRepaymentAsset;
+        // calculate exchange rate
+        (, uint256 _exchange) = SafeMathUpgradeable.tryDiv(rateLoanAsset, rateRepaymentAsset);
+        exchangeRate = _exchange;
+    }
+
+    function calcLoanAmountAndExchangeRate(
+        address collateralAddress,
+        uint256 amount,
+        address loanAsset,
+        uint256 loanToValue,
+        address repaymentAsset
+    ) external view returns (
+        uint256 loanAmount, 
+        uint256 exchangeRate, 
+        uint256 collateralToUSD, 
+        uint256 rateLoanAsset,
+        uint256 rateRepaymentAsset) {
+
+        if (collateralAddress == address(0)) {
+            // If collateral address is address(0), check BNB exchange rate with USD
+            // collateralToUSD = (uint256(RateBNBwithUSD()) * loanToValue * amount) / (100 * 10**5);
+            (, uint256 ltvAmount)  = SafeMathUpgradeable.tryMul(loanToValue, amount);
+            (, uint256 collRate)   = SafeMathUpgradeable.tryMul(ltvAmount, uint256(RateBNBwithUSD()));
+            (, uint256 collToUSD)  = SafeMathUpgradeable.tryDiv(collRate, (100 * 10**5));
+
+            collateralToUSD = collToUSD;
+        } else {
+            // If collateral address is not BNB, get latest price in USD of collateral crypto
+            // collateralToUSD = (uint256(getLatesPriceToUSD(collateralAddress))  * loanToValue * amount) / (100 * 10**5);
+            (, uint256 ltvAmount)  = SafeMathUpgradeable.tryMul(loanToValue, amount);
+            (, uint256 collRate)   = SafeMathUpgradeable.tryMul(ltvAmount, uint256(getLatesPriceToUSD(collateralAddress)));
+            (, uint256 collToUSD)  = SafeMathUpgradeable.tryDiv(collRate, (100 * 10**5));
+
+            collateralToUSD = collToUSD;
+        }
+
+        if (loanAsset == address(0)) {
+            // get price of BNB in USD
+            rateLoanAsset = uint256(RateBNBwithUSD());
+        } else {
+            // get price in USD of crypto as loan asset
+            rateLoanAsset = uint256(getLatesPriceToUSD(loanAsset));
+        }
+
+        (, uint256 lAmount) = SafeMathUpgradeable.tryDiv(collateralToUSD, rateLoanAsset); 
+        // loanAmount = collateralToUSD / rateLoanAsset;
+        loanAmount = lAmount;
+
+        if (repaymentAsset == address(0)) {
+            // get price in USD of BNB as repayment asset 
+            rateRepaymentAsset = uint256(RateBNBwithUSD());
+        } else {
+            // get latest price in USD of crypto as repayment asset
+            rateRepaymentAsset = uint256(getLatesPriceToUSD(repaymentAsset));
+        }
+
+        // calculate exchange rate
+        (, uint256 xchange) = SafeMathUpgradeable.tryDiv(rateLoanAsset, rateRepaymentAsset);
+        exchangeRate = xchange;
     }
 
     function exchangeRateofOffer(address _adLoanAsset, address _adRepayment)
@@ -152,7 +216,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
     }
 
     // tinh tien lai: interest = loanAmount * interestByLoanDurationType (interestByLoanDurationType = % lãi * số kì * loại kì / (365*100))
-    function calculateInteres(Contract memory _contract)
+    function calculateInterest(Contract memory _contract)
         external
         view
         returns (uint256 interest)

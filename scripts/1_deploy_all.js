@@ -11,6 +11,7 @@ const NFTBuildName      = "contracts/pawn/nft/DFY_Physical_NFTs.sol:DFY_Physical
 const EvaBuildName      = "contracts/pawn/evaluation/EvaluationContract.sol:AssetEvaluation";
 const PawnNFTBuildName  = "contracts/pawn/pawn-nft/PawnNFTContract.sol:PawnNFTContract";
 const ExchangeBuildName = "Exchange";
+const LoanBuildName     = "PawnP2PLoanContract";
 
 const proxyType = { kind: "uups" };
 
@@ -34,18 +35,12 @@ async function main() {
             "DFYNFT", 
             PawnConfig.IpfsUri
         ], 
-        proxyType ?? ""
+        proxyType
     );
     
     await NFTContract.deployed();
   
     console.log(`NFT_CONTRACT_ADDRESS: ${NFTContract.address}`);
-
-    
-    if(proxyType?.kind?.toLowerCase() != "uups") {
-        proxyAdmin = await hre.upgrades.erc1967.getAdminAddress(NFTContract.address);
-        console.log(`Proxy Admin: ${proxyAdmin}`);
-    }
 
     let implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(NFTContract.address);
     console.log(`${NFTArtifact.contractName} implementation address: ${implementationAddress}`);
@@ -68,11 +63,6 @@ async function main() {
 
     console.log(`EVALUATION_CONTRACT_ADDRESS: ${EvaContract.address}`);
 
-    if(proxyType?.kind?.toLowerCase() != "uups") {
-        proxyAdmin = await hre.upgrades.erc1967.getAdminAddress(EvaContract.address);
-        console.log(`Proxy Admin: ${proxyAdmin}`);
-    }
-
     implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(EvaContract.address);
     console.log(`${EvaArtifact.contractName} implementation address: ${implementationAddress}`);
     
@@ -81,16 +71,11 @@ async function main() {
     const PawnNFTFactory    = await hre.ethers.getContractFactory(PawnNFTBuildName);
     const PawnNFTArtifact   = await hre.artifacts.readArtifact(PawnNFTBuildName);
 
-    const PawnNFTContract   = await hre.upgrades.deployProxy(PawnNFTFactory, [100000], proxyType ?? "");
+    const PawnNFTContract   = await hre.upgrades.deployProxy(PawnNFTFactory, [100000], proxyType);
 
     await PawnNFTContract.deployed();
 
     console.log(`PAWN_NFT_CONTRACT_ADDRESS: ${PawnNFTContract.address}`);
-
-    if(proxyType?.kind?.toLowerCase() != "uups") {
-        proxyAdmin = await hre.upgrades.erc1967.getAdminAddress(PawnNFTContract.address);
-        console.log(`Proxy Admin: ${proxyAdmin}`);
-    }
 
     implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(PawnNFTContract.address);
     console.log(`${PawnNFTArtifact.contractName} implementation address: ${implementationAddress}`);
@@ -100,16 +85,11 @@ async function main() {
     const RepuFactory   = await hre.ethers.getContractFactory(RepuBuildName);
     const RepuArtifact  = await hre.artifacts.readArtifact(RepuBuildName);
 
-    const RepuContract  = await hre.upgrades.deployProxy(RepuFactory, proxyType ?? "");
+    const RepuContract  = await hre.upgrades.deployProxy(RepuFactory, proxyType);
     
     await RepuContract.deployed();
 
     console.log(`REPUTATION_CONTRACT_ADDRESS: ${RepuContract.address}`);
-
-    if(proxyType?.kind?.toLowerCase() != "uups") {
-        proxyAdmin = await hre.upgrades.erc1967.getAdminAddress(RepuContract.address);
-        console.log(`Proxy Admin: ${proxyAdmin}`);
-    }
 
     implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(RepuContract.address);
     console.log(`${RepuArtifact.contractName} implementation address: ${implementationAddress}`);
@@ -127,7 +107,7 @@ async function main() {
 
     console.log("============================================================\n\r");
 
-    const ProxyFactory  = await (await hre.ethers.getContractFactory(ProxyBuildName, proxyAdmin));
+    const ProxyFactory  = await hre.ethers.getContractFactory(ProxyBuildName, proxyAdmin);
     // const ProxyArtifact = await hre.artifacts.readArtifact(ProxyBuildName);
 
     const proxyDeploy   = await ProxyFactory.deploy(pawnDeploy.address, proxyAdmin.address, ProxyData);
@@ -147,6 +127,19 @@ async function main() {
 
     implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(ExchangeContract.address);
     console.log(`${ExchangeArtifact.contractName} implementation address: ${implementationAddress}`);
+
+    console.log("============================================================\n\r");
+
+    const LoanFactory   = await hre.ethers.getContractFactory(LoanBuildName);
+    const LoanArtifact  = await hre.artifacts.readArtifact(LoanBuildName);
+    const LoanContract  = await hre.upgrades.deployProxy(LoanFactory, proxyType);
+
+    await LoanContract.deployed();
+
+    console.log(`PAWN_NFPLOAN_CONTRACT_ADDRESS: ${LoanContract.address}`);
+
+    implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(LoanContract.address);
+    console.log(`${LoanArtifact.contractName} implementation address: ${implementationAddress}`);
 
     console.log("============================================================\n\r");
 }

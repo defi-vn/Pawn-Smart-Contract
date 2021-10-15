@@ -29,7 +29,7 @@ abstract contract PawnModel is
     
     mapping(address => uint256) public whitelistCollateral;
     address public feeWallet;
-    uint8 public lateThreshold;
+    uint32 public lateThreshold;
     uint32 public penaltyRate;
     uint32 public systemFeeRate; 
     uint32 public prepaidFeeRate;
@@ -127,7 +127,7 @@ abstract contract PawnModel is
     * @dev set fee for each token
     * @param _threshold is number of time allowed for late repayment
     */
-    function setLateThreshold(uint8 _threshold) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setLateThreshold(uint32 _threshold) external onlyRole(DEFAULT_ADMIN_ROLE) {
         lateThreshold = _threshold;
     }
 

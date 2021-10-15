@@ -666,11 +666,6 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             }
             delete collateralOffersMapping[_collateralId];
         }
-        emit SubmitPawnShopPackage(
-            _packageId,
-            _collateralId,
-            LoanRequestStatus.ACCEPTED
-        );
 
         generateContractForCollateralAndPackage(_collateralId, _packageId);
     }
@@ -879,6 +874,9 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
                 collaterals[_collateralId],
                 pawnShopPackages[_packageId]
             );
+
+        // uint loanAmount = 1000 * 10 ** 18;
+        // uint exchangeRate = 1 * 10 ** 18;
 
         // Prepare contract raw data
         ContractRawData memory contractData = ContractRawData(
