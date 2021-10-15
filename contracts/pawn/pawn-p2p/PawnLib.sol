@@ -274,10 +274,10 @@ library PawnLib {
     {
         if (durationType == LoanDurationType.WEEK) {
             // duedateTimestampInterest = 3*24*3600;
-            duedateTimestampInterest = 300; // test
+            duedateTimestampInterest = 180; // test
         } else {
             // duedateTimestampInterest = 7 * 24 * 3600;
-            duedateTimestampInterest = 500; // test
+            duedateTimestampInterest = 300; // test
         }
     }
 
@@ -288,10 +288,10 @@ library PawnLib {
     {
         if (durationType == LoanDurationType.WEEK) {
             // duedateTimestampInterest = 7 * 24 *3600 - 3 * 24 * 3600;
-            duedateTimestampInterest = 600 - 300; // test
+            duedateTimestampInterest = 600 - 180; // test
         } else {
             //  duedateTimestampInterest = 30 * 24 *3600 - 7 * 24 * 3600;
-            duedateTimestampInterest = 900 - 500; // test
+            duedateTimestampInterest = 900 - 300; // test
         }
     }
 
