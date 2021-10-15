@@ -848,8 +848,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         uint256 _packageId
     ) 
         internal 
-        whenContractNotPaused 
-        onlyOperator 
+        whenContractNotPaused
     {
         (
             Collateral storage collateral,
