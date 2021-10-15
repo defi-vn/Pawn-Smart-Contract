@@ -8,11 +8,10 @@ import "../pawn-p2p/IPawn.sol";
 import "../access/DFY-AccessControl.sol";
 import "../reputation/IReputation.sol";
 
-contract PawnP2PLoanContract is PawnModel
-{
+contract PawnP2PLoanContract is PawnModel {
     using CountersUpgradeable for CountersUpgradeable.Counter;
     using AddressUpgradeable for address;
-    using SafeMathUpgradeable for uint;
+    using SafeMathUpgradeable for uint256;
 
     IPawn public pawnContract;
 
@@ -22,7 +21,8 @@ contract PawnP2PLoanContract is PawnModel
 
     mapping(uint256 => PaymentRequest[]) public contractPaymentRequestMapping;
 
-    mapping(uint256 => CollateralAsLoanRequestListStruct) public collateralAsLoanRequestMapping; // Map from collateral to loan request
+    mapping(uint256 => CollateralAsLoanRequestListStruct)
+        public collateralAsLoanRequestMapping; // Map from collateral to loan request
 
     /** ==================== Loan contract related events ==================== */
     event LoanContractCreatedEvent(
@@ -32,7 +32,7 @@ contract PawnP2PLoanContract is PawnModel
         Contract data
     );
 
-    event PaymentRequestEvent (
+    event PaymentRequestEvent(
         int256 paymentRequestId,
         uint256 contractId,
         PaymentRequest data
@@ -58,14 +58,14 @@ contract PawnP2PLoanContract is PawnModel
     /** ==================== Initialization ==================== */
 
     /**
-    * @dev initialize function
-    * @param _zoom is coefficient used to represent risk params
-    */
+     * @dev initialize function
+     * @param _zoom is coefficient used to represent risk params
+     */
     function initialize(uint32 _zoom) public initializer {
         __PawnModel_init(_zoom);
     }
 
-    function setPawnContract(address _pawnAddress) 
+    function setPawnContract(address _pawnAddress)
         external
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
@@ -73,17 +73,15 @@ contract PawnP2PLoanContract is PawnModel
     }
 
     /** ================================ CREATE LOAN CONTRACT ============================= */
-    
-    function createContract(
-        ContractRawData memory contractData
-    ) 
+
+    function createContract(ContractRawData memory contractData)
         external
-        onlyRole(OPERATOR_ROLE) 
-        returns (uint256 _idx) 
+        onlyRole(OPERATOR_ROLE)
+        returns (uint256 _idx)
     {
         _idx = numberContracts;
         Contract storage newContract = contracts[_idx];
-        
+
         newContract.collateralId = contractData.collateralId;
         newContract.offerId = contractData.offerId;
         newContract.pawnShopPackageId = contractData.packageId;
@@ -113,9 +111,9 @@ contract PawnP2PLoanContract is PawnModel
         ++numberContracts;
 
         emit LoanContractCreatedEvent(
-            contractData.exchangeRate, 
-            _msgSender(), 
-            _idx, 
+            contractData.exchangeRate,
+            _msgSender(),
+            _idx,
             newContract
         );
     }
@@ -127,7 +125,7 @@ contract PawnP2PLoanContract is PawnModel
     {
         // Validate: Contract must active
         _contract = contracts[_contractId];
-        require(_contract.status == ContractStatus.ACTIVE, '0'); // contr-act
+        require(_contract.status == ContractStatus.ACTIVE, "0"); // contr-act
     }
 
     /** ================================ 3. PAYMENT REQUEST & REPAYMENT WORKLOWS ============================= */
@@ -136,11 +134,7 @@ contract PawnP2PLoanContract is PawnModel
         int256 _paymentRequestId,
         uint256 _contractId,
         PaymentRequestTypeEnum _paymentRequestType
-    ) 
-        public 
-        whenContractNotPaused 
-        onlyRole(OPERATOR_ROLE) 
-    {
+    ) public whenContractNotPaused onlyRole(OPERATOR_ROLE) {
         Contract storage currentContract = contractMustActive(_contractId);
         bool _chargePrepaidFee;
         uint256 _remainingLoan;
@@ -149,44 +143,59 @@ contract PawnP2PLoanContract is PawnModel
         uint256 _dueDateTimestamp;
 
         // Check if number of requests is 0 => create new requests, if not then update current request as LATE or COMPLETE and create new requests
-        PaymentRequest[] storage requests = contractPaymentRequestMapping[_contractId];
+        PaymentRequest[] storage requests = contractPaymentRequestMapping[
+            _contractId
+        ];
         if (requests.length > 0) {
             // not first phrase, get previous request
-            PaymentRequest storage previousRequest = requests[requests.length - 1];
-            
+            PaymentRequest storage previousRequest = requests[
+                requests.length - 1
+            ];
+
             // Validate: time must over due date of current payment
-            require(block.timestamp >= previousRequest.dueDateTimestamp, '0'); // time-not-due
+            require(block.timestamp >= previousRequest.dueDateTimestamp, "0"); // time-not-due
 
             // Validate: remaining loan must valid
             // require(previousRequest.remainingLoan == _remainingLoan, '1'); // remain
             _remainingLoan = previousRequest.remainingLoan;
-            _nextPhrasePenalty = exchange.calculatePenalty(previousRequest,currentContract,penaltyRate);
-            
-            if(_paymentRequestType == PaymentRequestTypeEnum.INTEREST)
-            {
+            _nextPhrasePenalty = exchange.calculatePenalty(
+                previousRequest,
+                currentContract,
+                penaltyRate
+            );
+
+            if (_paymentRequestType == PaymentRequestTypeEnum.INTEREST) {
                 _dueDateTimestamp = PawnLib.add(
-                    previousRequest.dueDateTimestamp, 
-                    PawnLib.calculatedueDateTimestampInterest(currentContract.terms.repaymentCycleType)
+                    previousRequest.dueDateTimestamp,
+                    PawnLib.calculatedueDateTimestampInterest(
+                        currentContract.terms.repaymentCycleType
+                    )
                 );
-                _nextPhraseInterest = exchange.calculateInteres(currentContract); 
-            } 
-            if(_paymentRequestType == PaymentRequestTypeEnum.OVERDUE) 
-            {
+                _nextPhraseInterest = exchange.calculateInteres(
+                    currentContract
+                );
+            }
+            if (_paymentRequestType == PaymentRequestTypeEnum.OVERDUE) {
                 _dueDateTimestamp = PawnLib.add(
-                    previousRequest.dueDateTimestamp, 
-                    PawnLib.calculatedueDateTimestampPenalty(currentContract.terms.repaymentCycleType)
+                    previousRequest.dueDateTimestamp,
+                    PawnLib.calculatedueDateTimestampPenalty(
+                        currentContract.terms.repaymentCycleType
+                    )
                 );
-                _nextPhraseInterest = 0;  
+                _nextPhraseInterest = 0;
             }
 
-            if(_dueDateTimestamp >= currentContract.terms.contractEndDate) {
+            if (_dueDateTimestamp >= currentContract.terms.contractEndDate) {
                 _chargePrepaidFee = true;
             } else {
                 _chargePrepaidFee = false;
             }
 
             // Validate: Due date timestamp of next payment request must not over contract due date
-            require(_dueDateTimestamp <= currentContract.terms.contractEndDate, '2'); // contr-end
+            require(
+                _dueDateTimestamp <= currentContract.terms.contractEndDate,
+                "2"
+            ); // contr-end
             // require(_dueDateTimestamp > previousRequest.dueDateTimestamp || _dueDateTimestamp == 0, '3'); // less-th-prev
 
             // update previous
@@ -207,7 +216,10 @@ contract PawnP2PLoanContract is PawnModel
                 currentContract.lateCount += 1;
 
                 // Check for late threshold reach
-                if (currentContract.terms.lateThreshold <= currentContract.lateCount) {
+                if (
+                    currentContract.terms.lateThreshold <=
+                    currentContract.lateCount
+                ) {
                     // Execute liquid
                     _liquidationExecution(
                         _contractId,
@@ -227,7 +239,12 @@ contract PawnP2PLoanContract is PawnModel
 
             // Check for last repayment, if last repayment, all paid
             if (block.timestamp > currentContract.terms.contractEndDate) {
-                if (previousRequest.remainingInterest + previousRequest.remainingPenalty + previousRequest.remainingLoan > 0) {
+                if (
+                    previousRequest.remainingInterest +
+                        previousRequest.remainingPenalty +
+                        previousRequest.remainingLoan >
+                    0
+                ) {
                     // unpaid => liquid
                     _liquidationExecution(
                         _contractId,
@@ -245,33 +262,55 @@ contract PawnP2PLoanContract is PawnModel
         } else {
             // Validate: remaining loan must valid
             // require(currentContract.terms.loanAmount == _remainingLoan, '4'); // remain
-                _remainingLoan = currentContract.terms.loanAmount;
-                _nextPhraseInterest = exchange.calculateInteres(currentContract);
-                _nextPhrasePenalty = 0;
-                _dueDateTimestamp = PawnLib.add(block.timestamp, PawnLib.calculatedueDateTimestampInterest(currentContract.terms.repaymentCycleType));
+            _remainingLoan = currentContract.terms.loanAmount;
+            _nextPhraseInterest = exchange.calculateInteres(currentContract);
+            _nextPhrasePenalty = 0;
+            _dueDateTimestamp = PawnLib.add(
+                block.timestamp,
+                PawnLib.calculatedueDateTimestampInterest(
+                    currentContract.terms.repaymentCycleType
+                )
+            );
 
-                if(currentContract.terms.repaymentCycleType == LoanDurationType.WEEK)
-                {
-                    if(currentContract.terms.contractEndDate - currentContract.terms.contractStartDate == 600)
-                    {
-                        _chargePrepaidFee = true;
-                    } else {
-                        _chargePrepaidFee = false;
-                }
+            if (
+                currentContract.terms.repaymentCycleType ==
+                LoanDurationType.WEEK
+            ) {
+                if (
+                    currentContract.terms.contractEndDate -
+                        currentContract.terms.contractStartDate ==
+                    600
+                ) {
+                    _chargePrepaidFee = true;
                 } else {
-                    if(currentContract.terms.contractEndDate - currentContract.terms.contractStartDate == 900)
-                    {
-                        _chargePrepaidFee = true;
-                        
-                    } else {
-                        _chargePrepaidFee = false;
-                    }
+                    _chargePrepaidFee = false;
                 }
+            } else {
+                if (
+                    currentContract.terms.contractEndDate -
+                        currentContract.terms.contractStartDate ==
+                    900
+                ) {
+                    _chargePrepaidFee = true;
+                } else {
+                    _chargePrepaidFee = false;
+                }
+            }
 
             // Validate: Due date timestamp of next payment request must not over contract due date
-            require(_dueDateTimestamp <= currentContract.terms.contractEndDate, '5'); // contr-end
-            require(_dueDateTimestamp > currentContract.terms.contractStartDate || _dueDateTimestamp == 0, '6'); // less-th-prev
-            require(block.timestamp < _dueDateTimestamp || _dueDateTimestamp == 0, '7'); // over
+            require(
+                _dueDateTimestamp <= currentContract.terms.contractEndDate,
+                "5"
+            ); // contr-end
+            require(
+                _dueDateTimestamp > currentContract.terms.contractStartDate ||
+                    _dueDateTimestamp == 0,
+                "6"
+            ); // less-th-prev
+            require(
+                block.timestamp < _dueDateTimestamp || _dueDateTimestamp == 0,
+                "7"
+            ); // over
 
             // Check for last repayment, if last repayment, all paid
             if (block.timestamp > currentContract.terms.contractEndDate) {
@@ -312,17 +351,19 @@ contract PawnP2PLoanContract is PawnModel
     ) external whenContractNotPaused {
         // Get contract & payment request
         Contract storage _contract = contractMustActive(_contractId);
-        PaymentRequest[] storage requests = contractPaymentRequestMapping[_contractId];
-        require(requests.length > 0, '0');
+        PaymentRequest[] storage requests = contractPaymentRequestMapping[
+            _contractId
+        ];
+        require(requests.length > 0, "0");
         PaymentRequest storage _paymentRequest = requests[requests.length - 1];
-        
+
         // Validation: Contract must not overdue
-        require(block.timestamp <= _contract.terms.contractEndDate, '1'); // contr-over
+        require(block.timestamp <= _contract.terms.contractEndDate, "1"); // contr-over
 
         // Validation: current payment request must active and not over due
-        require(_paymentRequest.status == PaymentRequestStatusEnum.ACTIVE, '2'); // not-act
+        require(_paymentRequest.status == PaymentRequestStatusEnum.ACTIVE, "2"); // not-act
         if (_paidPenaltyAmount + _paidInterestAmount > 0) {
-            require(block.timestamp <= _paymentRequest.dueDateTimestamp, '3'); // over-due
+            require(block.timestamp <= _paymentRequest.dueDateTimestamp, "3"); // over-due
         }
 
         // Calculate paid amount / remaining amount, if greater => get paid amount
@@ -366,19 +407,23 @@ contract PawnP2PLoanContract is PawnModel
 
         // emit event repayment
         emit RepaymentEvent(
-            _contractId, 
-            _paidPenaltyAmount, 
-            _paidInterestAmount, 
-            _paidLoanAmount, 
-            _feePenalty, 
-            _feeInterest, 
+            _contractId,
+            _paidPenaltyAmount,
+            _paidInterestAmount,
+            _paidLoanAmount,
+            _feePenalty,
+            _feeInterest,
             _prepaidFee,
             _paymentRequest.requestId,
             _UID
         );
 
         // If remaining loan = 0 => paidoff => execute release collateral
-        if (_paymentRequest.remainingLoan == 0 && _paymentRequest.remainingPenalty == 0 && _paymentRequest.remainingInterest == 0) {
+        if (
+            _paymentRequest.remainingLoan == 0 &&
+            _paymentRequest.remainingPenalty == 0 &&
+            _paymentRequest.remainingInterest == 0
+        ) {
             _returnCollateralToBorrowerAndCloseContract(_contractId);
         }
 
@@ -392,7 +437,10 @@ contract PawnP2PLoanContract is PawnModel
             );
 
             // Transfer penalty and interest to lender except fee amount
-            uint256 transferAmount = _paidPenaltyAmount + _paidInterestAmount - _feePenalty - _feeInterest;
+            uint256 transferAmount = _paidPenaltyAmount +
+                _paidInterestAmount -
+                _feePenalty -
+                _feeInterest;
             PawnLib.safeTransfer(
                 _contract.terms.repaymentAsset,
                 msg.sender,
@@ -413,11 +461,9 @@ contract PawnP2PLoanContract is PawnModel
     }
 
     /** ===================================== 3.3. LIQUIDITY & DEFAULT ============================= */
-    
-    function collateralRiskLiquidationExecution(
-        uint256 _contractId
-    ) 
-        external 
+
+    function collateralRiskLiquidationExecution(uint256 _contractId)
+        external
         whenContractNotPaused
         onlyRole(OPERATOR_ROLE)
     {
@@ -425,9 +471,9 @@ contract PawnP2PLoanContract is PawnModel
         Contract storage _contract = contractMustActive(_contractId);
 
         (
-            uint256 collateralExchangeRate, 
-            uint256 loanExchangeRate, 
-            uint256 repaymentExchangeRate, 
+            uint256 collateralExchangeRate,
+            uint256 loanExchangeRate,
+            uint256 repaymentExchangeRate,
 
         ) = exchange.RateAndTimestamp(_contract);
 
@@ -439,11 +485,19 @@ contract PawnP2PLoanContract is PawnModel
                 _contract
             );
 
-        uint256 valueOfRemainingRepayment = (repaymentExchangeRate * remainingRepayment) / ZOOM;
-        uint256 valueOfRemainingLoan = (loanExchangeRate * remainingLoan) / ZOOM;
-        uint256 valueOfCollateralLiquidationThreshold = (collateralExchangeRate * _contract.terms.collateralAmount * _contract.terms.liquidityThreshold) / (100 * ZOOM);
+        uint256 valueOfRemainingRepayment = (repaymentExchangeRate *
+            remainingRepayment) / ZOOM;
+        uint256 valueOfRemainingLoan = (loanExchangeRate * remainingLoan) /
+            ZOOM;
+        uint256 valueOfCollateralLiquidationThreshold = (collateralExchangeRate *
+                _contract.terms.collateralAmount *
+                _contract.terms.liquidityThreshold) / (100 * ZOOM);
 
-        require(valueOfRemainingLoan + valueOfRemainingRepayment >= valueOfCollateralLiquidationThreshold, '0'); // under-thres
+        require(
+            valueOfRemainingLoan + valueOfRemainingRepayment >=
+                valueOfCollateralLiquidationThreshold,
+            "0"
+        ); // under-thres
 
         // Execute: call internal liquidation
         _liquidationExecution(_contractId, ContractLiquidedReasonType.RISK);
@@ -458,11 +512,17 @@ contract PawnP2PLoanContract is PawnModel
         returns (uint256 remainingRepayment, uint256 remainingLoan)
     {
         // Validate: sum of unpaid interest, penalty and remaining loan in value must reach liquidation threshold of collateral value
-        PaymentRequest[] storage requests = contractPaymentRequestMapping[_contractId];
+        PaymentRequest[] storage requests = contractPaymentRequestMapping[
+            _contractId
+        ];
         if (requests.length > 0) {
             // Have payment request
-            PaymentRequest storage _paymentRequest = requests[requests.length - 1];
-            remainingRepayment = _paymentRequest.remainingInterest + _paymentRequest.remainingPenalty;
+            PaymentRequest storage _paymentRequest = requests[
+                requests.length - 1
+            ];
+            remainingRepayment =
+                _paymentRequest.remainingInterest +
+                _paymentRequest.remainingPenalty;
             remainingLoan = _paymentRequest.remainingLoan;
         } else {
             // Haven't had payment request
@@ -479,7 +539,7 @@ contract PawnP2PLoanContract is PawnModel
         Contract storage _contract = contractMustActive(_contractId);
 
         // validate: contract have lateCount == lateThreshold
-        require(_contract.lateCount >= _contract.terms.lateThreshold, '0'); // not-reach
+        require(_contract.lateCount >= _contract.terms.lateThreshold, "0"); // not-reach
 
         // Execute: call internal liquidation
         _liquidationExecution(_contractId, ContractLiquidedReasonType.LATE);
@@ -491,7 +551,7 @@ contract PawnP2PLoanContract is PawnModel
     {
         Contract storage _contract = contractMustActive(_contractId);
         // validate: current is over contract end date
-        require(block.timestamp >= _contract.terms.contractEndDate, '0'); // due
+        require(block.timestamp >= _contract.terms.contractEndDate, "0"); // due
 
         // validate: remaining loan, interest, penalty haven't paid in full
         (
@@ -501,8 +561,8 @@ contract PawnP2PLoanContract is PawnModel
                 _contractId,
                 _contract
             );
-        require(remainingRepayment + remainingLoan > 0, '1'); // paid
-        
+        require(remainingRepayment + remainingLoan > 0, "1"); // paid
+
         // Execute: call internal liquidation
         _liquidationExecution(_contractId, ContractLiquidedReasonType.UNPAID);
     }
@@ -519,18 +579,27 @@ contract PawnP2PLoanContract is PawnModel
             _contract.terms.systemFeeRate,
             ZOOM
         );
-        uint256 _liquidAmount = _contract.terms.collateralAmount - _systemFeeAmount;
+        uint256 _liquidAmount = _contract.terms.collateralAmount -
+            _systemFeeAmount;
 
         // Execute: update status of contract to DEFAULT, collateral to COMPLETE
         _contract.status = ContractStatus.DEFAULT;
-        PaymentRequest[] storage _paymentRequests = contractPaymentRequestMapping[_contractId];
-        PaymentRequest storage _lastPaymentRequest = _paymentRequests[_paymentRequests.length - 1];
+        PaymentRequest[]
+            storage _paymentRequests = contractPaymentRequestMapping[
+                _contractId
+            ];
+        PaymentRequest storage _lastPaymentRequest = _paymentRequests[
+            _paymentRequests.length - 1
+        ];
         _lastPaymentRequest.status = PaymentRequestStatusEnum.DEFAULT;
-        
+
         // Update collateral status in Pawn contract
         // Collateral storage _collateral = collaterals[_contract.collateralId];
         // _collateral.status = CollateralStatus.COMPLETED;
-        pawnContract.updateCollateralStatus(_contract.collateralId, CollateralStatus.COMPLETED);
+        pawnContract.updateCollateralStatus(
+            _contract.collateralId,
+            CollateralStatus.COMPLETED
+        );
 
         (
             uint256 _collateralExchangeRate,
@@ -538,18 +607,19 @@ contract PawnP2PLoanContract is PawnModel
             uint256 _repaymentExchangeRate,
             uint256 _rateUpdatedTime
         ) = exchange.RateAndTimestamp(_contract);
-        
+
         // Emit Event ContractLiquidedEvent & PaymentRequest event
-        ContractLiquidationData memory liquidationData = ContractLiquidationData(
-            _contractId,
-            _liquidAmount,
-            _systemFeeAmount,
-            _collateralExchangeRate,
-            _loanExchangeRate,
-            _repaymentExchangeRate,
-            _rateUpdatedTime,
-            _reasonType
-        );
+        ContractLiquidationData
+            memory liquidationData = ContractLiquidationData(
+                _contractId,
+                _liquidAmount,
+                _systemFeeAmount,
+                _collateralExchangeRate,
+                _loanExchangeRate,
+                _repaymentExchangeRate,
+                _rateUpdatedTime,
+                _reasonType
+            );
 
         emit ContractLiquidedEvent(liquidationData);
 
@@ -589,18 +659,26 @@ contract PawnP2PLoanContract is PawnModel
 
         // Execute: Update status of contract to COMPLETE, collateral to COMPLETE
         _contract.status = ContractStatus.COMPLETED;
-        PaymentRequest[] storage _paymentRequests = contractPaymentRequestMapping[_contractId];
-        PaymentRequest storage _lastPaymentRequest = _paymentRequests[_paymentRequests.length - 1];
+        PaymentRequest[]
+            storage _paymentRequests = contractPaymentRequestMapping[
+                _contractId
+            ];
+        PaymentRequest storage _lastPaymentRequest = _paymentRequests[
+            _paymentRequests.length - 1
+        ];
         _lastPaymentRequest.status = PaymentRequestStatusEnum.COMPLETE;
-        
+
         // Update Pawn contract's collateral status
         // Collateral storage _collateral = collaterals[_contract.collateralId];
         // _collateral.status = CollateralStatus.COMPLETED;
-        pawnContract.updateCollateralStatus(_contract.collateralId, CollateralStatus.COMPLETED);
+        pawnContract.updateCollateralStatus(
+            _contract.collateralId,
+            CollateralStatus.COMPLETED
+        );
 
         // Emit event ContractCompleted
         emit LoanContractCompletedEvent(_contractId);
-        emit PaymentRequestEvent(-1,_contractId, _lastPaymentRequest);
+        emit PaymentRequestEvent(-1, _contractId, _lastPaymentRequest);
 
         // Execute: Transfer collateral to borrower
         PawnLib.safeTransfer(

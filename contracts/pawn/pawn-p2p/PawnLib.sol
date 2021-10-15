@@ -4,8 +4,16 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-enum LoanDurationType {WEEK, MONTH}
-enum CollateralStatus {OPEN, DOING, COMPLETED, CANCEL}
+enum LoanDurationType {
+    WEEK,
+    MONTH
+}
+enum CollateralStatus {
+    OPEN,
+    DOING,
+    COMPLETED,
+    CANCEL
+}
 struct Collateral {
     address owner;
     uint256 amount;
@@ -16,9 +24,14 @@ struct Collateral {
     CollateralStatus status;
 }
 
-enum OfferStatus {PENDING, ACCEPTED, COMPLETED, CANCEL}
+enum OfferStatus {
+    PENDING,
+    ACCEPTED,
+    COMPLETED,
+    CANCEL
+}
 struct CollateralOfferList {
-    mapping (uint256 => Offer) offerMapping;
+    mapping(uint256 => Offer) offerMapping;
     uint256[] offerIdList;
     bool isInit;
 }
@@ -36,8 +49,14 @@ struct Offer {
     bool isInit;
 }
 
-enum PawnShopPackageStatus {ACTIVE, INACTIVE}
-enum PawnShopPackageType {AUTO, SEMI_AUTO}
+enum PawnShopPackageStatus {
+    ACTIVE,
+    INACTIVE
+}
+enum PawnShopPackageType {
+    AUTO,
+    SEMI_AUTO
+}
 struct Range {
     uint256 lowerBound;
     uint256 upperBound;
@@ -59,18 +78,28 @@ struct PawnShopPackage {
     uint256 loanToValueLiquidationThreshold;
 }
 
-enum LoanRequestStatus {PENDING, ACCEPTED, REJECTED, CONTRACTED, CANCEL}
+enum LoanRequestStatus {
+    PENDING,
+    ACCEPTED,
+    REJECTED,
+    CONTRACTED,
+    CANCEL
+}
 struct LoanRequestStatusStruct {
     bool isInit;
     LoanRequestStatus status;
 }
 struct CollateralAsLoanRequestListStruct {
-    mapping (uint256 => LoanRequestStatusStruct) loanRequestToPawnShopPackageMapping; // Mapping from package to status
+    mapping(uint256 => LoanRequestStatusStruct) loanRequestToPawnShopPackageMapping; // Mapping from package to status
     uint256[] pawnShopPackageIdList;
     bool isInit;
 }
 
-enum ContractStatus {ACTIVE, COMPLETED, DEFAULT}
+enum ContractStatus {
+    ACTIVE,
+    COMPLETED,
+    DEFAULT
+}
 struct ContractTerms {
     address borrower;
     address lender;
@@ -98,8 +127,17 @@ struct Contract {
     uint8 lateCount;
 }
 
-enum PaymentRequestStatusEnum {ACTIVE, LATE, COMPLETE, DEFAULT}
-enum PaymentRequestTypeEnum {INTEREST, OVERDUE, LOAN}
+enum PaymentRequestStatusEnum {
+    ACTIVE,
+    LATE,
+    COMPLETE,
+    DEFAULT
+}
+enum PaymentRequestTypeEnum {
+    INTEREST,
+    OVERDUE,
+    LOAN
+}
 struct PaymentRequest {
     uint256 requestId;
     PaymentRequestTypeEnum paymentRequestType;
@@ -113,7 +151,11 @@ struct PaymentRequest {
     PaymentRequestStatusEnum status;
 }
 
-enum ContractLiquidedReasonType {LATE, RISK, UNPAID}
+enum ContractLiquidedReasonType {
+    LATE,
+    RISK,
+    UNPAID
+}
 
 struct ContractRawData {
     uint256 collateralId;
@@ -130,7 +172,7 @@ struct ContractRawData {
     uint256 interest;
     LoanDurationType repaymentCycleType;
     uint256 liquidityThreshold;
-    uint256 loanDurationQty;    
+    uint256 loanDurationQty;
 }
 
 struct ContractLiquidationData {
@@ -169,15 +211,24 @@ library PawnLib {
         } else {
             // Handle ERC20
             uint256 prebalance = IERC20(asset).balanceOf(to);
-            require(IERC20(asset).balanceOf(from) >= amount, "not-enough-balance");
+            require(
+                IERC20(asset).balanceOf(from) >= amount,
+                "not-enough-balance"
+            );
             if (from == address(this)) {
                 // transfer direct to to
                 IERC20(asset).safeTransfer(to, amount);
             } else {
-                require(IERC20(asset).allowance(from, address(this)) >= amount, "not-allowance");
+                require(
+                    IERC20(asset).allowance(from, address(this)) >= amount,
+                    "not-allowance"
+                );
                 IERC20(asset).safeTransferFrom(from, to, amount);
             }
-            require(IERC20(asset).balanceOf(to) - amount == prebalance, "not-trans-enough");
+            require(
+                IERC20(asset).balanceOf(to) - amount == prebalance,
+                "not-trans-enough"
+            );
         }
     }
 
@@ -216,37 +267,37 @@ library PawnLib {
         }
     }
 
-    function calculatedueDateTimestampInterest(LoanDurationType durationType) 
-    internal pure 
-    returns(uint256 duedateTimestampInterest)
+    function calculatedueDateTimestampInterest(LoanDurationType durationType)
+        internal
+        pure
+        returns (uint256 duedateTimestampInterest)
     {
-        if(durationType == LoanDurationType.WEEK) {
-           // duedateTimestampInterest = 3*24*3600;
-            duedateTimestampInterest = 300;  // test
-        }
-        else {
+        if (durationType == LoanDurationType.WEEK) {
+            // duedateTimestampInterest = 3*24*3600;
+            duedateTimestampInterest = 300; // test
+        } else {
             // duedateTimestampInterest = 7 * 24 * 3600;
-            duedateTimestampInterest = 500;  // test
+            duedateTimestampInterest = 500; // test
         }
     }
 
-    function calculatedueDateTimestampPenalty(LoanDurationType durationType) 
-    internal pure 
-    returns(uint256 duedateTimestampInterest)
+    function calculatedueDateTimestampPenalty(LoanDurationType durationType)
+        internal
+        pure
+        returns (uint256 duedateTimestampInterest)
     {
-        if(durationType == LoanDurationType.WEEK) {
-           // duedateTimestampInterest = 7 * 24 *3600 - 3 * 24 * 3600;
-            duedateTimestampInterest = 600 - 300;  // test
-        }
-        else {
-          //  duedateTimestampInterest = 30 * 24 *3600 - 7 * 24 * 3600;
-            duedateTimestampInterest = 900 - 500;  // test
+        if (durationType == LoanDurationType.WEEK) {
+            // duedateTimestampInterest = 7 * 24 *3600 - 3 * 24 * 3600;
+            duedateTimestampInterest = 600 - 300; // test
+        } else {
+            //  duedateTimestampInterest = 30 * 24 *3600 - 7 * 24 * 3600;
+            duedateTimestampInterest = 900 - 500; // test
         }
     }
 
     function add(uint256 a, uint256 b) internal pure returns (uint256) {
         uint256 c = a + b;
-        require(c >= a, "0");//SafeMath: addition overflow
+        require(c >= a, "0"); //SafeMath: addition overflow
 
         return c;
     }
@@ -255,7 +306,11 @@ library PawnLib {
         return sub(a, b, "1"); //SafeMath: subtraction overflow
     }
 
-    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+    function sub(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
         require(b <= a, errorMessage);
         uint256 c = a - b;
 
@@ -277,17 +332,20 @@ library PawnLib {
     }
 
     function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        return div(a, b, "3");  //SafeMath: division by zero
+        return div(a, b, "3"); //SafeMath: division by zero
     }
 
-    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+    function div(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
         require(b > 0, errorMessage);
         uint256 c = a / b;
         // assert(a == b * c + a % b); // There is no case in which this doesn't hold
 
         return c;
     }
-
 }
 
 library PawnEventLib {
@@ -319,7 +377,6 @@ library PawnEventLib {
 }
 
 library CollateralLib {
-    
     function create(
         Collateral storage self,
         address _collateralAddress,
@@ -362,7 +419,8 @@ library CollateralLib {
             _loanRequestListStruct.isInit = true;
         }
 
-        LoanRequestStatusStruct storage statusStruct = _loanRequestListStruct.loanRequestToPawnShopPackageMapping[_packageId];
+        LoanRequestStatusStruct storage statusStruct = _loanRequestListStruct
+            .loanRequestToPawnShopPackageMapping[_packageId];
         require(statusStruct.isInit == false);
         statusStruct.isInit = true;
         statusStruct.status = LoanRequestStatus.PENDING;
@@ -375,13 +433,19 @@ library CollateralLib {
         uint256 _packageId,
         CollateralAsLoanRequestListStruct storage _loanRequestListStruct
     ) internal {
-        delete _loanRequestListStruct.loanRequestToPawnShopPackageMapping[_packageId];
+        delete _loanRequestListStruct.loanRequestToPawnShopPackageMapping[
+            _packageId
+        ];
 
-        uint256 lastIndex = _loanRequestListStruct.pawnShopPackageIdList.length - 1;
+        uint256 lastIndex = _loanRequestListStruct
+            .pawnShopPackageIdList
+            .length - 1;
 
         for (uint256 i = 0; i <= lastIndex; i++) {
             if (_loanRequestListStruct.pawnShopPackageIdList[i] == _packageId) {
-                _loanRequestListStruct.pawnShopPackageIdList[i] = _loanRequestListStruct.pawnShopPackageIdList[lastIndex];
+                _loanRequestListStruct.pawnShopPackageIdList[
+                        i
+                    ] = _loanRequestListStruct.pawnShopPackageIdList[lastIndex];
                 break;
             }
         }
@@ -394,11 +458,7 @@ library CollateralLib {
         CollateralAsLoanRequestListStruct storage _loanRequestListStruct,
         CollateralStatus _requiredCollateralStatus,
         LoanRequestStatus _requiredLoanRequestStatus
-    ) 
-        internal 
-        view 
-        returns (LoanRequestStatusStruct storage _statusStruct) 
-    {
+    ) internal view returns (LoanRequestStatusStruct storage _statusStruct) {
         // Check for owner of packageId
         // _pawnShopPackage = pawnShopPackages[_packageId];
         require(_pawnShopPackage.status == PawnShopPackageStatus.ACTIVE, "0"); // pack
@@ -453,7 +513,8 @@ library OfferLib {
         uint256 lastIndex = _collateralOfferList.offerIdList.length - 1;
         for (uint256 i = 0; i <= lastIndex; i++) {
             if (_collateralOfferList.offerIdList[i] == _id) {
-                _collateralOfferList.offerIdList[i] = _collateralOfferList.offerIdList[lastIndex];
+                _collateralOfferList.offerIdList[i] = _collateralOfferList
+                    .offerIdList[lastIndex];
                 break;
             }
         }
