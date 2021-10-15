@@ -18,25 +18,22 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     using PawnPackageLib for PawnShopPackage;
 
     mapping(address => uint256) public whitelistCollateral;
-    address public operator; 
+    address public operator;
     address public feeWallet = address(this);
     uint256 public penaltyRate;
-    uint256 public systemFeeRate; 
+    uint256 public systemFeeRate;
     uint256 public lateThreshold;
     uint256 public prepaidFeeRate;
-    uint256 public ZOOM;  
+    uint256 public ZOOM;
     bool public initialized = false;
     address public admin;
-
 
     /**
      * @dev initialize function
      * @param _zoom is coefficient used to represent risk params
      */
 
-    function initialize(
-        uint256 _zoom
-    ) external notInitialized {
+    function initialize(uint256 _zoom) external notInitialized {
         ZOOM = _zoom;
         initialized = true;
         admin = address(msg.sender);
@@ -59,26 +56,26 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     }
 
     /**
-    * @dev set fee for each token
-    * @param _feeRate is percentage of tokens to pay for the transaction
-    */
+     * @dev set fee for each token
+     * @param _feeRate is percentage of tokens to pay for the transaction
+     */
 
     function setSystemFeeRate(uint256 _feeRate) external onlyAdmin {
         systemFeeRate = _feeRate;
     }
 
     /**
-    * @dev set fee for each token
-    * @param _feeRate is percentage of tokens to pay for the penalty
-    */
+     * @dev set fee for each token
+     * @param _feeRate is percentage of tokens to pay for the penalty
+     */
     function setPenaltyRate(uint256 _feeRate) external onlyAdmin {
         penaltyRate = _feeRate;
     }
 
     /**
-    * @dev set fee for each token
-    * @param _threshold is number of time allowed for late repayment
-    */
+     * @dev set fee for each token
+     * @param _threshold is number of time allowed for late repayment
+     */
     function setLateThreshold(uint256 _threshold) external onlyAdmin {
         lateThreshold = _threshold;
     }
@@ -95,12 +92,12 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     }
 
     modifier notInitialized() {
-        require(!initialized, "-2");  //initialized
+        require(!initialized, "-2"); //initialized
         _;
     }
 
     modifier isInitialized() {
-        require(initialized, "-3");  //not-initialized
+        require(initialized, "-3"); //not-initialized
         _;
     }
 
@@ -115,7 +112,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     }
 
     function _onlyAdmin() private view {
-        require(admin == msg.sender, "-1");  //admin
+        require(admin == msg.sender, "-1"); //admin
     }
 
     modifier onlyAdmin() {
@@ -127,18 +124,18 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     function _whenNotPaused() private view {
         require(!paused(), "-4"); //Pausable: paused
     }
-    
+
     modifier whenContractNotPaused() {
         // require(!paused(), "Pausable: paused");
         _whenNotPaused();
         _;
     }
 
-    function emergencyWithdraw(address _token) 
-        external 
+    function emergencyWithdraw(address _token)
+        external
         override
-        onlyAdmin 
-        whenPaused 
+        onlyAdmin
+        whenPaused
     {
         PawnLib.safeTransfer(
             _token,
@@ -151,11 +148,8 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     /** ========================= COLLATERAL FUNCTIONS & STATES ============================= */
     uint256 public numberCollaterals;
     mapping(uint256 => Collateral) public collaterals;
-    
-    event CreateCollateralEvent(
-        uint256 collateralId,
-        Collateral data
-    );
+
+    event CreateCollateralEvent(uint256 collateralId, Collateral data);
 
     event WithdrawCollateralEvent(
         uint256 collateralId,
@@ -163,14 +157,14 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     );
 
     /**
-    * @dev create Collateral function, collateral will be stored in this contract
-    * @param _collateralAddress is address of collateral
-    * @param _packageId is id of pawn shop package
-    * @param _amount is amount of token
-    * @param _loanAsset is address of loan token
-    * @param _expectedDurationQty is expected duration
-    * @param _expectedDurationType is expected duration type
-    */
+     * @dev create Collateral function, collateral will be stored in this contract
+     * @param _collateralAddress is address of collateral
+     * @param _packageId is id of pawn shop package
+     * @param _amount is amount of token
+     * @param _loanAsset is address of loan token
+     * @param _expectedDurationQty is expected duration
+     * @param _expectedDurationType is expected duration type
+     */
     function createCollateral(
         address _collateralAddress,
         int256 _packageId,
@@ -178,23 +172,18 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         address _loanAsset,
         uint256 _expectedDurationQty,
         LoanDurationType _expectedDurationType
-    ) 
-        external 
-        payable 
-        whenContractNotPaused 
-        returns (uint256 _idx) 
-    {
+    ) external payable whenContractNotPaused returns (uint256 _idx) {
         //check whitelist collateral token
-        require(whitelistCollateral[_collateralAddress] == 1, '0'); //n-sup-col
+        require(whitelistCollateral[_collateralAddress] == 1, "0"); //n-sup-col
         //validate: cannot use BNB as loanAsset
-        require(_loanAsset != address(0), '1'); //bnb
+        require(_loanAsset != address(0), "1"); //bnb
 
         //id of collateral
         _idx = numberCollaterals;
 
         //create new collateral
         Collateral storage newCollateral = collaterals[_idx];
-        
+
         newCollateral.create(
             _collateralAddress,
             _amount,
@@ -209,11 +198,19 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
         if (_packageId >= 0) {
             //Package must active
-            PawnShopPackage storage pawnShopPackage = pawnShopPackages[uint256(_packageId)];
-            require(pawnShopPackage.status == PawnShopPackageStatus.ACTIVE, '2'); //pack
+            PawnShopPackage storage pawnShopPackage = pawnShopPackages[
+                uint256(_packageId)
+            ];
+            require(
+                pawnShopPackage.status == PawnShopPackageStatus.ACTIVE,
+                "2"
+            ); //pack
 
             // Submit collateral to package
-            CollateralAsLoanRequestListStruct storage loanRequestListStruct = collateralAsLoanRequestMapping[_idx];
+            CollateralAsLoanRequestListStruct
+                storage loanRequestListStruct = collateralAsLoanRequestMapping[
+                    _idx
+                ];
 
             newCollateral.submitToLoanPackage(
                 uint256(_packageId),
@@ -243,16 +240,16 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     }
 
     /**
-    * @dev cancel collateral function and return back collateral
-    * @param  _collateralId is id of collateral
-    */
-    function withdrawCollateral(uint256 _collateralId) 
-        external 
-        whenContractNotPaused 
+     * @dev cancel collateral function and return back collateral
+     * @param  _collateralId is id of collateral
+     */
+    function withdrawCollateral(uint256 _collateralId)
+        external
+        whenContractNotPaused
     {
         Collateral storage collateral = collaterals[_collateralId];
-        require(collateral.owner == msg.sender, '0'); //owner
-        require(collateral.status == CollateralStatus.OPEN, '1'); //col
+        require(collateral.owner == msg.sender, "0"); //owner
+        require(collateral.status == CollateralStatus.OPEN, "1"); //col
 
         PawnLib.safeTransfer(
             collateral.collateralAddress,
@@ -262,16 +259,19 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         );
 
         // Remove relation of collateral and offers
-        CollateralOfferList storage collateralOfferList = collateralOffersMapping[_collateralId];
+        CollateralOfferList
+            storage collateralOfferList = collateralOffersMapping[
+                _collateralId
+            ];
         if (collateralOfferList.isInit == true) {
-            for (uint256 i = 0; i < collateralOfferList.offerIdList.length; i++) {
+            for (
+                uint256 i = 0;
+                i < collateralOfferList.offerIdList.length;
+                i++
+            ) {
                 uint256 offerId = collateralOfferList.offerIdList[i];
                 Offer storage offer = collateralOfferList.offerMapping[offerId];
-                emit CancelOfferEvent(
-                    offerId,
-                    _collateralId,
-                    offer.owner
-                );
+                emit CancelOfferEvent(offerId, _collateralId, offer.owner);
             }
             delete collateralOffersMapping[_collateralId];
         }
@@ -289,12 +289,13 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     function updateCollateralStatus(
         uint256 _collateralId,
         CollateralStatus _status
-    )
-        external 
-        override
-        whenContractNotPaused
-    {
-        require(_msgSender() == address(pawnLoanContract) || _msgSender() == operator || _msgSender() == admin, "not-allow");
+    ) external override whenContractNotPaused {
+        require(
+            _msgSender() == address(pawnLoanContract) ||
+                _msgSender() == operator ||
+                _msgSender() == admin,
+            "not-allow"
+        );
 
         Collateral storage collateral = collaterals[_collateralId];
         require(collateral.status == CollateralStatus.DOING, "invalid-col");
@@ -307,11 +308,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
     mapping(uint256 => CollateralOfferList) public collateralOffersMapping;
 
-    event CreateOfferEvent(
-        uint256 offerId,
-        uint256 collateralId,
-        Offer data
-    );
+    event CreateOfferEvent(uint256 offerId, uint256 collateralId, Offer data);
 
     event CancelOfferEvent(
         uint256 offerId,
@@ -320,14 +317,14 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     );
 
     /**
-    * @dev create Collateral function, collateral will be stored in this contract
-    * @param _collateralId is id of collateral
-    * @param _repaymentAsset is address of repayment token
-    * @param _duration is duration of this offer
-    * @param _loanDurationType is type for calculating loan duration
-    * @param _repaymentCycleType is type for calculating repayment cycle
-    * @param _liquidityThreshold is ratio of assets to be liquidated
-    */
+     * @dev create Collateral function, collateral will be stored in this contract
+     * @param _collateralId is id of collateral
+     * @param _repaymentAsset is address of repayment token
+     * @param _duration is duration of this offer
+     * @param _loanDurationType is type for calculating loan duration
+     * @param _repaymentCycleType is type for calculating repayment cycle
+     * @param _liquidityThreshold is ratio of assets to be liquidated
+     */
     function createOffer(
         uint256 _collateralId,
         address _repaymentAsset,
@@ -337,24 +334,29 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         uint8 _loanDurationType,
         uint8 _repaymentCycleType,
         uint256 _liquidityThreshold
-    )
-        external 
-        whenContractNotPaused 
-        returns (uint256 _idx)
-    {
+    ) external whenContractNotPaused returns (uint256 _idx) {
         Collateral storage collateral = collaterals[_collateralId];
-        require(collateral.status == CollateralStatus.OPEN, '0'); // col
+        require(collateral.status == CollateralStatus.OPEN, "0"); // col
         // validate not allow for collateral owner to create offer
-        require(collateral.owner != msg.sender, '1'); // owner
+        require(collateral.owner != msg.sender, "1"); // owner
         // Validate ower already approve for this contract to withdraw
-        require(IERC20Upgradeable(collateral.loanAsset).allowance(msg.sender, address(this)) >= _loanAmount, '2'); // not-apr
+        require(
+            IERC20Upgradeable(collateral.loanAsset).allowance(
+                msg.sender,
+                address(this)
+            ) >= _loanAmount,
+            "2"
+        ); // not-apr
 
         // Get offers of collateral
-        CollateralOfferList storage collateralOfferList = collateralOffersMapping[_collateralId];
+        CollateralOfferList
+            storage collateralOfferList = collateralOffersMapping[
+                _collateralId
+            ];
         if (!collateralOfferList.isInit) {
             collateralOfferList.isInit = true;
         }
-        // Create offer id       
+        // Create offer id
         _idx = numberOffers;
 
         // Create offer data
@@ -375,7 +377,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         ++numberOffers;
 
         emit CreateOfferEvent(_idx, _collateralId, _offer);
-        
+
         // Adjust reputation score
         reputation.adjustReputationScore(
             msg.sender,
@@ -384,24 +386,29 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     }
 
     /**
-    * @dev cancel offer function, used for cancel offer
-    * @param  _offerId is id of offer
-    * @param _collateralId is id of collateral associated with offer
-    */
+     * @dev cancel offer function, used for cancel offer
+     * @param  _offerId is id of offer
+     * @param _collateralId is id of collateral associated with offer
+     */
     function cancelOffer(uint256 _offerId, uint256 _collateralId)
         external
         whenContractNotPaused
     {
-        CollateralOfferList storage collateralOfferList = collateralOffersMapping[_collateralId];
-        require(collateralOfferList.isInit == true, '0'); // col
-        
+        CollateralOfferList
+            storage collateralOfferList = collateralOffersMapping[
+                _collateralId
+            ];
+        require(collateralOfferList.isInit == true, "0"); // col
+
         Offer storage offer = collateralOfferList.offerMapping[_offerId];
 
         offer.cancel(_offerId, collateralOfferList);
 
-        delete collateralOfferList.offerIdList[collateralOfferList.offerIdList.length - 1];
+        delete collateralOfferList.offerIdList[
+            collateralOfferList.offerIdList.length - 1
+        ];
         emit CancelOfferEvent(_offerId, _collateralId, msg.sender);
-        
+
         // Adjust reputation score
         reputation.adjustReputationScore(
             msg.sender,
@@ -413,14 +420,11 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     uint256 public numberPawnShopPackages;
     mapping(uint256 => PawnShopPackage) public pawnShopPackages;
 
-    event CreatePawnShopPackage(
-        uint256 packageId,
-        PawnShopPackage data
-    );
+    event CreatePawnShopPackage(uint256 packageId, PawnShopPackage data);
 
     event ChangeStatusPawnShopPackage(
         uint256 packageId,
-        PawnShopPackageStatus status         
+        PawnShopPackageStatus status
     );
 
     function createPawnShopPackage(
@@ -435,23 +439,19 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         LoanDurationType _repaymentCycleType,
         uint256 _loanToValue,
         uint256 _loanToValueLiquidationThreshold
-    ) 
-        external 
-        whenContractNotPaused
-        returns (uint256 _idx)
-    {
+    ) external whenContractNotPaused returns (uint256 _idx) {
         _idx = numberPawnShopPackages;
 
         // Validataion logic: whitelist collateral, ranges must have upper greater than lower, duration type
         for (uint256 i = 0; i < _collateralAcceptance.length; i++) {
-            require(whitelistCollateral[_collateralAcceptance[i]] == 1, '0'); // col
+            require(whitelistCollateral[_collateralAcceptance[i]] == 1, "0"); // col
         }
 
-        require(_loanAmountRange.lowerBound < _loanAmountRange.upperBound, '1'); // loan-rge
-        require(_durationRange.lowerBound < _durationRange.upperBound, '2'); // dur-rge
-        require(_durationType < 2, '3'); // dur-type
-        
-        require(_loanToken != address(0), '4'); // bnb
+        require(_loanAmountRange.lowerBound < _loanAmountRange.upperBound, "1"); // loan-rge
+        require(_durationRange.lowerBound < _durationRange.upperBound, "2"); // dur-rge
+        require(_durationType < 2, "3"); // dur-type
+
+        require(_loanToken != address(0), "4"); // bnb
 
         //create new collateral
         PawnShopPackage storage newPackage = pawnShopPackages[_idx];
@@ -471,11 +471,8 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         );
 
         ++numberPawnShopPackages;
-        emit CreatePawnShopPackage(
-            _idx, 
-            newPackage
-        );
-        
+        emit CreatePawnShopPackage(_idx, newPackage);
+
         // Adjust reputation score
         reputation.adjustReputationScore(
             msg.sender,
@@ -483,17 +480,20 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         );
     }
 
-    function activePawnShopPackage(uint256 _packageId) external whenContractNotPaused {
+    function activePawnShopPackage(uint256 _packageId)
+        external
+        whenContractNotPaused
+    {
         PawnShopPackage storage pawnShopPackage = pawnShopPackages[_packageId];
-        require(pawnShopPackage.owner == msg.sender, '0'); // owner
-        require(pawnShopPackage.status == PawnShopPackageStatus.INACTIVE, '1'); // pack
+        require(pawnShopPackage.owner == msg.sender, "0"); // owner
+        require(pawnShopPackage.status == PawnShopPackageStatus.INACTIVE, "1"); // pack
 
         pawnShopPackage.status = PawnShopPackageStatus.ACTIVE;
         emit ChangeStatusPawnShopPackage(
             _packageId,
             PawnShopPackageStatus.ACTIVE
         );
-        
+
         // Adjust reputation score
         reputation.adjustReputationScore(
             msg.sender,
@@ -506,17 +506,17 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         whenContractNotPaused
     {
         PawnShopPackage storage pawnShopPackage = pawnShopPackages[_packageId];
-        
+
         // Deactivate package
-        require(pawnShopPackage.owner == msg.sender, '0'); // owner
-        require(pawnShopPackage.status == PawnShopPackageStatus.ACTIVE, '1'); // pack
+        require(pawnShopPackage.owner == msg.sender, "0"); // owner
+        require(pawnShopPackage.status == PawnShopPackageStatus.ACTIVE, "1"); // pack
 
         pawnShopPackage.status = PawnShopPackageStatus.INACTIVE;
         emit ChangeStatusPawnShopPackage(
             _packageId,
             PawnShopPackageStatus.INACTIVE
         );
-        
+
         // Adjust reputation score
         reputation.adjustReputationScore(
             msg.sender,
@@ -525,8 +525,9 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     }
 
     /** ========================= SUBMIT & ACCEPT WORKFLOW OF PAWNSHOP PACKAGE FUNCTIONS & STATES ============================= */
-    
-    mapping(uint256 => CollateralAsLoanRequestListStruct) public collateralAsLoanRequestMapping; // Map from collateral to loan request
+
+    mapping(uint256 => CollateralAsLoanRequestListStruct)
+        public collateralAsLoanRequestMapping; // Map from collateral to loan request
     event SubmitPawnShopPackage(
         uint256 packageId,
         uint256 collateralId,
@@ -534,31 +535,32 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     );
 
     /**
-    * @dev Submit Collateral to Package function, collateral will be submit to pawnshop package
-    * @param _collateralId is id of collateral
-    * @param _packageId is id of pawn shop package
-    */
+     * @dev Submit Collateral to Package function, collateral will be submit to pawnshop package
+     * @param _collateralId is id of collateral
+     * @param _packageId is id of pawn shop package
+     */
     function submitCollateralToPackage(
         uint256 _collateralId,
         uint256 _packageId
-    ) 
-        external 
-        whenContractNotPaused
-    {
+    ) external whenContractNotPaused {
         Collateral storage collateral = collaterals[_collateralId];
-        require(collateral.owner == msg.sender, '0'); // owner
-        require(collateral.status == CollateralStatus.OPEN, '1'); // col
-        
+        require(collateral.owner == msg.sender, "0"); // owner
+        require(collateral.status == CollateralStatus.OPEN, "1"); // col
+
         PawnShopPackage storage pawnShopPackage = pawnShopPackages[_packageId];
-        require(pawnShopPackage.status == PawnShopPackageStatus.ACTIVE, '2'); // pack
+        require(pawnShopPackage.status == PawnShopPackageStatus.ACTIVE, "2"); // pack
 
         // VALIDATE HAVEN'T SUBMIT TO PACKAGE YET
-        CollateralAsLoanRequestListStruct storage loanRequestListStruct = collateralAsLoanRequestMapping[_collateralId];
-        
-        if (loanRequestListStruct.isInit == true) {
-            LoanRequestStatusStruct storage statusStruct = loanRequestListStruct.loanRequestToPawnShopPackageMapping[_packageId];
+        CollateralAsLoanRequestListStruct
+            storage loanRequestListStruct = collateralAsLoanRequestMapping[
+                _collateralId
+            ];
 
-            require(statusStruct.isInit == false, '3'); // subed
+        if (loanRequestListStruct.isInit == true) {
+            LoanRequestStatusStruct storage statusStruct = loanRequestListStruct
+                .loanRequestToPawnShopPackageMapping[_packageId];
+
+            require(statusStruct.isInit == false, "3"); // subed
         }
 
         // Save
@@ -573,19 +575,21 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     function withdrawCollateralFromPackage(
         uint256 _collateralId,
         uint256 _packageId
-    ) 
-        external 
-        whenContractNotPaused 
-    {
+    ) external whenContractNotPaused {
         // Collateral must OPEN
         Collateral storage collateral = collaterals[_collateralId];
-        require(collateral.status == CollateralStatus.OPEN, '0'); // col
+        require(collateral.status == CollateralStatus.OPEN, "0"); // col
         // Sender is collateral owner
-        require(collateral.owner == msg.sender, '1'); // owner
+        require(collateral.owner == msg.sender, "1"); // owner
         // collateral-package status must pending
-        CollateralAsLoanRequestListStruct storage loanRequestListStruct = collateralAsLoanRequestMapping[_collateralId];
-        LoanRequestStatusStruct storage loanRequestStatus = loanRequestListStruct.loanRequestToPawnShopPackageMapping[_packageId];
-        require(loanRequestStatus.status == LoanRequestStatus.PENDING, '2'); // col-pack
+        CollateralAsLoanRequestListStruct
+            storage loanRequestListStruct = collateralAsLoanRequestMapping[
+                _collateralId
+            ];
+        LoanRequestStatusStruct
+            storage loanRequestStatus = loanRequestListStruct
+                .loanRequestToPawnShopPackageMapping[_packageId];
+        require(loanRequestStatus.status == LoanRequestStatus.PENDING, "2"); // col-pack
 
         // _removeCollateralFromPackage(_collateralId, _packageId);
 
@@ -600,10 +604,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     function acceptCollateralOfPackage(
         uint256 _collateralId,
         uint256 _packageId
-    ) 
-        external 
-        whenContractNotPaused 
-    {
+    ) external whenContractNotPaused {
         (
             Collateral storage collateral,
             PawnShopPackage storage pawnShopPackage,
@@ -615,9 +616,12 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
                 CollateralStatus.OPEN,
                 LoanRequestStatus.PENDING
             );
-        
+
         // Check for owner of packageId
-        require(pawnShopPackage.owner == msg.sender || msg.sender == operator, '0'); // owner-or-oper
+        require(
+            pawnShopPackage.owner == msg.sender || msg.sender == operator,
+            "0"
+        ); // owner-or-oper
 
         // Execute accept => change status of loan request to ACCEPTED, wait for system to generate contract
         // Update status of loan request between _collateralId and _packageId to Accepted
@@ -625,11 +629,16 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         collateral.status = CollateralStatus.DOING;
 
         // Remove status of loan request between _collateralId and other packageId then emit event Cancel
-        for (uint256 i = 0; i < loanRequestListStruct.pawnShopPackageIdList.length; i++) {
+        for (
+            uint256 i = 0;
+            i < loanRequestListStruct.pawnShopPackageIdList.length;
+            i++
+        ) {
             uint256 packageId = loanRequestListStruct.pawnShopPackageIdList[i];
             if (packageId != _packageId) {
                 // Remove status
-                delete loanRequestListStruct.loanRequestToPawnShopPackageMapping[packageId];
+                delete loanRequestListStruct
+                    .loanRequestToPawnShopPackageMapping[packageId];
                 emit SubmitPawnShopPackage(
                     packageId,
                     _collateralId,
@@ -641,16 +650,19 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         loanRequestListStruct.pawnShopPackageIdList.push(_packageId);
 
         // Remove relation of collateral and offers
-        CollateralOfferList storage collateralOfferList = collateralOffersMapping[_collateralId];
+        CollateralOfferList
+            storage collateralOfferList = collateralOffersMapping[
+                _collateralId
+            ];
         if (collateralOfferList.isInit == true) {
-            for (uint256 i = 0; i < collateralOfferList.offerIdList.length; i ++) {
+            for (
+                uint256 i = 0;
+                i < collateralOfferList.offerIdList.length;
+                i++
+            ) {
                 uint256 offerId = collateralOfferList.offerIdList[i];
                 Offer storage offer = collateralOfferList.offerMapping[offerId];
-                emit CancelOfferEvent(
-                    offerId,
-                    _collateralId,
-                    offer.owner
-                );
+                emit CancelOfferEvent(offerId, _collateralId, offer.owner);
             }
             delete collateralOffersMapping[_collateralId];
         }
@@ -659,20 +671,14 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             _collateralId,
             LoanRequestStatus.ACCEPTED
         );
-        
-        generateContractForCollateralAndPackage(
-            _collateralId, 
-            _packageId
-        );
+
+        generateContractForCollateralAndPackage(_collateralId, _packageId);
     }
 
     function rejectCollateralOfPackage(
         uint256 _collateralId,
         uint256 _packageId
-    ) 
-        external 
-        whenContractNotPaused 
-    {
+    ) external whenContractNotPaused {
         (
             Collateral storage collateral,
             PawnShopPackage storage pawnShopPackage,
@@ -726,7 +732,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     /** ========================= CONTRACT RELATED FUNCTIONS & STATES ============================= */
     uint256 public numberContracts;
     mapping(uint256 => Contract) public contracts;
-    
+
     /** ================================ 1. ACCEPT OFFER (FOR P2P WORKFLOWS) ============================= */
     // Old LoanContractCreatedEvent
 
@@ -737,26 +743,32 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     );
 
     /**
-    * @dev accept offer and create contract between collateral and offer
-    * @param  _collateralId is id of collateral
-    * @param  _offerId is id of offer
-    */
+     * @dev accept offer and create contract between collateral and offer
+     * @param  _collateralId is id of collateral
+     * @param  _offerId is id of offer
+     */
     function acceptOffer(uint256 _collateralId, uint256 _offerId)
         external
         whenContractNotPaused
     {
         Collateral storage collateral = collaterals[_collateralId];
-        require(msg.sender == collateral.owner, '0'); // owner
-        require(collateral.status == CollateralStatus.OPEN, '1'); // col
+        require(msg.sender == collateral.owner, "0"); // owner
+        require(collateral.status == CollateralStatus.OPEN, "1"); // col
 
-        CollateralOfferList storage collateralOfferList = collateralOffersMapping[_collateralId];
-        require(collateralOfferList.isInit == true, '2'); // col-off
+        CollateralOfferList
+            storage collateralOfferList = collateralOffersMapping[
+                _collateralId
+            ];
+        require(collateralOfferList.isInit == true, "2"); // col-off
         Offer storage offer = collateralOfferList.offerMapping[_offerId];
-        require(offer.isInit == true, '3'); // not-sent
-        require(offer.status == OfferStatus.PENDING, '4'); // unavail
+        require(offer.isInit == true, "3"); // not-sent
+        require(offer.status == OfferStatus.PENDING, "4"); // unavail
 
         // Prepare contract raw data
-        uint256 exchangeRate = exchange.exchangeRateofOffer(collateral.loanAsset, offer.repaymentAsset);
+        uint256 exchangeRate = exchange.exchangeRateofOffer(
+            collateral.loanAsset,
+            offer.repaymentAsset
+        );
         ContractRawData memory contractData = ContractRawData(
             _collateralId,
             collateral.owner,
@@ -767,17 +779,17 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             int256(_offerId),
             exchangeRate, /* Exchange rate */
             offer.loanAmount,
-            offer.owner, 
-            offer.repaymentAsset, 
-            offer.interest, 
-            offer.loanDurationType, 
+            offer.owner,
+            offer.repaymentAsset,
+            offer.interest,
+            offer.loanDurationType,
             offer.liquidityThreshold,
             offer.duration
         );
 
         // Create Contract
         uint256 contractId = pawnLoanContract.createContract(contractData);
-        
+
         // change status of offer and collateral
         offer.status = OfferStatus.ACCEPTED;
         collateral.status = CollateralStatus.DOING;
@@ -786,12 +798,10 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         for (uint256 i = 0; i < collateralOfferList.offerIdList.length; i++) {
             uint256 thisOfferId = collateralOfferList.offerIdList[i];
             if (thisOfferId != _offerId) {
-                Offer storage thisOffer = collateralOfferList.offerMapping[thisOfferId];
-                emit CancelOfferEvent(
-                    i,
-                    _collateralId, 
-                    thisOffer.owner
-                );
+                Offer storage thisOffer = collateralOfferList.offerMapping[
+                    thisOfferId
+                ];
+                emit CancelOfferEvent(i, _collateralId, thisOffer.owner);
 
                 delete collateralOfferList.offerMapping[thisOfferId];
             }
@@ -833,23 +843,24 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         );
 
         // Generate first payment period
-        pawnLoanContract.closePaymentRequestAndStartNew(0, contractId, PaymentRequestTypeEnum.INTEREST); 
+        pawnLoanContract.closePaymentRequestAndStartNew(
+            0,
+            contractId,
+            PaymentRequestTypeEnum.INTEREST
+        );
     }
 
     /** ================================ 2. ACCEPT COLLATERAL (FOR PAWNSHOP PACKAGE WORKFLOWS) ============================= */
-    
+
     /**
-    * @dev create contract between package and collateral
-    * @param  _collateralId is id of collateral
-    * @param  _packageId is id of package
-    */
+     * @dev create contract between package and collateral
+     * @param  _collateralId is id of collateral
+     * @param  _packageId is id of package
+     */
     function generateContractForCollateralAndPackage(
         uint256 _collateralId,
         uint256 _packageId
-    ) 
-        internal 
-        whenContractNotPaused
-    {
+    ) internal whenContractNotPaused {
         (
             Collateral storage collateral,
             PawnShopPackage storage pawnShopPackage,
@@ -863,11 +874,9 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             );
 
         // function tinh loanAmount va Exchange Rate trong contract Exchange.
-        (
-            uint256 loanAmount, 
-            uint256 exchangeRate
-        ) = exchange.calculateLoanAmountAndExchangeRate(
-                collaterals[_collateralId], 
+        (uint256 loanAmount, uint256 exchangeRate) = exchange
+            .calculateLoanAmountAndExchangeRate(
+                collaterals[_collateralId],
                 pawnShopPackages[_packageId]
             );
 
@@ -885,13 +894,13 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             pawnShopPackage.owner,
             pawnShopPackage.repaymentAsset,
             pawnShopPackage.interest,
-            pawnShopPackage.repaymentCycleType, 
+            pawnShopPackage.repaymentCycleType,
             pawnShopPackage.loanToValueLiquidationThreshold,
             collateral.expectedDurationQty
         );
         // Create Contract
         uint256 contractId = pawnLoanContract.createContract(contractData);
-        
+
         // Change status of collateral loan request to package to CONTRACTED
         statusStruct.status == LoanRequestStatus.CONTRACTED;
         emit SubmitPawnShopPackage(
@@ -915,7 +924,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             address(pawnLoanContract),
             collateral.amount
         );
-        
+
         // Adjust reputation score
         reputation.adjustReputationScore(
             pawnShopPackage.owner,
@@ -923,18 +932,19 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         );
 
         //ki dau tien BEId = 0
-        pawnLoanContract.closePaymentRequestAndStartNew(0, contractId, PaymentRequestTypeEnum.INTEREST);
+        pawnLoanContract.closePaymentRequestAndStartNew(
+            0,
+            contractId,
+            PaymentRequestTypeEnum.INTEREST
+        );
     }
 
     /** ================================ 3. PAYMENT REQUEST & REPAYMENT WORKLOWS ============================= */
     /** ===================================== 3.1. PAYMENT REQUEST ============================= */
     mapping(uint256 => PaymentRequest[]) public contractPaymentRequestMapping;
-    
+
     // Old PaymentRequestEvent
-    event PaymentRequestEvent (
-        uint256 contractId,
-        PaymentRequest data
-    );
+    event PaymentRequestEvent(uint256 contractId, PaymentRequest data);
 
     function closePaymentRequestAndStartNew(
         uint256 _contractId,
@@ -944,28 +954,35 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         uint256 _dueDateTimestamp,
         PaymentRequestTypeEnum _paymentRequestType,
         bool _chargePrepaidFee
-    ) 
-        external 
-        whenNotPaused 
-        onlyOperator 
-    {
+    ) external whenNotPaused onlyOperator {
         Contract storage currentContract = contractMustActive(_contractId);
 
         // Check if number of requests is 0 => create new requests, if not then update current request as LATE or COMPLETE and create new requests
-        PaymentRequest[] storage requests = contractPaymentRequestMapping[_contractId];
+        PaymentRequest[] storage requests = contractPaymentRequestMapping[
+            _contractId
+        ];
         if (requests.length > 0) {
             // not first phrase, get previous request
-            PaymentRequest storage previousRequest = requests[requests.length - 1];
-            
+            PaymentRequest storage previousRequest = requests[
+                requests.length - 1
+            ];
+
             // Validate: time must over due date of current payment
-            require(block.timestamp >= previousRequest.dueDateTimestamp, '0'); // time-not-due
+            require(block.timestamp >= previousRequest.dueDateTimestamp, "0"); // time-not-due
 
             // Validate: remaining loan must valid
-            require(previousRequest.remainingLoan == _remainingLoan, '1'); // remain
+            require(previousRequest.remainingLoan == _remainingLoan, "1"); // remain
 
             // Validate: Due date timestamp of next payment request must not over contract due date
-            require(_dueDateTimestamp <= currentContract.terms.contractEndDate, '2'); // contr-end
-            require(_dueDateTimestamp > previousRequest.dueDateTimestamp || _dueDateTimestamp == 0, '3'); // less-th-prev
+            require(
+                _dueDateTimestamp <= currentContract.terms.contractEndDate,
+                "2"
+            ); // contr-end
+            require(
+                _dueDateTimestamp > previousRequest.dueDateTimestamp ||
+                    _dueDateTimestamp == 0,
+                "3"
+            ); // less-th-prev
 
             // update previous
             // check for remaining penalty and interest, if greater than zero then is Lated, otherwise is completed
@@ -985,7 +1002,10 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
                 currentContract.lateCount += 1;
 
                 // Check for late threshold reach
-                if (currentContract.terms.lateThreshold <= currentContract.lateCount) {
+                if (
+                    currentContract.terms.lateThreshold <=
+                    currentContract.lateCount
+                ) {
                     // Execute liquid
                     _liquidationExecution(
                         _contractId,
@@ -1005,7 +1025,12 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
             // Check for last repayment, if last repayment, all paid
             if (block.timestamp > currentContract.terms.contractEndDate) {
-                if (previousRequest.remainingInterest + previousRequest.remainingPenalty + previousRequest.remainingLoan > 0) {
+                if (
+                    previousRequest.remainingInterest +
+                        previousRequest.remainingPenalty +
+                        previousRequest.remainingLoan >
+                    0
+                ) {
                     // unpaid => liquid
                     _liquidationExecution(
                         _contractId,
@@ -1022,12 +1047,22 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             emit PaymentRequestEvent(_contractId, previousRequest);
         } else {
             // Validate: remaining loan must valid
-            require(currentContract.terms.loanAmount == _remainingLoan, '4'); // remain
+            require(currentContract.terms.loanAmount == _remainingLoan, "4"); // remain
 
             // Validate: Due date timestamp of next payment request must not over contract due date
-            require(_dueDateTimestamp <= currentContract.terms.contractEndDate, '5'); // contr-end
-            require(_dueDateTimestamp > currentContract.terms.contractStartDate || _dueDateTimestamp == 0, '6'); // less-th-prev
-            require(block.timestamp < _dueDateTimestamp || _dueDateTimestamp == 0, '7'); // over
+            require(
+                _dueDateTimestamp <= currentContract.terms.contractEndDate,
+                "5"
+            ); // contr-end
+            require(
+                _dueDateTimestamp > currentContract.terms.contractStartDate ||
+                    _dueDateTimestamp == 0,
+                "6"
+            ); // less-th-prev
+            require(
+                block.timestamp < _dueDateTimestamp || _dueDateTimestamp == 0,
+                "7"
+            ); // over
 
             // Check for last repayment, if last repayment, all paid
             if (block.timestamp > currentContract.terms.contractEndDate) {
@@ -1054,9 +1089,8 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         emit PaymentRequestEvent(_contractId, newRequest);
     }
 
-
     /** ===================================== 3.2. REPAYMENT ============================= */
-    
+
     event RepaymentEvent(
         uint256 contractId,
         uint256 paidPenaltyAmount,
@@ -1081,17 +1115,19 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     ) external whenNotPaused {
         // Get contract & payment request
         Contract storage _contract = contractMustActive(_contractId);
-        PaymentRequest[] storage requests = contractPaymentRequestMapping[_contractId];
-        require(requests.length > 0, '0');
+        PaymentRequest[] storage requests = contractPaymentRequestMapping[
+            _contractId
+        ];
+        require(requests.length > 0, "0");
         PaymentRequest storage _paymentRequest = requests[requests.length - 1];
-        
+
         // Validation: Contract must not overdue
-        require(block.timestamp <= _contract.terms.contractEndDate, '1'); // contr-over
+        require(block.timestamp <= _contract.terms.contractEndDate, "1"); // contr-over
 
         // Validation: current payment request must active and not over due
-        require(_paymentRequest.status == PaymentRequestStatusEnum.ACTIVE, '2'); // not-act
+        require(_paymentRequest.status == PaymentRequestStatusEnum.ACTIVE, "2"); // not-act
         if (_paidPenaltyAmount + _paidInterestAmount > 0) {
-            require(block.timestamp <= _paymentRequest.dueDateTimestamp, '3'); // over-due
+            require(block.timestamp <= _paymentRequest.dueDateTimestamp, "3"); // over-due
         }
 
         // Calculate paid amount / remaining amount, if greater => get paid amount
@@ -1135,19 +1171,23 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
         // emit event repayment
         emit RepaymentEvent(
-            _contractId, 
-            _paidPenaltyAmount, 
-            _paidInterestAmount, 
-            _paidLoanAmount, 
-            _feePenalty, 
-            _feeInterest, 
+            _contractId,
+            _paidPenaltyAmount,
+            _paidInterestAmount,
+            _paidLoanAmount,
+            _feePenalty,
+            _feeInterest,
             _prepaidFee,
             _paymentRequest.requestId,
             _UID
         );
 
         // If remaining loan = 0 => paidoff => execute release collateral
-        if (_paymentRequest.remainingLoan == 0 && _paymentRequest.remainingPenalty == 0 && _paymentRequest.remainingInterest == 0) {
+        if (
+            _paymentRequest.remainingLoan == 0 &&
+            _paymentRequest.remainingPenalty == 0 &&
+            _paymentRequest.remainingInterest == 0
+        ) {
             _returnCollateralToBorrowerAndCloseContract(_contractId);
         }
 
@@ -1161,7 +1201,10 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             );
 
             // Transfer penalty and interest to lender except fee amount
-            uint256 transferAmount = _paidPenaltyAmount + _paidInterestAmount - _feePenalty - _feeInterest;
+            uint256 transferAmount = _paidPenaltyAmount +
+                _paidInterestAmount -
+                _feePenalty -
+                _feeInterest;
             PawnLib.safeTransfer(
                 _contract.terms.repaymentAsset,
                 msg.sender,
@@ -1187,10 +1230,10 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         uint256 contractId,
         uint256 liquidedAmount,
         uint256 feeAmount,
-        ContractLiquidedReasonType reasonType         
+        ContractLiquidedReasonType reasonType
     );
     event LoanContractCompletedEvent(uint256 contractId);
-    
+
     function collateralRiskLiquidationExecution(
         uint256 _contractId,
         uint256 _collateralPerRepaymentTokenExchangeRate,
@@ -1206,14 +1249,23 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
                 _contractId,
                 _contract
             );
-        uint256 valueOfRemainingRepayment = (_collateralPerRepaymentTokenExchangeRate * remainingRepayment) / ZOOM;
-        uint256 valueOfRemainingLoan = (_collateralPerLoanAssetExchangeRate * remainingLoan) / ZOOM;
-        uint256 valueOfCollateralLiquidationThreshold = (_contract.terms.collateralAmount * _contract.terms.liquidityThreshold) / (100 * ZOOM);
+        uint256 valueOfRemainingRepayment = (_collateralPerRepaymentTokenExchangeRate *
+                remainingRepayment) / ZOOM;
+        uint256 valueOfRemainingLoan = (_collateralPerLoanAssetExchangeRate *
+            remainingLoan) / ZOOM;
+        uint256 valueOfCollateralLiquidationThreshold = (_contract
+            .terms
+            .collateralAmount * _contract.terms.liquidityThreshold) /
+            (100 * ZOOM);
 
-        require(valueOfRemainingLoan + valueOfRemainingRepayment >= valueOfCollateralLiquidationThreshold, '0'); // under-thres
+        require(
+            valueOfRemainingLoan + valueOfRemainingRepayment >=
+                valueOfCollateralLiquidationThreshold,
+            "0"
+        ); // under-thres
 
         // Execute: call internal liquidation
-        _liquidationExecution(_contractId, ContractLiquidedReasonType.RISK);        
+        _liquidationExecution(_contractId, ContractLiquidedReasonType.RISK);
     }
 
     function calculateRemainingLoanAndRepaymentFromContract(
@@ -1225,11 +1277,17 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         returns (uint256 remainingRepayment, uint256 remainingLoan)
     {
         // Validate: sum of unpaid interest, penalty and remaining loan in value must reach liquidation threshold of collateral value
-        PaymentRequest[] storage requests = contractPaymentRequestMapping[_contractId];
+        PaymentRequest[] storage requests = contractPaymentRequestMapping[
+            _contractId
+        ];
         if (requests.length > 0) {
             // Have payment request
-            PaymentRequest storage _paymentRequest = requests[requests.length - 1];
-            remainingRepayment = _paymentRequest.remainingInterest + _paymentRequest.remainingPenalty;
+            PaymentRequest storage _paymentRequest = requests[
+                requests.length - 1
+            ];
+            remainingRepayment =
+                _paymentRequest.remainingInterest +
+                _paymentRequest.remainingPenalty;
             remainingLoan = _paymentRequest.remainingLoan;
         } else {
             // Haven't had payment request
@@ -1246,7 +1304,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         Contract storage _contract = contractMustActive(_contractId);
 
         // validate: contract have lateCount == lateThreshold
-        require(_contract.lateCount >= _contract.terms.lateThreshold, '0'); // not-reach
+        require(_contract.lateCount >= _contract.terms.lateThreshold, "0"); // not-reach
 
         // Execute: call internal liquidation
         _liquidationExecution(_contractId, ContractLiquidedReasonType.LATE);
@@ -1259,7 +1317,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     {
         // Validate: Contract must active
         _contract = contracts[_contractId];
-        require(_contract.status == ContractStatus.ACTIVE, '0'); // contr-act
+        require(_contract.status == ContractStatus.ACTIVE, "0"); // contr-act
     }
 
     function notPaidFullAtEndContractLiquidation(uint256 _contractId)
@@ -1268,7 +1326,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     {
         Contract storage _contract = contractMustActive(_contractId);
         // validate: current is over contract end date
-        require(block.timestamp >= _contract.terms.contractEndDate, '0'); // due
+        require(block.timestamp >= _contract.terms.contractEndDate, "0"); // due
 
         // validate: remaining loan, interest, penalty haven't paid in full
         (
@@ -1278,8 +1336,8 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
                 _contractId,
                 _contract
             );
-        require(remainingRepayment + remainingLoan > 0, '1'); // paid
-        
+        require(remainingRepayment + remainingLoan > 0, "1"); // paid
+
         // Execute: call internal liquidation
         _liquidationExecution(_contractId, ContractLiquidedReasonType.UNPAID);
     }
@@ -1296,12 +1354,18 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             _contract.terms.systemFeeRate,
             ZOOM
         );
-        uint256 _liquidAmount = _contract.terms.collateralAmount - _systemFeeAmount;
+        uint256 _liquidAmount = _contract.terms.collateralAmount -
+            _systemFeeAmount;
 
         // Execute: update status of contract to DEFAULT, collateral to COMPLETE
         _contract.status = ContractStatus.DEFAULT;
-        PaymentRequest[] storage _paymentRequests = contractPaymentRequestMapping[_contractId];
-        PaymentRequest storage _lastPaymentRequest = _paymentRequests[_paymentRequests.length - 1];
+        PaymentRequest[]
+            storage _paymentRequests = contractPaymentRequestMapping[
+                _contractId
+            ];
+        PaymentRequest storage _lastPaymentRequest = _paymentRequests[
+            _paymentRequests.length - 1
+        ];
         _lastPaymentRequest.status = PaymentRequestStatusEnum.DEFAULT;
         Collateral storage _collateral = collaterals[_contract.collateralId];
         _collateral.status = CollateralStatus.COMPLETED;
@@ -1350,8 +1414,13 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
         // Execute: Update status of contract to COMPLETE, collateral to COMPLETE
         _contract.status = ContractStatus.COMPLETED;
-        PaymentRequest[] storage _paymentRequests = contractPaymentRequestMapping[_contractId];
-        PaymentRequest storage _lastPaymentRequest = _paymentRequests[_paymentRequests.length - 1];
+        PaymentRequest[]
+            storage _paymentRequests = contractPaymentRequestMapping[
+                _contractId
+            ];
+        PaymentRequest storage _lastPaymentRequest = _paymentRequests[
+            _paymentRequests.length - 1
+        ];
         _lastPaymentRequest.status = PaymentRequestStatusEnum.COMPLETE;
         Collateral storage _collateral = collaterals[_contract.collateralId];
         _collateral.status = CollateralStatus.COMPLETED;
@@ -1378,27 +1447,31 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             IReputation.ReasonType.BR_CONTRACT_COMPLETE
         );
     }
-    
+
     function releaseTrappedCollateralLockedWithoutContract(
         uint256 _collateralId,
         uint256 _packageId
     ) external onlyAdmin {
         // Validate: Collateral must Doing
         Collateral storage collateral = collaterals[_collateralId];
-        require(collateral.status == CollateralStatus.DOING, '0'); // col
+        require(collateral.status == CollateralStatus.DOING, "0"); // col
 
         // Check for collateral not being in any contract
-        for (uint256 i = 0; i < numberContracts - 1; i ++) {
+        for (uint256 i = 0; i < numberContracts - 1; i++) {
             Contract storage mContract = contracts[i];
-            require(mContract.collateralId != _collateralId, '1'); // col-in-cont
+            require(mContract.collateralId != _collateralId, "1"); // col-in-cont
         }
 
         // Check for collateral-package status is ACCEPTED
-        CollateralAsLoanRequestListStruct storage loanRequestListStruct = collateralAsLoanRequestMapping[_collateralId];
-        require(loanRequestListStruct.isInit == true, '2'); // col-loan-req
-        LoanRequestStatusStruct storage statusStruct = loanRequestListStruct.loanRequestToPawnShopPackageMapping[_packageId];
-        require(statusStruct.isInit == true, '3'); // col-loan-req-pack
-        require(statusStruct.status == LoanRequestStatus.ACCEPTED, '4'); // not-acpt
+        CollateralAsLoanRequestListStruct
+            storage loanRequestListStruct = collateralAsLoanRequestMapping[
+                _collateralId
+            ];
+        require(loanRequestListStruct.isInit == true, "2"); // col-loan-req
+        LoanRequestStatusStruct storage statusStruct = loanRequestListStruct
+            .loanRequestToPawnShopPackageMapping[_packageId];
+        require(statusStruct.isInit == true, "3"); // col-loan-req-pack
+        require(statusStruct.status == LoanRequestStatus.ACCEPTED, "4"); // not-acpt
 
         // Update status of loan request
         statusStruct.status = LoanRequestStatus.PENDING;
@@ -1419,7 +1492,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     /** ===================================== REPUTATION FUNCTIONS & STATES ===================================== */
 
     IReputation public reputation;
-    
+
     function setReputationContract(address _reputationAddress)
         external
         onlyAdmin
@@ -1430,20 +1503,14 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     /** ==================== Exchange functions & states ==================== */
     Exchange public exchange;
 
-    function setExchangeContract(address _exchangeAddress) 
-        external 
-        onlyAdmin
-    {
+    function setExchangeContract(address _exchangeAddress) external onlyAdmin {
         exchange = Exchange(_exchangeAddress);
     }
 
     /** ==================== Loan Contract functions & states ==================== */
     PawnP2PLoanContract public pawnLoanContract;
 
-    function setPawnLoanContract(address _pawnLoanAddress)
-        external
-        onlyAdmin
-    {
+    function setPawnLoanContract(address _pawnLoanAddress) external onlyAdmin {
         pawnLoanContract = PawnP2PLoanContract(_pawnLoanAddress);
     }
 }

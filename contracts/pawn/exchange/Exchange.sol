@@ -193,7 +193,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
 
         interest =
             (interestToUSD * _interestByLoanDurationType) /
-            (repaymentAssetToUSD * 10**5);
+            (repaymentAssetToUSD * 10**10);
     }
 
     // tinh penalty
@@ -220,7 +220,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
                 _interestByLoanDurationType +
                 _paymentrequest.remainingInterest *
                 _penaltyRate) /
-            10**5;
+            10**10;
     }
 
     // lay Rate va thoi gian cap nhat ti gia do
