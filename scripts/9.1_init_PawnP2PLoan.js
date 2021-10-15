@@ -82,8 +82,10 @@ async function main() {
 
     console.log(`Setting Whitelisted collateral...`);
     for await (let token of Tokens) {
-        await LoanContract.setWhitelistCollateral(token.Address, 1);
-        console.log(`\tWhitelisted token as collateral: ${token.Symbol}: ${token.Address}`);
+        if(token.Address != "0x0000000000000000000000000000000000000000") {
+            await LoanContract.setWhitelistCollateral(token.Address, 1);
+            console.log(`\tWhitelisted token as collateral: ${token.Symbol}: ${token.Address}`);
+        }
     }
 
     // console.log("============================================================\n\r");
