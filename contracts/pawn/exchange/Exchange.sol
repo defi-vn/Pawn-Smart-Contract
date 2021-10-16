@@ -169,10 +169,10 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         PawnShopPackage memory _pkg
     ) external view returns (uint256 loanAmount, uint256 exchangeRate) {
         (loanAmount, exchangeRate, , , ) = calcLoanAmountAndExchangeRate(
-            _col.collateralAddress, 
-            _col.amount, 
-            _col.loanAsset, 
-            _pkg.loanToValue, 
+            _col.collateralAddress,
+            _col.amount,
+            _col.loanAsset,
+            _pkg.loanToValue,
             _pkg.repaymentAsset
         );
     }
@@ -255,7 +255,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
 
         // calculate exchange rate
         (, uint256 xchange) = SafeMathUpgradeable.tryDiv(
-            rateLoanAsset,
+            rateLoanAsset * 10**5,
             rateRepaymentAsset
         );
         exchangeRate = xchange;
@@ -278,7 +278,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         } else {
             // all LoanAsset and repaymentAsset are crypto or token is different BNB
             (, uint256 exRate) = SafeMathUpgradeable.tryDiv(
-                uint256(getLatesPriceToUSD(_adLoanAsset)),
+                uint256(getLatesPriceToUSD(_adLoanAsset) * 10**5),
                 uint256(getLatesPriceToUSD(_adRepayment))
             );
             exchangeRateOfOffer = exRate;
@@ -487,7 +487,11 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             _interestOfPenalty = saPenaltyOfInterest;
         }
         // valuePenalty =(_paymentrequest.remainingPenalty +_paymentrequest.remainingPenalty *_interestByLoanDurationType +_paymentrequest.remainingInterest *_penaltyRate);
-        uint256 penalty = _paymentrequest.remainingInterest * _penaltyRate;
+        //  uint256 penalty = _paymentrequest.remainingInterest * _penaltyRate;
+        (, uint256 penalty) = SafeMathUpgradeable.tryDiv(
+            (_paymentrequest.remainingInterest * _penaltyRate),
+            (100 * 10**5)
+        );
         valuePenalty =
             _paymentrequest.remainingPenalty +
             _interestOfPenalty +
@@ -518,7 +522,10 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         _penaltyOfInterest = saPenaltyOfInterest;
 
         // valuePenalty =(_paymentrequest.remainingPenalty +_paymentrequest.remainingPenalty *_interestByLoanDurationType +_paymentrequest.remainingInterest *_penaltyRate);
-        uint256 penalty = _remainingInterest * _penaltyRate;
+        (, uint256 penalty) = SafeMathUpgradeable.tryDiv(
+            (_remainingInterest * _penaltyRate),
+            (100 * 10**5)
+        );
         valuePenalty = _remainingPenalty + _penaltyOfInterest + penalty;
     }
 
