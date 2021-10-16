@@ -130,6 +130,12 @@ contract PawnP2PLoanContract is PawnModel {
     }
 
     /** ================================ 3. PAYMENT REQUEST & REPAYMENT WORKLOWS ============================= */
+    event Test(
+        uint256 _remainingPenalty,
+        PaymentRequest _paymentrequest,
+        Contract _contract,
+        uint256 _penaltyRate
+    );
 
     function closePaymentRequestAndStartNew(
         int256 _paymentRequestId,
@@ -164,7 +170,12 @@ contract PawnP2PLoanContract is PawnModel {
                 currentContract,
                 penaltyRate
             );
-
+            emit Test(
+                _nextPhrasePenalty,
+                previousRequest,
+                currentContract,
+                penaltyRate
+            );
             if (_paymentRequestType == PaymentRequestTypeEnum.INTEREST) {
                 _dueDateTimestamp = PawnLib.add(
                     previousRequest.dueDateTimestamp,
@@ -240,7 +251,9 @@ contract PawnP2PLoanContract is PawnModel {
 
             // Check for last repayment, if last repayment, all paid
             if (block.timestamp > currentContract.terms.contractEndDate) {
-                uint256 remainingAmount = previousRequest.remainingInterest + previousRequest.remainingPenalty + previousRequest.remainingLoan;
+                uint256 remainingAmount = previousRequest.remainingInterest +
+                    previousRequest.remainingPenalty +
+                    previousRequest.remainingLoan;
                 if (remainingAmount > 0) {
                     // unpaid => liquid
                     _liquidationExecution(
