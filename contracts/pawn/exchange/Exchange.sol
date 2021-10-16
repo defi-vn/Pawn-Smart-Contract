@@ -87,81 +87,94 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
 
     // loanAmount= (CollateralAsset * amount * loanToValue) / RateLoanAsset
     // exchangeRate = RateLoanAsset / RateRepaymentAsset
+    // function calculateLoanAmountAndExchangeRate(
+    //     Collateral memory _col,
+    //     PawnShopPackage memory _pkg
+    // ) external view returns (uint256 loanAmount, uint256 exchangeRate) {
+    //     uint256 collateralToUSD;
+    //     uint256 rateLoanAsset;
+    //     uint256 rateRepaymentAsset;
+
+    //     if (_col.collateralAddress == address(0)) {
+    //         // If collateral address is address(0), check BNB exchange rate with USD
+    //         // collateralToUSD = (uint256(RateBNBwithUSD()) * 10**10 * _pkg.loanToValue * _col.amount) / 100;
+    //         (, uint256 _ltvAmount) = SafeMathUpgradeable.tryMul(
+    //             _pkg.loanToValue,
+    //             _col.amount
+    //         );
+    //         (, uint256 _collRate) = SafeMathUpgradeable.tryMul(
+    //             _ltvAmount,
+    //             uint256(RateBNBwithUSD())
+    //         );
+    //         (, uint256 _collToUSD) = SafeMathUpgradeable.tryDiv(
+    //             _collRate,
+    //             (100 * 10**5)
+    //         );
+
+    //         collateralToUSD = _collToUSD;
+    //     } else {
+    //         // If collateral address is not BNB, get latest price in USD of collateral crypto
+    //         // collateralToUSD = (uint256(getLatesPriceToUSD(_col.collateralAddress)) * 10**10 * _pkg.loanToValue * _col.amount) / 100;
+    //         (, uint256 _ltvAmount) = SafeMathUpgradeable.tryMul(
+    //             _pkg.loanToValue,
+    //             _col.amount
+    //         );
+    //         (, uint256 _collRate) = SafeMathUpgradeable.tryMul(
+    //             _ltvAmount,
+    //             uint256(getLatesPriceToUSD(_col.collateralAddress))
+    //         );
+    //         (, uint256 _collToUSD) = SafeMathUpgradeable.tryDiv(
+    //             _collRate,
+    //             (100 * 10**5)
+    //         );
+
+    //         collateralToUSD = _collToUSD;
+    //     }
+
+    //     if (_col.loanAsset == address(0)) {
+    //         // get price of BNB in USD
+    //         rateLoanAsset = uint256(RateBNBwithUSD());
+    //     } else {
+    //         // get price in USD of crypto as loan asset
+    //         rateLoanAsset = uint256(getLatesPriceToUSD(_col.loanAsset));
+    //     }
+
+    //     // Calculate Loan amount
+    //     (, uint256 _loanAmount) = SafeMathUpgradeable.tryDiv(
+    //         collateralToUSD,
+    //         rateLoanAsset
+    //     );
+    //     loanAmount = _loanAmount;
+
+    //     if (_pkg.repaymentAsset == address(0)) {
+    //         // get price in USD of BNB as repayment asset
+    //         rateRepaymentAsset = uint256(RateBNBwithUSD());
+    //     } else {
+    //         // get latest price in USD of crypto as repayment asset
+    //         rateRepaymentAsset = uint256(
+    //             getLatesPriceToUSD(_pkg.repaymentAsset)
+    //         );
+    //     }
+
+    //     // calculate exchange rate
+    //     (, uint256 _exchange) = SafeMathUpgradeable.tryDiv(
+    //         rateLoanAsset,
+    //         rateRepaymentAsset
+    //     );
+    //     exchangeRate = _exchange;
+    // }
+
     function calculateLoanAmountAndExchangeRate(
         Collateral memory _col,
         PawnShopPackage memory _pkg
     ) external view returns (uint256 loanAmount, uint256 exchangeRate) {
-        uint256 collateralToUSD;
-        uint256 rateLoanAsset;
-        uint256 rateRepaymentAsset;
-
-        if (_col.collateralAddress == address(0)) {
-            // If collateral address is address(0), check BNB exchange rate with USD
-            // collateralToUSD = (uint256(RateBNBwithUSD()) * 10**10 * _pkg.loanToValue * _col.amount) / 100;
-            (, uint256 _ltvAmount) = SafeMathUpgradeable.tryMul(
-                _pkg.loanToValue,
-                _col.amount
-            );
-            (, uint256 _collRate) = SafeMathUpgradeable.tryMul(
-                _ltvAmount,
-                uint256(RateBNBwithUSD())
-            );
-            (, uint256 _collToUSD) = SafeMathUpgradeable.tryDiv(
-                _collRate,
-                (100 * 10**5)
-            );
-
-            collateralToUSD = _collToUSD;
-        } else {
-            // If collateral address is not BNB, get latest price in USD of collateral crypto
-            // collateralToUSD = (uint256(getLatesPriceToUSD(_col.collateralAddress)) * 10**10 * _pkg.loanToValue * _col.amount) / 100;
-            (, uint256 _ltvAmount) = SafeMathUpgradeable.tryMul(
-                _pkg.loanToValue,
-                _col.amount
-            );
-            (, uint256 _collRate) = SafeMathUpgradeable.tryMul(
-                _ltvAmount,
-                uint256(getLatesPriceToUSD(_col.collateralAddress))
-            );
-            (, uint256 _collToUSD) = SafeMathUpgradeable.tryDiv(
-                _collRate,
-                (100 * 10**5)
-            );
-
-            collateralToUSD = _collToUSD;
-        }
-
-        if (_col.loanAsset == address(0)) {
-            // get price of BNB in USD
-            rateLoanAsset = uint256(RateBNBwithUSD());
-        } else {
-            // get price in USD of crypto as loan asset
-            rateLoanAsset = uint256(getLatesPriceToUSD(_col.loanAsset));
-        }
-
-        // Calculate Loan amount
-        (, uint256 _loanAmount) = SafeMathUpgradeable.tryDiv(
-            collateralToUSD,
-            rateLoanAsset
+        (loanAmount, exchangeRate, , , ) = calcLoanAmountAndExchangeRate(
+            _col.collateralAddress, 
+            _col.amount, 
+            _col.loanAsset, 
+            _pkg.loanToValue, 
+            _pkg.repaymentAsset
         );
-        loanAmount = _loanAmount;
-
-        if (_pkg.repaymentAsset == address(0)) {
-            // get price in USD of BNB as repayment asset
-            rateRepaymentAsset = uint256(RateBNBwithUSD());
-        } else {
-            // get latest price in USD of crypto as repayment asset
-            rateRepaymentAsset = uint256(
-                getLatesPriceToUSD(_pkg.repaymentAsset)
-            );
-        }
-
-        // calculate exchange rate
-        (, uint256 _exchange) = SafeMathUpgradeable.tryDiv(
-            rateLoanAsset,
-            rateRepaymentAsset
-        );
-        exchangeRate = _exchange;
     }
 
     function calcLoanAmountAndExchangeRate(
@@ -171,7 +184,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         uint256 loanToValue,
         address repaymentAsset
     )
-        external
+        public
         view
         returns (
             uint256 loanAmount,
