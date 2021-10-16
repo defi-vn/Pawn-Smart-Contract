@@ -486,16 +486,19 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             );
             _interestOfPenalty = saPenaltyOfInterest;
         }
-        // valuePenalty =(_paymentrequest.remainingPenalty +_paymentrequest.remainingPenalty *_interestByLoanDurationType +_paymentrequest.remainingInterest *_penaltyRate);
-        //  uint256 penalty = _paymentrequest.remainingInterest * _penaltyRate;
-        (, uint256 penalty) = SafeMathUpgradeable.tryDiv(
-            (_paymentrequest.remainingInterest * _penaltyRate),
-            (100 * 10**5)
-        );
-        valuePenalty =
-            _paymentrequest.remainingPenalty +
+        valuePenalty = (_paymentrequest.remainingPenalty +
             _interestOfPenalty +
-            penalty;
+            _paymentrequest.remainingInterest *
+            _penaltyRate);
+        //  uint256 penalty = _paymentrequest.remainingInterest * _penaltyRate;
+        // (, uint256 penalty) = SafeMathUpgradeable.tryDiv(
+        //     (_paymentrequest.remainingInterest * _penaltyRate),
+        //     (100 * 10**5)
+        // );
+        // valuePenalty =
+        //     _paymentrequest.remainingPenalty +
+        //     _interestOfPenalty +
+        //     penalty;
     }
 
     // ============================== test penalty===================================
