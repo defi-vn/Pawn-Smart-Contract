@@ -8,7 +8,7 @@ const LoanProxyAddr     = proxies.PAWN_P2PLOAN_CONTRACT_ADDRESS;
 const LoanBuildName     = "contracts/pawn/pawn-p2p-v2/PawnP2PLoanContract.sol:PawnP2PLoanContract";
 
 const RepuProxyAddr     = proxies.REPUTATION_CONTRACT_ADDRESS;
-const RepuBuildName     = "contracts/pawn/reputation/Reputation.sol:Reputation";
+// const RepuBuildName     = "contracts/pawn/reputation/Reputation.sol:Reputation";
 
 const ExchangeProxyAddr = proxies.EXCHANGE_CONTRACT_ADDRESS;
 const PawnProxyAddr     = proxies.PAWN_CONTRACT_ADDRESS;
