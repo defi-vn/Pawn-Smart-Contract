@@ -240,7 +240,9 @@ contract PawnP2PLoanContract is PawnModel {
 
             // Check for last repayment, if last repayment, all paid
             if (block.timestamp > currentContract.terms.contractEndDate) {
-                uint256 remainingAmount = previousRequest.remainingInterest + previousRequest.remainingPenalty + previousRequest.remainingLoan;
+                uint256 remainingAmount = previousRequest.remainingInterest +
+                    previousRequest.remainingPenalty +
+                    previousRequest.remainingLoan;
                 if (remainingAmount > 0) {
                     // unpaid => liquid
                     _liquidationExecution(
