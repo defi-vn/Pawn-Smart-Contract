@@ -592,7 +592,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
     function collateralPerRepaymentAndLoanTokenExchangeRate(
         Contract memory _contract
     )
-        internal
+        external
         view
         returns (
             uint256 _collateralPerRepaymentTokenExchangeRate,
