@@ -500,6 +500,8 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
 
     /** ===================================== 3.3. LIQUIDITY & DEFAULT ============================= */
 
+<<<<<<< HEAD
+=======
     event test(
         uint256 collateralExchangeRate,
         uint256 loanExchangeRate,
@@ -509,6 +511,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
         Contract _contract
     );
 
+>>>>>>> 441e29a841f98971dc6e6d56ceb789ebc801899d
     function collateralRiskLiquidationExecution(uint256 _contractId)
         external
         whenContractNotPaused
@@ -517,12 +520,8 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
         // Validate: Contract must active
         Contract storage _contract = contractMustActive(_contractId);
 
-        (
-            uint256 collateralExchangeRate,
-            uint256 loanExchangeRate,
-            uint256 repaymentExchangeRate,
-
-        ) = exchange.RateAndTimestamp(_contract);
+        (uint256 repaymentExchangeRate, uint256 loanExchangeRate) = exchange
+            .collateralPerRepaymentAndLoanTokenExchangeRate(_contract);
 
         (
             uint256 remainingRepayment,
@@ -536,6 +535,12 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
             remainingRepayment) / ZOOM;
         uint256 valueOfRemainingLoan = (loanExchangeRate * remainingLoan) /
             ZOOM;
+<<<<<<< HEAD
+        uint256 valueOfCollateralLiquidationThreshold = (_contract
+            .terms
+            .collateralAmount * _contract.terms.liquidityThreshold) /
+            (100 * ZOOM);
+=======
         uint256 valueOfCollateralLiquidationThreshold = (collateralExchangeRate *
                 _contract.terms.collateralAmount *
                 _contract.terms.liquidityThreshold) / (100 * ZOOM);
@@ -548,6 +553,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
             remainingLoan,
             _contract
         );
+>>>>>>> 441e29a841f98971dc6e6d56ceb789ebc801899d
 
         require(
             valueOfRemainingLoan + valueOfRemainingRepayment >=

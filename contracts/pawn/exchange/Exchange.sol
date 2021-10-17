@@ -589,6 +589,60 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         _repaymemtExchangeRate = uint256(priceRepayment);
     }
 
+    function collateralPerRepaymentAndLoanTokenExchangeRate(
+        Contract memory _contract
+    )
+        internal
+        view
+        returns (
+            uint256 _collateralPerRepaymentTokenExchangeRate,
+            uint256 _collateralPerLoanAssetExchangeRate
+        )
+    {
+        uint256 priceRepaymentAset;
+        uint256 priceLoanAsset;
+        uint256 priceCollateralAsset;
+
+        if (_contract.terms.repaymentAsset == address(0)) {
+            priceRepaymentAset = uint256(RateBNBwithUSD());
+        } else {
+            priceRepaymentAset = uint256(
+                getLatesPriceToUSD(_contract.terms.repaymentAsset)
+            );
+        }
+
+        if (_contract.terms.loanAsset == address(0)) {
+            priceLoanAsset = uint256(RateBNBwithUSD());
+        } else {
+            priceLoanAsset = uint256(
+                getLatesPriceToUSD(_contract.terms.loanAsset)
+            );
+        }
+
+        if (_contract.terms.collateralAsset == address(0)) {
+            priceCollateralAsset = uint256(RateBNBwithUSD());
+        } else {
+            priceCollateralAsset = uint256(
+                getLatesPriceToUSD(_contract.terms.collateralAsset)
+            );
+        }
+
+        (
+            ,
+            uint256 tempCollateralPerRepaymentTokenExchangeRate
+        ) = SafeMathUpgradeable.tryDiv(
+                priceRepaymentAset * 10**5,
+                priceCollateralAsset
+            );
+
+        _collateralPerRepaymentTokenExchangeRate = tempCollateralPerRepaymentTokenExchangeRate;
+
+        (, uint256 tempCollateralPerLoanAssetExchangeRate) = SafeMathUpgradeable
+            .tryDiv(priceLoanAsset * 10**5, priceCollateralAsset);
+
+        _collateralPerLoanAssetExchangeRate = tempCollateralPerLoanAssetExchangeRate;
+    }
+
     // ======================================= NFT==========================
 
     // tinh tien lai: interest = loanAmount * interestByLoanDurationType (interestByLoanDurationType = % lãi * số kì * loại kì / (365*100))
