@@ -196,6 +196,14 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
         emit CreateCollateralEvent(_idx, newCollateral);
 
+        // transfer to this contract
+        PawnLib.safeTransfer(
+            _collateralAddress,
+            msg.sender,
+            address(this),
+            _amount
+        );
+
         if (_packageId >= 0) {
             //Package must active
             PawnShopPackage storage pawnShopPackage = pawnShopPackages[
@@ -225,24 +233,6 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
                 LoanRequestStatus.PENDING
             );
 
-            // if(pawnShopPackage.packageType == PawnShopPackageType.AUTO) {
-            //     // Check if lender has enough balance and allowance for lending
-            //     pawnLoanContract.checkLenderAccount(
-            //         newCollateral.collateralAddress,
-            //         newCollateral.amount,
-            //         pawnShopPackage.loanToValue,
-            //         pawnShopPackage.loanToken,
-            //         pawnShopPackage.repaymentAsset,
-            //         pawnShopPackage.owner,
-            //         address(this)
-            //     );
-                
-            //     // PawnLib.checkLenderAccount(loanAmount, pawnShopPackage.loanToken, pawnShopPackage.owner, address(this));
-                
-            //     // Lender has sufficient balance and allowance => process submitted collateral to contract
-            //     processLoanRequestToContract(_idx, uint256(_packageId));
-            // }
-
             createContractForAutoPawnPackage(
                 _idx,
                 uint256(_packageId),
@@ -250,14 +240,6 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
                 pawnShopPackage
             );
         }
-
-        // transfer to this contract
-        PawnLib.safeTransfer(
-            _collateralAddress,
-            msg.sender,
-            address(this),
-            _amount
-        );
 
         // Adjust reputation score
         reputation.adjustReputationScore(
@@ -627,25 +609,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             _collateralId,
             LoanRequestStatus.PENDING
         );
-
-        // Auto generate contract for Auto pawnshop package type
-        // if(pawnShopPackage.packageType == PawnShopPackageType.AUTO) {
-        //     // Check if lender has enough balance and allowance for lending
-        //     pawnLoanContract.checkLenderAccount(
-        //         collateral.collateralAddress,
-        //         collateral.amount,
-        //         pawnShopPackage.loanToValue,
-        //         pawnShopPackage.loanToken,
-        //         pawnShopPackage.repaymentAsset,
-        //         pawnShopPackage.owner,
-        //         address(this)
-        //     );
-            
-        //     // PawnLib.checkLenderAccount(loanAmount, pawnShopPackage.loanToken, pawnShopPackage.owner, address(this));
-            
-        //     // Lender has sufficient balance and allowance => process submitted collateral to contract
-        //     processLoanRequestToContract(_collateralId, _packageId);
-        // }
+        
         createContractForAutoPawnPackage(
             _collateralId,
             _packageId,
@@ -847,6 +811,12 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             }
             delete collateralOffersMapping[_collateralId];
         }
+
+        emit SubmitPawnShopPackage(
+            _packageId, 
+            _collateralId, 
+            LoanRequestStatus.ACCEPTED
+        );
 
         // Generate loan contract
         // generateContractForCollateralAndPackage(_collateralId, _packageId);
