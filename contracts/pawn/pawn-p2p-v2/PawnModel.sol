@@ -55,7 +55,7 @@ abstract contract PawnModel is
     * @dev initialize function
     * @param _zoom is coefficient used to represent risk params
     */
-    function __PawnModel_init(uint32 _zoom) internal initializer {
+    function __PawnModel_init(uint256 _zoom) internal initializer {
         __PawnModel_init_unchained();
 
         ZOOM = _zoom;
@@ -70,21 +70,11 @@ abstract contract PawnModel is
 
     /** ==================== Common functions ==================== */
 
-    // modifier onlyOperator() {
-    //     // require(operator == msg.sender, "operator");
-    //     _onlyOperator();
-    //     _;
-    // }
-    
     modifier whenContractNotPaused() {
         // require(!paused(), "Pausable: paused");
         _whenNotPaused();
         _;
     }
-
-    // function _onlyOperator() private view {
-    //     require(operator == msg.sender, "-0"); //operator
-    // }
 
     function _whenNotPaused() private view {
         require(!paused(), "Pausable: paused");
