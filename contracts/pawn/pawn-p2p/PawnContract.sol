@@ -588,7 +588,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             // uint256 lenderCurrentAllowance = IERC20Upgradeable(pawnShopPackage.loanToken).allowance(pawnShopPackage.owner, address(this));
             // require(lenderCurrentAllowance >= loanAmount, "5"); // allowance not enough
 
-            pawnLoanContract.checkLenderBallanceAndAllowance(
+            pawnLoanContract.checkLenderAccount(
                 collateral.collateralAddress,
                 collateral.amount,
                 pawnShopPackage.loanToValue,
