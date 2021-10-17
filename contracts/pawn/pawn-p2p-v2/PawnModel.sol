@@ -29,11 +29,11 @@ abstract contract PawnModel is
     
     mapping(address => uint256) public whitelistCollateral;
     address public feeWallet;
-    uint32 public lateThreshold;
-    uint32 public penaltyRate;
-    uint32 public systemFeeRate; 
-    uint32 public prepaidFeeRate;
-    uint32 public ZOOM;
+    uint256 public lateThreshold;
+    uint256 public penaltyRate;
+    uint256 public systemFeeRate; 
+    uint256 public prepaidFeeRate;
+    uint256 public ZOOM;
 
     IReputation public reputation;
 
@@ -111,7 +111,7 @@ abstract contract PawnModel is
     * @dev set fee for each token
     * @param _feeRate is percentage of tokens to pay for the transaction
     */
-    function setSystemFeeRate(uint32 _feeRate) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setSystemFeeRate(uint256 _feeRate) external onlyRole(DEFAULT_ADMIN_ROLE) {
         systemFeeRate = _feeRate;
     }
 
@@ -119,7 +119,7 @@ abstract contract PawnModel is
     * @dev set fee for each token
     * @param _feeRate is percentage of tokens to pay for the penalty
     */
-    function setPenaltyRate(uint32 _feeRate) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setPenaltyRate(uint256 _feeRate) external onlyRole(DEFAULT_ADMIN_ROLE) {
         penaltyRate = _feeRate;
     }
 
@@ -127,11 +127,11 @@ abstract contract PawnModel is
     * @dev set fee for each token
     * @param _threshold is number of time allowed for late repayment
     */
-    function setLateThreshold(uint32 _threshold) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setLateThreshold(uint256 _threshold) external onlyRole(DEFAULT_ADMIN_ROLE) {
         lateThreshold = _threshold;
     }
 
-    function setPrepaidFeeRate(uint32 _feeRate) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setPrepaidFeeRate(uint256 _feeRate) external onlyRole(DEFAULT_ADMIN_ROLE) {
         prepaidFeeRate = _feeRate;
     }
 
