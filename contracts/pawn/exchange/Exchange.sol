@@ -243,7 +243,8 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             rateLoanAsset
         );
         // loanAmount = collateralToUSD / rateLoanAsset;
-        loanAmount = lAmount;
+        uint256 tempLoamAmount = lAmount / 10**13;
+        loanAmount = tempLoamAmount * 10**13;
 
         if (repaymentAsset == address(0)) {
             // get price in USD of BNB as repayment asset
@@ -367,7 +368,8 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             _interestByLoanDurationType,
             _repaymentAssetToUSD
         );
-        interest = saInterest;
+        uint256 tempInterest = saInterest / 10**13;
+        interest = tempInterest * 10**13;
     }
 
     //====================  Test tinh interest==================================
@@ -492,10 +494,11 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             (_paymentrequest.remainingInterest * _penaltyRate),
             (100 * 10**5)
         );
-        valuePenalty =
-            _paymentrequest.remainingPenalty +
+        uint256 _penalty = _paymentrequest.remainingPenalty +
             _interestOfPenalty +
             penalty;
+        uint256 tempPenalty = _penalty / 10**13;
+        valuePenalty = tempPenalty * 10**13;
     }
 
     // ============================== test penalty===================================
@@ -503,30 +506,45 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         uint256 _remainingPenalty,
         uint256 _remainingInterest,
         uint256 _interest,
-        uint256 _penaltyRate
+        uint256 _penaltyRate,
+        LoanDurationType numLoanDurationType
     ) external pure returns (uint256 valuePenalty, uint256 _penaltyOfInterest) {
-        // neu ky vay theo tuan thi L = interest * 7 /365
-        //_interestByLoanDurationType =(_contract.terms.interest * 7) / (100 * 365);
-        (, uint256 saInterestByLoanDurationType) = SafeMathUpgradeable.tryDiv(
-            _interest * 7,
-            365
-        );
-        (, uint256 saPenaltyOfInterestRate) = SafeMathUpgradeable.tryMul(
-            _remainingPenalty,
-            saInterestByLoanDurationType
-        );
-        (, uint256 saPenaltyOfInterest) = SafeMathUpgradeable.tryDiv(
-            saPenaltyOfInterestRate,
-            10**5
-        );
-        _penaltyOfInterest = saPenaltyOfInterest;
+        uint256 _interestOfPenalty;
+        if (numLoanDurationType == LoanDurationType.WEEK) {
+            // neu ky vay theo tuan thi (L) = interest * 7 /365
+            //_interestByLoanDurationType =(_contract.terms.interest * 7) / (100 * 365);
+            (, uint256 saInterestByLoanDurationType) = SafeMathUpgradeable
+                .tryDiv((_interest * 7), 365);
+            (, uint256 saPenaltyOfInterestRate) = SafeMathUpgradeable.tryMul(
+                _remainingPenalty,
+                saInterestByLoanDurationType
+            );
+            (, uint256 saPenaltyOfInterest) = SafeMathUpgradeable.tryDiv(
+                saPenaltyOfInterestRate,
+                (100 * 10**5)
+            );
+            _interestOfPenalty = saPenaltyOfInterest;
+        } else {
+            // _interestByLoanDurationType =(_contract.terms.interest * 30) /(100 * 365);
+            (, uint256 saInterestByLoanDurationType) = SafeMathUpgradeable
+                .tryDiv(_interest * 30, 365);
+            (, uint256 saPenaltyOfInterestRate) = SafeMathUpgradeable.tryMul(
+                _remainingPenalty,
+                saInterestByLoanDurationType
+            );
+            (, uint256 saPenaltyOfInterest) = SafeMathUpgradeable.tryDiv(
+                saPenaltyOfInterestRate,
+                (100 * 10**5)
+            );
+            _interestOfPenalty = saPenaltyOfInterest;
 
-        // valuePenalty =(_paymentrequest.remainingPenalty +_paymentrequest.remainingPenalty *_interestByLoanDurationType +_paymentrequest.remainingInterest *_penaltyRate);
-        (, uint256 penalty) = SafeMathUpgradeable.tryDiv(
-            (_remainingInterest * _penaltyRate),
-            (100 * 10**5)
-        );
-        valuePenalty = _remainingPenalty + _penaltyOfInterest + penalty;
+            // valuePenalty =(_paymentrequest.remainingPenalty +_paymentrequest.remainingPenalty *_interestByLoanDurationType +_paymentrequest.remainingInterest *_penaltyRate);
+            (, uint256 penalty) = SafeMathUpgradeable.tryDiv(
+                (_remainingInterest * _penaltyRate),
+                (100 * 10**5)
+            );
+            valuePenalty = _remainingPenalty + _penaltyOfInterest + penalty;
+        }
     }
 
     // lay Rate va thoi gian cap nhat ti gia do
