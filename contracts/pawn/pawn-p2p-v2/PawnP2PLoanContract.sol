@@ -76,7 +76,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
 
     /** ================================ CREATE LOAN CONTRACT ============================= */
 
-    function createContract(ContractRawData memory contractData)
+    function createContract(ContractRawData calldata contractData)
         external
         override
         onlyRole(OPERATOR_ROLE)
@@ -119,6 +119,14 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
             _idx,
             newContract
         );
+
+        // Generate first payment period
+        // ki dau tien BEId = 0
+        closePaymentRequestAndStartNew(
+            0,
+            _idx,
+            PaymentRequestTypeEnum.INTEREST
+        );
     }
 
     function contractMustActive(uint256 _contractId)
@@ -137,7 +145,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
         int256 _paymentRequestId,
         uint256 _contractId,
         PaymentRequestTypeEnum _paymentRequestType
-    ) external override whenContractNotPaused onlyRole(OPERATOR_ROLE) {
+    ) public override whenContractNotPaused onlyRole(OPERATOR_ROLE) {
         Contract storage currentContract = contractMustActive(_contractId);
         bool _chargePrepaidFee;
         uint256 _remainingLoan;
@@ -498,9 +506,6 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
         uint256 repaymentExchangeRate,
         uint256 remainingRepayment,
         uint256 remainingLoan,
-        uint256 valueOfRemainingRepayment,
-        uint256 valueOfRemainingLoan,
-        uint256 valueOfCollateralLiquidationThreshold,
         Contract _contract
     );
 
@@ -541,9 +546,6 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
             repaymentExchangeRate,
             remainingRepayment,
             remainingLoan,
-            valueOfRemainingRepayment,
-            valueOfRemainingLoan,
-            valueOfCollateralLiquidationThreshold,
             _contract
         );
 

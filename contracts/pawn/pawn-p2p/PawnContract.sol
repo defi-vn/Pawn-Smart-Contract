@@ -224,6 +224,31 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
                 _idx,
                 LoanRequestStatus.PENDING
             );
+
+            // if(pawnShopPackage.packageType == PawnShopPackageType.AUTO) {
+            //     // Check if lender has enough balance and allowance for lending
+            //     pawnLoanContract.checkLenderAccount(
+            //         newCollateral.collateralAddress,
+            //         newCollateral.amount,
+            //         pawnShopPackage.loanToValue,
+            //         pawnShopPackage.loanToken,
+            //         pawnShopPackage.repaymentAsset,
+            //         pawnShopPackage.owner,
+            //         address(this)
+            //     );
+                
+            //     // PawnLib.checkLenderAccount(loanAmount, pawnShopPackage.loanToken, pawnShopPackage.owner, address(this));
+                
+            //     // Lender has sufficient balance and allowance => process submitted collateral to contract
+            //     processLoanRequestToContract(_idx, uint256(_packageId));
+            // }
+
+            createContractForAutoPawnPackage(
+                _idx,
+                uint256(_packageId),
+                newCollateral,
+                pawnShopPackage
+            );
         }
 
         // transfer to this contract
@@ -239,6 +264,33 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             msg.sender,
             IReputation.ReasonType.BR_CREATE_COLLATERAL
         );
+    }
+
+    function createContractForAutoPawnPackage(
+        uint256 _collateralId,
+        uint256 _packageId,
+        Collateral storage _collateral,
+        PawnShopPackage storage _pawnShopPackage
+    )
+        internal 
+    {
+        if(_pawnShopPackage.packageType == PawnShopPackageType.AUTO) {
+            // Check if lender has enough balance and allowance for lending
+            pawnLoanContract.checkLenderAccount(
+                _collateral.collateralAddress,
+                _collateral.amount,
+                _pawnShopPackage.loanToValue,
+                _pawnShopPackage.loanToken,
+                _pawnShopPackage.repaymentAsset,
+                _pawnShopPackage.owner,
+                address(this)
+            );
+            
+            // PawnLib.checkLenderAccount(loanAmount, pawnShopPackage.loanToken, pawnShopPackage.owner, address(this));
+            
+            // Lender has sufficient balance and allowance => process submitted collateral to contract
+            processLoanRequestToContract(_collateralId, _packageId);
+        }
     }
 
     /**
@@ -577,32 +629,29 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         );
 
         // Auto generate contract for Auto pawnshop package type
-        if(pawnShopPackage.packageType == PawnShopPackageType.AUTO) {
-            // Get loan amount from exchange contract
-            // (uint256 loanAmount, ) = exchange.calculateLoanAmountAndExchangeRate(collateral, pawnShopPackage);
-
-            // // Check if lender has enough balance and allowance for lending
-            // uint256 lenderCurrentBalance = IERC20Upgradeable(pawnShopPackage.loanToken).balanceOf(pawnShopPackage.owner);
-            // require(lenderCurrentBalance >= loanAmount, "4"); // insufficient balance
-
-            // uint256 lenderCurrentAllowance = IERC20Upgradeable(pawnShopPackage.loanToken).allowance(pawnShopPackage.owner, address(this));
-            // require(lenderCurrentAllowance >= loanAmount, "5"); // allowance not enough
-
-            pawnLoanContract.checkLenderAccount(
-                collateral.collateralAddress,
-                collateral.amount,
-                pawnShopPackage.loanToValue,
-                pawnShopPackage.loanToken,
-                pawnShopPackage.repaymentAsset,
-                pawnShopPackage.owner,
-                address(this)
-            );
+        // if(pawnShopPackage.packageType == PawnShopPackageType.AUTO) {
+        //     // Check if lender has enough balance and allowance for lending
+        //     pawnLoanContract.checkLenderAccount(
+        //         collateral.collateralAddress,
+        //         collateral.amount,
+        //         pawnShopPackage.loanToValue,
+        //         pawnShopPackage.loanToken,
+        //         pawnShopPackage.repaymentAsset,
+        //         pawnShopPackage.owner,
+        //         address(this)
+        //     );
             
-            // PawnLib.checkLenderAccount(loanAmount, pawnShopPackage.loanToken, pawnShopPackage.owner, address(this));
+        //     // PawnLib.checkLenderAccount(loanAmount, pawnShopPackage.loanToken, pawnShopPackage.owner, address(this));
             
-            // Lender has sufficient balance and allowance => process submitted collateral to contract
-            processLoanRequestToContract(_collateralId, _packageId);
-        }
+        //     // Lender has sufficient balance and allowance => process submitted collateral to contract
+        //     processLoanRequestToContract(_collateralId, _packageId);
+        // }
+        createContractForAutoPawnPackage(
+            _collateralId,
+            _packageId,
+            collateral,
+            pawnShopPackage
+        );
     }
 
     function withdrawCollateralFromPackage(
@@ -869,7 +918,8 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         );
 
         // Create Contract
-        uint256 contractId = pawnLoanContract.createContract(contractData);
+        // uint256 contractId = pawnLoanContract.createContract(contractData);
+        pawnLoanContract.createContract(contractData);
 
         // change status of offer and collateral
         offer.status = OfferStatus.ACCEPTED;
@@ -917,11 +967,11 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         );
 
         // Generate first payment period
-        pawnLoanContract.closePaymentRequestAndStartNew(
-            0,
-            contractId,
-            PaymentRequestTypeEnum.INTEREST
-        );
+        // pawnLoanContract.closePaymentRequestAndStartNew(
+        //     0,
+        //     contractId,
+        //     PaymentRequestTypeEnum.INTEREST
+        // );
     }
 
     /** ================================ 2. ACCEPT COLLATERAL (FOR PAWNSHOP PACKAGE WORKFLOWS) ============================= */
@@ -1031,7 +1081,18 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         PawnShopPackage storage _pawnShopPackage,
         LoanRequestStatusStruct storage _statusStruct
     ) internal whenContractNotPaused {
-        
+        (
+            _collateral,
+            _pawnShopPackage,
+            ,
+            _statusStruct
+        ) = verifyCollateralPackageData(
+                _collateralId,
+                _packageId,
+                CollateralStatus.DOING,
+                LoanRequestStatus.ACCEPTED
+            );
+
         // function tinh loanAmount va Exchange Rate trong contract Exchange.
         (uint256 loanAmount, uint256 exchangeRate) = exchange
             .calculateLoanAmountAndExchangeRate(
@@ -1061,7 +1122,8 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             _collateral.expectedDurationQty
         );
         // Create Contract
-        uint256 contractId = pawnLoanContract.createContract(contractData);
+        // uint256 contractId = pawnLoanContract.createContract(contractData);
+        pawnLoanContract.createContract(contractData);
 
         // Change status of collateral loan request to package to CONTRACTED
         _statusStruct.status == LoanRequestStatus.CONTRACTED;
@@ -1094,11 +1156,11 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         );
 
         //ki dau tien BEId = 0
-        pawnLoanContract.closePaymentRequestAndStartNew(
-            0,
-            contractId,
-            PaymentRequestTypeEnum.INTEREST
-        );
+        // pawnLoanContract.closePaymentRequestAndStartNew(
+        //     0,
+        //     contractId,
+        //     PaymentRequestTypeEnum.INTEREST
+        // );
     }
 
     /** ================================ 3. PAYMENT REQUEST & REPAYMENT WORKLOWS ============================= */
