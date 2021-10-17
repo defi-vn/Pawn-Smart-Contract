@@ -165,26 +165,41 @@ contract PawnP2PLoanContract is PawnModel {
                 penaltyRate
             );
 
+            bool _success;
+            uint256 _timeStamp;
             if (_paymentRequestType == PaymentRequestTypeEnum.INTEREST) {
-                _dueDateTimestamp = PawnLib.add(
-                    previousRequest.dueDateTimestamp,
-                    PawnLib.calculatedueDateTimestampInterest(
+                _timeStamp = PawnLib.calculatedueDateTimestampInterest(
                         currentContract.terms.repaymentCycleType
-                    )
                 );
+                // _dueDateTimestamp = PawnLib.add(
+                //     previousRequest.dueDateTimestamp,
+                //     PawnLib.calculatedueDateTimestampInterest(
+                //         currentContract.terms.repaymentCycleType
+                //     )
+                // );
                 _nextPhraseInterest = exchange.calculateInterest(
                     currentContract
                 );
             }
             if (_paymentRequestType == PaymentRequestTypeEnum.OVERDUE) {
-                _dueDateTimestamp = PawnLib.add(
-                    previousRequest.dueDateTimestamp,
-                    PawnLib.calculatedueDateTimestampPenalty(
+                _timeStamp = PawnLib.calculatedueDateTimestampPenalty(
                         currentContract.terms.repaymentCycleType
-                    )
                 );
+                // _dueDateTimestamp = PawnLib.add(
+                //     previousRequest.dueDateTimestamp,
+                //     PawnLib.calculatedueDateTimestampPenalty(
+                //         currentContract.terms.repaymentCycleType
+                //     )
+                // );
                 _nextPhraseInterest = 0;
             }
+
+            (_success, _dueDateTimestamp) = SafeMathUpgradeable.tryAdd(
+                previousRequest.dueDateTimestamp, 
+                _timeStamp
+            );
+
+            require(_success, "safe-math");
 
             if (_dueDateTimestamp >= currentContract.terms.contractEndDate) {
                 _chargePrepaidFee = true;
@@ -264,12 +279,22 @@ contract PawnP2PLoanContract is PawnModel {
             _remainingLoan = currentContract.terms.loanAmount;
             _nextPhraseInterest = exchange.calculateInterest(currentContract);
             _nextPhrasePenalty = 0;
-            _dueDateTimestamp = PawnLib.add(
+
+            bool _success;
+            (_success, _dueDateTimestamp) = SafeMathUpgradeable.tryAdd(
                 block.timestamp,
                 PawnLib.calculatedueDateTimestampInterest(
                     currentContract.terms.repaymentCycleType
                 )
             );
+            // _dueDateTimestamp = PawnLib.add(
+            //     block.timestamp,
+            //     PawnLib.calculatedueDateTimestampInterest(
+            //         currentContract.terms.repaymentCycleType
+            //     )
+            // );
+
+            require(_success, "safe-math");
 
             if (
                 currentContract.terms.repaymentCycleType ==
