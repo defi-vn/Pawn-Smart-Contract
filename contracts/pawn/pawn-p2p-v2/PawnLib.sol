@@ -259,36 +259,15 @@ library PawnLib {
         require(lenderCurrentAllowance >= loanAmount, "5"); // allowance not enough
     }
 
+    /**
+    * @dev Return the absolute value of a signed integer
+    * @param _input is any signed integer
+    * @return an unsigned integer that is the absolute value of _input
+    */
+    function abs(int256 _input) internal pure returns (uint256) {
+        return _input >= 0 ? uint256(_input) : uint256(_input * -1);
+    }
 }
-
-library PawnEventLib {
-    event SubmitPawnShopPackage(
-        uint256 packageId,
-        uint256 collateralId,
-        LoanRequestStatus status
-    );
-
-    event ChangeStatusPawnShopPackage(
-        uint256 packageId,
-        PawnShopPackageStatus status
-    );
-
-    event CreateCollateralEvent(uint256 collateralId, Collateral data);
-
-    event WithdrawCollateralEvent(
-        uint256 collateralId,
-        address collateralOwner
-    );
-
-    event CreateOfferEvent(uint256 offerId, uint256 collateralId, Offer data);
-
-    event CancelOfferEvent(
-        uint256 offerId,
-        uint256 collateralId,
-        address offerOwner
-    );
-}
-
 library CollateralLib {
     
     function create(
@@ -306,22 +285,6 @@ library CollateralLib {
         self.status = CollateralStatus.OPEN;
         self.expectedDurationQty = _expectedDurationQty;
         self.expectedDurationType = _expectedDurationType;
-    }
-
-    function withdraw(
-        Collateral storage self,
-        uint256 _collateralId,
-        CollateralOfferList storage _collateralOfferList
-    ) internal {
-        for (uint256 i = 0; i < _collateralOfferList.offerIdList.length; i++) {
-            uint256 offerId = _collateralOfferList.offerIdList[i];
-            Offer storage offer = _collateralOfferList.offerMapping[offerId];
-            emit PawnEventLib.CancelOfferEvent(
-                offerId,
-                _collateralId,
-                offer.owner
-            );
-        }
     }
 
     function submitToLoanPackage(
