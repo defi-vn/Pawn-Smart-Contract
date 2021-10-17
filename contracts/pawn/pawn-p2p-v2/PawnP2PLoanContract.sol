@@ -137,12 +137,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
         int256 _paymentRequestId,
         uint256 _contractId,
         PaymentRequestTypeEnum _paymentRequestType
-    ) 
-        external 
-        override
-        whenContractNotPaused 
-        onlyRole(OPERATOR_ROLE) 
-    {
+    ) external override whenContractNotPaused onlyRole(OPERATOR_ROLE) {
         Contract storage currentContract = contractMustActive(_contractId);
         bool _chargePrepaidFee;
         uint256 _remainingLoan;
@@ -210,9 +205,9 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
             require(_success, "safe-math");
 
             if (_dueDateTimestamp >= currentContract.terms.contractEndDate) {
-                _chargePrepaidFee = true;
-            } else {
                 _chargePrepaidFee = false;
+            } else {
+                _chargePrepaidFee = true;
             }
 
             // Validate: Due date timestamp of next payment request must not over contract due date
@@ -316,9 +311,9 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                         currentContract.terms.contractStartDate ==
                     600
                 ) {
-                    _chargePrepaidFee = true;
-                } else {
                     _chargePrepaidFee = false;
+                } else {
+                    _chargePrepaidFee = true;
                 }
             } else {
                 if (
@@ -326,9 +321,9 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                         currentContract.terms.contractStartDate ==
                     900
                 ) {
-                    _chargePrepaidFee = true;
-                } else {
                     _chargePrepaidFee = false;
+                } else {
+                    _chargePrepaidFee = true;
                 }
             }
 
@@ -758,21 +753,17 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
         uint256 _amount,
         uint256 _loanToValue,
         address _loanToken,
-        address _repaymentAsset, 
-        address _owner, 
+        address _repaymentAsset,
+        address _owner,
         address _spender
-    )
-        external
-        view
-        override
-    {
+    ) external view override {
         checkLenderBallanceAndAllowance(
             _collateralAddress,
             _amount,
             _loanToValue,
             _loanToken,
-            _repaymentAsset, 
-            _owner, 
+            _repaymentAsset,
+            _owner,
             _spender
         );
     }
@@ -782,8 +773,8 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
         uint256 _amount,
         uint256 _loanToValue,
         address _loanToken,
-        address _repaymentAsset, 
-        address _owner, 
+        address _repaymentAsset,
+        address _owner,
         address _spender
     )
         public
@@ -806,7 +797,10 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
         currentBalance = IERC20Upgradeable(_loanToken).balanceOf(_owner);
         require(currentBalance >= loanAmount, "4"); // insufficient balance
 
-        currentAllowance = IERC20Upgradeable(_loanToken).allowance(_owner, _spender);
+        currentAllowance = IERC20Upgradeable(_loanToken).allowance(
+            _owner,
+            _spender
+        );
         require(currentAllowance >= loanAmount, "5"); // allowance not enough
     }
 }
