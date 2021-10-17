@@ -4,11 +4,12 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "./PawnModel.sol";
+import "./ILoan.sol";
 import "../pawn-p2p/IPawn.sol";
 import "../access/DFY-AccessControl.sol";
 import "../reputation/IReputation.sol";
 
-contract PawnP2PLoanContract is PawnModel {
+contract PawnP2PLoanContract is PawnModel, ILoan {
     using CountersUpgradeable for CountersUpgradeable.Counter;
     using AddressUpgradeable for address;
     using SafeMathUpgradeable for uint256;
@@ -77,6 +78,7 @@ contract PawnP2PLoanContract is PawnModel {
 
     function createContract(ContractRawData memory contractData)
         external
+        override
         onlyRole(OPERATOR_ROLE)
         returns (uint256 _idx)
     {
@@ -135,7 +137,12 @@ contract PawnP2PLoanContract is PawnModel {
         int256 _paymentRequestId,
         uint256 _contractId,
         PaymentRequestTypeEnum _paymentRequestType
-    ) public whenContractNotPaused onlyRole(OPERATOR_ROLE) {
+    ) 
+        external 
+        override
+        whenContractNotPaused 
+        onlyRole(OPERATOR_ROLE) 
+    {
         Contract storage currentContract = contractMustActive(_contractId);
         bool _chargePrepaidFee;
         uint256 _remainingLoan;
@@ -740,5 +747,62 @@ contract PawnP2PLoanContract is PawnModel {
                 break;
             }
         }
+    }
+
+    function checkLenderAccount(
+        address _collateralAddress,
+        uint256 _amount,
+        uint256 _loanToValue,
+        address _loanToken,
+        address _repaymentAsset, 
+        address _owner, 
+        address _spender
+    )
+        external
+        view
+        override
+    {
+        checkLenderBallanceAndAllowance(
+            _collateralAddress,
+            _amount,
+            _loanToValue,
+            _loanToken,
+            _repaymentAsset, 
+            _owner, 
+            _spender
+        );
+    }
+
+    function checkLenderBallanceAndAllowance(
+        address _collateralAddress,
+        uint256 _amount,
+        uint256 _loanToValue,
+        address _loanToken,
+        address _repaymentAsset, 
+        address _owner, 
+        address _spender
+    )
+        public
+        view
+        returns (
+            uint256 loanAmount,
+            uint256 currentBalance,
+            uint256 currentAllowance
+        )
+    {
+        (loanAmount, , , , ) = exchange.calcLoanAmountAndExchangeRate(
+            _collateralAddress,
+            _amount,
+            _loanToken,
+            _loanToValue,
+            _repaymentAsset
+        );
+
+        // Check if lender has enough balance and allowance for lending
+        currentBalance = IERC20Upgradeable(_loanToken).balanceOf(_owner);
+        require(currentBalance >= loanAmount, "4"); // insufficient balance
+
+        currentAllowance = IERC20Upgradeable(_loanToken).allowance(_owner, _spender);
+        require(currentAllowance >= loanAmount, "5"); // allowance not enough
     }
 }

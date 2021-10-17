@@ -9,7 +9,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeab
 import "./IPawn.sol";
 import "../reputation/IReputation.sol";
 import "../exchange/Exchange.sol";
-import "../pawn-p2p-v2/PawnP2PLoanContract.sol";
+import "../pawn-p2p-v2/ILoan.sol";
 
 contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     using SafeERC20Upgradeable for IERC20Upgradeable;
@@ -206,6 +206,8 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
                 "2"
             ); //pack
 
+            // _submitCollateralToPackage(_idx, uint256(_packageId));
+
             // Submit collateral to package
             CollateralAsLoanRequestListStruct
                 storage loanRequestListStruct = collateralAsLoanRequestMapping[
@@ -336,6 +338,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         uint256 _liquidityThreshold
     ) external whenContractNotPaused returns (uint256 _idx) {
         Collateral storage collateral = collaterals[_collateralId];
+
         require(collateral.status == CollateralStatus.OPEN, "0"); // col
         // validate not allow for collateral owner to create offer
         require(collateral.owner != msg.sender, "1"); // owner
@@ -347,8 +350,6 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             ) >= _loanAmount,
             "2"
         ); // not-apr
-
-        require(false, "x");
 
         // Get offers of collateral
         CollateralOfferList
@@ -373,8 +374,6 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             _repaymentCycleType,
             _liquidityThreshold
         );
-
-        require(false, "y");
 
         collateralOfferList.offerIdList.push(_idx);
 
@@ -569,24 +568,41 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
         // Save
         collateral.submitToLoanPackage(_packageId, loanRequestListStruct);
+        // _submitCollateralToPackage(_collateralId, _packageId);
+        
         emit SubmitPawnShopPackage(
             _packageId,
             _collateralId,
             LoanRequestStatus.PENDING
         );
 
-        // Get loan amount from exchange contract
-        (uint256 loanAmount, ) = exchange.calculateLoanAmountAndExchangeRate(collateral, pawnShopPackage);
+        // Auto generate contract for Auto pawnshop package type
+        if(pawnShopPackage.packageType == PawnShopPackageType.AUTO) {
+            // Get loan amount from exchange contract
+            // (uint256 loanAmount, ) = exchange.calculateLoanAmountAndExchangeRate(collateral, pawnShopPackage);
 
-        // Check if lender has enough balance and allowance for lending
-        uint256 lenderCurrentBalance = IERC20Upgradeable(pawnShopPackage.loanToken).balanceOf(pawnShopPackage.owner);
-        require(lenderCurrentBalance >= loanAmount, "4"); // not enough balance
+            // // Check if lender has enough balance and allowance for lending
+            // uint256 lenderCurrentBalance = IERC20Upgradeable(pawnShopPackage.loanToken).balanceOf(pawnShopPackage.owner);
+            // require(lenderCurrentBalance >= loanAmount, "4"); // insufficient balance
 
-        uint256 lenderCurrentAllowance = IERC20Upgradeable(pawnShopPackage.loanToken).allowance(pawnShopPackage.owner, address(this));
-        require(lenderCurrentAllowance >= loanAmount, "5"); // insufficient allowance
-        
-        // Lender has sufficient balance and allowance => process submitted collateral to contract
-        processLoanRequestToContract(_collateralId, _packageId);
+            // uint256 lenderCurrentAllowance = IERC20Upgradeable(pawnShopPackage.loanToken).allowance(pawnShopPackage.owner, address(this));
+            // require(lenderCurrentAllowance >= loanAmount, "5"); // allowance not enough
+
+            pawnLoanContract.checkLenderBallanceAndAllowance(
+                collateral.collateralAddress,
+                collateral.amount,
+                pawnShopPackage.loanToValue,
+                pawnShopPackage.loanToken,
+                pawnShopPackage.repaymentAsset,
+                pawnShopPackage.owner,
+                address(this)
+            );
+            
+            // PawnLib.checkLenderAccount(loanAmount, pawnShopPackage.loanToken, pawnShopPackage.owner, address(this));
+            
+            // Lender has sufficient balance and allowance => process submitted collateral to contract
+            processLoanRequestToContract(_collateralId, _packageId);
+        }
     }
 
     function withdrawCollateralFromPackage(
@@ -611,6 +627,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         // _removeCollateralFromPackage(_collateralId, _packageId);
 
         collateral.removeFromLoanPackage(_packageId, loanRequestListStruct);
+
         emit SubmitPawnShopPackage(
             _packageId,
             _collateralId,
@@ -641,7 +658,6 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             Collateral storage collateral,
             PawnShopPackage storage pawnShopPackage,
             CollateralAsLoanRequestListStruct storage loanRequestListStruct,
-
         ) = verifyCollateralPackageData(
                 _collateralId,
                 _packageId,
@@ -652,12 +668,45 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
         // _removeCollateralFromPackage(_collateralId, _packageId);
         collateral.removeFromLoanPackage(_packageId, loanRequestListStruct);
+        
         emit SubmitPawnShopPackage(
             _packageId,
             _collateralId,
             LoanRequestStatus.REJECTED
         );
     }
+
+    // function _submitCollateralToPackage(
+    //     uint256 _collateralId,
+    //     uint256 _packageId
+    // ) internal {
+    //     CollateralAsLoanRequestListStruct storage loanRequestListStruct = collateralAsLoanRequestMapping[_collateralId];
+    //     if (!loanRequestListStruct.isInit) {
+    //         loanRequestListStruct.isInit = true;
+    //     }
+
+    //     LoanRequestStatusStruct storage statusStruct = loanRequestListStruct.loanRequestToPawnShopPackageMapping[_packageId];
+    //     require(statusStruct.isInit == false);
+    //     statusStruct.isInit = true;
+    //     statusStruct.status = LoanRequestStatus.PENDING;
+    //     loanRequestListStruct.pawnShopPackageIdList.push(_packageId);
+    // }
+
+    // function _removeCollateralFromPackage (
+    //     uint256 _collateralId,
+    //     uint256 _packageId
+    // ) internal {
+    //     CollateralAsLoanRequestListStruct storage loanRequestListStruct = collateralAsLoanRequestMapping[_collateralId];
+    //     delete loanRequestListStruct.loanRequestToPawnShopPackageMapping[_packageId];
+
+    //     for (uint i = 0; i < loanRequestListStruct.pawnShopPackageIdList.length - 1; i++){
+    //         if (loanRequestListStruct.pawnShopPackageIdList[i] == _packageId) {
+    //             loanRequestListStruct.pawnShopPackageIdList[i] = loanRequestListStruct.pawnShopPackageIdList[loanRequestListStruct.pawnShopPackageIdList.length - 1];
+    //             break;
+    //         }
+    //     }
+    //     delete loanRequestListStruct.pawnShopPackageIdList[loanRequestListStruct.pawnShopPackageIdList.length - 1];
+    // }
 
     function verifyCollateralPackageData(
         uint256 _collateralId,
@@ -696,7 +745,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     {
         (
             Collateral storage collateral,
-            ,
+            PawnShopPackage storage pawnShopPackage,
             CollateralAsLoanRequestListStruct storage loanRequestListStruct,
             LoanRequestStatusStruct storage statusStruct
         ) = verifyCollateralPackageData(
@@ -751,7 +800,14 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         }
 
         // Generate loan contract
-        generateContractForCollateralAndPackage(_collateralId, _packageId);
+        // generateContractForCollateralAndPackage(_collateralId, _packageId);
+        generateContract(
+            _collateralId, 
+            _packageId,
+            collateral,
+            pawnShopPackage,
+            statusStruct
+        );
     }
 
     /** ========================= CONTRACT RELATED FUNCTIONS & STATES ============================= */
@@ -870,32 +926,117 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
     /** ================================ 2. ACCEPT COLLATERAL (FOR PAWNSHOP PACKAGE WORKFLOWS) ============================= */
 
+    // /**
+    //  * @dev create contract between package and collateral
+    //  * @param  _collateralId is id of collateral
+    //  * @param  _packageId is id of package
+    //  */
+    // function generateContractForCollateralAndPackage(
+    //     uint256 _collateralId,
+    //     uint256 _packageId
+    // ) internal whenContractNotPaused {
+    //     (
+    //         Collateral storage collateral,
+    //         PawnShopPackage storage pawnShopPackage,
+    //         ,
+    //         LoanRequestStatusStruct storage statusStruct
+    //     ) = verifyCollateralPackageData(
+    //             _collateralId,
+    //             _packageId,
+    //             CollateralStatus.DOING,
+    //             LoanRequestStatus.ACCEPTED
+    //         );
+
+    //     // function tinh loanAmount va Exchange Rate trong contract Exchange.
+    //     (uint256 loanAmount, uint256 exchangeRate) = exchange
+    //         .calculateLoanAmountAndExchangeRate(
+    //             collaterals[_collateralId],
+    //             pawnShopPackages[_packageId]
+    //         );
+
+    //     // uint loanAmount = 1000 * 10 ** 18;
+    //     // uint exchangeRate = 1 * 10 ** 18;
+
+    //     // Prepare contract raw data
+    //     ContractRawData memory contractData = ContractRawData(
+    //         _collateralId,
+    //         collateral.owner,
+    //         collateral.loanAsset,
+    //         collateral.collateralAddress,
+    //         collateral.amount,
+    //         int256(_packageId),
+    //         -1,
+    //         exchangeRate,
+    //         loanAmount,
+    //         pawnShopPackage.owner,
+    //         pawnShopPackage.repaymentAsset,
+    //         pawnShopPackage.interest,
+    //         pawnShopPackage.repaymentCycleType,
+    //         pawnShopPackage.loanToValueLiquidationThreshold,
+    //         collateral.expectedDurationQty
+    //     );
+    //     // Create Contract
+    //     uint256 contractId = pawnLoanContract.createContract(contractData);
+
+    //     // Change status of collateral loan request to package to CONTRACTED
+    //     statusStruct.status == LoanRequestStatus.CONTRACTED;
+    //     emit SubmitPawnShopPackage(
+    //         _packageId,
+    //         _collateralId,
+    //         LoanRequestStatus.CONTRACTED
+    //     );
+
+    //     // Transfer loan token from lender to borrower
+    //     PawnLib.safeTransfer(
+    //         collateral.loanAsset,
+    //         pawnShopPackage.owner,
+    //         collateral.owner,
+    //         loanAmount
+    //     );
+
+    //     // transfer collateral to LoanContract
+    //     PawnLib.safeTransfer(
+    //         collateral.collateralAddress,
+    //         address(this),
+    //         address(pawnLoanContract),
+    //         collateral.amount
+    //     );
+
+    //     // Adjust reputation score
+    //     reputation.adjustReputationScore(
+    //         pawnShopPackage.owner,
+    //         IReputation.ReasonType.LD_GENERATE_CONTRACT
+    //     );
+
+    //     //ki dau tien BEId = 0
+    //     pawnLoanContract.closePaymentRequestAndStartNew(
+    //         0,
+    //         contractId,
+    //         PaymentRequestTypeEnum.INTEREST
+    //     );
+    // }
+
     /**
      * @dev create contract between package and collateral
      * @param  _collateralId is id of collateral
      * @param  _packageId is id of package
+     * @param  _collateral is the collateral being submitted to pawnshop package for creating loan request
+     * @param  _pawnShopPackage is the pawnshop package where the collateral being sent to
+     * @param  _statusStruct is the status object of the loan request generated when collateral is submitted to pawnshop package
      */
-    function generateContractForCollateralAndPackage(
+    function generateContract(
         uint256 _collateralId,
-        uint256 _packageId
+        uint256 _packageId,
+        Collateral storage _collateral,
+        PawnShopPackage storage _pawnShopPackage,
+        LoanRequestStatusStruct storage _statusStruct
     ) internal whenContractNotPaused {
-        (
-            Collateral storage collateral,
-            PawnShopPackage storage pawnShopPackage,
-            ,
-            LoanRequestStatusStruct storage statusStruct
-        ) = verifyCollateralPackageData(
-                _collateralId,
-                _packageId,
-                CollateralStatus.DOING,
-                LoanRequestStatus.ACCEPTED
-            );
-
+        
         // function tinh loanAmount va Exchange Rate trong contract Exchange.
         (uint256 loanAmount, uint256 exchangeRate) = exchange
             .calculateLoanAmountAndExchangeRate(
-                collaterals[_collateralId],
-                pawnShopPackages[_packageId]
+                _collateral,
+                _pawnShopPackage
             );
 
         // uint loanAmount = 1000 * 10 ** 18;
@@ -904,26 +1045,26 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         // Prepare contract raw data
         ContractRawData memory contractData = ContractRawData(
             _collateralId,
-            collateral.owner,
-            collateral.loanAsset,
-            collateral.collateralAddress,
-            collateral.amount,
+            _collateral.owner,
+            _collateral.loanAsset,
+            _collateral.collateralAddress,
+            _collateral.amount,
             int256(_packageId),
             -1,
             exchangeRate,
             loanAmount,
-            pawnShopPackage.owner,
-            pawnShopPackage.repaymentAsset,
-            pawnShopPackage.interest,
-            pawnShopPackage.repaymentCycleType,
-            pawnShopPackage.loanToValueLiquidationThreshold,
-            collateral.expectedDurationQty
+            _pawnShopPackage.owner,
+            _pawnShopPackage.repaymentAsset,
+            _pawnShopPackage.interest,
+            _pawnShopPackage.repaymentCycleType,
+            _pawnShopPackage.loanToValueLiquidationThreshold,
+            _collateral.expectedDurationQty
         );
         // Create Contract
         uint256 contractId = pawnLoanContract.createContract(contractData);
 
         // Change status of collateral loan request to package to CONTRACTED
-        statusStruct.status == LoanRequestStatus.CONTRACTED;
+        _statusStruct.status == LoanRequestStatus.CONTRACTED;
         emit SubmitPawnShopPackage(
             _packageId,
             _collateralId,
@@ -932,23 +1073,23 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
         // Transfer loan token from lender to borrower
         PawnLib.safeTransfer(
-            collateral.loanAsset,
-            pawnShopPackage.owner,
-            collateral.owner,
+            _collateral.loanAsset,
+            _pawnShopPackage.owner,
+            _collateral.owner,
             loanAmount
         );
 
         // transfer collateral to LoanContract
         PawnLib.safeTransfer(
-            collateral.collateralAddress,
+            _collateral.collateralAddress,
             address(this),
             address(pawnLoanContract),
-            collateral.amount
+            _collateral.amount
         );
 
         // Adjust reputation score
         reputation.adjustReputationScore(
-            pawnShopPackage.owner,
+            _pawnShopPackage.owner,
             IReputation.ReasonType.LD_GENERATE_CONTRACT
         );
 
@@ -1529,9 +1670,9 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     }
 
     /** ==================== Loan Contract functions & states ==================== */
-    PawnP2PLoanContract public pawnLoanContract;
+    ILoan public pawnLoanContract;
 
     function setPawnLoanContract(address _pawnLoanAddress) external onlyAdmin {
-        pawnLoanContract = PawnP2PLoanContract(_pawnLoanAddress);
+        pawnLoanContract = ILoan(_pawnLoanAddress);
     }
 }
