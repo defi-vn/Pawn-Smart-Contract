@@ -169,7 +169,7 @@ contract PawnP2PLoanContract is PawnModel {
             uint256 _timeStamp;
             if (_paymentRequestType == PaymentRequestTypeEnum.INTEREST) {
                 _timeStamp = PawnLib.calculatedueDateTimestampInterest(
-                        currentContract.terms.repaymentCycleType
+                    currentContract.terms.repaymentCycleType
                 );
                 // _dueDateTimestamp = PawnLib.add(
                 //     previousRequest.dueDateTimestamp,
@@ -178,12 +178,13 @@ contract PawnP2PLoanContract is PawnModel {
                 //     )
                 // );
                 _nextPhraseInterest = exchange.calculateInterest(
+                    _remainingLoan,
                     currentContract
                 );
             }
             if (_paymentRequestType == PaymentRequestTypeEnum.OVERDUE) {
                 _timeStamp = PawnLib.calculatedueDateTimestampPenalty(
-                        currentContract.terms.repaymentCycleType
+                    currentContract.terms.repaymentCycleType
                 );
                 // _dueDateTimestamp = PawnLib.add(
                 //     previousRequest.dueDateTimestamp,
@@ -195,7 +196,7 @@ contract PawnP2PLoanContract is PawnModel {
             }
 
             (_success, _dueDateTimestamp) = SafeMathUpgradeable.tryAdd(
-                previousRequest.dueDateTimestamp, 
+                previousRequest.dueDateTimestamp,
                 _timeStamp
             );
 
@@ -277,7 +278,10 @@ contract PawnP2PLoanContract is PawnModel {
             // Validate: remaining loan must valid
             // require(currentContract.terms.loanAmount == _remainingLoan, '4'); // remain
             _remainingLoan = currentContract.terms.loanAmount;
-            _nextPhraseInterest = exchange.calculateInterest(currentContract);
+            _nextPhraseInterest = exchange.calculateInterest(
+                _remainingLoan,
+                currentContract
+            );
             _nextPhrasePenalty = 0;
 
             bool _success;

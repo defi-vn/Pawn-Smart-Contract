@@ -290,11 +290,10 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
     // tinh tien lai cua moi ky: interest = loanAmount * interestByLoanDurationType
     //(interestByLoanDurationType = % lãi * số kì * loại kì / (365*100))
 
-    function calculateInterest(Contract memory _contract)
-        external
-        view
-        returns (uint256 interest)
-    {
+    function calculateInterest(
+        uint256 _remainingLoan,
+        Contract memory _contract
+    ) external view returns (uint256 interest) {
         uint256 _interestToUSD;
         uint256 _repaymentAssetToUSD;
         uint256 _interestByLoanDurationType;
@@ -305,7 +304,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             // interestToUSD = (uint256(RateBNBwithUSD()) *_contract.terms.loanAmount) * _contract.terms.interest;
             (, uint256 interestToAmount) = SafeMathUpgradeable.tryMul(
                 _contract.terms.interest,
-                _contract.terms.loanAmount
+                _remainingLoan
             );
             (, uint256 interestRate) = SafeMathUpgradeable.tryMul(
                 interestToAmount,
@@ -321,7 +320,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             // interestToUSD = (uint256(getLatesPriceToUSD(_contract.terms.loanAsset)) * _contract.terms.loanAmount) * _contractterms.interest;
             (, uint256 interestToAmount) = SafeMathUpgradeable.tryMul(
                 _contract.terms.interest,
-                _contract.terms.loanAmount
+                _remainingLoan
             );
             (, uint256 interestRate) = SafeMathUpgradeable.tryMul(
                 interestToAmount,
