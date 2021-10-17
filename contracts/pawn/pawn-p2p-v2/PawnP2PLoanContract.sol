@@ -492,6 +492,18 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
 
     /** ===================================== 3.3. LIQUIDITY & DEFAULT ============================= */
 
+    event test(
+        uint256 collateralExchangeRate,
+        uint256 loanExchangeRate,
+        uint256 repaymentExchangeRate,
+        uint256 remainingRepayment,
+        uint256 remainingLoan,
+        uint256 valueOfRemainingRepayment,
+        uint256 valueOfRemainingLoan,
+        uint256 valueOfCollateralLiquidationThreshold,
+        Contract _contract
+    );
+
     function collateralRiskLiquidationExecution(uint256 _contractId)
         external
         whenContractNotPaused
@@ -522,6 +534,18 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
         uint256 valueOfCollateralLiquidationThreshold = (collateralExchangeRate *
                 _contract.terms.collateralAmount *
                 _contract.terms.liquidityThreshold) / (100 * ZOOM);
+
+        emit test(
+            collateralExchangeRate,
+            loanExchangeRate,
+            repaymentExchangeRate,
+            remainingRepayment,
+            remainingLoan,
+            valueOfRemainingRepayment,
+            valueOfRemainingLoan,
+            valueOfCollateralLiquidationThreshold,
+            _contract
+        );
 
         require(
             valueOfRemainingLoan + valueOfRemainingRepayment >=

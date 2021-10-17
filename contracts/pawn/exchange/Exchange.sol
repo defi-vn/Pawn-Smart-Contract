@@ -568,7 +568,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
                 _contract.terms.collateralAsset
             );
         }
-        _collateralExchangeRate = uint256(priceCollateral) * 10**10;
+        _collateralExchangeRate = uint256(priceCollateral);
 
         if (_contract.terms.loanAsset == address(0)) {
             (priceLoan, _rateUpdateTime) = RateBNBwithUSDAttimestamp();
@@ -577,7 +577,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
                 _contract.terms.loanAsset
             );
         }
-        _loanExchangeRate = uint256(priceLoan) * 10**10;
+        _loanExchangeRate = uint256(priceLoan);
 
         if (_contract.terms.repaymentAsset == address(0)) {
             (priceRepayment, _rateUpdateTime) = RateBNBwithUSDAttimestamp();
@@ -586,7 +586,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
                 _contract.terms.repaymentAsset
             );
         }
-        _repaymemtExchangeRate = uint256(priceRepayment) * 10**10;
+        _repaymemtExchangeRate = uint256(priceRepayment);
     }
 
     // ======================================= NFT==========================
