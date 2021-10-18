@@ -497,8 +497,9 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         uint256 _penalty = _paymentrequest.remainingPenalty +
             _interestOfPenalty +
             penalty;
-        uint256 tempPenalty = _penalty / 10**13;
-        valuePenalty = tempPenalty * 10**13;
+        // uint256 tempPenalty = _penalty / 10**13;
+        // valuePenalty = tempPenalty * 10**13;
+        valuePenalty = DivRound(_penalty);
     }
 
     // ============================== test penalty===================================
