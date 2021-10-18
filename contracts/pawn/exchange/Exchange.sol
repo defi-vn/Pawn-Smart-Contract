@@ -259,7 +259,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             rateLoanAsset * 10**5,
             rateRepaymentAsset
         );
-        exchangeRate = xchange * 10**13;
+        exchangeRate = DivRound(xchange);
     }
 
     // calculate Rate of LoanAsset with repaymentAsset
@@ -589,6 +589,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         _repaymemtExchangeRate = uint256(priceRepayment);
     }
 
+    // tinh ti gia cua repayment / collateralAsset  va   loanAsset / collateralAsset
     function collateralPerRepaymentAndLoanTokenExchangeRate(
         Contract memory _contract
     )
@@ -604,29 +605,36 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         uint256 priceCollateralAsset;
 
         if (_contract.terms.repaymentAsset == address(0)) {
+            // neu repaymentAsset la BNB
             priceRepaymentAset = uint256(RateBNBwithUSD());
         } else {
+            // neu la cac dong khac
             priceRepaymentAset = uint256(
                 getLatesPriceToUSD(_contract.terms.repaymentAsset)
             );
         }
 
         if (_contract.terms.loanAsset == address(0)) {
+            // neu dong loan asset la BNB
             priceLoanAsset = uint256(RateBNBwithUSD());
         } else {
+            // cac dong khac
             priceLoanAsset = uint256(
                 getLatesPriceToUSD(_contract.terms.loanAsset)
             );
         }
 
         if (_contract.terms.collateralAsset == address(0)) {
+            // neu collateralAsset la bnb
             priceCollateralAsset = uint256(RateBNBwithUSD());
         } else {
+            // la cac dong khac
             priceCollateralAsset = uint256(
                 getLatesPriceToUSD(_contract.terms.collateralAsset)
             );
         }
 
+        // tempCollateralPerRepaymentTokenExchangeRate = priceRepaymentAsset / priceCollateralAsset
         (
             ,
             uint256 tempCollateralPerRepaymentTokenExchangeRate
@@ -637,6 +645,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
 
         _collateralPerRepaymentTokenExchangeRate = tempCollateralPerRepaymentTokenExchangeRate;
 
+        // tempCollateralPerLoanAssetExchangeRate = priceLoanAsset / priceCollateralAsset
         (, uint256 tempCollateralPerLoanAssetExchangeRate) = SafeMathUpgradeable
             .tryDiv(priceLoanAsset * 10**5, priceCollateralAsset);
 
@@ -771,5 +780,20 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             );
         }
         _repaymemtExchangeRate = uint256(priceRepayment) * 10**10;
+    }
+
+    function DivRound(uint256 a) private pure returns (uint256) {
+        // kiem tra so du khi chia 10**13. Neu lon hon 5 *10**12 khi chia xong thi lam tron len(+1) roi nhan lai voi 10**13
+        //con nho hon thi giua nguyen va nhan lai voi 10**13
+
+        uint256 tmp = a % 10**13;
+        uint256 tm;
+        if (tmp < 5 * 10**12) {
+            tm = a / 10**13;
+        } else {
+            tm = a / 10**13 + 1;
+        }
+        uint256 rouding = tm * 10**13;
+        return rouding;
     }
 }
