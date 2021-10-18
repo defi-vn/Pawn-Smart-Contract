@@ -1,8 +1,8 @@
 require('@nomiclabs/hardhat-ethers');
 const hre = require('hardhat');
 
-const { PawnConfig, Proxies, Exchanges } = require('./.deployment_data.json');
-const proxies = Proxies.Beta;
+const { PawnConfig, Proxies, Exchanges } = require('./.deployment_data_prelive.json');
+const proxies = Proxies.Prelive;
 
 const ExchangeProxyAddr = proxies.EXCHANGE_CONTRACT_ADDRESS;
 const ExchangeBuildName = "Exchange";

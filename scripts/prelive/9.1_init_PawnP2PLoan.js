@@ -1,14 +1,14 @@
 require('@nomiclabs/hardhat-ethers');
 const hre = require('hardhat');
 
-const { PawnConfig, Proxies, Tokens } = require('./.deployment_data.json');
-const proxies = Proxies.Beta;
+const { PawnConfig, Proxies, Tokens } = require('./.deployment_data_prelive.json');
+const proxies = Proxies.Prelive;
 
 const LoanProxyAddr     = proxies.PAWN_P2PLOAN_CONTRACT_ADDRESS;
 const LoanBuildName     = "contracts/pawn/pawn-p2p-v2/PawnP2PLoanContract.sol:PawnP2PLoanContract";
 
 const RepuProxyAddr     = proxies.REPUTATION_CONTRACT_ADDRESS;
-// const RepuBuildName     = "contracts/pawn/reputation/Reputation.sol:Reputation";
+const RepuBuildName     = "contracts/pawn/reputation/Reputation.sol:Reputation";
 
 const ExchangeProxyAddr = proxies.EXCHANGE_CONTRACT_ADDRESS;
 const PawnProxyAddr     = proxies.PAWN_CONTRACT_ADDRESS;
@@ -76,9 +76,9 @@ async function main() {
     await LoanContract.setPawnContract(PawnProxyAddr);
     console.log(`Pawn contract set at address: ${PawnProxyAddr}`);
     
-    console.log(`Setting Pawn contract as operator...`);
-    await LoanContract.setOperator(PawnProxyAddr);
-    console.log(`Pawn contract as operator: ${PawnProxyAddr}\n\r`);
+    // console.log(`Setting Pawn contract as operator...`);
+    // await LoanContract.setOperator(PawnProxyAddr);
+    // console.log(`Pawn contract as operator: ${PawnProxyAddr}\n\r`);
 
     console.log(`Setting Whitelisted collateral...`);
     for await (let token of Tokens) {
@@ -88,11 +88,11 @@ async function main() {
         }
     }
 
-    // console.log("============================================================\n\r");
-    // console.log(`Initializing ${RepuArtifact.contractName}...`);
-    // console.log(`Setting contract caller...`);
-    // await RepuContract.addWhitelistedContractCaller(LoanProxyAddr);
-    // console.log(`Contract caller set at address: ${LoanArtifact.contractName} - ${LoanProxyAddr}\n\r`);
+    console.log("============================================================\n\r");
+    console.log(`Initializing ${RepuArtifact.contractName}...`);
+    console.log(`Setting contract caller...`);
+    await RepuContract.addWhitelistedContractCaller(LoanProxyAddr);
+    console.log(`Contract caller set at address: ${LoanArtifact.contractName} - ${LoanProxyAddr}\n\r`);
 
     console.log("============================================================\n\r");
 
