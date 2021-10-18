@@ -519,13 +519,12 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 _contract
             );
 
-        uint256 valueOfRemainingRepayment = (repaymentExchangeRate *
-            remainingRepayment) / ZOOM;
-        uint256 valueOfRemainingLoan = (loanExchangeRate * remainingLoan) /
-            ZOOM;
-        uint256 valueOfCollateralLiquidationThreshold = (_contract
-            .terms
-            .collateralAmount * _contract.terms.liquidityThreshold) /
+        uint256 valueOfRemainingRepayment = (repaymentExchangeRate * remainingRepayment) / ZOOM;
+
+        uint256 valueOfRemainingLoan = (loanExchangeRate * remainingLoan) / ZOOM;
+
+        uint256 valueOfCollateralLiquidationThreshold = 
+            (_contract.terms.collateralAmount * _contract.terms.liquidityThreshold) /
             (100 * ZOOM);
 
         require(
@@ -761,16 +760,28 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
         address _repaymentAsset,
         address _owner,
         address _spender
-    ) external view override {
-        checkLenderBallanceAndAllowance(
-            _collateralAddress,
-            _amount,
-            _loanToValue,
-            _loanToken,
-            _repaymentAsset,
-            _owner,
-            _spender
-        );
+    ) 
+        external 
+        view 
+        override 
+        returns (
+            bool sufficientBalance,
+            bool overAllowance
+        )
+    {
+        (
+            , , ,
+            sufficientBalance, 
+            overAllowance
+        ) = checkLenderBallanceAndAllowance(
+                _collateralAddress,
+                _amount,
+                _loanToValue,
+                _loanToken,
+                _repaymentAsset,
+                _owner,
+                _spender
+            );
     }
 
     function checkLenderBallanceAndAllowance(
@@ -787,7 +798,9 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
         returns (
             uint256 loanAmount,
             uint256 currentBalance,
-            uint256 currentAllowance
+            uint256 currentAllowance,
+            bool sufficientBalance,
+            bool overAllowance
         )
     {
         (loanAmount, , , , ) = exchange.calcLoanAmountAndExchangeRate(
@@ -800,12 +813,14 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
 
         // Check if lender has enough balance and allowance for lending
         currentBalance = IERC20Upgradeable(_loanToken).balanceOf(_owner);
-        require(currentBalance >= loanAmount, "4"); // insufficient balance
+        // require(currentBalance >= loanAmount, "4"); // insufficient balance
+        sufficientBalance = (currentBalance >= loanAmount);
 
         currentAllowance = IERC20Upgradeable(_loanToken).allowance(
             _owner,
             _spender
         );
-        require(currentAllowance >= loanAmount, "5"); // allowance not enough
+        // require(currentAllowance >= loanAmount, "5"); // allowance not enough
+        overAllowance = (currentAllowance >= loanAmount);
     }
 }

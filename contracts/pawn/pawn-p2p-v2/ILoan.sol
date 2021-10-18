@@ -27,5 +27,9 @@ interface ILoan is IPawnV2 {
         address spender
     )
         external 
-        view;
+        view
+        returns (
+            bool sufficientBalance,
+            bool overAllowance
+        );
 }

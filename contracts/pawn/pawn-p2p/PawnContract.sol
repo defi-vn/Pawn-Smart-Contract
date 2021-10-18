@@ -258,20 +258,24 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     {
         if(_pawnShopPackage.packageType == PawnShopPackageType.AUTO) {
             // Check if lender has enough balance and allowance for lending
-            pawnLoanContract.checkLenderAccount(
-                _collateral.collateralAddress,
-                _collateral.amount,
-                _pawnShopPackage.loanToValue,
-                _pawnShopPackage.loanToken,
-                _pawnShopPackage.repaymentAsset,
-                _pawnShopPackage.owner,
-                address(this)
-            );
+            (
+                bool sufficientBalance, 
+            ) = pawnLoanContract.checkLenderAccount(
+                    _collateral.collateralAddress,
+                    _collateral.amount,
+                    _pawnShopPackage.loanToValue,
+                    _pawnShopPackage.loanToken,
+                    _pawnShopPackage.repaymentAsset,
+                    _pawnShopPackage.owner,
+                    address(this)
+                );
             
             // PawnLib.checkLenderAccount(loanAmount, pawnShopPackage.loanToken, pawnShopPackage.owner, address(this));
             
             // Lender has sufficient balance and allowance => process submitted collateral to contract
-            processLoanRequestToContract(_collateralId, _packageId);
+            if(sufficientBalance) {
+                processLoanRequestToContract(_collateralId, _packageId);
+            }
         }
     }
 
