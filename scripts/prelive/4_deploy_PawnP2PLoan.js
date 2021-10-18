@@ -1,10 +1,10 @@
 require('@nomiclabs/hardhat-ethers');
 
 const hre = require('hardhat');
-const { Proxies, PawnConfig } = require('./.deployment_data.json');
-const proxies = Proxies.Staging;
+const { Proxies, PawnConfig } = require('./.deployment_data_prelive.json');
+const proxies = Proxies.Prelive;
 
-const LoanBuildName = "PawnP2PLoanContract";
+const LoanBuildName = "contracts/pawn/pawn-p2p-v2/PawnP2PLoanContract.sol:PawnP2PLoanContract";
 
 const proxyType = { kind: "uups" };
 
