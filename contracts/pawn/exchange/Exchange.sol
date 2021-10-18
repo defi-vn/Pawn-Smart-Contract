@@ -259,7 +259,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             rateLoanAsset * 10**5,
             rateRepaymentAsset
         );
-        exchangeRate = DivRound(xchange);
+        exchangeRate = xchange * 10**13;
     }
 
     // calculate Rate of LoanAsset with repaymentAsset
@@ -367,8 +367,9 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             _interestByLoanDurationType,
             _repaymentAssetToUSD
         );
-        uint256 tempInterest = saInterest / 10**13;
-        interest = tempInterest * 10**13;
+        // uint256 tempInterest = saInterest / 10**13;
+        // interest = tempInterest * 10**13;
+        interest = DivRound(saInterest);
     }
 
     //====================  Test tinh interest==================================
