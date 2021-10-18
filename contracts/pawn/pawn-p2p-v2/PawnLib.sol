@@ -2,18 +2,11 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+// import "./IPawn.sol";
 
-enum LoanDurationType {
-    WEEK,
-    MONTH
-}
-enum CollateralStatus {
-    OPEN,
-    DOING,
-    COMPLETED,
-    CANCEL
-}
+enum LoanDurationType {WEEK, MONTH}
+enum CollateralStatus {OPEN, DOING, COMPLETED, CANCEL}
 struct Collateral {
     address owner;
     uint256 amount;
@@ -24,12 +17,7 @@ struct Collateral {
     CollateralStatus status;
 }
 
-enum OfferStatus {
-    PENDING,
-    ACCEPTED,
-    COMPLETED,
-    CANCEL
-}
+enum OfferStatus {PENDING, ACCEPTED, COMPLETED, CANCEL}
 struct CollateralOfferList {
     mapping(uint256 => Offer) offerMapping;
     uint256[] offerIdList;
@@ -49,14 +37,8 @@ struct Offer {
     bool isInit;
 }
 
-enum PawnShopPackageStatus {
-    ACTIVE,
-    INACTIVE
-}
-enum PawnShopPackageType {
-    AUTO,
-    SEMI_AUTO
-}
+enum PawnShopPackageStatus {ACTIVE, INACTIVE}
+enum PawnShopPackageType {AUTO, SEMI_AUTO}
 struct Range {
     uint256 lowerBound;
     uint256 upperBound;
@@ -78,13 +60,7 @@ struct PawnShopPackage {
     uint256 loanToValueLiquidationThreshold;
 }
 
-enum LoanRequestStatus {
-    PENDING,
-    ACCEPTED,
-    REJECTED,
-    CONTRACTED,
-    CANCEL
-}
+enum LoanRequestStatus {PENDING, ACCEPTED, REJECTED, CONTRACTED, CANCEL}
 struct LoanRequestStatusStruct {
     bool isInit;
     LoanRequestStatus status;
@@ -95,11 +71,7 @@ struct CollateralAsLoanRequestListStruct {
     bool isInit;
 }
 
-enum ContractStatus {
-    ACTIVE,
-    COMPLETED,
-    DEFAULT
-}
+enum ContractStatus {ACTIVE, COMPLETED, DEFAULT}
 struct ContractTerms {
     address borrower;
     address lender;
@@ -127,17 +99,8 @@ struct Contract {
     uint8 lateCount;
 }
 
-enum PaymentRequestStatusEnum {
-    ACTIVE,
-    LATE,
-    COMPLETE,
-    DEFAULT
-}
-enum PaymentRequestTypeEnum {
-    INTEREST,
-    OVERDUE,
-    LOAN
-}
+enum PaymentRequestStatusEnum {ACTIVE, LATE, COMPLETE, DEFAULT}
+enum PaymentRequestTypeEnum {INTEREST, OVERDUE, LOAN}
 struct PaymentRequest {
     uint256 requestId;
     PaymentRequestTypeEnum paymentRequestType;
@@ -151,11 +114,7 @@ struct PaymentRequest {
     PaymentRequestStatusEnum status;
 }
 
-enum ContractLiquidedReasonType {
-    LATE,
-    RISK,
-    UNPAID
-}
+enum ContractLiquidedReasonType {LATE, RISK, UNPAID}
 
 struct ContractRawData {
     uint256 collateralId;
@@ -172,7 +131,7 @@ struct ContractRawData {
     uint256 interest;
     LoanDurationType repaymentCycleType;
     uint256 liquidityThreshold;
-    uint256 loanDurationQty;
+    uint256 loanDurationQty;    
 }
 
 struct ContractLiquidationData {
@@ -187,7 +146,7 @@ struct ContractLiquidationData {
 }
 
 library PawnLib {
-    using SafeERC20 for IERC20;
+    using SafeERC20Upgradeable for IERC20Upgradeable;
 
     function safeTransfer(
         address asset,
@@ -210,25 +169,16 @@ library PawnLib {
             }
         } else {
             // Handle ERC20
-            uint256 prebalance = IERC20(asset).balanceOf(to);
-            require(
-                IERC20(asset).balanceOf(from) >= amount,
-                "not-enough-balance"
-            );
+            uint256 prebalance = IERC20Upgradeable(asset).balanceOf(to);
+            require(IERC20Upgradeable(asset).balanceOf(from) >= amount, "not-enough-balance");
             if (from == address(this)) {
                 // transfer direct to to
-                IERC20(asset).safeTransfer(to, amount);
+                IERC20Upgradeable(asset).safeTransfer(to, amount);
             } else {
-                require(
-                    IERC20(asset).allowance(from, address(this)) >= amount,
-                    "not-allowance"
-                );
-                IERC20(asset).safeTransferFrom(from, to, amount);
+                require(IERC20Upgradeable(asset).allowance(from, address(this)) >= amount, "not-allowance");
+                IERC20Upgradeable(asset).safeTransferFrom(from, to, amount);
             }
-            require(
-                IERC20(asset).balanceOf(to) - amount == prebalance,
-                "not-trans-enough"
-            );
+            require(IERC20Upgradeable(asset).balanceOf(to) - amount == prebalance, "not-trans-enough");
         }
     }
 
@@ -242,7 +192,7 @@ library PawnLib {
             _amount = from.balance;
         } else {
             // ERC20
-            _amount = IERC20(_token).balanceOf(from);
+            _amount = IERC20Upgradeable(_token).balanceOf(from);
         }
     }
 
@@ -295,88 +245,31 @@ library PawnLib {
         }
     }
 
-    function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        uint256 c = a + b;
-        require(c >= a, "0"); //SafeMath: addition overflow
+    function checkLenderAccount(
+        uint256 loanAmount, 
+        address loanToken, 
+        address owner, 
+        address spender
+    ) internal view {
+        // Check if lender has enough balance and allowance for lending
+        uint256 lenderCurrentBalance = IERC20Upgradeable(loanToken).balanceOf(owner);
+        require(lenderCurrentBalance >= loanAmount, "4"); // insufficient balance
 
-        return c;
+        uint256 lenderCurrentAllowance = IERC20Upgradeable(loanToken).allowance(owner, spender);
+        require(lenderCurrentAllowance >= loanAmount, "5"); // allowance not enough
     }
 
-    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-        return sub(a, b, "1"); //SafeMath: subtraction overflow
-    }
-
-    function sub(
-        uint256 a,
-        uint256 b,
-        string memory errorMessage
-    ) internal pure returns (uint256) {
-        require(b <= a, errorMessage);
-        uint256 c = a - b;
-
-        return c;
-    }
-
-    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-        // Gas optimization: this is cheaper than requiring 'a' not being zero, but the
-        // benefit is lost if 'b' is also tested.
-        // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
-        if (a == 0) {
-            return 0;
-        }
-
-        uint256 c = a * b;
-        require(c / a == b, "2"); //SafeMath: multiplication overflow
-
-        return c;
-    }
-
-    function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        return div(a, b, "3"); //SafeMath: division by zero
-    }
-
-    function div(
-        uint256 a,
-        uint256 b,
-        string memory errorMessage
-    ) internal pure returns (uint256) {
-        require(b > 0, errorMessage);
-        uint256 c = a / b;
-        // assert(a == b * c + a % b); // There is no case in which this doesn't hold
-
-        return c;
+    /**
+    * @dev Return the absolute value of a signed integer
+    * @param _input is any signed integer
+    * @return an unsigned integer that is the absolute value of _input
+    */
+    function abs(int256 _input) internal pure returns (uint256) {
+        return _input >= 0 ? uint256(_input) : uint256(_input * -1);
     }
 }
-
-library PawnEventLib {
-    event SubmitPawnShopPackage(
-        uint256 packageId,
-        uint256 collateralId,
-        LoanRequestStatus status
-    );
-
-    event ChangeStatusPawnShopPackage(
-        uint256 packageId,
-        PawnShopPackageStatus status
-    );
-
-    event CreateCollateralEvent(uint256 collateralId, Collateral data);
-
-    event WithdrawCollateralEvent(
-        uint256 collateralId,
-        address collateralOwner
-    );
-
-    event CreateOfferEvent(uint256 offerId, uint256 collateralId, Offer data);
-
-    event CancelOfferEvent(
-        uint256 offerId,
-        uint256 collateralId,
-        address offerOwner
-    );
-}
-
 library CollateralLib {
+    
     function create(
         Collateral storage self,
         address _collateralAddress,
@@ -394,22 +287,6 @@ library CollateralLib {
         self.expectedDurationType = _expectedDurationType;
     }
 
-    function withdraw(
-        Collateral storage self,
-        uint256 _collateralId,
-        CollateralOfferList storage _collateralOfferList
-    ) internal {
-        for (uint256 i = 0; i < _collateralOfferList.offerIdList.length; i++) {
-            uint256 offerId = _collateralOfferList.offerIdList[i];
-            Offer storage offer = _collateralOfferList.offerMapping[offerId];
-            emit PawnEventLib.CancelOfferEvent(
-                offerId,
-                _collateralId,
-                offer.owner
-            );
-        }
-    }
-
     function submitToLoanPackage(
         Collateral storage self,
         uint256 _packageId,
@@ -419,8 +296,7 @@ library CollateralLib {
             _loanRequestListStruct.isInit = true;
         }
 
-        LoanRequestStatusStruct storage statusStruct = _loanRequestListStruct
-            .loanRequestToPawnShopPackageMapping[_packageId];
+        LoanRequestStatusStruct storage statusStruct = _loanRequestListStruct.loanRequestToPawnShopPackageMapping[_packageId];
         require(statusStruct.isInit == false);
         statusStruct.isInit = true;
         statusStruct.status = LoanRequestStatus.PENDING;
@@ -433,19 +309,13 @@ library CollateralLib {
         uint256 _packageId,
         CollateralAsLoanRequestListStruct storage _loanRequestListStruct
     ) internal {
-        delete _loanRequestListStruct.loanRequestToPawnShopPackageMapping[
-            _packageId
-        ];
+        delete _loanRequestListStruct.loanRequestToPawnShopPackageMapping[_packageId];
 
-        uint256 lastIndex = _loanRequestListStruct
-            .pawnShopPackageIdList
-            .length - 1;
+        uint256 lastIndex = _loanRequestListStruct.pawnShopPackageIdList.length - 1;
 
         for (uint256 i = 0; i <= lastIndex; i++) {
             if (_loanRequestListStruct.pawnShopPackageIdList[i] == _packageId) {
-                _loanRequestListStruct.pawnShopPackageIdList[
-                        i
-                    ] = _loanRequestListStruct.pawnShopPackageIdList[lastIndex];
+                _loanRequestListStruct.pawnShopPackageIdList[i] = _loanRequestListStruct.pawnShopPackageIdList[lastIndex];
                 break;
             }
         }
@@ -458,7 +328,11 @@ library CollateralLib {
         CollateralAsLoanRequestListStruct storage _loanRequestListStruct,
         CollateralStatus _requiredCollateralStatus,
         LoanRequestStatus _requiredLoanRequestStatus
-    ) internal view returns (LoanRequestStatusStruct storage _statusStruct) {
+    ) 
+        internal 
+        view 
+        returns (LoanRequestStatusStruct storage _statusStruct) 
+    {
         // Check for owner of packageId
         // _pawnShopPackage = pawnShopPackages[_packageId];
         require(_pawnShopPackage.status == PawnShopPackageStatus.ACTIVE, "0"); // pack
@@ -484,8 +358,8 @@ library OfferLib {
         uint256 _loanAmount,
         uint256 _duration,
         uint256 _interest,
-        uint256 _loanDurationType,
-        uint256 _repaymentCycleType,
+        uint8 _loanDurationType,
+        uint8 _repaymentCycleType,
         uint256 _liquidityThreshold
     ) internal {
         self.isInit = true;
@@ -513,8 +387,7 @@ library OfferLib {
         uint256 lastIndex = _collateralOfferList.offerIdList.length - 1;
         for (uint256 i = 0; i <= lastIndex; i++) {
             if (_collateralOfferList.offerIdList[i] == _id) {
-                _collateralOfferList.offerIdList[i] = _collateralOfferList
-                    .offerIdList[lastIndex];
+                _collateralOfferList.offerIdList[i] = _collateralOfferList.offerIdList[lastIndex];
                 break;
             }
         }

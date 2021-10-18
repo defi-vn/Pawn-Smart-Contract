@@ -68,7 +68,7 @@ task("balance", "Prints an account's balance")
     apiKey: BscScanApiKey
   },
   solidity: {
-    version: "0.8.7",
+    version: "0.8.9",
     settings: {
       optimizer: {
         enabled: true,
@@ -86,10 +86,10 @@ task("balance", "Prints an account's balance")
   contractSizer: {
     alphaSort: true,
     disambiguatePaths: true,
-    runOnCompile: true,
+    runOnCompile: false,
     strict: false,
+  },
+  mocha: {
+    timeout: 600000
   }
-  // mocha: {
-  //   timeout: 20000
-  // }
 };
