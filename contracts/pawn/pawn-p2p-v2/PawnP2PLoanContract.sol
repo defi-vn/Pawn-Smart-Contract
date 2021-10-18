@@ -140,6 +140,10 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
     }
 
     /** ================================ 3. PAYMENT REQUEST & REPAYMENT WORKLOWS ============================= */
+    event TestLateCount(
+        uint256 lateThreshold,
+        uint256 lateCount
+    );
 
     function closePaymentRequestAndStartNew(
         int256 _paymentRequestId,
@@ -242,6 +246,11 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 // Update late counter of contract
                 currentContract.lateCount += 1;
 
+                emit TestLateCount(
+                    currentContract.terms.lateThreshold, 
+                    currentContract.lateCount
+                );
+
                 // Check for late threshold reach
                 if (
                     currentContract.terms.lateThreshold <=
@@ -252,6 +261,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                         _contractId,
                         ContractLiquidedReasonType.LATE
                     );
+
                     return;
                 }
             } else {
@@ -531,7 +541,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
             (100 * ZOOM);
 
         uint256 total = valueOfRemainingLoan + valueOfRemainingRepayment;
-        bool valid = valueOfRemainingLoan + valueOfRemainingRepayment >
+        bool valid = valueOfRemainingLoan + valueOfRemainingRepayment >=
             valueOfCollateralLiquidationThreshold;
         emit TestLiquidationData(
             repaymentExchangeRate,
@@ -545,7 +555,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
             valid
         );
 
-        //        require(valid, "0"); // under-thres
+        require(valid, "0"); // under-thres
 
         // Execute: call internal liquidation
         _liquidationExecution(_contractId, ContractLiquidedReasonType.RISK);
