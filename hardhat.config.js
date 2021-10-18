@@ -61,7 +61,7 @@ task("balance", "Prints an account's balance")
       url: "https://bsc-dataseed.binance.org/",
       chainId: 56,
       gasPrice: 20000000000,
-      accounts: ["625389f69b81c00c031e3d4b04ae50b6cba40c34150befdd38609f0f52bb20b9"]
+      accounts: {mnemonic: mnemonic}
     }
   },
   etherscan: {
