@@ -94,7 +94,17 @@ contract Reputation is
         _rewardByReason[ReasonType.BR_ACCEPT_OFFER]      =  1;  // index: 11
         _rewardByReason[ReasonType.BR_CONTRACT_COMPLETE] =  5;  // index: 12
         _rewardByReason[ReasonType.BR_CONTRACT_DEFAULTED]= -5;  // index: 13
+        _rewardByReason[ReasonType.LD_REVIEWED_BY_BORROWER_1] = 1;  // index: 14
+        _rewardByReason[ReasonType.LD_REVIEWED_BY_BORROWER_2] = 2;  // index: 15
+        _rewardByReason[ReasonType.LD_REVIEWED_BY_BORROWER_3] = 3;  // index: 16
+        _rewardByReason[ReasonType.LD_REVIEWED_BY_BORROWER_4] = 4;  // index: 17
+        _rewardByReason[ReasonType.LD_REVIEWED_BY_BORROWER_5] = 5;  // index: 18
         _rewardByReason[ReasonType.LD_KYC]               =  5;  // index: 19
+        _rewardByReason[ReasonType.BR_REVIEWED_BY_LENDER_1] = 1;    // index: 20
+        _rewardByReason[ReasonType.BR_REVIEWED_BY_LENDER_2] = 2;    // index: 21
+        _rewardByReason[ReasonType.BR_REVIEWED_BY_LENDER_3] = 3;    // index: 22
+        _rewardByReason[ReasonType.BR_REVIEWED_BY_LENDER_4] = 4;    // index: 23
+        _rewardByReason[ReasonType.BR_REVIEWED_BY_LENDER_5] = 5;    // index: 24
     }
 
     function initializeRewardByReason() external onlyRole(DEFAULT_ADMIN_ROLE) {
