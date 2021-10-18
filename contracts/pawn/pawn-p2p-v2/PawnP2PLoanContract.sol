@@ -519,22 +519,27 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 _contract
             );
 
-        uint256 valueOfRemainingRepayment = (repaymentExchangeRate * remainingRepayment) / (ZOOM * 10**5);
+        uint256 valueOfRemainingRepayment = (repaymentExchangeRate *
+            remainingRepayment) / (ZOOM * 10**5);
 
-        uint256 valueOfRemainingLoan = (loanExchangeRate * remainingLoan) / (ZOOM * 10**5);
+        uint256 valueOfRemainingLoan = (loanExchangeRate * remainingLoan) /
+            (ZOOM * 10**5);
 
-        uint256 valueOfCollateralLiquidationThreshold = 
-            (_contract.terms.collateralAmount * _contract.terms.liquidityThreshold) /
+        uint256 valueOfCollateralLiquidationThreshold = (_contract
+            .terms
+            .collateralAmount * _contract.terms.liquidityThreshold) /
             (100 * ZOOM);
 
+        uint256 a = valueOfRemainingLoan + valueOfRemainingRepayment;
         emit TestLiquidationData(
-            repaymentExchangeRate, 
-            loanExchangeRate, 
-            remainingRepayment, 
-            remainingLoan, 
+            repaymentExchangeRate,
+            loanExchangeRate,
+            remainingRepayment,
+            remainingLoan,
             valueOfRemainingRepayment,
             valueOfRemainingLoan,
-            valueOfCollateralLiquidationThreshold
+            valueOfCollateralLiquidationThreshold,
+            a
         );
 
         // require(
@@ -554,7 +559,8 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
         uint256 remainingLoan,
         uint256 valueOfRemainingRepayment,
         uint256 valueOfRemainingLoan,
-        uint256 valueOfCollateralLiquidationThreshold
+        uint256 valueOfCollateralLiquidationThreshold,
+        uint256 a
     );
 
     function calculateRemainingLoanAndRepaymentFromContract(
@@ -780,28 +786,27 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
         address _repaymentAsset,
         address _owner,
         address _spender
-    ) 
-        external 
-        view 
-        override 
-        returns (
-            bool sufficientBalance,
-            bool overAllowance
-        )
+    )
+        external
+        view
+        override
+        returns (bool sufficientBalance, bool overAllowance)
     {
         (
-            , , ,
-            sufficientBalance, 
+            ,
+            ,
+            ,
+            sufficientBalance,
             overAllowance
         ) = checkLenderBallanceAndAllowance(
-                _collateralAddress,
-                _amount,
-                _loanToValue,
-                _loanToken,
-                _repaymentAsset,
-                _owner,
-                _spender
-            );
+            _collateralAddress,
+            _amount,
+            _loanToValue,
+            _loanToken,
+            _repaymentAsset,
+            _owner,
+            _spender
+        );
     }
 
     function checkLenderBallanceAndAllowance(
