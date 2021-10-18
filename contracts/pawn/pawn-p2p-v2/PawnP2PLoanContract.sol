@@ -531,7 +531,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
             (100 * ZOOM);
 
         uint256 total = valueOfRemainingLoan + valueOfRemainingRepayment;
-        bool valid = valueOfRemainingLoan + valueOfRemainingRepayment >
+        bool valid = valueOfRemainingLoan + valueOfRemainingRepayment >=
             valueOfCollateralLiquidationThreshold;
         emit TestLiquidationData(
             repaymentExchangeRate,
@@ -545,7 +545,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
             valid
         );
 
-        //        require(valid, "0"); // under-thres
+        require(valid, "0"); // under-thres
 
         // Execute: call internal liquidation
         _liquidationExecution(_contractId, ContractLiquidedReasonType.RISK);
