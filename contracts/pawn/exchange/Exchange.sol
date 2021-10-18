@@ -248,12 +248,10 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
 
         if (repaymentAsset == address(0)) {
             // get price in USD of BNB as repayment asset
-            rateRepaymentAsset = uint256(RateBNBwithUSD()) * 10**10;
+            rateRepaymentAsset = uint256(RateBNBwithUSD());
         } else {
             // get latest price in USD of crypto as repayment asset
-            rateRepaymentAsset =
-                uint256(getLatesPriceToUSD(repaymentAsset)) *
-                10**10;
+            rateRepaymentAsset = uint256(getLatesPriceToUSD(repaymentAsset));
         }
 
         // calculate exchange rate
@@ -261,7 +259,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             rateLoanAsset * 10**5,
             rateRepaymentAsset
         );
-        exchangeRate = xchange;
+        exchangeRate = xchange * 10**13;
     }
 
     // calculate Rate of LoanAsset with repaymentAsset
