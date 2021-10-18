@@ -259,7 +259,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             rateLoanAsset * 10**5,
             rateRepaymentAsset
         );
-        exchangeRate = xchange * 10**13;
+        exchangeRate = DivRound(xchange);
     }
 
     // calculate Rate of LoanAsset with repaymentAsset
@@ -634,6 +634,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             );
         }
 
+        // tempCollateralPerRepaymentTokenExchangeRate = priceRepaymentAsset / priceCollateralAsset
         (
             ,
             uint256 tempCollateralPerRepaymentTokenExchangeRate
@@ -644,6 +645,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
 
         _collateralPerRepaymentTokenExchangeRate = tempCollateralPerRepaymentTokenExchangeRate;
 
+        // tempCollateralPerLoanAssetExchangeRate = priceLoanAsset / priceCollateralAsset
         (, uint256 tempCollateralPerLoanAssetExchangeRate) = SafeMathUpgradeable
             .tryDiv(priceLoanAsset * 10**5, priceCollateralAsset);
 
@@ -778,5 +780,20 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             );
         }
         _repaymemtExchangeRate = uint256(priceRepayment) * 10**10;
+    }
+
+    function DivRound(uint256 a) private pure returns (uint256) {
+        // kiem tra so du khi chia 10**13. Neu lon hon 5 *10**12 khi chia xong thi lam tron len(+1) roi nhan lai voi 10**13
+        //con nho hon thi giua nguyen va nhan lai voi 10**13
+
+        uint256 tmp = a % 10**13;
+        uint256 tm;
+        if (tmp < 5 * 10**12) {
+            tm = a / 10**13;
+        } else {
+            tm = a / 10**13 + 1;
+        }
+        uint256 rouding = tm * 10**13;
+        return rouding;
     }
 }
