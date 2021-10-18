@@ -18,7 +18,7 @@ const lateThreshold     = PawnConfig.LateThreshold;
 const penaltyRate       = PawnConfig.PenaltyRate;
 const prepaidFeeRate    = PawnConfig.PrepaidFee;
 const systemFeeRate     = PawnConfig.SystemFee;
-const operator          = PawnConfig.EvaluationOperator;
+const operator          = PawnConfig.Operator;
 const feeWallet         = PawnConfig.FeeWallet;
 
 const decimals          = 10**18;
