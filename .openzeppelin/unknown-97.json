@@ -490,6 +490,11 @@
       "address": "0x7C8BAfa0CA8EfF673A35e872ff7023B3Abecae65",
       "txHash": "0xf3fad420d2525b5ebc83a7c2334d9f850096ad19fae250883cfa578d36bd949f",
       "kind": "uups"
+    },
+    {
+      "address": "0xbAEf8911C1473B640B9e7fE46dBb676B3Af6Aa81",
+      "txHash": "0x0ac6a7e09b98ce724d997d7b9c355e1f96e7307c9344ee521e73752ec211ed63",
+      "kind": "uups"
     }
   ],
   "impls": {
@@ -18020,6 +18025,342 @@
           },
           "t_mapping(t_address,t_bool)": {
             "label": "mapping(address => bool)"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "18e467e2cee1d5ca517b34a36cdc4a6cd027a7cdcc79db806460c735d966f689": {
+      "address": "0x61c3b92097642Bbb1b08075759138021586585e6",
+      "txHash": "0xed3ff8e32d7133e860ad3111e1f395d463b4ce381510f716a479a78f8e969dbe",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)43_storage)",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:63"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:219"
+          },
+          {
+            "contract": "Reputation",
+            "label": "_reputationScore",
+            "type": "t_mapping(t_address,t_uint32)",
+            "src": "contracts\\pawn\\reputation\\Reputation.sol:33"
+          },
+          {
+            "contract": "Reputation",
+            "label": "_rewardByReason",
+            "type": "t_mapping(t_enum(ReasonType)2429,t_int8)",
+            "src": "contracts\\pawn\\reputation\\Reputation.sol:35"
+          },
+          {
+            "contract": "Reputation",
+            "label": "whitelistedContractCaller",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "contracts\\pawn\\reputation\\Reputation.sol:37"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_uint32)": {
+            "label": "mapping(address => uint32)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_mapping(t_enum(ReasonType)2429,t_int8)": {
+            "label": "mapping(enum IReputation.ReasonType => int8)"
+          },
+          "t_enum(ReasonType)2429": {
+            "label": "enum IReputation.ReasonType",
+            "members": [
+              "LD_CREATE_PACKAGE",
+              "LD_CANCEL_PACKAGE",
+              "LD_REOPEN_PACKAGE",
+              "LD_GENERATE_CONTRACT",
+              "LD_CREATE_OFFER",
+              "LD_CANCEL_OFFER",
+              "LD_ACCEPT_OFFER",
+              "BR_CREATE_COLLATERAL",
+              "BR_CANCEL_COLLATERAL",
+              "BR_ONTIME_PAYMENT",
+              "BR_LATE_PAYMENT",
+              "BR_ACCEPT_OFFER",
+              "BR_CONTRACT_COMPLETE",
+              "BR_CONTRACT_DEFAULTED",
+              "LD_REVIEWED_BY_BORROWER_1",
+              "LD_REVIEWED_BY_BORROWER_2",
+              "LD_REVIEWED_BY_BORROWER_3",
+              "LD_REVIEWED_BY_BORROWER_4",
+              "LD_REVIEWED_BY_BORROWER_5",
+              "LD_KYC",
+              "BR_REVIEWED_BY_LENDER_1",
+              "BR_REVIEWED_BY_LENDER_2",
+              "BR_REVIEWED_BY_LENDER_3",
+              "BR_REVIEWED_BY_LENDER_4",
+              "BR_REVIEWED_BY_LENDER_5",
+              "BR_KYC"
+            ]
+          },
+          "t_int8": {
+            "label": "int8"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)43_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(RoleData)43_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "052239bc5ad8f1af704f8bf38ec400b6a32920065a9bf8f87b67f6cb26aaae3a": {
+      "address": "0x6D6b8f829CB7D75d7F425415d8192f130a636743",
+      "txHash": "0x0329dfd34bb9dc930cfec8bab099ee89b9818f6865fee74abfd292a13c633b2d",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)89_storage)",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:63"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:219"
+          },
+          {
+            "contract": "Reputation",
+            "label": "_reputationScore",
+            "type": "t_mapping(t_address,t_uint32)",
+            "src": "contracts\\pawn\\reputation\\Reputation.sol:33"
+          },
+          {
+            "contract": "Reputation",
+            "label": "_rewardByReason",
+            "type": "t_mapping(t_enum(ReasonType)19444,t_int8)",
+            "src": "contracts\\pawn\\reputation\\Reputation.sol:35"
+          },
+          {
+            "contract": "Reputation",
+            "label": "whitelistedContractCaller",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "contracts\\pawn\\reputation\\Reputation.sol:37"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_uint32)": {
+            "label": "mapping(address => uint32)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_mapping(t_enum(ReasonType)19444,t_int8)": {
+            "label": "mapping(enum IReputation.ReasonType => int8)"
+          },
+          "t_enum(ReasonType)19444": {
+            "label": "enum IReputation.ReasonType",
+            "members": [
+              "LD_CREATE_PACKAGE",
+              "LD_CANCEL_PACKAGE",
+              "LD_REOPEN_PACKAGE",
+              "LD_GENERATE_CONTRACT",
+              "LD_CREATE_OFFER",
+              "LD_CANCEL_OFFER",
+              "LD_ACCEPT_OFFER",
+              "BR_CREATE_COLLATERAL",
+              "BR_CANCEL_COLLATERAL",
+              "BR_ONTIME_PAYMENT",
+              "BR_LATE_PAYMENT",
+              "BR_ACCEPT_OFFER",
+              "BR_CONTRACT_COMPLETE",
+              "BR_CONTRACT_DEFAULTED",
+              "LD_REVIEWED_BY_BORROWER_1",
+              "LD_REVIEWED_BY_BORROWER_2",
+              "LD_REVIEWED_BY_BORROWER_3",
+              "LD_REVIEWED_BY_BORROWER_4",
+              "LD_REVIEWED_BY_BORROWER_5",
+              "LD_KYC",
+              "BR_REVIEWED_BY_LENDER_1",
+              "BR_REVIEWED_BY_LENDER_2",
+              "BR_REVIEWED_BY_LENDER_3",
+              "BR_REVIEWED_BY_LENDER_4",
+              "BR_REVIEWED_BY_LENDER_5",
+              "BR_KYC"
+            ]
+          },
+          "t_int8": {
+            "label": "int8"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)89_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(RoleData)89_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_uint256": {
+            "label": "uint256"
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
