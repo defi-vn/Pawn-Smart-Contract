@@ -640,7 +640,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             ,
             uint256 tempCollateralPerRepaymentTokenExchangeRate
         ) = SafeMathUpgradeable.tryDiv(
-                priceRepaymentAset * 10**5,
+                (priceRepaymentAset * 10**10),
                 priceCollateralAsset
             );
 
@@ -648,7 +648,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
 
         // tempCollateralPerLoanAssetExchangeRate = priceLoanAsset / priceCollateralAsset
         (, uint256 tempCollateralPerLoanAssetExchangeRate) = SafeMathUpgradeable
-            .tryDiv(priceLoanAsset * 10**5, priceCollateralAsset);
+            .tryDiv((priceLoanAsset * 10**10), priceCollateralAsset);
 
         _collateralPerLoanAssetExchangeRate = tempCollateralPerLoanAssetExchangeRate;
     }

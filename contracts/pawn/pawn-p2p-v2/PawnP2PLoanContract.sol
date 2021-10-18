@@ -519,23 +519,43 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 _contract
             );
 
-        uint256 valueOfRemainingRepayment = (repaymentExchangeRate * remainingRepayment) / ZOOM;
+        uint256 valueOfRemainingRepayment = (repaymentExchangeRate * remainingRepayment) / (ZOOM * 10**5);
 
-        uint256 valueOfRemainingLoan = (loanExchangeRate * remainingLoan) / ZOOM;
+        uint256 valueOfRemainingLoan = (loanExchangeRate * remainingLoan) / (ZOOM * 10**5);
 
         uint256 valueOfCollateralLiquidationThreshold = 
             (_contract.terms.collateralAmount * _contract.terms.liquidityThreshold) /
             (100 * ZOOM);
 
-        require(
-            valueOfRemainingLoan + valueOfRemainingRepayment >=
-                valueOfCollateralLiquidationThreshold,
-            "0"
-        ); // under-thres
+        emit TestLiquidationData(
+            repaymentExchangeRate, 
+            loanExchangeRate, 
+            remainingRepayment, 
+            remainingLoan, 
+            valueOfRemainingRepayment,
+            valueOfRemainingLoan,
+            valueOfCollateralLiquidationThreshold
+        );
+
+        // require(
+        //     valueOfRemainingLoan + valueOfRemainingRepayment >=
+        //         valueOfCollateralLiquidationThreshold,
+        //     "0"
+        // ); // under-thres
 
         // Execute: call internal liquidation
         _liquidationExecution(_contractId, ContractLiquidedReasonType.RISK);
     }
+
+    event TestLiquidationData(
+        uint256 repaymentExchangeRate,
+        uint256 loanExchangeRate,
+        uint256 remainingRepayment,
+        uint256 remainingLoan,
+        uint256 valueOfRemainingRepayment,
+        uint256 valueOfRemainingLoan,
+        uint256 valueOfCollateralLiquidationThreshold
+    );
 
     function calculateRemainingLoanAndRepaymentFromContract(
         uint256 _contractId,
