@@ -589,6 +589,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         _repaymemtExchangeRate = uint256(priceRepayment);
     }
 
+    // tinh ti gia cua repayment / collateralAsset  va   loanAsset / collateralAsset
     function collateralPerRepaymentAndLoanTokenExchangeRate(
         Contract memory _contract
     )
@@ -604,24 +605,30 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         uint256 priceCollateralAsset;
 
         if (_contract.terms.repaymentAsset == address(0)) {
+            // neu repaymentAsset la BNB
             priceRepaymentAset = uint256(RateBNBwithUSD());
         } else {
+            // neu la cac dong khac
             priceRepaymentAset = uint256(
                 getLatesPriceToUSD(_contract.terms.repaymentAsset)
             );
         }
 
         if (_contract.terms.loanAsset == address(0)) {
+            // neu dong loan asset la BNB
             priceLoanAsset = uint256(RateBNBwithUSD());
         } else {
+            // cac dong khac
             priceLoanAsset = uint256(
                 getLatesPriceToUSD(_contract.terms.loanAsset)
             );
         }
 
         if (_contract.terms.collateralAsset == address(0)) {
+            // neu collateralAsset la bnb
             priceCollateralAsset = uint256(RateBNBwithUSD());
         } else {
+            // la cac dong khac
             priceCollateralAsset = uint256(
                 getLatesPriceToUSD(_contract.terms.collateralAsset)
             );
