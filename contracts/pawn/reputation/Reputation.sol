@@ -94,6 +94,7 @@ contract Reputation is
         _rewardByReason[ReasonType.BR_ACCEPT_OFFER]      =  1;  // index: 11
         _rewardByReason[ReasonType.BR_CONTRACT_COMPLETE] =  5;  // index: 12
         _rewardByReason[ReasonType.BR_CONTRACT_DEFAULTED]= -5;  // index: 13
+        _rewardByReason[ReasonType.LD_KYC]               =  5;  // index: 19
     }
 
     function initializeRewardByReason() external onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -118,7 +119,7 @@ contract Reputation is
 
     modifier onlyWhitelistedContractCaller(address _from) {
         // Caller must be a contract
-        require(_from.isContract(), "DFY: Calling Reputation adjustment from a non-contract address");
+        // require(_from.isContract(), "DFY: Calling Reputation adjustment from a non-contract address");
 
         // Caller must be whitelisted
         require(whitelistedContractCaller[_from] == true, "DFY: Caller is not allowed");
@@ -130,7 +131,7 @@ contract Reputation is
     * @param _caller is the contract address being whitelisted=
     */
     function addWhitelistedContractCaller(address _caller) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        require(_caller.isContract(), "DFY: Setting reputation contract caller to a non-contract address");
+        // require(_caller.isContract(), "DFY: Setting reputation contract caller to a non-contract address");
         whitelistedContractCaller[_caller] = true;
     }
 

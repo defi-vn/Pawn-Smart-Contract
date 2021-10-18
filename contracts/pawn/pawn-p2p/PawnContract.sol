@@ -692,38 +692,6 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         );
     }
 
-    // function _submitCollateralToPackage(
-    //     uint256 _collateralId,
-    //     uint256 _packageId
-    // ) internal {
-    //     CollateralAsLoanRequestListStruct storage loanRequestListStruct = collateralAsLoanRequestMapping[_collateralId];
-    //     if (!loanRequestListStruct.isInit) {
-    //         loanRequestListStruct.isInit = true;
-    //     }
-
-    //     LoanRequestStatusStruct storage statusStruct = loanRequestListStruct.loanRequestToPawnShopPackageMapping[_packageId];
-    //     require(statusStruct.isInit == false);
-    //     statusStruct.isInit = true;
-    //     statusStruct.status = LoanRequestStatus.PENDING;
-    //     loanRequestListStruct.pawnShopPackageIdList.push(_packageId);
-    // }
-
-    // function _removeCollateralFromPackage (
-    //     uint256 _collateralId,
-    //     uint256 _packageId
-    // ) internal {
-    //     CollateralAsLoanRequestListStruct storage loanRequestListStruct = collateralAsLoanRequestMapping[_collateralId];
-    //     delete loanRequestListStruct.loanRequestToPawnShopPackageMapping[_packageId];
-
-    //     for (uint i = 0; i < loanRequestListStruct.pawnShopPackageIdList.length - 1; i++){
-    //         if (loanRequestListStruct.pawnShopPackageIdList[i] == _packageId) {
-    //             loanRequestListStruct.pawnShopPackageIdList[i] = loanRequestListStruct.pawnShopPackageIdList[loanRequestListStruct.pawnShopPackageIdList.length - 1];
-    //             break;
-    //         }
-    //     }
-    //     delete loanRequestListStruct.pawnShopPackageIdList[loanRequestListStruct.pawnShopPackageIdList.length - 1];
-    // }
-
     function verifyCollateralPackageData(
         uint256 _collateralId,
         uint256 _packageId,
@@ -935,13 +903,6 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             offer.owner,
             IReputation.ReasonType.LD_ACCEPT_OFFER
         );
-
-        // Generate first payment period
-        // pawnLoanContract.closePaymentRequestAndStartNew(
-        //     0,
-        //     contractId,
-        //     PaymentRequestTypeEnum.INTEREST
-        // );
     }
 
     /** ================================ 2. ACCEPT COLLATERAL (FOR PAWNSHOP PACKAGE WORKFLOWS) ============================= */
@@ -1067,9 +1028,6 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         (uint256 loanAmount, uint256 exchangeRate) = exchange
             .calculateLoanAmountAndExchangeRate(_collateral, _pawnShopPackage);
 
-        // uint loanAmount = 1000 * 10 ** 18;
-        // uint exchangeRate = 1 * 10 ** 18;
-
         // Prepare contract raw data
         ContractRawData memory contractData = ContractRawData(
             _collateralId,
@@ -1121,13 +1079,6 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             _pawnShopPackage.owner,
             IReputation.ReasonType.LD_GENERATE_CONTRACT
         );
-
-        //ki dau tien BEId = 0
-        // pawnLoanContract.closePaymentRequestAndStartNew(
-        //     0,
-        //     contractId,
-        //     PaymentRequestTypeEnum.INTEREST
-        // );
     }
 
     /** ================================ 3. PAYMENT REQUEST & REPAYMENT WORKLOWS ============================= */

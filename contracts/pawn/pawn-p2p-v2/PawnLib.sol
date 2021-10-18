@@ -19,7 +19,7 @@ struct Collateral {
 
 enum OfferStatus {PENDING, ACCEPTED, COMPLETED, CANCEL}
 struct CollateralOfferList {
-    mapping (uint256 => Offer) offerMapping;
+    mapping(uint256 => Offer) offerMapping;
     uint256[] offerIdList;
     bool isInit;
 }
@@ -66,7 +66,7 @@ struct LoanRequestStatusStruct {
     LoanRequestStatus status;
 }
 struct CollateralAsLoanRequestListStruct {
-    mapping (uint256 => LoanRequestStatusStruct) loanRequestToPawnShopPackageMapping; // Mapping from package to status
+    mapping(uint256 => LoanRequestStatusStruct) loanRequestToPawnShopPackageMapping; // Mapping from package to status
     uint256[] pawnShopPackageIdList;
     bool isInit;
 }

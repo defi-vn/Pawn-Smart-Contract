@@ -1,16 +1,16 @@
 require('@nomiclabs/hardhat-ethers');
 
 const hre = require('hardhat');
-const { PawnConfig } = require('./.deployment_data.json');
+// const { PawnConfig } = require('./.deployment_data_prelive.json');
 
-const ExchangeBuildName = "Exchange";
+const ExchangeBuildName = "contracts/pawn/exchange/Exchange.sol:Exchange";
 
 const proxyType = { kind: "uups" };
 
 const decimals      = 10**18;
 
 async function main() {
-    const [deployer, proxyAdmin] = await hre.ethers.getSigners();
+    const [deployer] = await hre.ethers.getSigners();
     
     console.log("============================================================\n\r");
     console.log("Deploying contracts with the account:", deployer.address);  
