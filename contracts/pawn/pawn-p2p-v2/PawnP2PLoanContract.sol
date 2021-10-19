@@ -233,7 +233,6 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 previousRequest.remainingPenalty > 0
             ) {
                 previousRequest.status = PaymentRequestStatusEnum.LATE;
-
                 // Adjust reputation score
                 reputation.adjustReputationScore(
                     currentContract.terms.borrower,
@@ -254,6 +253,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                     currentContract.lateCount
                 ) {
                     // Execute liquid
+                    emit PaymentRequestEvent(-1, _contractId, previousRequest);
                     _liquidationExecution(
                         _contractId,
                         ContractLiquidedReasonType.LATE
@@ -655,10 +655,13 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
             storage _paymentRequests = contractPaymentRequestMapping[
                 _contractId
             ];
-        PaymentRequest storage _lastPaymentRequest = _paymentRequests[
-            _paymentRequests.length - 1
-        ];
-        _lastPaymentRequest.status = PaymentRequestStatusEnum.DEFAULT;
+
+        if (_reasonType != ContractLiquidedReasonType.LATE) {
+            PaymentRequest storage _lastPaymentRequest = _paymentRequests[
+                _paymentRequests.length - 1
+            ];
+            _lastPaymentRequest.status = PaymentRequestStatusEnum.DEFAULT;
+        }
 
         // Update collateral status in Pawn contract
         // Collateral storage _collateral = collaterals[_contract.collateralId];
@@ -687,8 +690,8 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 _rateUpdatedTime,
                 _reasonType
             );
-        emit PaymentRequestEvent(-1, _contractId, _lastPaymentRequest);
 
+        // emit PaymentRequestEvent(-1, _contractId, _lastPaymentRequest);
         emit ContractLiquidedEvent(liquidationData);
 
         // Transfer to lender liquid amount
