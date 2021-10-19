@@ -182,12 +182,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 _timeStamp = PawnLib.calculatedueDateTimestampInterest(
                     currentContract.terms.repaymentCycleType
                 );
-                // _dueDateTimestamp = PawnLib.add(
-                //     previousRequest.dueDateTimestamp,
-                //     PawnLib.calculatedueDateTimestampInterest(
-                //         currentContract.terms.repaymentCycleType
-                //     )
-                // );
+
                 _nextPhraseInterest = exchange.calculateInterest(
                     _remainingLoan,
                     currentContract
@@ -197,12 +192,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 _timeStamp = PawnLib.calculatedueDateTimestampPenalty(
                     currentContract.terms.repaymentCycleType
                 );
-                // _dueDateTimestamp = PawnLib.add(
-                //     previousRequest.dueDateTimestamp,
-                //     PawnLib.calculatedueDateTimestampPenalty(
-                //         currentContract.terms.repaymentCycleType
-                //     )
-                // );
+
                 _nextPhraseInterest = 0;
             }
 
@@ -223,7 +213,8 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
             require(
                 _dueDateTimestamp <= currentContract.terms.contractEndDate,
                 "2"
-            ); // contr-end
+            ); 
+            // contr-end
             // require(_dueDateTimestamp > previousRequest.dueDateTimestamp || _dueDateTimestamp == 0, '3'); // less-th-prev
 
             // update previous
@@ -254,6 +245,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 ) {
                     // Execute liquid
                     emit PaymentRequestEvent(-1, _contractId, previousRequest);
+                    
                     _liquidationExecution(
                         _contractId,
                         ContractLiquidedReasonType.LATE
@@ -308,39 +300,14 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                     currentContract.terms.repaymentCycleType
                 )
             );
-            // _dueDateTimestamp = PawnLib.add(
-            //     block.timestamp,
-            //     PawnLib.calculatedueDateTimestampInterest(
-            //         currentContract.terms.repaymentCycleType
-            //     )
-            // );
 
             require(_success, "safe-math");
 
-            if (
-                currentContract.terms.repaymentCycleType ==
-                LoanDurationType.WEEK
-            ) {
-                if (
-                    currentContract.terms.contractEndDate -
-                        currentContract.terms.contractStartDate ==
-                    600
-                ) {
-                    _chargePrepaidFee = false;
-                } else {
-                    _chargePrepaidFee = true;
-                }
-            } else {
-                if (
-                    currentContract.terms.contractEndDate -
-                        currentContract.terms.contractStartDate ==
-                    900
-                ) {
-                    _chargePrepaidFee = false;
-                } else {
-                    _chargePrepaidFee = true;
-                }
-            }
+            _chargePrepaidFee = PawnLib.isPrepaidChargeRequired(
+                currentContract.terms.repaymentCycleType,
+                currentContract.terms.contractStartDate,
+                currentContract.terms.contractEndDate
+            );
 
             // Validate: Due date timestamp of next payment request must not over contract due date
             require(

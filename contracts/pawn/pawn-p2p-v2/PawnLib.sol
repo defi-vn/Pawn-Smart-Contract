@@ -217,6 +217,31 @@ library PawnLib {
         }
     }
 
+    function isPrepaidChargeRequired(
+        LoanDurationType durationType,
+        uint256 startDate,
+        uint256 endDate
+    ) internal pure returns (bool) {
+        uint256 week = 600; // define week duration
+        uint256 month = 900; // define month duration
+        
+        if(durationType == LoanDurationType.WEEK) {
+            // if loan contract only lasts one week
+            if((endDate - startDate) == week) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            // if loan contract only lasts one month
+            if((endDate - startDate) == month) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
     function calculatedueDateTimestampInterest(LoanDurationType durationType)
         internal
         pure
