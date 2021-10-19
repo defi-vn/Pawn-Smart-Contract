@@ -203,17 +203,21 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
 
             require(_success, "safe-math");
 
-            if (_dueDateTimestamp >= currentContract.terms.contractEndDate) {
-                _chargePrepaidFee = false;
-            } else {
-                _chargePrepaidFee = true;
-            }
-
+            // if (_dueDateTimestamp >= currentContract.terms.contractEndDate) {
+            //     _chargePrepaidFee = false;
+            // } else {
+            //     _chargePrepaidFee = true;
+            // }
+            _chargePrepaidFee = PawnLib.isPrepaidChargeRequired(
+                currentContract.terms.repaymentCycleType,
+                previousRequest.dueDateTimestamp,
+                currentContract.terms.contractEndDate
+            );
             // Validate: Due date timestamp of next payment request must not over contract due date
             require(
                 _dueDateTimestamp <= currentContract.terms.contractEndDate,
                 "2"
-            ); 
+            );
             // contr-end
             // require(_dueDateTimestamp > previousRequest.dueDateTimestamp || _dueDateTimestamp == 0, '3'); // less-th-prev
 
@@ -245,7 +249,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 ) {
                     // Execute liquid
                     emit PaymentRequestEvent(-1, _contractId, previousRequest);
-                    
+
                     _liquidationExecution(
                         _contractId,
                         ContractLiquidedReasonType.LATE
