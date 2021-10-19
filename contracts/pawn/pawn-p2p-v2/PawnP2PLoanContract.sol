@@ -140,10 +140,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
     }
 
     /** ================================ 3. PAYMENT REQUEST & REPAYMENT WORKLOWS ============================= */
-    event TestLateCount(
-        uint256 lateThreshold,
-        uint256 lateCount
-    );
+    event TestLateCount(uint256 lateThreshold, uint256 lateCount);
 
     function closePaymentRequestAndStartNew(
         int256 _paymentRequestId,
@@ -247,7 +244,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 currentContract.lateCount += 1;
 
                 emit TestLateCount(
-                    currentContract.terms.lateThreshold, 
+                    currentContract.terms.lateThreshold,
                     currentContract.lateCount
                 );
 
@@ -690,10 +687,9 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 _rateUpdatedTime,
                 _reasonType
             );
+        emit PaymentRequestEvent(-1, _contractId, _lastPaymentRequest);
 
         emit ContractLiquidedEvent(liquidationData);
-
-        emit PaymentRequestEvent(-1, _contractId, _lastPaymentRequest);
 
         // Transfer to lender liquid amount
         PawnLib.safeTransfer(
