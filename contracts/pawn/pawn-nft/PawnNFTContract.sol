@@ -19,7 +19,7 @@ import "../nft/IDFY_Physical_NFTs.sol";
 import "../evaluation/EvaluationContract.sol";
 import "../evaluation/IBEP20.sol";
 import "../reputation/IReputation.sol";
-import "../exchange/Exchange.sol";
+import "../exchange/ExchangeNFT.sol";
 
 contract PawnNFTContract is
     IPawnNFT,
@@ -1280,12 +1280,12 @@ contract PawnNFTContract is
         reputation = IReputation(_reputationAddress);
     }
 
-    Exchange public exchange;
+    ExchangeNFT public exchange;
 
     function setExchangeContract(address _exchangeAddress)
         external
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
-        exchange = Exchange(_exchangeAddress);
+        exchange = ExchangeNFT(_exchangeAddress);
     }
 }
