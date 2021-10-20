@@ -14,14 +14,16 @@ async function main() {
     const RepuFactory   = await hre.ethers.getContractFactory(RepuBuildName);
     const RepuArtifact  = await hre.artifacts.readArtifact(RepuBuildName);
 
-    const RepuContract   = await hre.upgrades.deployProxy(RepuFactory, proxyType ?? "");
+    const RepuContract  = await hre.upgrades.deployProxy(RepuFactory, proxyType);
     
     await RepuContract.deployed();
-  
-    console.log(`${RepuArtifact.contractName} proxy address: ${RepuContract.address}`);
+
+    console.log(`REPUTATION_CONTRACT_ADDRESS: ${RepuContract.address}`);
 
     const implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(RepuContract.address);
-    console.log(`Implementation Address: ${implementationAddress}`);
+    console.log(`${RepuArtifact.contractName} implementation address: ${implementationAddress}`);
+    
+    console.log("============================================================\n\r");
 }
   
 main()
