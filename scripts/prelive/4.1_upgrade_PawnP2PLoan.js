@@ -1,7 +1,7 @@
 const hre = require('hardhat');
 
-const { Proxies } = require('./.deployment_data.json');
-const proxies = Proxies.Beta;
+const { Proxies } = require('./.deployment_data_prelive.json');
+const proxies = Proxies.Prelive;
 
 const LoanProxyAddr     = proxies.PAWN_P2PLOAN_CONTRACT_ADDRESS;
 const LoanBuildName     = "contracts/pawn/pawn-p2p-v2/PawnP2PLoanContract.sol:PawnP2PLoanContract";

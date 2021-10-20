@@ -8,9 +8,9 @@ const RepuProxyAddr     = proxies.REPUTATION_CONTRACT_ADDRESS;
 const PawnP2PProxyAddr  = proxies.PAWN_CONTRACT_ADDRESS;
 const LoanP2PProxyAddr  = proxies.PAWN_P2PLOAN_CONTRACT_ADDRESS;
 const PawnNFTProxyAddr  = proxies.PAWN_NFT_CONTRACT_ADDRESS;
-const LoanNFTProxyAddr  = proxies.PAWN_NFPLOAN_CONTRACT_ADDRESS;
+// const LoanNFTProxyAddr  = proxies.PAWN_NFPLOAN_CONTRACT_ADDRESS;
 
-const RepuBuildName     = "contracts/reputation/v102/Reputation.sol:Reputation"
+const RepuBuildName     = "contracts/pawn/reputation/Reputation.sol:Reputation"
 
 const decimals           = 10**18;
 

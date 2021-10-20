@@ -41,128 +41,66 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         ListCryptoExchange[_cryptoAddress] = _latestPriceAddress;
     }
 
+    function getLatestRoundData(AggregatorV3Interface getPriceToUSD)
+        internal
+        view
+        returns (uint256, uint256)
+    {
+        (, int256 _price, , uint256 _timeStamp, ) = getPriceToUSD
+            .latestRoundData();
+
+        require(_price > 0, "Negative or zero rate");
+
+        return (uint256(_price), _timeStamp);
+    }
+
     // lay gia cua dong BNB
-    function RateBNBwithUSD() internal view returns (int256 price) {
+    function RateBNBwithUSD() internal view returns (uint256 price) {
         AggregatorV3Interface getPriceToUSD = AggregatorV3Interface(
             0x2514895c72f50D8bd4B4F9b1110F0D6bD2c97526
         );
-        (, price, , , ) = getPriceToUSD.latestRoundData();
+
+        (price, ) = getLatestRoundData(getPriceToUSD);
     }
 
     // lay ti gia dong BNB + timestamp
     function RateBNBwithUSDAttimestamp()
         internal
         view
-        returns (int256 price, uint256 timeStamp)
+        returns (uint256 price, uint256 timeStamp)
     {
         AggregatorV3Interface getPriceToUSD = AggregatorV3Interface(
             0x2514895c72f50D8bd4B4F9b1110F0D6bD2c97526
         );
-        (, price, , timeStamp, ) = getPriceToUSD.latestRoundData();
+
+        (price, timeStamp) = getLatestRoundData(getPriceToUSD);
     }
 
     // lay gia cua cac crypto va token khac da duoc them vao ListcryptoExchange
     function getLatesPriceToUSD(address _adcrypto)
         internal
         view
-        returns (int256 price)
+        returns (uint256 price)
     {
         AggregatorV3Interface priceFeed = AggregatorV3Interface(
             ListCryptoExchange[_adcrypto]
         );
-        (, price, , , ) = priceFeed.latestRoundData();
+
+        (price, ) = getLatestRoundData(priceFeed);
     }
 
     // lay ti gia va timestamp cua cac crypto va token da duoc them vao ListcryptoExchange
     function getRateAndTimestamp(address _adcrypto)
         internal
         view
-        returns (int256 price, uint256 timeStamp)
+        returns (uint256 price, uint256 timeStamp)
     {
         AggregatorV3Interface priceFeed = AggregatorV3Interface(
             ListCryptoExchange[_adcrypto]
         );
-        (, price, , timeStamp, ) = priceFeed.latestRoundData();
+
+        (price, timeStamp) = getLatestRoundData(priceFeed);
     }
-
-    // loanAmount= (CollateralAsset * amount * loanToValue) / RateLoanAsset
-    // exchangeRate = RateLoanAsset / RateRepaymentAsset
-    // function calculateLoanAmountAndExchangeRate(
-    //     Collateral memory _col,
-    //     PawnShopPackage memory _pkg
-    // ) external view returns (uint256 loanAmount, uint256 exchangeRate) {
-    //     uint256 collateralToUSD;
-    //     uint256 rateLoanAsset;
-    //     uint256 rateRepaymentAsset;
-
-    //     if (_col.collateralAddress == address(0)) {
-    //         // If collateral address is address(0), check BNB exchange rate with USD
-    //         // collateralToUSD = (uint256(RateBNBwithUSD()) * 10**10 * _pkg.loanToValue * _col.amount) / 100;
-    //         (, uint256 _ltvAmount) = SafeMathUpgradeable.tryMul(
-    //             _pkg.loanToValue,
-    //             _col.amount
-    //         );
-    //         (, uint256 _collRate) = SafeMathUpgradeable.tryMul(
-    //             _ltvAmount,
-    //             uint256(RateBNBwithUSD())
-    //         );
-    //         (, uint256 _collToUSD) = SafeMathUpgradeable.tryDiv(
-    //             _collRate,
-    //             (100 * 10**5)
-    //         );
-
-    //         collateralToUSD = _collToUSD;
-    //     } else {
-    //         // If collateral address is not BNB, get latest price in USD of collateral crypto
-    //         // collateralToUSD = (uint256(getLatesPriceToUSD(_col.collateralAddress)) * 10**10 * _pkg.loanToValue * _col.amount) / 100;
-    //         (, uint256 _ltvAmount) = SafeMathUpgradeable.tryMul(
-    //             _pkg.loanToValue,
-    //             _col.amount
-    //         );
-    //         (, uint256 _collRate) = SafeMathUpgradeable.tryMul(
-    //             _ltvAmount,
-    //             uint256(getLatesPriceToUSD(_col.collateralAddress))
-    //         );
-    //         (, uint256 _collToUSD) = SafeMathUpgradeable.tryDiv(
-    //             _collRate,
-    //             (100 * 10**5)
-    //         );
-
-    //         collateralToUSD = _collToUSD;
-    //     }
-
-    //     if (_col.loanAsset == address(0)) {
-    //         // get price of BNB in USD
-    //         rateLoanAsset = uint256(RateBNBwithUSD());
-    //     } else {
-    //         // get price in USD of crypto as loan asset
-    //         rateLoanAsset = uint256(getLatesPriceToUSD(_col.loanAsset));
-    //     }
-
-    //     // Calculate Loan amount
-    //     (, uint256 _loanAmount) = SafeMathUpgradeable.tryDiv(
-    //         collateralToUSD,
-    //         rateLoanAsset
-    //     );
-    //     loanAmount = _loanAmount;
-
-    //     if (_pkg.repaymentAsset == address(0)) {
-    //         // get price in USD of BNB as repayment asset
-    //         rateRepaymentAsset = uint256(RateBNBwithUSD());
-    //     } else {
-    //         // get latest price in USD of crypto as repayment asset
-    //         rateRepaymentAsset = uint256(
-    //             getLatesPriceToUSD(_pkg.repaymentAsset)
-    //         );
-    //     }
-
-    //     // calculate exchange rate
-    //     (, uint256 _exchange) = SafeMathUpgradeable.tryDiv(
-    //         rateLoanAsset,
-    //         rateRepaymentAsset
-    //     );
-    //     exchangeRate = _exchange;
-    // }
 
     function calculateLoanAmountAndExchangeRate(
         Collateral memory _col,
@@ -220,7 +158,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             );
             (, uint256 collRate) = SafeMathUpgradeable.tryMul(
                 ltvAmount,
-                uint256(getLatesPriceToUSD(collateralAddress))
+                getLatesPriceToUSD(collateralAddress)
             );
             (, uint256 collToUSD) = SafeMathUpgradeable.tryDiv(
                 collRate,
@@ -232,10 +170,10 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
 
         if (loanAsset == address(0)) {
             // get price of BNB in USD
-            rateLoanAsset = uint256(RateBNBwithUSD());
+            rateLoanAsset = RateBNBwithUSD();
         } else {
             // get price in USD of crypto as loan asset
-            rateLoanAsset = uint256(getLatesPriceToUSD(loanAsset));
+            rateLoanAsset = getLatesPriceToUSD(loanAsset);
         }
 
         (, uint256 lAmount) = SafeMathUpgradeable.tryDiv(
@@ -248,10 +186,10 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
 
         if (repaymentAsset == address(0)) {
             // get price in USD of BNB as repayment asset
-            rateRepaymentAsset = uint256(RateBNBwithUSD());
+            rateRepaymentAsset = RateBNBwithUSD();
         } else {
             // get latest price in USD of crypto as repayment asset
-            rateRepaymentAsset = uint256(getLatesPriceToUSD(repaymentAsset));
+            rateRepaymentAsset = getLatesPriceToUSD(repaymentAsset);
         }
 
         // calculate exchange rate
@@ -272,15 +210,15 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         if (_adLoanAsset == address(0)) {
             // if LoanAsset is address(0) , check BNB exchange rate with BNB
             (, uint256 exRate) = SafeMathUpgradeable.tryDiv(
-                uint256(RateBNBwithUSD()),
-                uint256(getLatesPriceToUSD(_adRepayment))
+                RateBNBwithUSD(),
+                getLatesPriceToUSD(_adRepayment)
             );
             exchangeRateOfOffer = exRate;
         } else {
             // all LoanAsset and repaymentAsset are crypto or token is different BNB
             (, uint256 exRate) = SafeMathUpgradeable.tryDiv(
-                uint256(getLatesPriceToUSD(_adLoanAsset) * 10**5),
-                uint256(getLatesPriceToUSD(_adRepayment))
+                (getLatesPriceToUSD(_adLoanAsset) * 10**5),
+                getLatesPriceToUSD(_adRepayment)
             );
             exchangeRateOfOffer = exRate;
         }
@@ -308,7 +246,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             );
             (, uint256 interestRate) = SafeMathUpgradeable.tryMul(
                 interestToAmount,
-                uint256(RateBNBwithUSD())
+                RateBNBwithUSD()
             );
             (, uint256 itrestRate) = SafeMathUpgradeable.tryDiv(
                 interestRate,
@@ -324,7 +262,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             );
             (, uint256 interestRate) = SafeMathUpgradeable.tryMul(
                 interestToAmount,
-                uint256(getLatesPriceToUSD(_contract.terms.loanAsset))
+                getLatesPriceToUSD(_contract.terms.loanAsset)
             );
             (, uint256 itrestRate) = SafeMathUpgradeable.tryDiv(
                 interestRate,
@@ -354,11 +292,11 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         // tinh Rate cua dong repayment
         if (_contract.terms.repaymentAsset == address(0)) {
             // neu dong tra la BNB
-            _repaymentAssetToUSD = uint256(RateBNBwithUSD());
+            _repaymentAssetToUSD = RateBNBwithUSD();
         } else {
             // neu dong tra kha BNB
-            _repaymentAssetToUSD = uint256(
-                getLatesPriceToUSD(_contract.terms.loanAsset)
+            _repaymentAssetToUSD = getLatesPriceToUSD(
+                _contract.terms.loanAsset
             );
         }
 
@@ -399,7 +337,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             );
             (, uint256 interestRate) = SafeMathUpgradeable.tryMul(
                 interestToAmount,
-                uint256(RateBNBwithUSD())
+                RateBNBwithUSD()
             );
             (, uint256 itrestRate) = SafeMathUpgradeable.tryDiv(
                 interestRate,
@@ -415,7 +353,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             );
             (, uint256 interestRate) = SafeMathUpgradeable.tryMul(
                 interestToAmount,
-                uint256(getLatesPriceToUSD(_loanAsset))
+                getLatesPriceToUSD(_loanAsset)
             );
             (, uint256 itrestRate) = SafeMathUpgradeable.tryDiv(
                 interestRate,
@@ -436,10 +374,10 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         // tinh Rate cua dong repayment
         if (_repaymentAsset == address(0)) {
             // neu dong tra la BNB
-            _repaymentAssetToUSD = uint256(RateBNBwithUSD());
+            _repaymentAssetToUSD = RateBNBwithUSD();
         } else {
             // neu dong tra kha BNB
-            _repaymentAssetToUSD = uint256(getLatesPriceToUSD(_loanAsset));
+            _repaymentAssetToUSD = getLatesPriceToUSD(_loanAsset);
         }
 
         // tien lai theo moi kỳ tinh ra dong tra
@@ -497,8 +435,9 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         uint256 _penalty = _paymentrequest.remainingPenalty +
             _interestOfPenalty +
             penalty;
-        uint256 tempPenalty = _penalty / 10**13;
-        valuePenalty = tempPenalty * 10**13;
+        // uint256 tempPenalty = _penalty / 10**13;
+        // valuePenalty = tempPenalty * 10**13;
+        valuePenalty = DivRound(_penalty);
     }
 
     // ============================== test penalty===================================
@@ -558,36 +497,38 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             uint256 _rateUpdateTime
         )
     {
-        int256 priceCollateral;
-        int256 priceLoan;
-        int256 priceRepayment;
-
+        // Get exchange rate of collateral token
         if (_contract.terms.collateralAsset == address(0)) {
-            (priceCollateral, _rateUpdateTime) = RateBNBwithUSDAttimestamp();
+            (
+                _collateralExchangeRate,
+                _rateUpdateTime
+            ) = RateBNBwithUSDAttimestamp();
         } else {
-            (priceCollateral, _rateUpdateTime) = getRateAndTimestamp(
+            (_collateralExchangeRate, _rateUpdateTime) = getRateAndTimestamp(
                 _contract.terms.collateralAsset
             );
         }
-        _collateralExchangeRate = uint256(priceCollateral);
 
+        // Get exchange rate of loan token
         if (_contract.terms.loanAsset == address(0)) {
-            (priceLoan, _rateUpdateTime) = RateBNBwithUSDAttimestamp();
+            (_loanExchangeRate, _rateUpdateTime) = RateBNBwithUSDAttimestamp();
         } else {
-            (priceLoan, _rateUpdateTime) = getRateAndTimestamp(
+            (_loanExchangeRate, _rateUpdateTime) = getRateAndTimestamp(
                 _contract.terms.loanAsset
             );
         }
-        _loanExchangeRate = uint256(priceLoan);
 
+        // Get exchange rate of repayment token
         if (_contract.terms.repaymentAsset == address(0)) {
-            (priceRepayment, _rateUpdateTime) = RateBNBwithUSDAttimestamp();
+            (
+                _repaymemtExchangeRate,
+                _rateUpdateTime
+            ) = RateBNBwithUSDAttimestamp();
         } else {
-            (priceRepayment, _rateUpdateTime) = getRateAndTimestamp(
+            (_repaymemtExchangeRate, _rateUpdateTime) = getRateAndTimestamp(
                 _contract.terms.repaymentAsset
             );
         }
-        _repaymemtExchangeRate = uint256(priceRepayment);
     }
 
     // tinh ti gia cua repayment / collateralAsset  va   loanAsset / collateralAsset
@@ -607,185 +548,57 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
 
         if (_contract.terms.repaymentAsset == address(0)) {
             // neu repaymentAsset la BNB
-            priceRepaymentAset = uint256(RateBNBwithUSD());
+            priceRepaymentAset = RateBNBwithUSD();
         } else {
             // neu la cac dong khac
-            priceRepaymentAset = uint256(
-                getLatesPriceToUSD(_contract.terms.repaymentAsset)
+            priceRepaymentAset = getLatesPriceToUSD(
+                _contract.terms.repaymentAsset
             );
         }
 
         if (_contract.terms.loanAsset == address(0)) {
             // neu dong loan asset la BNB
-            priceLoanAsset = uint256(RateBNBwithUSD());
+            priceLoanAsset = RateBNBwithUSD();
         } else {
             // cac dong khac
-            priceLoanAsset = uint256(
-                getLatesPriceToUSD(_contract.terms.loanAsset)
-            );
+            priceLoanAsset = getLatesPriceToUSD(_contract.terms.loanAsset);
         }
 
         if (_contract.terms.collateralAsset == address(0)) {
             // neu collateralAsset la bnb
-            priceCollateralAsset = uint256(RateBNBwithUSD());
+            priceCollateralAsset = RateBNBwithUSD();
         } else {
             // la cac dong khac
-            priceCollateralAsset = uint256(
-                getLatesPriceToUSD(_contract.terms.collateralAsset)
+            priceCollateralAsset = getLatesPriceToUSD(
+                _contract.terms.collateralAsset
             );
         }
 
+        bool success;
         // tempCollateralPerRepaymentTokenExchangeRate = priceRepaymentAsset / priceCollateralAsset
         (
-            ,
-            uint256 tempCollateralPerRepaymentTokenExchangeRate
+            success,
+            _collateralPerRepaymentTokenExchangeRate
         ) = SafeMathUpgradeable.tryDiv(
-                (priceRepaymentAset * 10**10),
-                priceCollateralAsset
-            );
+            (priceRepaymentAset * 10**10),
+            priceCollateralAsset
+        );
+        require(success, "Safe math: division by zero");
 
-        _collateralPerRepaymentTokenExchangeRate = tempCollateralPerRepaymentTokenExchangeRate;
+        // _collateralPerRepaymentTokenExchangeRate = tempCollateralPerRepaymentTokenExchangeRate;
 
         // tempCollateralPerLoanAssetExchangeRate = priceLoanAsset / priceCollateralAsset
-        (, uint256 tempCollateralPerLoanAssetExchangeRate) = SafeMathUpgradeable
+        (success, _collateralPerLoanAssetExchangeRate) = SafeMathUpgradeable
             .tryDiv((priceLoanAsset * 10**10), priceCollateralAsset);
 
-        _collateralPerLoanAssetExchangeRate = tempCollateralPerLoanAssetExchangeRate;
-    }
+        require(success, "Safe math: division by zero");
 
-    // ======================================= NFT==========================
-
-    // tinh tien lai: interest = loanAmount * interestByLoanDurationType (interestByLoanDurationType = % lãi * số kì * loại kì / (365*100))
-    function calculateInterestNFT(IPawnNFT.Contract memory _contract)
-        external
-        view
-        returns (uint256 interest)
-    {
-        uint256 interestToUSD;
-        uint256 repaymentAssetToUSD;
-        uint256 _interestByLoanDurationType;
-
-        if (
-            _contract.terms.repaymentCycleType == IPawnNFT.LoanDurationType.WEEK
-        ) {
-            _interestByLoanDurationType =
-                (_contract.terms.interest * 7 * 10**5) /
-                (100 * 365);
-        } else {
-            _interestByLoanDurationType =
-                (_contract.terms.interest * 30 * 10**5) /
-                (100 * 365);
-        }
-
-        if (_contract.terms.loanAsset == address(0)) {
-            interestToUSD =
-                (uint256(Exchange.RateBNBwithUSD())) *
-                10**10 *
-                _contract.terms.loanAmount;
-        } else {
-            interestToUSD =
-                (
-                    uint256(
-                        Exchange.getLatesPriceToUSD(_contract.terms.loanAsset)
-                    )
-                ) *
-                10**10 *
-                _contract.terms.loanAmount;
-        }
-
-        if (_contract.terms.repaymentAsset == address(0)) {
-            repaymentAssetToUSD = (uint256(Exchange.RateBNBwithUSD())) * 10**10;
-        } else {
-            repaymentAssetToUSD =
-                (
-                    uint256(
-                        Exchange.getLatesPriceToUSD(
-                            _contract.terms.repaymentAsset
-                        )
-                    )
-                ) *
-                10**10;
-        }
-
-        interest =
-            (interestToUSD * _interestByLoanDurationType) /
-            (repaymentAssetToUSD * 10**5);
-    }
-
-    function calculatePenaltyNFT(
-        IPawnNFT.PaymentRequest memory _paymentrequest,
-        IPawnNFT.Contract memory _contract,
-        uint256 _penaltyRate
-    ) external pure returns (uint256 valuePenalty) {
-        uint256 _interestByLoanDurationType;
-        if (
-            _contract.terms.repaymentCycleType == IPawnNFT.LoanDurationType.WEEK
-        ) {
-            _interestByLoanDurationType =
-                (_contract.terms.interest * 7 * 10**5) /
-                (100 * 365);
-        } else {
-            _interestByLoanDurationType =
-                (_contract.terms.interest * 30 * 10**5) /
-                (100 * 365);
-        }
-
-        valuePenalty =
-            (_paymentrequest.remainingPenalty *
-                10**5 +
-                _paymentrequest.remainingPenalty *
-                _interestByLoanDurationType +
-                _paymentrequest.remainingInterest *
-                _penaltyRate) /
-            10**5;
-    }
-
-    function RateAndTimestampNFT(
-        IPawnNFT.Contract memory _contract,
-        address _token
-    )
-        external
-        view
-        returns (
-            uint256 _collateralExchangeRate,
-            uint256 _loanExchangeRate,
-            uint256 _repaymemtExchangeRate,
-            uint256 _rateUpdateTime
-        )
-    {
-        int256 priceCollateral;
-        int256 priceLoan;
-        int256 priceRepayment;
-
-        if (_token == address(0)) {
-            (priceCollateral, _rateUpdateTime) = RateBNBwithUSDAttimestamp();
-        } else {
-            (priceCollateral, _rateUpdateTime) = getRateAndTimestamp(_token);
-        }
-        _collateralExchangeRate = uint256(priceCollateral) * 10**10;
-
-        if (_contract.terms.loanAsset == address(0)) {
-            (priceLoan, _rateUpdateTime) = RateBNBwithUSDAttimestamp();
-        } else {
-            (priceLoan, _rateUpdateTime) = getRateAndTimestamp(
-                _contract.terms.loanAsset
-            );
-        }
-        _loanExchangeRate = uint256(priceLoan) * 10**10;
-
-        if (_contract.terms.repaymentAsset == address(0)) {
-            (priceRepayment, _rateUpdateTime) = RateBNBwithUSDAttimestamp();
-        } else {
-            (priceRepayment, _rateUpdateTime) = getRateAndTimestamp(
-                _contract.terms.repaymentAsset
-            );
-        }
-        _repaymemtExchangeRate = uint256(priceRepayment) * 10**10;
+        // _collateralPerLoanAssetExchangeRate = tempCollateralPerLoanAssetExchangeRate;
     }
 
     function DivRound(uint256 a) private pure returns (uint256) {
         // kiem tra so du khi chia 10**13. Neu lon hon 5 *10**12 khi chia xong thi lam tron len(+1) roi nhan lai voi 10**13
-        //con nho hon thi giua nguyen va nhan lai voi 10**13
+        //con nho hon thi giu nguyen va nhan lai voi 10**13
 
         uint256 tmp = a % 10**13;
         uint256 tm;

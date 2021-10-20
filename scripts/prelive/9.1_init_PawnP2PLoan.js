@@ -18,7 +18,7 @@ const lateThreshold     = PawnConfig.LateThreshold;
 const penaltyRate       = PawnConfig.PenaltyRate;
 const prepaidFeeRate    = PawnConfig.PrepaidFee;
 const systemFeeRate     = PawnConfig.SystemFee;
-const operator          = PawnConfig.EvaluationOperator;
+const operator          = PawnConfig.Operator;
 const feeWallet         = PawnConfig.FeeWallet;
 
 const decimals          = 10**18;
@@ -74,11 +74,7 @@ async function main() {
 
     console.log(`Setting Pawn contract address...`);
     await LoanContract.setPawnContract(PawnProxyAddr);
-    console.log(`Pawn contract set at address: ${PawnProxyAddr}`);
-    
-    // console.log(`Setting Pawn contract as operator...`);
-    // await LoanContract.setOperator(PawnProxyAddr);
-    // console.log(`Pawn contract as operator: ${PawnProxyAddr}\n\r`);
+    console.log(`Pawn contract set at address: ${PawnProxyAddr}\n\r`);
 
     console.log(`Setting Whitelisted collateral...`);
     for await (let token of Tokens) {

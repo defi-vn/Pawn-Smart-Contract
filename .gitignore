@@ -17,3 +17,5 @@ bin
 #.Env file
 .env
 
+#Remix compiler
+contracts/.deps

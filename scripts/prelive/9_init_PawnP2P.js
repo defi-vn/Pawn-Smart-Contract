@@ -2,8 +2,8 @@ require('@nomiclabs/hardhat-ethers');
 const hre = require('hardhat');
 const { PawnContract } = require('../test/Pawn.test');
 
-const { PawnConfig, Proxies, Tokens } = require('./.deployment_data.json');
-const proxies = Proxies.Beta;
+const { PawnConfig, Proxies, Tokens } = require('./.deployment_data_prelive.json');
+const proxies = Proxies.Prelive;
 
 const PawnProxyAddr     = proxies.PAWN_CONTRACT_ADDRESS;
 const PawnBuildName     = "contracts/pawn/pawn-p2p/PawnContract.sol:PawnContract";

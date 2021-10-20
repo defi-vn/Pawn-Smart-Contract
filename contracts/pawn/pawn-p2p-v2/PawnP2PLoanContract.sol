@@ -140,10 +140,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
     }
 
     /** ================================ 3. PAYMENT REQUEST & REPAYMENT WORKLOWS ============================= */
-    event TestLateCount(
-        uint256 lateThreshold,
-        uint256 lateCount
-    );
+    event TestLateCount(uint256 lateThreshold, uint256 lateCount);
 
     function closePaymentRequestAndStartNew(
         int256 _paymentRequestId,
@@ -185,12 +182,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 _timeStamp = PawnLib.calculatedueDateTimestampInterest(
                     currentContract.terms.repaymentCycleType
                 );
-                // _dueDateTimestamp = PawnLib.add(
-                //     previousRequest.dueDateTimestamp,
-                //     PawnLib.calculatedueDateTimestampInterest(
-                //         currentContract.terms.repaymentCycleType
-                //     )
-                // );
+
                 _nextPhraseInterest = exchange.calculateInterest(
                     _remainingLoan,
                     currentContract
@@ -200,12 +192,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 _timeStamp = PawnLib.calculatedueDateTimestampPenalty(
                     currentContract.terms.repaymentCycleType
                 );
-                // _dueDateTimestamp = PawnLib.add(
-                //     previousRequest.dueDateTimestamp,
-                //     PawnLib.calculatedueDateTimestampPenalty(
-                //         currentContract.terms.repaymentCycleType
-                //     )
-                // );
+
                 _nextPhraseInterest = 0;
             }
 
@@ -216,17 +203,22 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
 
             require(_success, "safe-math");
 
-            if (_dueDateTimestamp >= currentContract.terms.contractEndDate) {
-                _chargePrepaidFee = false;
-            } else {
-                _chargePrepaidFee = true;
-            }
-
+            // if (_dueDateTimestamp >= currentContract.terms.contractEndDate) {
+            //     _chargePrepaidFee = false;
+            // } else {
+            //     _chargePrepaidFee = true;
+            // }
+            _chargePrepaidFee = PawnLib.isPrepaidChargeRequired(
+                currentContract.terms.repaymentCycleType,
+                previousRequest.dueDateTimestamp,
+                currentContract.terms.contractEndDate
+            );
             // Validate: Due date timestamp of next payment request must not over contract due date
             require(
                 _dueDateTimestamp <= currentContract.terms.contractEndDate,
                 "2"
-            ); // contr-end
+            );
+            // contr-end
             // require(_dueDateTimestamp > previousRequest.dueDateTimestamp || _dueDateTimestamp == 0, '3'); // less-th-prev
 
             // update previous
@@ -236,7 +228,6 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 previousRequest.remainingPenalty > 0
             ) {
                 previousRequest.status = PaymentRequestStatusEnum.LATE;
-
                 // Adjust reputation score
                 reputation.adjustReputationScore(
                     currentContract.terms.borrower,
@@ -247,7 +238,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 currentContract.lateCount += 1;
 
                 emit TestLateCount(
-                    currentContract.terms.lateThreshold, 
+                    currentContract.terms.lateThreshold,
                     currentContract.lateCount
                 );
 
@@ -257,6 +248,8 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                     currentContract.lateCount
                 ) {
                     // Execute liquid
+                    emit PaymentRequestEvent(-1, _contractId, previousRequest);
+
                     _liquidationExecution(
                         _contractId,
                         ContractLiquidedReasonType.LATE
@@ -311,39 +304,14 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                     currentContract.terms.repaymentCycleType
                 )
             );
-            // _dueDateTimestamp = PawnLib.add(
-            //     block.timestamp,
-            //     PawnLib.calculatedueDateTimestampInterest(
-            //         currentContract.terms.repaymentCycleType
-            //     )
-            // );
 
             require(_success, "safe-math");
 
-            if (
-                currentContract.terms.repaymentCycleType ==
-                LoanDurationType.WEEK
-            ) {
-                if (
-                    currentContract.terms.contractEndDate -
-                        currentContract.terms.contractStartDate ==
-                    600
-                ) {
-                    _chargePrepaidFee = false;
-                } else {
-                    _chargePrepaidFee = true;
-                }
-            } else {
-                if (
-                    currentContract.terms.contractEndDate -
-                        currentContract.terms.contractStartDate ==
-                    900
-                ) {
-                    _chargePrepaidFee = false;
-                } else {
-                    _chargePrepaidFee = true;
-                }
-            }
+            _chargePrepaidFee = PawnLib.isPrepaidChargeRequired(
+                currentContract.terms.repaymentCycleType,
+                currentContract.terms.contractStartDate,
+                currentContract.terms.contractEndDate
+            );
 
             // Validate: Due date timestamp of next payment request must not over contract due date
             require(
@@ -658,10 +626,13 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
             storage _paymentRequests = contractPaymentRequestMapping[
                 _contractId
             ];
-        PaymentRequest storage _lastPaymentRequest = _paymentRequests[
-            _paymentRequests.length - 1
-        ];
-        _lastPaymentRequest.status = PaymentRequestStatusEnum.DEFAULT;
+
+        if (_reasonType != ContractLiquidedReasonType.LATE) {
+            PaymentRequest storage _lastPaymentRequest = _paymentRequests[
+                _paymentRequests.length - 1
+            ];
+            _lastPaymentRequest.status = PaymentRequestStatusEnum.DEFAULT;
+        }
 
         // Update collateral status in Pawn contract
         // Collateral storage _collateral = collaterals[_contract.collateralId];
@@ -691,9 +662,8 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 _reasonType
             );
 
+        // emit PaymentRequestEvent(-1, _contractId, _lastPaymentRequest);
         emit ContractLiquidedEvent(liquidationData);
-
-        emit PaymentRequestEvent(-1, _contractId, _lastPaymentRequest);
 
         // Transfer to lender liquid amount
         PawnLib.safeTransfer(

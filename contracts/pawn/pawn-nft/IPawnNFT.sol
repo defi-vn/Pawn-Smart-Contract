@@ -194,21 +194,24 @@ interface IPawnNFT {
         PaymentRequestStatusEnum status;
     }
 
-    struct ContractLiquidationData {
-        uint256 contractId;
-        uint256 liquidAmount;
-        uint256 systemFeeAmount;
-        uint256 collateralExchangeRate;
-        uint256 loanExchangeRate;
-        uint256 repaymentExchangeRate;
-        uint256 rateUpdateTime;
-        ContractLiquidedReasonType reasonType;
-    }
-
+    /**
+     * @dev End lend period settlement and generate invoice for next period
+     * @param _contractId is id contract
+     * @param _remainingLoan is remaining Loan of borrower
+     * @param _nextPhrasePenalty is next Phrase Penalty
+     * @param _nextPhraseInterest is token next Phrase Interest
+     * @param _dueDateTimestamp is due DateTimestamp
+     * @param _paymentRequestType is type of payment request
+     * @param _chargePrepaidFee is charge Prepaid Fee
+     */
     function closePaymentRequestAndStartNew(
-        int256 _paymentRequestId,
         uint256 _contractId,
-        PaymentRequestTypeEnum _paymentRequestType
+        uint256 _remainingLoan,
+        uint256 _nextPhrasePenalty,
+        uint256 _nextPhraseInterest,
+        uint256 _dueDateTimestamp,
+        PaymentRequestTypeEnum _paymentRequestType,
+        bool _chargePrepaidFee
     ) external;
 
     /**
@@ -227,9 +230,9 @@ interface IPawnNFT {
     ) external;
 
     function collateralRiskLiquidationExecution(
-        uint256 _contractId
-        //        uint256 _collateralPerRepaymentTokenExchangeRate,
-        //        uint256 _collateralPerLoanAssetExchangeRate
+        uint256 _contractId,
+        uint256 _collateralPerRepaymentTokenExchangeRate,
+        uint256 _collateralPerLoanAssetExchangeRate
     ) external;
 
     function lateLiquidationExecution(uint256 _contractId) external;
