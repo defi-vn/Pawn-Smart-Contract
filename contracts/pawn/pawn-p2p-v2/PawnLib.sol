@@ -410,6 +410,14 @@ library CollateralLib {
         }
     }
 
+    // function addCollateral(
+    //     uint256 _idContract,
+    //     uint256 _idCollateral,
+    //     uint256 _amount
+    // ) internal {
+
+    // }
+
     function checkCondition(
         Collateral storage self,
         uint256 _packageId,
