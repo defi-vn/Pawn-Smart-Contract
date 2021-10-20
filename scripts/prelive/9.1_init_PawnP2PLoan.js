@@ -74,11 +74,7 @@ async function main() {
 
     console.log(`Setting Pawn contract address...`);
     await LoanContract.setPawnContract(PawnProxyAddr);
-    console.log(`Pawn contract set at address: ${PawnProxyAddr}`);
-    
-    // console.log(`Setting Pawn contract as operator...`);
-    // await LoanContract.setOperator(PawnProxyAddr);
-    // console.log(`Pawn contract as operator: ${PawnProxyAddr}\n\r`);
+    console.log(`Pawn contract set at address: ${PawnProxyAddr}\n\r`);
 
     console.log(`Setting Whitelisted collateral...`);
     for await (let token of Tokens) {
