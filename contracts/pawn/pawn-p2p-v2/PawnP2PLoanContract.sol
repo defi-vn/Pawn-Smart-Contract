@@ -56,6 +56,14 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
 
     event LoanContractCompletedEvent(uint256 contractId);
 
+    /** ==================== Collateral related events ==================== */
+    event CollateralAmountIncreased(
+        uint256 contractId,
+        uint256 collateralId,
+        uint256 originalAmount,
+        uint256 addedAmount
+    );
+
     /** ==================== Initialization ==================== */
 
     /**
@@ -827,5 +835,41 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
         );
         // require(currentAllowance >= loanAmount, "5"); // allowance not enough
         overAllowance = (currentAllowance >= loanAmount);
+    }
+
+    function increaseCollateralAmount(
+        uint256 _contractId,
+        uint256 _collateralId,
+        address _collateralAddress,
+        uint256 _amount
+    ) external {
+        Contract storage _contract = contractMustActive(_contractId);
+        require(_collateralId == _contract.collateralId, "0"); // id collateral them vao phai trung voi id collateral truoc do
+        require(_collateralAddress == _contract.terms.collateralAsset, "1"); // collateral them vao phai giong voi collateral da them vao truoc do
+        require(_contract.terms.borrower == _msgSender(), "2"); // sender must be the borrower in loan contract
+
+        uint256 originalCollateralAmount = _contract.terms.collateralAmount;
+
+        PawnLib.safeTransfer(
+            _collateralAddress,
+            msg.sender,
+            address(this),
+            _amount
+        );
+
+        _contract.terms.collateralAmount += _amount;
+
+        emit CollateralAmountIncreased(
+            _contractId,
+            _collateralId,
+            originalCollateralAmount,
+            _amount
+        );
+
+        // Update collateral info from PawnContract
+        pawnContract.updateCollateralAmount(
+            _collateralId,
+            _contract.terms.collateralAmount
+        );
     }
 }

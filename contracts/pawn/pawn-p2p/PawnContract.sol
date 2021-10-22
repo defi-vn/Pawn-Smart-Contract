@@ -256,22 +256,20 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     ) internal {
         if (_pawnShopPackage.packageType == PawnShopPackageType.AUTO) {
             // Check if lender has enough balance and allowance for lending
-            (
-                bool sufficientBalance, 
-            ) = pawnLoanContract.checkLenderAccount(
-                    _collateral.collateralAddress,
-                    _collateral.amount,
-                    _pawnShopPackage.loanToValue,
-                    _pawnShopPackage.loanToken,
-                    _pawnShopPackage.repaymentAsset,
-                    _pawnShopPackage.owner,
-                    address(this)
-                );
-            
+            (bool sufficientBalance, ) = pawnLoanContract.checkLenderAccount(
+                _collateral.collateralAddress,
+                _collateral.amount,
+                _pawnShopPackage.loanToValue,
+                _pawnShopPackage.loanToken,
+                _pawnShopPackage.repaymentAsset,
+                _pawnShopPackage.owner,
+                address(this)
+            );
+
             // PawnLib.checkLenderAccount(loanAmount, pawnShopPackage.loanToken, pawnShopPackage.owner, address(this));
 
             // Lender has sufficient balance and allowance => process submitted collateral to contract
-            if(sufficientBalance) {
+            if (sufficientBalance) {
                 processLoanRequestToContract(_collateralId, _packageId);
             }
         }
@@ -324,22 +322,58 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         );
     }
 
-    function updateCollateralStatus(
-        uint256 _collateralId,
-        CollateralStatus _status
-    ) external override whenContractNotPaused {
+    function _isValidCaller() private view {
         require(
             _msgSender() == address(pawnLoanContract) ||
                 _msgSender() == operator ||
                 _msgSender() == admin,
-            "not-allow"
-        );
+            "0"
+        ); // caller not allowed
+    }
 
-        Collateral storage collateral = collaterals[_collateralId];
-        require(collateral.status == CollateralStatus.DOING, "invalid-col");
+    function _validateCollateral(uint256 _collateralId)
+        private
+        view
+        returns (Collateral storage collateral)
+    {
+        collateral = collaterals[_collateralId];
+        require(collateral.status == CollateralStatus.DOING, "1"); // invalid collateral
+    }
+
+    function updateCollateralStatus(
+        uint256 _collateralId,
+        CollateralStatus _status
+    ) external override whenContractNotPaused {
+        _isValidCaller();
+        Collateral storage collateral = _validateCollateral(_collateralId);
 
         collateral.status = _status;
     }
+
+    function updateCollateralAmount(uint256 _collateralId, uint256 _amount)
+        external
+        override
+        whenContractNotPaused
+    {
+        _isValidCaller();
+        Collateral storage collateral = _validateCollateral(_collateralId);
+
+        collateral.amount += _amount;
+    }
+
+    // function increaseCollateralAmount(
+    //     uint256 _contractId,
+    //     uint256 _collateralId,
+    //     uint256 _amount
+    // ) public {
+    //     // gọi collateral theo collateral id
+    //     Collateral storage _col = collaterals[_collateralId];
+    //     Contract storage _contract = Contracts[_contractId];
+    //     // kiểm tra collateral trong contract
+    //     // tăng amount => collateral.increase(_amount);
+    //     // transfer amount sang Loan Contract
+    //     // transfer thành công => Update collateral amount trong contract bên Loan
+    // }
 
     /** ========================= OFFER FUNCTIONS & STATES ============================= */
     uint256 public numberOffers;

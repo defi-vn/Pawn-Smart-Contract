@@ -13,4 +13,7 @@ interface IPawn {
         uint256 _collateralId,
         CollateralStatus _status
     ) external;
+
+    function updateCollateralAmount(uint256 _collateralId, uint256 _amount)
+        external;
 }
