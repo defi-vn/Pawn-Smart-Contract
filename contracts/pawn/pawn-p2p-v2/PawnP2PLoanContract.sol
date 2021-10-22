@@ -846,6 +846,7 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
         Contract storage _contract = contractMustActive(_contractId);
         require(_collateralId == _contract.collateralId, "0"); // id collateral them vao phai trung voi id collateral truoc do
         require(_collateralAddress == _contract.terms.collateralAsset, "1"); // collateral them vao phai giong voi collateral da them vao truoc do
+        require(_contract.terms.borrower == _msgSender(), "2"); // sender must be the borrower in loan contract
 
         uint256 originalCollateralAmount = _contract.terms.collateralAmount;
 
