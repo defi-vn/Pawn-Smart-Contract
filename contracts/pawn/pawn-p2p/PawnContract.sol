@@ -1655,4 +1655,17 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     function setPawnLoanContract(address _pawnLoanAddress) external onlyAdmin {
         pawnLoanContract = ILoan(_pawnLoanAddress);
     }
+
+    // User-reviews
+    function contractInfoForReview(uint256 _contractId) 
+        external 
+        override
+        returns (
+            address borrower,
+            address lender,
+            ContractStatus status
+        )
+    {
+        
+    }
 }
