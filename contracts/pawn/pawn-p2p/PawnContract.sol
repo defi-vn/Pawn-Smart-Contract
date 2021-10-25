@@ -462,20 +462,30 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         Collateral storage collateral = collaterals[_collateralId];
         Offer storage offer = collateralOfferList.offerMapping[_offerId];
 
-        offer.cancel(_offerId, collateral, collateralOfferList);
+        // offer.cancel(_offerId, collateral, collateralOfferList);
 
-        delete collateralOfferList.offerIdList[
-            collateralOfferList.offerIdList.length - 1
-        ];
+        // delete collateralOfferList.offerIdList[
+        //     collateralOfferList.offerIdList.length - 1
+        // ];
         // kiểm tra người gọi hàm -> rẽ nhánh event
         // neu nguoi goi la owner cua collateral  => reject offer.
 
         if (msg.sender == collateral.owner) {
+            offer.cancel(_offerId, collateral.owner, collateralOfferList);
+            
+            delete collateralOfferList.offerIdList[
+                collateralOfferList.offerIdList.length - 1
+            ];
             emit CancelOfferEvent(_offerId, _collateralId, offer.owner);
         }
 
         // neu nguoi goi la owner cua offer thi canel offer
         if (msg.sender == offer.owner) {
+            offer.cancel(_offerId, address(0), collateralOfferList);
+            
+            delete collateralOfferList.offerIdList[
+                collateralOfferList.offerIdList.length - 1
+            ];
             emit CancelOfferEvent(_offerId, _collateralId, msg.sender);
 
             // Adjust reputation score

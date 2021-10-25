@@ -470,12 +470,12 @@ library OfferLib {
     function cancel(
         Offer storage self,
         uint256 _id,
-        Collateral storage collateral,
+        address _collateralOwner,
         CollateralOfferList storage _collateralOfferList
     ) internal {
         require(self.isInit == true, "1"); // offer-col
         require(
-            self.owner == msg.sender || collateral.owner == msg.sender,
+            self.owner == msg.sender || (_collateralOwner != address(0) && _collateralOwner == msg.sender),
             "2"
         ); // owner
         require(self.status == OfferStatus.PENDING, "3"); // offer
