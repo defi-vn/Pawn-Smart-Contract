@@ -470,10 +470,14 @@ library OfferLib {
     function cancel(
         Offer storage self,
         uint256 _id,
+        address _collateralOwner,
         CollateralOfferList storage _collateralOfferList
     ) internal {
         require(self.isInit == true, "1"); // offer-col
-        require(self.owner == msg.sender, "2"); // owner
+        require(
+            self.owner == msg.sender || (_collateralOwner != address(0) && _collateralOwner == msg.sender),
+            "2"
+        ); // owner
         require(self.status == OfferStatus.PENDING, "3"); // offer
 
         delete _collateralOfferList.offerMapping[_id];
