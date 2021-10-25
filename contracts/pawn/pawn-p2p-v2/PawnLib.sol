@@ -197,24 +197,24 @@ library PawnLib {
         uint256 amount
     ) internal {
         if (asset == address(0)) {
-            require(from.balance >= amount, "balance");
+            require(from.balance >= amount, "0"); // balance
             // Handle BNB
             if (to == address(this)) {
                 // Send to this contract
             } else if (from == address(this)) {
                 // Send from this contract
                 (bool success, ) = to.call{value: amount}("");
-                require(success, "fail-trans-bnb");
+                require(success, "1"); //fail-trans-bnb
             } else {
                 // Send from other address to another address
-                require(false, "not-allow-transfer");
+                require(false, "2"); //not-allow-transfer
             }
         } else {
             // Handle ERC20
             uint256 prebalance = IERC20Upgradeable(asset).balanceOf(to);
             require(
                 IERC20Upgradeable(asset).balanceOf(from) >= amount,
-                "not-enough-balance"
+                "3" //not-enough-balance
             );
             if (from == address(this)) {
                 // transfer direct to to
@@ -223,13 +223,13 @@ library PawnLib {
                 require(
                     IERC20Upgradeable(asset).allowance(from, address(this)) >=
                         amount,
-                    "not-allowance"
+                    "4" //not-allowance
                 );
                 IERC20Upgradeable(asset).safeTransferFrom(from, to, amount);
             }
             require(
                 IERC20Upgradeable(asset).balanceOf(to) - amount == prebalance,
-                "not-trans-enough"
+                "5" //not-trans-enough
             );
         }
     }
@@ -409,6 +409,14 @@ library CollateralLib {
             }
         }
     }
+
+    // function addCollateral(
+    //     uint256 _idContract,
+    //     uint256 _idCollateral,
+    //     uint256 _amount
+    // ) internal {
+
+    // }
 
     function checkCondition(
         Collateral storage self,

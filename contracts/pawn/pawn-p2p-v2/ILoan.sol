@@ -3,33 +3,34 @@
 pragma solidity ^0.8.4;
 
 import "./IPawn.sol";
-import "./PawnLib.sol";
 
 interface ILoan is IPawnV2 {
-    function createContract(ContractRawData memory _contractData) 
-        external 
+    function createContract(ContractRawData memory _contractData)
+        external
         returns (uint256 _idx);
 
     function closePaymentRequestAndStartNew(
         int256 _paymentRequestId,
         uint256 _contractId,
         PaymentRequestTypeEnum _paymentRequestType
-    )
-        external;
+    ) external;
 
     function checkLenderAccount(
         address collateralAddress,
         uint256 amount,
         uint256 loanToValue,
         address loanToken,
-        address repaymentAsset, 
-        address owner, 
+        address repaymentAsset,
+        address owner,
         address spender
-    )
-        external 
+    ) external view returns (bool sufficientBalance, bool overAllowance);
+
+    function getContractInfoForReview(uint256 _contractId) 
+        external
         view
         returns (
-            bool sufficientBalance,
-            bool overAllowance
+            address borrower,
+            address lender,
+            ContractStatus status
         );
 }
