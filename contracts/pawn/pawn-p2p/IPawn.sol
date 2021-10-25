@@ -16,4 +16,13 @@ interface IPawn {
 
     function updateCollateralAmount(uint256 _collateralId, uint256 _amount)
         external;
+
+    function getContractInfoForReview(uint256 _contractId) 
+        external
+        view
+        returns (
+            address borrower,
+            address lender,
+            ContractStatus status
+        );
 }
