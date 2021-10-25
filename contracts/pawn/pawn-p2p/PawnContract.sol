@@ -361,20 +361,6 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         collateral.amount += _amount;
     }
 
-    // function increaseCollateralAmount(
-    //     uint256 _contractId,
-    //     uint256 _collateralId,
-    //     uint256 _amount
-    // ) public {
-    //     // gọi collateral theo collateral id
-    //     Collateral storage _col = collaterals[_collateralId];
-    //     Contract storage _contract = Contracts[_contractId];
-    //     // kiểm tra collateral trong contract
-    //     // tăng amount => collateral.increase(_amount);
-    //     // transfer amount sang Loan Contract
-    //     // transfer thành công => Update collateral amount trong contract bên Loan
-    // }
-
     /** ========================= OFFER FUNCTIONS & STATES ============================= */
     uint256 public numberOffers;
 
@@ -1688,5 +1674,22 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
     function setPawnLoanContract(address _pawnLoanAddress) external onlyAdmin {
         pawnLoanContract = ILoan(_pawnLoanAddress);
+    }
+
+    /** ==================== User-reviews related functions ==================== */
+    function getContractInfoForReview(uint256 _contractId) 
+        external 
+        override
+        view
+        returns (
+            address borrower,
+            address lender,
+            ContractStatus status
+        )
+    {
+        Contract storage _contract = contracts[_contractId];
+        borrower = _contract.terms.borrower;
+        lender = _contract.terms.lender;
+        status = _contract.status;
     }
 }
