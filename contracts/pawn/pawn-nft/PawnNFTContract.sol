@@ -1169,4 +1169,21 @@ contract PawnNFTContract is
     {
         reputation = IReputation(_reputationAddress);
     }
+
+    /** ==================== User-reviews related functions ==================== */
+    function getContractInfoForReview(uint256 _contractId) 
+        external 
+        override
+        view
+        returns (
+            address borrower,
+            address lender,
+            ContractStatus status
+        )
+    {
+        Contract storage _contract = contracts[_contractId];
+        borrower = _contract.terms.borrower;
+        lender = _contract.terms.lender;
+        status = _contract.status;
+    }
 }

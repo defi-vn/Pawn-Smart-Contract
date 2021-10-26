@@ -10,6 +10,7 @@ import "../reputation/IReputation.sol";
 import "../pawn-p2p/IPawn.sol";
 import "../pawn-p2p-v2/ILoan.sol";
 import "../pawn-p2p-v2/PawnLib.sol";
+import "../pawn-nft/IPawnNFT.sol";
 
 contract UserReview is
     Initializable,
@@ -24,10 +25,12 @@ contract UserReview is
     // mapping from reviewer address to pawn or loan contract address => contractId
     mapping(address => mapping(bytes32 => bool)) public _listOfContractReviewedByUser;
 
-    mapping(address => mapping(bytes32 => Review)) private _listOfReviewByUser;
+    mapping(address => mapping(bytes32 => Review)) public _listOfReviewByUser;
 
-    mapping(uint8 => IReputation.ReasonType) private _lenderReviewedByBorrower;
-    mapping(uint8 => IReputation.ReasonType) private _borrowerReviewedByLender;
+    mapping(uint8 => IReputation.ReasonType) public _lenderReviewedByBorrower;
+    mapping(uint8 => IReputation.ReasonType) public _borrowerReviewedByLender;
+
+    address public pawnNFTContract;
     
     struct Review {
         address reviewee;
@@ -41,7 +44,8 @@ contract UserReview is
         address reviewee,
         uint256 points,
         uint256 contractId,
-        address contractOrigin
+        address contractOrigin,
+        IReputation.ReasonType reason
     );
 
     /** ==================== Initialization ==================== */
@@ -50,21 +54,29 @@ contract UserReview is
     * @dev initialize function
     */
     function initialize(
-        address _pawnContract,
-        address _loanContract
-    ) internal initializer {
+        address _pawnContractAddress,
+        address _loanContractAddress,
+        address _pawnNFTContractAddress,
+        address _reputationContractAddress
+    ) public initializer {
         __AccessControl_init();
         __UUPSUpgradeable_init();
 
-        pawnContract = _pawnContract;
-        loanContract = _loanContract;
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+
+        pawnContract    = _pawnContractAddress;
+        loanContract    = _loanContractAddress;
+        pawnNFTContract = _pawnNFTContractAddress;
+        reputation      = IReputation(_reputationContractAddress);
+
+        _initializePointToRewardReason();
     }
 
-    function setReputationContract(address _reputationAddress)
+    function setReputationContract(address _reputationContractAddress)
         external
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
-        reputation = IReputation(_reputationAddress);
+        reputation = IReputation(_reputationContractAddress);
     }
 
     function setPawnContract(address _pawnContractAddress) 
@@ -79,6 +91,13 @@ contract UserReview is
         onlyRole(DEFAULT_ADMIN_ROLE) 
     {
         loanContract = _loanContractAddress;
+    }
+
+    function setPawnNFTContract(address _pawnNFTContractAddress) 
+        external 
+        onlyRole(DEFAULT_ADMIN_ROLE) 
+    {
+        pawnNFTContract = _pawnNFTContractAddress;
     }
 
     function initializePointToRewardReason() external onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -101,61 +120,110 @@ contract UserReview is
 
     /** ==================== User-reviews function implementations ==================== */
     
-    function submitUserReview(
+    function submitUserReviewCryptoContract(
         uint8 _points, 
         uint256 _contractId, 
         address _contractAddress
     ) external 
     {
-        require(_contractAddress == pawnContract || _contractAddress == loanContract, "0"); // invalid pawn or loan contract
+        require(
+            _contractAddress == pawnContract || 
+            _contractAddress == loanContract, 
+                "DFY: Invalid pawn or loan contract"
+        ); // invalid pawn or loan contract
 
         address borrower;
         address lender;
         ContractStatus status;
 
+        // Get contract data for review
         if(_contractAddress == pawnContract) {
             (borrower, lender, status) = IPawn(pawnContract).getContractInfoForReview(_contractId);
         } else if(_contractAddress == loanContract) {
             (borrower, lender, status) = ILoan(loanContract).getContractInfoForReview(_contractId);
         }
 
-        // Check contract status
-        require((status == ContractStatus.COMPLETED || status == ContractStatus.DEFAULT), "1"); // Contract must not active
+        // Check contract status, must be Completed or Default
+        require((status == ContractStatus.COMPLETED || status == ContractStatus.DEFAULT), "DFY: Crypto loan contract is active"); // Loan contract must not active
+        
+        _submitUserReview(
+            borrower,
+            lender,
+            _contractId,
+            _contractAddress,
+            _points
+        );
+    }
 
+    function submitUserReviewNFTContract(
+        uint8 _points, 
+        uint256 _contractId, 
+        address _contractAddress
+    ) external {
+        require(_contractAddress == pawnNFTContract, "DFY: Invalid pawn or loan contract"); // invalid Pawn NFT contract
+
+        (address borrower, address lender, IPawnNFT.ContractStatus status) = IPawnNFT(pawnNFTContract).getContractInfoForReview(_contractId);
+        
+        // Check contract status, must be Completed or Default
+        require((status == IPawnNFT.ContractStatus.COMPLETED || status == IPawnNFT.ContractStatus.DEFAULT), "DFY: NFT loan contract is active"); // Loan contract must not active
+
+        _submitUserReview(
+            borrower,
+            lender,
+            _contractId,
+            _contractAddress,
+            _points
+        );
+    }
+
+    function _submitUserReview(
+        address _borrower,
+        address _lender,
+        uint256 _contractId,
+        address _contractOrigin,
+        uint8 _points
+    ) internal {
         // Determine reviewer, reviewee, and reward reason
         address reviewer;
         address reviewee;
         IReputation.ReasonType rewardReason;
-        if(_msgSender() == borrower) {
-            reviewer = borrower;
-            reviewee = lender;
+        if(msg.sender == _borrower) {
+            reviewer = _borrower;
+            reviewee = _lender;
             rewardReason = IReputation.ReasonType(_lenderReviewedByBorrower[_points]);
-        } else if(_msgSender() == lender) {
-            reviewer = lender;
-            reviewee = borrower;
+        } else if(msg.sender == _lender) {
+            reviewer = _lender;
+            reviewee = _borrower;
             rewardReason = IReputation.ReasonType(_borrowerReviewedByLender[_points]);
         }
 
         // Check for invalid reviewer
-        require(reviewer != address(0), "2"); // Reviewer is undefined
+        require(reviewer != address(0), "DFY: Reviewer is not defined"); // Reviewer is undefined
 
         // Check if contract has been reviewed by reviewer
-        bytes32 key = keccak256(abi.encodePacked(_contractAddress, _contractId));
-        require(_listOfContractReviewedByUser[reviewer][key] == false, "3"); // Contract must not be reviewed by this user before
+        bytes32 key = keccak256(abi.encodePacked(_contractOrigin, _contractId));
+        require(_listOfContractReviewedByUser[reviewer][key] == false, "DFY: Contract must not be reviewed by this user"); // Contract must not be reviewed by this user before
 
         // Store review information
         _listOfReviewByUser[reviewer][key] = Review(
             reviewee,
             _contractId,
             _points,
-            _contractAddress
+            _contractOrigin
         );
         _listOfContractReviewedByUser[reviewer][key] = true;
 
         // Adjust reputation point of reviewee
         reputation.adjustReputationScore(reviewee, rewardReason);
         
-        emit UserReviewSubmitted(reviewer, reviewee, _points, _contractId, _contractAddress);
+        emit UserReviewSubmitted(
+            reviewer, 
+            reviewee, 
+            _points, 
+            _contractId, 
+            _contractOrigin,
+            rewardReason
+        );
     }
 
     function getReviewKey(uint _contractId, address _contractAddress) public pure returns (bytes32) {

@@ -238,4 +238,13 @@ interface IPawnNFT {
     function lateLiquidationExecution(uint256 _contractId) external;
 
     function notPaidFullAtEndContractLiquidation(uint256 _contractId) external;
+
+    function getContractInfoForReview(uint256 _contractId) 
+        external
+        view
+        returns (
+            address borrower,
+            address lender,
+            ContractStatus status
+        );
 }
