@@ -475,7 +475,7 @@ library OfferLib {
     ) internal {
         require(self.isInit == true, "1"); // offer-col
         require(
-            self.owner == msg.sender || (_collateralOwner != address(0) && _collateralOwner == msg.sender),
+            self.owner == msg.sender || _collateralOwner == msg.sender,
             "2"
         ); // owner
         require(self.status == OfferStatus.PENDING, "3"); // offer
