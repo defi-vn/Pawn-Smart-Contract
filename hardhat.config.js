@@ -5,7 +5,7 @@ require("@nomiclabs/hardhat-web3");
 require("@openzeppelin/hardhat-upgrades");
 require("hardhat-contract-sizer");
 
-const { InfuraKey, mnemonic, Wallet, BscScanApiKey, EtherscanApiKey } = require('./.secret.json');
+const { InfuraKey, mnemonic, Wallet, BscScanApiKey, EtherscanApiKey, PrivateKey } = require('./.secret.json');
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -54,7 +54,7 @@ task("balance", "Prints an account's balance")
       chainId: 97,
       gas: 8812388,
       // gasPrice: 20000000000,
-      accounts: {mnemonic: mnemonic},
+      accounts: PrivateKey,
       from: Wallet
     },
     mainnet: {
