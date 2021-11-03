@@ -55,7 +55,7 @@
             "EXCHANGE_CONTRACT_ADDRESS":        "0x2fb8d65a817f32E6334dAA25D8CFe5fdE2027e30",
             "PAWN_P2PLOAN_CONTRACT_ADDRESS":    "0x90C3764c2998b57E215704938EDA227a8466b3aA",
             "PAWN_NFPLOAN_CONTRACT_ADDRESS":    "",
-            "USERREVIEW_CONTRACT_ADDRESS":      ""          
+            "USERREVIEW_CONTRACT_ADDRESS":      ""
         }
     },
     "Implementations": {
