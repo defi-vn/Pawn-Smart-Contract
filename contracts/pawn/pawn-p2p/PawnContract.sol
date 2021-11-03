@@ -358,7 +358,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         _isValidCaller();
         Collateral storage collateral = _validateCollateral(_collateralId);
 
-        collateral.amount += _amount;
+        collateral.amount = _amount;
     }
 
     /** ========================= OFFER FUNCTIONS & STATES ============================= */
@@ -1597,10 +1597,10 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     }
 
     /** ==================== User-reviews related functions ==================== */
-    function getContractInfoForReview(uint256 _contractId) 
-        external 
-        override
+    function getContractInfoForReview(uint256 _contractId)
+        external
         view
+        override
         returns (
             address borrower,
             address lender,
