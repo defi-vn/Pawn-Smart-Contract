@@ -125,13 +125,13 @@ contract Reputation is
     {}
 
     function version() public pure virtual returns (string memory) {
-        return "0"; //1.0.2
+        return "1.0.2";
     }
 
     modifier isNotZeroAddress(address _to) {
         require(
             _to != address(0),
-            "1" //DFY: Reward pawn reputation to the zero address
+            "DFY: Reward pawn reputation to the zero address"
         );
         _;
     }
@@ -139,7 +139,7 @@ contract Reputation is
     modifier onlyEOA(address _to) {
         require(
             !_to.isContract(),
-            "2" //DFY: Reward pawn reputation to a contract address
+            "DFY: Reward pawn reputation to a contract address"
         );
         _;
     }
@@ -151,7 +151,7 @@ contract Reputation is
         // Caller must be whitelisted
         require(
             whitelistedContractCaller[_from] == true,
-            "3" //DFY: Caller is not allowed
+            "DFY: Caller is not allowed"
         );
         _;
     }
