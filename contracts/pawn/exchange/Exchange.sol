@@ -296,7 +296,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         } else {
             // neu dong tra kha BNB
             _repaymentAssetToUSD = getLatesPriceToUSD(
-                _contract.terms.loanAsset
+                _contract.terms.repaymentAsset
             );
         }
 
@@ -376,7 +376,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             // neu dong tra la BNB
             _repaymentAssetToUSD = RateBNBwithUSD();
         } else {
-            // neu dong tra kha BNB
+            // neu dong tra khac BNB
             _repaymentAssetToUSD = getLatesPriceToUSD(_loanAsset);
         }
 
