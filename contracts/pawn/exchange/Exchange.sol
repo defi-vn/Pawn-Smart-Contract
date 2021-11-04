@@ -213,14 +213,14 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
                 RateBNBwithUSD(),
                 getLatesPriceToUSD(_adRepayment)
             );
-            exchangeRateOfOffer = exRate;
+            exchangeRateOfOffer = exRate * 10**13;
         } else {
             // all LoanAsset and repaymentAsset are crypto or token is different BNB
             (, uint256 exRate) = SafeMathUpgradeable.tryDiv(
                 (getLatesPriceToUSD(_adLoanAsset) * 10**5),
                 getLatesPriceToUSD(_adRepayment)
             );
-            exchangeRateOfOffer = exRate;
+            exchangeRateOfOffer = exRate * 10**13;
         }
     }
 
