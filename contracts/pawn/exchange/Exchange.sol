@@ -181,8 +181,9 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
             rateLoanAsset
         );
         // loanAmount = collateralToUSD / rateLoanAsset;
-        uint256 tempLoamAmount = lAmount / 10**13;
-        loanAmount = tempLoamAmount * 10**13;
+        // uint256 tempLoamAmount = lAmount / 10**13;
+        // loanAmount = tempLoamAmount * 10**13;
+        loanAmount = DivRound(lAmount);
 
         if (repaymentAsset == address(0)) {
             // get price in USD of BNB as repayment asset
@@ -194,10 +195,10 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
 
         // calculate exchange rate
         (, uint256 xchange) = SafeMathUpgradeable.tryDiv(
-            rateLoanAsset * 10**5,
+            rateLoanAsset * 10**18,
             rateRepaymentAsset
         );
-        exchangeRate = xchange * 10**13;
+        exchangeRate = xchange;
     }
 
     // calculate Rate of LoanAsset with repaymentAsset
@@ -210,17 +211,17 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         if (_adLoanAsset == address(0)) {
             // if LoanAsset is address(0) , check BNB exchange rate with BNB
             (, uint256 exRate) = SafeMathUpgradeable.tryDiv(
-                RateBNBwithUSD(),
+                RateBNBwithUSD() * 10**18,
                 getLatesPriceToUSD(_adRepayment)
             );
-            exchangeRateOfOffer = exRate * 10**13;
+            exchangeRateOfOffer = exRate;
         } else {
             // all LoanAsset and repaymentAsset are crypto or token is different BNB
             (, uint256 exRate) = SafeMathUpgradeable.tryDiv(
-                (getLatesPriceToUSD(_adLoanAsset) * 10**5),
+                (getLatesPriceToUSD(_adLoanAsset) * 10**18),
                 getLatesPriceToUSD(_adRepayment)
             );
-            exchangeRateOfOffer = exRate * 10**13;
+            exchangeRateOfOffer = exRate;
         }
     }
 
