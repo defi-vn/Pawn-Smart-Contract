@@ -56,7 +56,7 @@ if(argv._.includes('block')) {
     });
 }
 else {
-    console.log("Block parameter is required");
+    console.log("Block parameter is required. Type --help for usages.");
 }
 
 const showOutput = (events, allEvents, showDetails) => {
