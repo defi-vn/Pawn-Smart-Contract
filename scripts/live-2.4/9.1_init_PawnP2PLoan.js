@@ -68,9 +68,9 @@ async function main() {
     await LoanContract.setReputationContract(RepuProxyAddr);
     console.log(`Reputation contract set at address: ${RepuProxyAddr}\n\r`);
 
-    // console.log(`Setting Exchange contract...`);
-    // await LoanContract.setExchangeContract(ExchangeProxyAddr);
-    // console.log(`Exchange contract set at address: ${ExchangeProxyAddr}\n\r`);
+    console.log(`Setting Exchange contract...`);
+    await LoanContract.setExchangeContract(ExchangeProxyAddr);
+    console.log(`Exchange contract set at address: ${ExchangeProxyAddr}\n\r`);
 
     console.log(`Setting Pawn contract address...`);
     await LoanContract.setPawnContract(PawnProxyAddr);
@@ -92,14 +92,13 @@ async function main() {
 
     console.log("============================================================\n\r");
 
-    /// Grant Roles to admin
-    // console.log(`Setting Roles to ADMIN account: ${PawnConfig.Admin}`);
-    // await LoanContract.grantRole(PawnConfig.DEFAULT_ADMIN_ROLE, PawnConfig.Admin);
-    // await LoanContract.grantRole(PawnConfig.PAUSER_ROLE, PawnConfig.Admin);
-    // console.log(`Roles granted: 
-    //             \n\r\t${PawnConfig.DEFAULT_ADMIN_ROLE}, 
-    //             \n\r\t${PawnConfig.OPERATOR_ROLE}, 
-    //             \n\r\t${PawnConfig.PAUSER_ROLE}`);
+    // Grant Roles to admin
+    console.log(`Setting Roles to ADMIN account: ${PawnConfig.Admin}`);
+    await LoanContract.grantRole(PawnConfig.DEFAULT_ADMIN_ROLE, PawnConfig.Admin);
+    await LoanContract.grantRole(PawnConfig.PAUSER_ROLE, PawnConfig.Admin);
+    console.log(`Roles granted: 
+                \n\r\t${PawnConfig.DEFAULT_ADMIN_ROLE},
+                \n\r\t${PawnConfig.PAUSER_ROLE}`);
 
     console.log("============================================================\n\r");
 
