@@ -49,30 +49,44 @@ if(argv._.includes('block')) {
         fromBlock: startBlock,
         toBlock: endBlock, 
         function(error, events) {
-            showOutput(events, argv.eventDetails);
+            showOutput(events, argv.allEvents, argv.eventDetails);
         }
     }).then(function(events) {
-        showOutput(events, argv.eventDetails);
+        showOutput(events, argv.allEvents, argv.eventDetails);
     });
 }
 else {
     console.log("Block parameter is required");
 }
 
-const showOutput = (events, showDetails) => {
-    if(showDetails) {
-        for(var i = 0; i < events.length; i++) {
-            console.log(`Block number: ${events[i].blockNumber}`);
-            console.log(`Event: ${events[i].event}`);
-            console.log(events[i].returnValues);
+const showOutput = (events, allEvents, showDetails) => {
+    if(!allEvents) {
+        if(showDetails) {
+            for(var i = 0; i < events.length; i++) {
+                console.log(`Block number: ${events[i].blockNumber}`);
+                console.log(`Event: ${events[i].event}`);
+                console.log(events[i].returnValues);
+            }
+        }
+        else {
+            for(var i = 0; i < events.length; i++) {
+                if(events[i].returnValues.exchangeRate !== undefined) {
+                    console.log(`Block number: ${events[i].blockNumber}`);
+                    console.log(`Exchange Rate: ${events[i].returnValues.exchangeRate}`);
+                }
+            }
         }
     }
     else {
-        for(var i = 0; i < events.length; i++) {
-            if(events[i].returnValues.exchangeRate !== undefined) {
+        if(showDetails) {
+            for(var i = 0; i < events.length; i++) {
                 console.log(`Block number: ${events[i].blockNumber}`);
-                console.log(`Exchange Rate: ${events[i].returnValues.exchangeRate}`);
+                console.log(`Event: ${events[i].event}`);
+                console.log(events[i].returnValues);
             }
+        }
+        else {
+            console.log(events);
         }
     }
 }
