@@ -16,26 +16,26 @@
         "ZOOM": 100000
     },
     "Proxies": {
-        "Prelive": {
-            "PAWN_CONTRACT_ADDRESS":            "0x8f6139ABB3737Bc6679196254ca56174FB281c4f",
-            "EVALUATION_CONTRACT_ADDRESS":      "0xF12320A7e5Fb3e840bF264B0f04e24EAEf7e8Ab7",
-            "NFT_CONTRACT_ADDRESS":             "0x26ECfE62674B62eD551e498c34E196C3acb52C01",
-            "REPUTATION_CONTRACT_ADDRESS":      "0x6c34C17fA89E9c65fB5A691B6b71f178311279Cb",
-            "PAWN_NFT_CONTRACT_ADDRESS":        "0xb9eAF9626Ba35b55acC8e328a95c48B5403b8621",
-            "EXCHANGE_CONTRACT_ADDRESS":        "0x5f64cd7F5c1BbF94c4097380283BE1f21bB68518",
-            "PAWN_P2PLOAN_CONTRACT_ADDRESS":    "0x899e455358a9d6d6C8674436f12742E21530ac7B",
+        "Live": {
+            "PAWN_CONTRACT_ADDRESS":        "0xe42389C5186C30857F793479b82EE177E9E74bA9",
+            "EVALUATION_CONTRACT_ADDRESS":  "0xBa19b6fc0E9059617C08d6224C7e1c6d3b8d7D2F",
+            "NFT_CONTRACT_ADDRESS":         "0xa74284D12eFbFd719d03f5a289C763Bc7317b5bE",
+            "REPUTATION_CONTRACT_ADDRESS":  "0x3174bBbA2BAD72e3e3692d2646D34aa6eE38C191",
+            "PAWN_NFT_CONTRACT_ADDRESS":    "0x2CFd86376139B990e7Ff7286498DC25E98F7457E",
+            "EXCHANGE_CONTRACT_ADDRESS":        "0x59B4871f4E41EbDE4D54F028c6faD76ddE47a7bb",
+            "PAWN_P2PLOAN_CONTRACT_ADDRESS":    "0x9361DECA56f2A6B9e8C6a4217da61DeF5dB34099",
             "PAWN_NFPLOAN_CONTRACT_ADDRESS":    ""
         }
     },
     "Implementations": {
-        "Prelive": {
-            "PAWN_CONTRACT_ADDRESS":            "0x0c56D701b35c974e71Ecf581E8921F1ccCBF79Eb",
-            "EVALUATION_CONTRACT_ADDRESS":      "0x722b1F083CcF338Bf3650194F67CB04D18844157",
-            "NFT_CONTRACT_ADDRESS":             "0x3514cB367a867aeF6cb20D239e125bd2260E5DFE",
-            "REPUTATION_CONTRACT_ADDRESS":      "0xAaC1a6d50EA54B911c3eD36Bac9E1835b29Ecc9C",
-            "PAWN_NFT_CONTRACT_ADDRESS":        "0x45085966f4A29ff318F494E1209F9f4260Ea3c2d",
-            "EXCHANGE_CONTRACT_ADDRESS":        "0x8e2fa1704886d3d40e97a6999ea6f34eb0384cc9",
-            "PAWN_P2PLOAN_CONTRACT_ADDRESS":    "0xb12D7d9F6F3763d9D86Dd96B90f7e201459340bB",
+        "Live": {
+            "PAWN_CONTRACT_ADDRESS":        "0x20DFBD6d68F8ECb6Bb136Dc5b93a810e9626C98f",
+            "EVALUATION_CONTRACT_ADDRESS":  "0xBc8c88e9d8973df21495b5322B4F436E235456E6",
+            "NFT_CONTRACT_ADDRESS":         "0x031855df3f2653BF50C2683d01876399AA2Df6A6",
+            "REPUTATION_CONTRACT_ADDRESS":  "0xAaC1a6d50EA54B911c3eD36Bac9E1835b29Ecc9C",
+            "PAWN_NFT_CONTRACT_ADDRESS":    "0x8070604d487FB5eCD6e5728c0348A2D957e7B7E9",
+            "EXCHANGE_CONTRACT_ADDRESS":        "0x31f81f2D1172Ccb945690AA0883f67d303F8adbE",
+            "PAWN_P2PLOAN_CONTRACT_ADDRESS":    "0x2cc4A3e28838df40646b2172981953A29C205df5",
             "PAWN_NFPLOAN_CONTRACT_ADDRESS":    ""
         }
     },
@@ -259,6 +259,67 @@
             "Name": "BUSD/USD",
             "Address": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
             "Exchange": "0xcBb98864Ef56E9042e7d2efef76141f15731B82f"
+        },
+        {
+            "Symbol": "EOS",
+            "Name": "EOS/USD",
+            "Address": "0x56b6fB708fC5732DEC1Afc8D8556423A2EDcCbD6",
+            "Exchange": "0xd5508c8Ffdb8F15cE336e629fD4ca9AdB48f50F0"
+        },
+        {
+            "Symbol": "ATOM",
+            "Name": "ATOM/USD",
+            "Address": "0x0Eb3a705fc54725037CC9e008bDede697f62F335",
+            "Exchange": "0xb056B7C804297279A9a673289264c17E6Dc6055d"
+        },
+        {
+            "Symbol": "ONT",
+            "Name": "ONT/USD",
+            "Address": "0xFd7B3A77848f1C2D67E05E54d78d174a0C850335",
+            "Exchange": "0x887f177CBED2cf555a64e7bF125E1825EB69dB82"
+        },
+        {
+            "Symbol": "COMP",
+            "Name": "COMP/USD",
+            "Address": "0x52CE071Bd9b1C4B00A0b92D298c512478CaD67e8",
+            "Exchange": "0x0Db8945f9aEf5651fa5bd52314C5aAe78DfDe540"
+        },
+        {
+            "Symbol": "UNI",
+            "Name": "UNI/USD",
+            "Address": "0xBf5140A22578168FD562DCcF235E5D43A02ce9B1",
+            "Exchange": "0xb57f259E7C24e56a1dA00F66b55A5640d9f9E7e4"
+        },
+        {
+            "Symbol": "USDC",
+            "Name": "USDC/USD",
+            "Address": "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
+            "Exchange": "0x51597f405303C4377E36123cBc172b13269EA163"
+        },
+        {
+            "Symbol": "XTZ",
+            "Name": "XTZ/USD",
+            "Address": "0x16939ef78684453bfDFb47825F8a5F714f12623a",
+            "Exchange": "0x9A18137ADCF7b05f033ad26968Ed5a9cf0Bf8E6b"
+        },
+        {
+            "Symbol": "YFI",
+            "Name": "YFI/USD",
+            "Address": "0x88f1A5ae2A3BF98AEAF342D26B30a79438c9142e",
+            "Exchange": "0xD7eAa5Bf3013A96e3d515c055Dbd98DbdC8c620D"
+        },
+        {
+            "Symbol": "YFII",
+            "Name": "YFII/USD",
+            "Address": "0x7F70642d88cf1C4a3a7abb072B53B929b653edA5",
+            "Exchange": "0xC94580FAaF145B2FD0ab5215031833c98D3B77E4"
+        },
+        {
+            "Symbol": "DFY",
+            "Name": "DFY/USD",
+            "Address": "0xd98560689c6e748dc37bc410b4d3096b1aa3d8c2",
+            "Exchange": "0xC20e4e681E86339240459Cd86511aB9f1192fbCE"
         }
+        
     ]
 }

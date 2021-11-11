@@ -173,4 +173,6 @@ abstract contract PawnModel is
     {
         return super.supportsInterface(interfaceId);
     }
+
+    /** ==================== Version 2.4 ==================== */
 }
