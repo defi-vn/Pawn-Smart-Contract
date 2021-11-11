@@ -1612,4 +1612,6 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         lender = _contract.terms.lender;
         status = _contract.status;
     }
+
+    /** ==================== Version 2.4 ==================== */
 }
