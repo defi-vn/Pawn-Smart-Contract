@@ -6,7 +6,8 @@ import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol"
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
-import "../pawn-nft/IPawnNFT.sol";
+
+import "../pawn-nft-v2/PawnNFTLib.sol";
 
 contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
     mapping(address => address) public ListCryptoExchange;
@@ -472,6 +473,283 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
 
         // _collateralPerLoanAssetExchangeRate = tempCollateralPerLoanAssetExchangeRate;
     }
+
+    /**======================   NFT =========================================== */
+
+    /** ========== exchange Rate Of Offer   ===================== */
+    // exchangeRate offer
+    function exchangeRateOfOffer_NFT(address _adLoanAsset, address _adRepayment)
+        external
+        view
+        returns (uint256 exchangeRate)
+    {
+        // exchangeRate = loan / repayment
+        if (_adLoanAsset == address(0)) {
+            // if LoanAsset is address(0) , check BNB exchange rate with BNB
+            (, uint256 exRate) = SafeMathUpgradeable.tryDiv(
+                RateBNBwithUSD() * 10**18,
+                getLatesPriceToUSD(_adRepayment)
+            );
+            exchangeRate = exRate;
+        } else {
+            // all LoanAsset and repaymentAsset are crypto or token is different BNB
+            (, uint256 exRate) = SafeMathUpgradeable.tryDiv(
+                (getLatesPriceToUSD(_adLoanAsset) * 10**18),
+                getLatesPriceToUSD(_adRepayment)
+            );
+            exchangeRate = exRate;
+        }
+    }
+
+    /** ======== Tinh interest ===================== */
+
+    function calculateInterest_NFT(
+        uint256 _remainingLoan,
+        Contract_NFT memory _contract
+    ) external view returns (uint256 interest) {
+        uint256 _interestToUSD;
+        uint256 _repaymentAssetToUSD;
+        uint256 _interestByLoanDurationType;
+
+        // tinh tien lai
+        if (_contract.terms.loanAsset == address(0)) {
+            // if loanAsset is BNB
+            (, uint256 interestToAmount) = SafeMathUpgradeable.tryMul(
+                _contract.terms.interest,
+                _remainingLoan
+            );
+            (, uint256 interestRate) = SafeMathUpgradeable.tryMul(
+                interestToAmount,
+                RateBNBwithUSD()
+            );
+            (, uint256 itrestRate) = SafeMathUpgradeable.tryDiv(
+                interestRate,
+                (100 * 10**5)
+            );
+            _interestToUSD = itrestRate;
+        } else {
+            // Neu loanAsset la cac dong crypto va token khac BNB
+            // interestToUSD = (uint256(getLatesPriceToUSD(_contract.terms.loanAsset)) * _contract.terms.loanAmount) * _contractterms.interest;
+            (, uint256 interestToAmount) = SafeMathUpgradeable.tryMul(
+                _contract.terms.interest,
+                _remainingLoan
+            );
+            (, uint256 interestRate) = SafeMathUpgradeable.tryMul(
+                interestToAmount,
+                getLatesPriceToUSD(_contract.terms.loanAsset)
+            );
+            (, uint256 itrestRate) = SafeMathUpgradeable.tryDiv(
+                interestRate,
+                (100 * 10**5)
+            );
+            _interestToUSD = itrestRate;
+        }
+
+        // tinh tien lai cho moi ky thanh toan
+        if (_contract.terms.repaymentCycleType == LoanDurationType_NFT.WEEK) {
+            // neu thoi gian vay theo tuan thì L = loanAmount * interest * 7 /365
+            (, uint256 _interest) = SafeMathUpgradeable.tryDiv(
+                (_interestToUSD * 7),
+                365
+            );
+            _interestByLoanDurationType = _interest;
+        } else {
+            // thoi gian vay theo thang thi  L = loanAmount * interest * 30 /365
+            //  _interestByLoanDurationType =(_contract.terms.interest * 30) / 365);
+            (, uint256 _interest) = SafeMathUpgradeable.tryDiv(
+                (_interestToUSD * 30),
+                365
+            );
+            _interestByLoanDurationType = _interest;
+        }
+
+        // tinh Rate cua dong repayment
+        if (_contract.terms.repaymentAsset == address(0)) {
+            // neu dong tra la BNB
+            _repaymentAssetToUSD = RateBNBwithUSD();
+        } else {
+            // neu dong tra kha BNB
+            _repaymentAssetToUSD = getLatesPriceToUSD(
+                _contract.terms.repaymentAsset
+            );
+        }
+
+        // tien lai theo moi kỳ tinh ra dong tra
+        (, uint256 saInterest) = SafeMathUpgradeable.tryDiv(
+            _interestByLoanDurationType,
+            _repaymentAssetToUSD
+        );
+        // uint256 tempInterest = saInterest / 10**13;
+        // interest = tempInterest * 10**13;
+        interest = DivRound(saInterest);
+    }
+
+    /** =========== Tinh penalty ================ */
+
+    function calculatePenalty_NFT(
+        PaymentRequest_NFT memory _paymentrequest,
+        Contract_NFT memory _contract,
+        uint256 _penaltyRate
+    ) external pure returns (uint256 valuePenalty) {
+        uint256 _interestOfPenalty;
+        if (_contract.terms.repaymentCycleType == LoanDurationType_NFT.WEEK) {
+            // neu ky vay theo tuan thi (L) = interest * 7 /365
+            //_interestByLoanDurationType =(_contract.terms.interest * 7) / (100 * 365);
+            (, uint256 saInterestByLoanDurationType) = SafeMathUpgradeable
+                .tryDiv((_contract.terms.interest * 7), 365);
+            (, uint256 saPenaltyOfInterestRate) = SafeMathUpgradeable.tryMul(
+                _paymentrequest.remainingPenalty,
+                saInterestByLoanDurationType
+            );
+            (, uint256 saPenaltyOfInterest) = SafeMathUpgradeable.tryDiv(
+                saPenaltyOfInterestRate,
+                (100 * 10**5)
+            );
+            _interestOfPenalty = saPenaltyOfInterest;
+        } else {
+            // _interestByLoanDurationType =(_contract.terms.interest * 30) /(100 * 365);
+            (, uint256 saInterestByLoanDurationType) = SafeMathUpgradeable
+                .tryDiv(_contract.terms.interest * 30, 365);
+            (, uint256 saPenaltyOfInterestRate) = SafeMathUpgradeable.tryMul(
+                _paymentrequest.remainingPenalty,
+                saInterestByLoanDurationType
+            );
+            (, uint256 saPenaltyOfInterest) = SafeMathUpgradeable.tryDiv(
+                saPenaltyOfInterestRate,
+                (100 * 10**5)
+            );
+            _interestOfPenalty = saPenaltyOfInterest;
+        }
+        // valuePenalty =(_paymentrequest.remainingPenalty +_paymentrequest.remainingPenalty *_interestByLoanDurationType +_paymentrequest.remainingInterest *_penaltyRate);
+        //  uint256 penalty = _paymentrequest.remainingInterest * _penaltyRate;
+        (, uint256 penalty) = SafeMathUpgradeable.tryDiv(
+            (_paymentrequest.remainingInterest * _penaltyRate),
+            (100 * 10**5)
+        );
+        uint256 _penalty = _paymentrequest.remainingPenalty +
+            _interestOfPenalty +
+            penalty;
+        // uint256 tempPenalty = _penalty / 10**13;
+        // valuePenalty = tempPenalty * 10**13;
+        valuePenalty = DivRound(_penalty);
+    }
+
+    /** ======================= Tinh Rate cho moi lan vo no vi ti gia   =================== */
+
+    // tinh ti gia cua repayment / collateralAsset  va   loanAsset / collateralAsset
+    function collateralPerRepaymentAndLoanTokenExchangeRate_NFT(
+        Contract_NFT memory _contract,
+        address _adEvaluationAsset
+    )
+        external
+        view
+        returns (
+            uint256 _collateralPerRepaymentTokenExchangeRate,
+            uint256 _collateralPerLoanAssetExchangeRate
+        )
+    {
+        uint256 priceRepaymentAset;
+        uint256 priceLoanAsset;
+        uint256 priceCollateralAsset;
+
+        if (_contract.terms.repaymentAsset == address(0)) {
+            // neu repaymentAsset la BNB
+            priceRepaymentAset = RateBNBwithUSD();
+        } else {
+            // neu la cac dong khac
+            priceRepaymentAset = getLatesPriceToUSD(
+                _contract.terms.repaymentAsset
+            );
+        }
+
+        if (_contract.terms.loanAsset == address(0)) {
+            // neu dong loan asset la BNB
+            priceLoanAsset = RateBNBwithUSD();
+        } else {
+            // cac dong khac
+            priceLoanAsset = getLatesPriceToUSD(_contract.terms.loanAsset);
+        }
+
+        if (_adEvaluationAsset == address(0)) {
+            // neu collateralAsset la bnb
+            priceCollateralAsset = RateBNBwithUSD();
+        } else {
+            // la cac dong khac
+            priceCollateralAsset = getLatesPriceToUSD(_adEvaluationAsset);
+        }
+
+        bool success;
+        // tempCollateralPerRepaymentTokenExchangeRate = priceRepaymentAsset / priceCollateralAsset
+        (
+            success,
+            _collateralPerRepaymentTokenExchangeRate
+        ) = SafeMathUpgradeable.tryDiv(
+            (priceRepaymentAset * 10**10),
+            priceCollateralAsset
+        );
+        require(success, "Safe math: division by zero");
+
+        // _collateralPerRepaymentTokenExchangeRate = tempCollateralPerRepaymentTokenExchangeRate;
+
+        // tempCollateralPerLoanAssetExchangeRate = priceLoanAsset / priceCollateralAsset
+        (success, _collateralPerLoanAssetExchangeRate) = SafeMathUpgradeable
+            .tryDiv((priceLoanAsset * 10**10), priceCollateralAsset);
+
+        require(success, "Safe math: division by zero");
+
+        // _collateralPerLoanAssetExchangeRate = tempCollateralPerLoanAssetExchangeRate;
+    }
+
+    /** ============ Tinh rate va thoi gian cap nhat Rate do ======================== */
+    // lay Rate va thoi gian cap nhat ti gia do
+    function RateAndTimestamp_NFT(
+        Contract_NFT memory _contract,
+        address _adEvaluationAsset
+    )
+        external
+        view
+        returns (
+            uint256 _collateralExchangeRate,
+            uint256 _loanExchangeRate,
+            uint256 _repaymemtExchangeRate,
+            uint256 _rateUpdateTime
+        )
+    {
+        // Get exchange rate of collateral token
+        if (_adEvaluationAsset == address(0)) {
+            (
+                _collateralExchangeRate,
+                _rateUpdateTime
+            ) = RateBNBwithUSDAttimestamp();
+        } else {
+            (_collateralExchangeRate, _rateUpdateTime) = getRateAndTimestamp(
+                _adEvaluationAsset
+            );
+        }
+
+        // Get exchange rate of loan token
+        if (_contract.terms.loanAsset == address(0)) {
+            (_loanExchangeRate, _rateUpdateTime) = RateBNBwithUSDAttimestamp();
+        } else {
+            (_loanExchangeRate, _rateUpdateTime) = getRateAndTimestamp(
+                _contract.terms.loanAsset
+            );
+        }
+
+        // Get exchange rate of repayment token
+        if (_contract.terms.repaymentAsset == address(0)) {
+            (
+                _repaymemtExchangeRate,
+                _rateUpdateTime
+            ) = RateBNBwithUSDAttimestamp();
+        } else {
+            (_repaymemtExchangeRate, _rateUpdateTime) = getRateAndTimestamp(
+                _contract.terms.repaymentAsset
+            );
+        }
+    }
+
+    /** =================================== ROUNDING    ============================= */
 
     function DivRound(uint256 a) private pure returns (uint256) {
         // kiem tra so du khi chia 10**13. Neu lon hon 5 *10**12 khi chia xong thi lam tron len(+1) roi nhan lai voi 10**13
