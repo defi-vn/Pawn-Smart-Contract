@@ -239,7 +239,7 @@ interface IPawnNFT {
 
     function notPaidFullAtEndContractLiquidation(uint256 _contractId) external;
 
-    function getContractInfoForReview(uint256 _contractId) 
+    function getContractInfoForReview(uint256 _contractId)
         external
         view
         returns (

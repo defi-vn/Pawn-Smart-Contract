@@ -874,10 +874,10 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
     }
 
     /** ==================== User-reviews related functions ==================== */
-    function getContractInfoForReview(uint256 _contractId) 
-        external 
-        override
+    function getContractInfoForReview(uint256 _contractId)
+        external
         view
+        override
         returns (
             address borrower,
             address lender,

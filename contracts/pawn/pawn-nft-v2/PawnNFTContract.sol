@@ -506,8 +506,8 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
     function _isValidCaller() private view {
         require(
             msg.sender == address(LoanContract_NFT) ||
-                msg.sender == operator ||
-                msg.sender == admin,
+                hasRole(OPERATOR_ROLE, msg.sender) ||
+                hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
             "0"
         ); // caller not allowed
     }
