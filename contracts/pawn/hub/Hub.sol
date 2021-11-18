@@ -62,17 +62,21 @@ contract Hub is
 
     /** ==================== Hub operation functions ==================== */
     function setSystemFeeToken(address feeToken)
-        public
+        external
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
         systemConfig.systemFeeToken = feeToken;
     }
 
     function setSystemFeeWallet(address feeWallet)
-        public
+        external
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
         systemConfig.systemFeeWallet = feeWallet;
+    }
+
+    function registerContract(bytes4 signature, address contractAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        ContractRegistry[signature] = contractAddress;
     }
 
     /** ==================== Standard interface function implementations ==================== */
