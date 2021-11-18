@@ -12,21 +12,21 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "../access/DFY-AccessControl.sol";
 import "./IDFY_Physical_NFTs.sol";
 
-contract DFY_Physical_NFTs is 
+contract DFY_Physical_NFTs is
     IDFY_Physical_NFTs,
     Initializable,
-    UUPSUpgradeable, 
-    ERC1155Upgradeable, 
-    DFYAccessControl, 
-    PausableUpgradeable, 
-    ERC1155BurnableUpgradeable 
+    UUPSUpgradeable,
+    ERC1155Upgradeable,
+    DFYAccessControl,
+    PausableUpgradeable,
+    ERC1155BurnableUpgradeable
 {
     using CountersUpgradeable for CountersUpgradeable.Counter;
     using AddressUpgradeable for address;
 
     // Total NFT token
     CountersUpgradeable.Counter public totalToken;
-    
+
     // Address evaluation
     address public evaluationContract;
 
@@ -34,13 +34,13 @@ contract DFY_Physical_NFTs is
     // TokenId => CID
     mapping(uint256 => string) public tokenIdListToCID;
 
-    // Mapping token id to information evaluation of NFT token 
+    // Mapping token id to information evaluation of NFT token
     // TokenId => NFTEvaluation
-    mapping (uint256 => NFTEvaluation) public tokenIdOfEvaluation; //evaluation Of Token
+    mapping(uint256 => NFTEvaluation) public tokenIdOfEvaluation; //evaluation Of Token
 
-    // Mapping evaluator to NFT 
+    // Mapping evaluator to NFT
     // Address evaluator => listTokenId
-    mapping (address => uint256[] ) public tokenIdListByEvaluator;
+    mapping(address => uint256[]) public tokenIdListByEvaluator;
 
     // Struct NFT Evaluation
     // struct NFTEvaluation{
@@ -58,15 +58,11 @@ contract DFY_Physical_NFTs is
     string private _tokenBaseUri;
 
     // Event NFT create success
-    event NFTCreated(
-        address assetOwner,
-        uint256 tokenID,
-        string cid
-    );
+    event NFTCreated(address assetOwner, uint256 tokenID, string cid);
 
     // Modifier check contract valuation call mint NFT token
-    modifier onlyEvaluation {
-        require(msg.sender == evaluationContract, 'Cant mint.');
+    modifier onlyEvaluation() {
+        require(msg.sender == evaluationContract, "Cant mint.");
         _;
     }
 
@@ -83,12 +79,15 @@ contract DFY_Physical_NFTs is
 
         name = _name;
         symbol = _symbol;
-        
+
         _setBaseURI(_uri);
     }
 
-    function _authorizeUpgrade(address) internal override onlyRole(DEFAULT_ADMIN_ROLE) {}
-
+    function _authorizeUpgrade(address)
+        internal
+        override
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {}
 
     function _setBaseURI(string memory _uri) internal {
         require(bytes(_uri).length > 0, "Blank baseURI");
@@ -103,15 +102,27 @@ contract DFY_Physical_NFTs is
         return bytes(tokenIdListToCID[tokenId]).length > 0;
     }
 
-    function setBaseURI(string memory _uri) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setBaseURI(string memory _uri)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         _setBaseURI(_uri);
     }
 
-    function uri(uint tokenId) public view virtual override returns (string memory) {
+    function uri(uint256 tokenId)
+        public
+        view
+        virtual
+        override
+        returns (string memory)
+    {
         require(_exists(tokenId), "Invalid token");
 
         string memory baseUri = _baseURI();
-        return bytes(baseUri).length > 0 ? string(abi.encodePacked(baseUri, tokenIdListToCID[tokenId])) : "";
+        return
+            bytes(baseUri).length > 0
+                ? string(abi.encodePacked(baseUri, tokenIdListToCID[tokenId]))
+                : "";
     }
 
     function pause() external onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -123,10 +134,13 @@ contract DFY_Physical_NFTs is
     }
 
     /**
-    * @dev set address evaluation contract
-    * @param _evaluationContract is address evaluation contract
-    */
-    function setEvaluationContract(address _evaluationContract) external onlyRole(DEFAULT_ADMIN_ROLE){
+     * @dev set address evaluation contract
+     * @param _evaluationContract is address evaluation contract
+     */
+    function setEvaluationContract(address _evaluationContract)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         // Check address different address(0)
         require(_evaluationContract != address(0), "Zero address.");
 
@@ -138,27 +152,22 @@ contract DFY_Physical_NFTs is
     }
 
     /**
-    * @dev evaluation contract call this function mint NFT token
-    * @param _assetOwner is owner of asset mint NFT token
-    * @param _evaluator is evaluator mint NFT
-    * @param _evaluatontId is id evaluation NFT token
-    * @param _amount is amount NFT token
-    * @param _cid is cid of NFT token
-    * @param _data is data of NFT token
-    */
+     * @dev evaluation contract call this function mint NFT token
+     * @param _assetOwner is owner of asset mint NFT token
+     * @param _evaluator is evaluator mint NFT
+     * @param _evaluatontId is id evaluation NFT token
+     * @param _amount is amount NFT token
+     * @param _cid is cid of NFT token
+     * @param _data is data of NFT token
+     */
     function mint(
-        address _assetOwner, 
-        address _evaluator, 
-        uint256 _evaluatontId, 
-        uint256 _amount, 
-        string memory _cid, 
+        address _assetOwner,
+        address _evaluator,
+        uint256 _evaluatontId,
+        uint256 _amount,
+        string memory _cid,
         bytes memory _data
-    ) 
-        external
-        override 
-        onlyEvaluation 
-        returns (uint256 tokenId)
-    {
+    ) external override onlyEvaluation returns (uint256 tokenId) {
         // Gennerate tokenId
         tokenId = totalToken.current();
 
@@ -186,30 +195,27 @@ contract DFY_Physical_NFTs is
     }
 
     /**
-    * @dev get evaluation id and address of given token Id
-    * @param _tokenId is the token whose evaluation data is being queried
-    */
-    function getEvaluationOfToken(uint256 _tokenId) 
-        external 
+     * @dev get evaluation id and address of given token Id
+     * @param _tokenId is the token whose evaluation data is being queried
+     */
+    function getEvaluationOfToken(uint256 _tokenId)
+        external
         view
         override
-        returns (address evaluationAddress, uint256 evaluationId) 
+        returns (address evaluationAddress, uint256 evaluationId)
     {
-        evaluationAddress   = tokenIdOfEvaluation[_tokenId].evaluationContract;
-        evaluationId        = tokenIdOfEvaluation[_tokenId].evaluationId;
+        evaluationAddress = tokenIdOfEvaluation[_tokenId].evaluationContract;
+        evaluationId = tokenIdOfEvaluation[_tokenId].evaluationId;
     }
 
     function _beforeTokenTransfer(
-        address operator, 
-        address from, 
-        address to, 
-        uint256[] memory ids, 
-        uint256[] memory amounts, 
+        address operator,
+        address from,
+        address to,
+        uint256[] memory ids,
+        uint256[] memory amounts,
         bytes memory data
-    ) 
-        internal 
-        override whenNotPaused 
-    {
+    ) internal override whenNotPaused {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 
@@ -222,12 +228,18 @@ contract DFY_Physical_NFTs is
         return super.supportsInterface(interfaceId);
     }
 
-    function updateCID (uint256 _tokenId, string memory _newCID) external onlyRole(DEFAULT_ADMIN_ROLE){
+    function updateCID(uint256 _tokenId, string memory _newCID)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         // Check for empty CID string input
         require(bytes(_newCID).length > 0, "Empty CID");
 
         // Check if token exists
-        require(bytes(tokenIdListToCID[_tokenId]).length > 0, "Token doesn't exist");
+        require(
+            bytes(tokenIdListToCID[_tokenId]).length > 0,
+            "Token doesn't exist"
+        );
 
         // Update CID
         tokenIdListToCID[_tokenId] = _newCID;
