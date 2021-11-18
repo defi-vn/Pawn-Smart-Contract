@@ -75,7 +75,10 @@ contract Hub is
         systemConfig.systemFeeWallet = feeWallet;
     }
 
-    function registerContract(bytes4 signature, address contractAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function registerContract(bytes4 signature, address contractAddress)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         ContractRegistry[signature] = contractAddress;
     }
 
