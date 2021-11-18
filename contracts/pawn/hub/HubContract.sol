@@ -15,8 +15,6 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "../access/DFY-AccessControl.sol";
 import "../nft/IDFY_Physical_NFTs.sol";
 
-import "../evaluation/IBEP20.sol";
-
 contract PawnNFTModel is
     Initializable,
     UUPSUpgradeable,
@@ -31,9 +29,13 @@ contract PawnNFTModel is
     uint256 public systemFeeRate;
     uint256 public lateThreshold;
     uint256 public prepaidFeeRate;
+
     uint256 public ZOOM;
-    address public admin;
-    address public operator;
+
+    using AddressUpgradeable for address;
+
+    // address public admin;
+    // address public operator;
 
     // DFY_Physical_NFTs dfy_physical_nfts;
     // AssetEvaluation assetEvaluation;
@@ -43,7 +45,7 @@ contract PawnNFTModel is
         __DFYAccessControl_init();
         __Pausable_init();
         __UUPSUpgradeable_init();
-        admin = address(msg.sender);
+        //    admin = address(msg.sender);
         ZOOM = _zoom;
     }
 
@@ -67,8 +69,22 @@ contract PawnNFTModel is
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
         // operator = _newOperator;
-        operator = _newOperator;
+        // operator = _newOperator;
         grantRole(OPERATOR_ROLE, _newOperator);
+    }
+
+    function setEvaluationContract(address _evaluationContract)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
+        // Check address different address(0)
+        require(_evaluationContract != address(0), "Zero address.");
+
+        // Check address is contract
+        require(_evaluationContract.isContract(), "Not a contract.");
+
+        // Set address evaluation
+        grantRole(EVALUATION_CONTRACT_ROLE, _evaluationContract);
     }
 
     function setFeeWallet(address _newFeeWallet)
