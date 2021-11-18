@@ -36,9 +36,7 @@ contract Hub is
     {
         __UUPSUpgradeable_init();
         __Pausable_init();
-
         __DFYAccessControl_init();
-
         systemConfig.systemFeeWallet = feeWallet;
         systemConfig.systemFeeToken = feeToken;
     }
