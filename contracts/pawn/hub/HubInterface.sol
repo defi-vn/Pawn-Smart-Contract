@@ -17,5 +17,12 @@ interface HubInterface {
         mapping(address => uint256) whitelistedCollateral;
     }
 
-    // struct PawnNFTConfig {}
+    struct PawnNFTConfig {
+        uint256 ZOOM;
+        uint256 systemFeeRate;
+        uint256 penaltyRate;
+        uint256 prepaidFeeRate;
+        uint256 lateThreshold;
+        mapping(address => uint256) whitelistedEvaluationContract;
+    }
 }
