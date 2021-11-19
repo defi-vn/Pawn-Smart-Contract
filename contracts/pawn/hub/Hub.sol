@@ -26,6 +26,7 @@ contract Hub is
 
     SystemConfig public systemConfig;
     PawnConfig public pawnConfig;
+    PawnNFTConfig public pawnNFTConfig;
 
     // TODO: New state variables must go below this line -----------------------------
 
@@ -59,18 +60,18 @@ contract Hub is
     }
 
     /** ==================== Hub operation functions ==================== */
-    function setSystemFeeToken(address feeToken)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
-        systemConfig.systemFeeToken = feeToken;
-    }
 
-    function setSystemFeeWallet(address feeWallet)
+    function setSystemConfig(address _FeeWallet, address _FeeToken)
         external
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
-        systemConfig.systemFeeWallet = feeWallet;
+        if (_FeeWallet != address(0)) {
+            systemConfig.systemFeeWallet = _FeeWallet;
+        }
+
+        if (_FeeToken != address(0)) {
+            systemConfig.systemFeeToken = _FeeToken;
+        }
     }
 
     function registerContract(bytes4 signature, address contractAddress)
@@ -95,5 +96,93 @@ contract Hub is
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
+    }
+
+    /** ================= config PAWN NFT ============== */
+    function setEvaluationContract(address _evaluationContract, uint256 _status)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
+        pawnNFTConfig.whitelistedEvaluationContract[
+            _evaluationContract
+        ] = _status;
+    }
+
+    function setWhitelistCollateral_NFT(address _token, uint256 _status)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
+        pawnNFTConfig.whitelistedCollateral[_token] = _status;
+    }
+
+    function setPawnNFTConfig(
+        int256 _zoom,
+        int256 _FeeRate,
+        int256 _penaltyRate,
+        int256 _prepaidFeedRate,
+        int256 _lateThreshold
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        if (_zoom >= 0) {
+            pawnNFTConfig.ZOOM = abs(_zoom);
+        }
+
+        if (_FeeRate >= 0) {
+            pawnNFTConfig.systemFeeRate = abs(_FeeRate);
+        }
+
+        if (_penaltyRate >= 0) {
+            pawnNFTConfig.penaltyRate = abs(_penaltyRate);
+        }
+
+        if (_prepaidFeedRate >= 0) {
+            pawnNFTConfig.prepaidFeeRate = abs(_prepaidFeedRate);
+        }
+
+        if (_lateThreshold >= 0) {
+            pawnNFTConfig.lateThreshold = abs(_lateThreshold);
+        }
+    }
+
+    /** ========== ConFIg PAWN crypto ===================*/
+
+    function setWhitelistCollateral(address _token, uint256 _status)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
+        pawnConfig.whitelistedCollateral[_token] = _status;
+    }
+
+    function setPawnConfig(
+        int256 _zoom,
+        int256 _FeeRate,
+        int256 _penaltyRate,
+        int256 _prepaidFeedRate,
+        int256 _lateThreshold
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        if (_zoom >= 0) {
+            pawnNFTConfig.ZOOM = abs(_zoom);
+        }
+
+        if (_FeeRate >= 0) {
+            pawnNFTConfig.systemFeeRate = abs(_FeeRate);
+        }
+
+        if (_penaltyRate >= 0) {
+            pawnNFTConfig.penaltyRate = abs(_penaltyRate);
+        }
+
+        if (_prepaidFeedRate >= 0) {
+            pawnNFTConfig.prepaidFeeRate = abs(_prepaidFeedRate);
+        }
+
+        if (_lateThreshold >= 0) {
+            pawnNFTConfig.lateThreshold = abs(_lateThreshold);
+        }
+    }
+
+    /**======================= */
+
+    function abs(int256 _input) internal pure returns (uint256) {
+        return _input >= 0 ? uint256(_input) : uint256(_input * -1);
     }
 }

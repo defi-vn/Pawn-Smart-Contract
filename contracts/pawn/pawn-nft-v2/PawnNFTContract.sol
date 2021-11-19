@@ -124,7 +124,8 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
         */
 
         // Check white list nft contract
-        require(whitelistCollateral[_nftContract] == 1, "0");
+        require(hubContract.whitelistCollateral[_nftContract] == 1, "0");
+        //   require(whitelistCollateral[_nftContract] == 1, "0");
 
         // Check loan amount
         require(_loanAmount > 0 && _expectedDurationQty > 0, "1");
@@ -514,18 +515,15 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
 
     /** ================================ ACCEPT OFFER ============================= */
     /**
-     * @dev accept offer and create contract between collateral and offer
-     * @param  _nftCollateralId is id of collateral NFT
-     * @param  _offerId is id of offer
-     */
+ 
 
     /** ==================== Loan Contract functions & states ==================== */
-    IPawnNFT public LoanContract_NFT;
+    // IPawnNFT public LoanContract_NFT;
 
-    function setPawnLoanContract(address _pawnLoanAddress)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
-        LoanContract_NFT = IPawnNFT(_pawnLoanAddress);
-    }
+    // function setPawnLoanContract(address _pawnLoanAddress)
+    //     external
+    //     onlyRole(DEFAULT_ADMIN_ROLE)
+    // {
+    //     LoanContract_NFT = IPawnNFT(_pawnLoanAddress);
+    // }
 }

@@ -19,6 +19,7 @@ import "../evaluation/IBEP20.sol";
 import "../reputation/IReputation.sol";
 import "../pawn-nft-v2/PawnNFTLib.sol";
 import "../exchange/Exchange.sol";
+import "../hub/Hub.sol";
 
 abstract contract PawnNFTModel is
     Initializable,
@@ -28,6 +29,31 @@ abstract contract PawnNFTModel is
     ERC1155HolderUpgradeable,
     DFYAccessControl
 {
+    Hub public hubContract;
+
+    function setContractHub(address _contractHubAddress)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
+        hubContract = Hub(_contractHubAddress);
+    }
+
+    modifier onlyAdmin() {
+        require(
+            hubContract.hasRole(hubContract.DEFAULT_ADMIN_ROLE(), msg.sender),
+            "is not Admin"
+        );
+        _;
+    }
+
+    modifier onlyOperator() {
+        require(
+            hubContract.hasRole(hubContract.OPERATOR_ROLE(), msg.sender),
+            "is not Operator"
+        );
+        _;
+    }
+
     // AssetEvaluation assetEvaluation;
 
     // mapping(address => uint256) public whitelistCollateral;
@@ -53,11 +79,7 @@ abstract contract PawnNFTModel is
         // ZOOM = _zoom;
     }
 
-    function _authorizeUpgrade(address)
-        internal
-        override
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {}
+    function _authorizeUpgrade(address) internal override onlyAdmin {}
 
     function supportsInterface(bytes4 interfaceId)
         public
@@ -139,11 +161,7 @@ abstract contract PawnNFTModel is
     //     whitelistCollateral[_token] = _status;
     // }
 
-    function emergencyWithdraw(address _token)
-        external
-        whenPaused
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function emergencyWithdraw(address _token) external whenPaused onlyAdmin {
         PawnNFTLib.safeTransfer(
             _token,
             address(this),

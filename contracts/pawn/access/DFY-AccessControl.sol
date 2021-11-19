@@ -26,9 +26,6 @@ contract DFYAccessControl is AccessControlUpgradeable {
      */
     bytes32 public constant EVALUATOR_ROLE = keccak256("EVALUATOR_ROLE");
 
-    bytes32 public constant EVALUATION_CONTRACT_ROLE =
-        keccak256("EVALUATION_CONTRACT_ROLE");
-
     function __DFYAccessControl_init() internal initializer {
         __AccessControl_init();
 
