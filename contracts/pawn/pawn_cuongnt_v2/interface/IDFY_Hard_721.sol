@@ -8,10 +8,6 @@ interface IDFY_Hard_721 is BaseInterface{
     function setBaseURI(
         string memory _newURI
     ) external;
-
-    function uri(
-        uint256 _tokenId
-    ) public view virtual returns (string memory);
     
     function mint(
         address _evaluator,

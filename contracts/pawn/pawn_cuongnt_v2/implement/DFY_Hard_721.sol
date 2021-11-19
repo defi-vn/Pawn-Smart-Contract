@@ -2,6 +2,7 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
@@ -9,9 +10,9 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "../interface/IDFY_Hard_721.sol";
 
-contract DFY_Hard_721 is 
-    IDFY_Hard_721,
+contract DFY_Hard_721 is
     Initializable,
+    IDFY_Hard_721,
     UUPSUpgradeable,
     ERC721Upgradeable,
     PausableUpgradeable
@@ -20,13 +21,7 @@ contract DFY_Hard_721 is
     using AddressUpgradeable for address;
 
     // Total NFT_Hard_721 token
-    CountersUpgradeable.counter public totalToken;
-
-    // Name NFT_Hard_721 token
-    string public name;
-
-    // Name NFT_Hard_721 token
-    string public symbol;
+    CountersUpgradeable.Counter public totalToken;
     
     // Base URI NFT Token
     string public tokenBaseUri;
@@ -47,9 +42,6 @@ contract DFY_Hard_721 is
         __ERC721_init(_name,_symbol);
         __Pausable_init();
         __UUPSUpgradeable_init();
-
-        name = _name;
-        symbol = _symbol;
         
         _setBaseURI(_uri);
     }
@@ -78,13 +70,13 @@ contract DFY_Hard_721 is
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721Upgradeable)
+        override(ERC721Upgradeable, IERC165Upgradeable)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
     }
 
-    function _authorizeUpgrade(address) 
+    function _authorizeUpgrade(address)
         internal
         override{}
 
@@ -105,33 +97,29 @@ contract DFY_Hard_721 is
 
     function pause()
         external 
-        override
     {
         _pause();
     }
 
     function unpause() 
         external
-        override 
     {
         _unpause();
     }
 
-    function _exists(uint256 _tokenId) internal view virtual returns (bool) {
+    function _exists(uint256 _tokenId) override internal view virtual returns (bool) {
         return bytes(cidOfToken[_tokenId]).length > 0;
     }
 
     function uri(uint256 _tokenId) 
-        public
+        external
         view
-        virtual
-        override
         whenNotPaused
         returns (string memory)
     {
-        require(_exists(tokenId), "Invalid token");
+        require(_exists(_tokenId), "Invalid token");
 
-        return bytes(tokenBaseUri).length > 0 ? string(abi.encodePacked(tokenBaseUri, cidOfToken[tokenId])) : "";
+        return bytes(tokenBaseUri).length > 0 ? string(abi.encodePacked(tokenBaseUri, cidOfToken[_tokenId])) : "";
     }
 
     function mint(
@@ -151,7 +139,7 @@ contract DFY_Hard_721 is
         cidOfToken[tokenId] =_cid;
 
         // Add token id to mapping token of cid of token id
-        tokenOfEvaluator[_evaluator] = tokenId;
+        tokenOfEvaluator[_evaluator].push(tokenId);
 
         // Mint token
         _mint(_owner, tokenId);

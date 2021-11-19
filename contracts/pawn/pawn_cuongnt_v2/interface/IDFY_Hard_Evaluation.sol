@@ -75,10 +75,6 @@ interface IDFY_Hard_Evaluation is BaseInterface{
         address _newAdminAddress
     ) external;
 
-    function setFeeWallet(
-        address _newFeeWallet
-    ) external;
-
     function setMintingNFTFee(
         uint256 _newFee
     ) external;
