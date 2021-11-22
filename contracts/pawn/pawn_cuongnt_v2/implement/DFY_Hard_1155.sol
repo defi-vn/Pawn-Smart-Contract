@@ -12,7 +12,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "../interface/IDFY_Hard_1155.sol";
 
 contract DFY_Hard_1155 is
-    Initializable,    
+    Initializable,
     IDFY_Hard_1155,
     UUPSUpgradeable,
     ERC1155Upgradeable,
@@ -30,7 +30,7 @@ contract DFY_Hard_1155 is
 
     // Name NFT_Hard_721 token
     string public symbol;
-    
+
     // Base URI NFT Token
     string public tokenBaseUri;
 
@@ -54,16 +54,11 @@ contract DFY_Hard_1155 is
 
         name = _name;
         symbol = _symbol;
-        
+
         _setBaseURI(_uri);
     }
 
-    function signature() 
-        external
-        view
-        override
-        returns(bytes4) 
-    {
+    function signature() external view override returns (bytes4) {
         return type(IDFY_Hard_1155).interfaceId;
     }
 
@@ -87,34 +82,22 @@ contract DFY_Hard_1155 is
         return super.supportsInterface(interfaceId);
     }
 
-    function _authorizeUpgrade(address) 
-        internal
-        override{}
+    function _authorizeUpgrade(address) internal override {}
 
     function _setBaseURI(string memory _newURI) internal {
         require(bytes(_newURI).length > 0, "Blank");
         tokenBaseUri = _newURI;
     }
 
-    function setBaseURI(
-        string memory _newURI
-    ) 
-        external
-        override
-        whenNotPaused
-    {
+    function setBaseURI(string memory _newURI) external override whenNotPaused {
         _setBaseURI(_newURI);
     }
 
-    function pause()
-        external 
-    {
+    function pause() external {
         _pause();
     }
 
-    function unpause() 
-        external
-    {
+    function unpause() external {
         _unpause();
     }
 
@@ -122,35 +105,33 @@ contract DFY_Hard_1155 is
         return bytes(cidOfToken[_tokenId]).length > 0;
     }
 
-    function uri(uint256 _tokenId) 
-        public 
+    function uri(uint256 _tokenId)
+        public
         view
         virtual
         override
         returns (string memory)
-        {
+    {
         require(_exists(_tokenId), "Invalid token");
 
-        return bytes(tokenBaseUri).length > 0 ? string(abi.encodePacked(tokenBaseUri, cidOfToken[_tokenId])) : "";
+        return
+            bytes(tokenBaseUri).length > 0
+                ? string(abi.encodePacked(tokenBaseUri, cidOfToken[_tokenId]))
+                : "";
     }
 
     function mint(
-        address _assetOwner, 
-        address _evaluator, 
-        uint256 _amount, 
-        string memory _cid, 
+        address _assetOwner,
+        address _evaluator,
+        uint256 _amount,
+        string memory _cid,
         bytes memory _data
-    )
-        external
-        override
-        whenNotPaused
-        returns (uint256 tokenId)
-    {
+    ) external override whenNotPaused returns (uint256 tokenId) {
         // Generate token id
         tokenId = totalToken.current();
 
         // Add mapping cid of token id token id
-        cidOfToken[tokenId] =_cid;
+        cidOfToken[tokenId] = _cid;
 
         // Add token id to mapping token of cid of token id
         tokenOfEvaluator[_evaluator].push(tokenId);
@@ -164,12 +145,9 @@ contract DFY_Hard_1155 is
         return tokenId;
     }
 
-    function updateCID(
-        uint256 _tokenId,
-        string memory _newCID
-    ) 
+    function updateCID(uint256 _tokenId, string memory _newCID)
         external
-        override 
+        override
         whenNotPaused
     {
         // Check for empty CID string input
@@ -181,5 +159,4 @@ contract DFY_Hard_1155 is
         // Update CID
         cidOfToken[_tokenId] = _newCID;
     }
-
 }

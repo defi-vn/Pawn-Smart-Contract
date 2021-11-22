@@ -277,4 +277,8 @@ contract Reputation is
 
         emit ReputationPointReduced(_from, _points, _reasonType);
     }
+
+    function signature() external view returns (bytes4) {
+        return type(IReputation).interfaceId;
+    }
 }

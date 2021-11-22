@@ -1,25 +1,24 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "../../base/BaseInterface.sol";
+import "../../../base/BaseInterface.sol";
 
-interface IDFY_Hard_Evaluation is BaseInterface{
-
+interface IDFY_Hard_Evaluation is BaseInterface {
     /** ===== Enum ===== */
-    enum AssetStatus{
+    enum AssetStatus {
         OPEN,
         EVALUATED,
         NFT_CREATED
     }
 
-    enum EvaluationStatus{
+    enum EvaluationStatus {
         EVALUATED,
         EVALUATION_ACCEPTED,
         EVALUATION_REJECTED,
         NFT_CREATED
     }
 
-    enum CollectionStandard{
+    enum CollectionStandard {
         NFT_HARD_721,
         NFT_HARD_1155
     }
@@ -48,40 +47,25 @@ interface IDFY_Hard_Evaluation is BaseInterface{
     }
 
     /** ===== event ===== */
-    event AssetEvent (
-        uint256 assetId,
-        Asset asset
-    );
+    event AssetEvent(uint256 assetId, Asset asset);
 
-    event EvaluationEvent (
+    event EvaluationEvent(
         uint256 evaluationId,
         Asset asset,
         Evaluation evaluation
     );
 
-    event NFTEvent (
-        uint256 tokenId,
-        address owner,
-        string nftCID
-    );
-    
+    event NFTEvent(uint256 tokenId, address owner, string nftCID);
+
     /** ===== method ===== */
 
-    function setBaseURI(
-        string memory _newURI
-    ) external;
+    function setBaseURI(string memory _newURI) external;
 
-    function setAdminAddress(
-        address _newAdminAddress
-    ) external;
+    function setAdminAddress(address _newAdminAddress) external;
 
-    function setMintingNFTFee(
-        uint256 _newFee
-    ) external;
+    function setMintingNFTFee(uint256 _newFee) external;
 
-    function setAddressMintingFee(
-        address _newAddressMintingFee
-    ) external;
+    function setAddressMintingFee(address _newAddressMintingFee) external;
 
     function createAssetRequest(
         string memory _assetCID,
@@ -98,20 +82,13 @@ interface IDFY_Hard_Evaluation is BaseInterface{
         uint256 _depreciationRate
     ) external;
 
-    function acceptEvaluation(
-        uint256 _assetId,
-        uint256 _evaluationId
-    ) external;
+    function acceptEvaluation(uint256 _assetId, uint256 _evaluationId) external;
 
-    function rejectEvaluation(
-        uint256 _assetId,
-        uint256 _evaluationId
-    ) external;
+    function rejectEvaluation(uint256 _assetId, uint256 _evaluationId) external;
 
     function createNftToken(
         uint256 _assetId,
         uint256 _evaluationId,
         string memory _nftCID
     ) external;
-
 }

@@ -164,10 +164,15 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
         emit CollateralEvent_NFT(collateralId, collaterals[collateralId], _UID);
 
         // Adjust reputation score
-        reputation.adjustReputationScore(
-            msg.sender,
-            IReputation.ReasonType.BR_CREATE_COLLATERAL
-        );
+        // reputation.adjustReputationScore(
+        //     msg.sender,
+        //     IReputation.ReasonType.BR_CREATE_COLLATERAL
+        // );
+    }
+
+    function getReputation() internal returns (address) {
+        bytes4 signatureReputation = IReputation.signature();
+        return Hub.ContractRegistry[signatureReputation];
     }
 
     function withdrawCollateral(uint256 _nftCollateralId, uint256 _UID)
