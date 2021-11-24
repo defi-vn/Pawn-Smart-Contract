@@ -23,7 +23,7 @@ contract Hub is
 {
     using AddressUpgradeable for address;
 
-    mapping(string => address) public ContractRegistry;
+    mapping(bytes4 => address) public ContractRegistry;
 
     SystemConfig public systemConfig;
     PawnConfig public pawnConfig;
@@ -42,8 +42,33 @@ contract Hub is
         __AccessControl_init();
         systemConfig.systemFeeWallet = feeWallet;
         systemConfig.systemFeeToken = feeToken;
-        systemConfig.Admin = msg.sender;
-        systemConfig.Admin = operator;
+        // systemConfig.Admin = msg.sender;
+        // systemConfig.Admin = operator;
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(HubRoleLib.DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(HubRoleLib.OPERATOR_ROLE, operator);
+        _setupRole(HubRoleLib.PAUSER_ROLE, msg.sender);
+        _setupRole(HubRoleLib.EVALUATOR_ROLE, msg.sender);
+    }
+
+    function setOperator(address _newOperator)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
+        // operator = _newOperator;
+
+        grantRole(HubRoleLib.OPERATOR_ROLE, _newOperator);
+    }
+
+    function setPauseRole(address _newPauseRole)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
+        grantRole(HubRoleLib.PAUSER_ROLE, _newPauseRole);
+    }
+
+    function setEvaluationRole(address _newEvaluationRole) external {
+        grantRole(HubRoleLib.EVALUATOR_ROLE, _newEvaluationRole);
     }
 
     modifier whenContractNotPaused() {
@@ -65,12 +90,10 @@ contract Hub is
 
     /** ==================== Hub operation functions ==================== */
 
-    function setSystemConfig(
-        address _FeeWallet,
-        address _FeeToken,
-        address _admin,
-        address _operator
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setSystemConfig(address _FeeWallet, address _FeeToken)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         if (_FeeWallet != address(0)) {
             systemConfig.systemFeeWallet = _FeeWallet;
         }
@@ -78,41 +101,27 @@ contract Hub is
         if (_FeeToken != address(0)) {
             systemConfig.systemFeeToken = _FeeToken;
         }
-
-        if (_admin != address(0)) {
-            systemConfig.Admin = _admin;
-        }
-
-        if (_operator != address(0)) {
-            systemConfig.Operator = _operator;
-        }
     }
 
     function getSystemConfig()
         external
         view
         override
-        returns (
-            address _FeeWallet,
-            address _FeeToken,
-            address _admin,
-            address _operator
-        )
+        returns (address _FeeWallet, address _FeeToken)
     {
         _FeeWallet = systemConfig.systemFeeWallet;
         _FeeToken = systemConfig.systemFeeToken;
-        _admin = systemConfig.Admin;
-        _operator = systemConfig.Operator;
     }
 
-    function registerContract(
-        string memory nameContract,
-        address contractAddress
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function registerContract(bytes4 nameContract, address contractAddress)
+        external
+        override
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         ContractRegistry[nameContract] = contractAddress;
     }
 
-    function getContractAddress(string memory _nameContract)
+    function getContractAddress(bytes4 _nameContract)
         external
         view
         override

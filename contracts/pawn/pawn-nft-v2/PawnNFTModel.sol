@@ -23,6 +23,7 @@ import "../exchange/Exchange.sol";
 import "../hub/Hub.sol";
 import "../hub/HubInterface.sol";
 import "../hub/HubLib.sol";
+import "../exchange/IExchange.sol";
 
 abstract contract PawnNFTModel is
     Initializable,

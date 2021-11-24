@@ -6,10 +6,19 @@ import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol"
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
 
+import "./IExchange.sol";
 import "../pawn-nft-v2/PawnNFTLib.sol";
 
-contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
+import "../hub/HubInterface.sol";
+
+contract Exchange is
+    Initializable,
+    UUPSUpgradeable,
+    AccessControlUpgradeable,
+    IExchange
+{
     mapping(address => address) public ListCryptoExchange;
 
     function initialize() public initializer {
@@ -28,7 +37,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(AccessControlUpgradeable)
+        override(IERC165Upgradeable, AccessControlUpgradeable)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
@@ -38,7 +47,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
     function setCryptoExchange(
         address _cryptoAddress,
         address _latestPriceAddress
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    ) external override onlyRole(DEFAULT_ADMIN_ROLE) {
         ListCryptoExchange[_cryptoAddress] = _latestPriceAddress;
     }
 
@@ -764,5 +773,21 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         }
         uint256 rouding = tm * 10**13;
         return rouding;
+    }
+
+    /**============  signature ====================*/
+
+    function signature() public view override returns (bytes4) {
+        return type(IExchange).interfaceId;
+    }
+
+    address hubContract;
+
+    function setContractHub(address _contractHubAddress) external {
+        hubContract = _contractHubAddress;
+    }
+
+    function RegistrywithHubContract() external {
+        HubInterface(hubContract).registerContract(signature(), address(this));
     }
 }

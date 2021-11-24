@@ -6,8 +6,8 @@ interface HubInterface {
     struct SystemConfig {
         address systemFeeWallet;
         address systemFeeToken;
-        address Admin;
-        address Operator;
+        // address Admin;
+        // address Operator;
     }
 
     struct PawnConfig {
@@ -66,7 +66,7 @@ interface HubInterface {
             uint256 _lateThreshold
         );
 
-    function getContractAddress(string memory _nameContract)
+    function getContractAddress(bytes4 _nameContract)
         external
         view
         returns (address _contractAddres);
@@ -74,10 +74,8 @@ interface HubInterface {
     function getSystemConfig()
         external
         view
-        returns (
-            address _FeeWallet,
-            address _FeeToken,
-            address _admin,
-            address _operator
-        );
+        returns (address _FeeWallet, address _FeeToken);
+
+    function registerContract(bytes4 nameContract, address contractAddress)
+        external;
 }

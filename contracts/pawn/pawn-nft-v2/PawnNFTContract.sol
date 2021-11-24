@@ -574,21 +574,32 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
     //     LoanContract_NFT = IPawnNFT(_pawnLoanAddress);
     // }
     /** ==== Reputation =======*/
+
+    function signature() public view override returns (bytes4) {
+        return type(IPawnNFT).interfaceId;
+    }
+
     function getReputation() internal view returns (address) {
-        string memory nameContract = "Reputation";
-        return HubInterface(hubContract).getContractAddress(nameContract);
+        return
+            HubInterface(hubContract).getContractAddress(
+                type(IReputation).interfaceId
+            );
     }
 
     /**=== Exchange======= */
     function getExchange() internal view returns (address) {
-        string memory nameContract = "Exchange";
-        return HubInterface(hubContract).getContractAddress(nameContract);
+        return
+            HubInterface(hubContract).getContractAddress(
+                type(IExchange).interfaceId
+            );
     }
 
     /**============get Loan Contract ================ */
 
     function getLoanContractNFT() internal view returns (address) {
-        string memory nameContract = "LoanContractNFT";
-        return HubInterface(hubContract).getContractAddress(nameContract);
+        return
+            HubInterface(hubContract).getContractAddress(
+                type(IPawnNFT).interfaceId
+            );
     }
 }
