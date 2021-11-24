@@ -7,6 +7,7 @@ interface IDFY_Hard_Evaluation is BaseInterface {
     /** ===== Enum ===== */
     enum AssetStatus {
         OPEN,
+        APPOINTMENTED,
         EVALUATED,
         NFT_CREATED
     }
@@ -23,6 +24,14 @@ interface IDFY_Hard_Evaluation is BaseInterface {
         NFT_HARD_1155
     }
 
+    enum AppointmentStatus {
+        OPEN,
+        ACCEPTED,
+        REJECTED,
+        CANCELLED,
+        EVALUATED
+    }
+
     /** ===== Data type ===== */
 
     struct Asset {
@@ -34,38 +43,77 @@ interface IDFY_Hard_Evaluation is BaseInterface {
         AssetStatus status;
     }
 
+    struct Appointment {
+        uint256 assetId;
+        address assetOwner;
+        address evaluator;
+        uint256 evaluationFee;
+        address evaluationFeeAddress;
+        AppointmentStatus status;
+    }
+
     struct Evaluation {
         uint256 assetId;
+        uint256 appointmentId;
         string evaluationCID;
         uint256 depreciationRate;
         address evaluator;
         address currency;
         uint256 price;
+        uint256 mintingFee;
+        address mintingFeeAddress;
         address collectionAddress;
         CollectionStandard collectionStandard;
         EvaluationStatus status;
     }
 
+    
     /** ===== event ===== */
-    event AssetEvent(uint256 assetId, Asset asset);
+    event AssetEvent(
+        uint256 assetId,
+        Asset asset
+    );
+
+    event AppointmentEvent(
+        uint256 appoimentId,
+        Asset asset,
+        Appointment appointment,
+        string reason
+    );
 
     event EvaluationEvent(
         uint256 evaluationId,
         Asset asset,
+        Evaluation evaluation,
+        string reason
+    );  
+
+    event NFTEvent(
+        uint256 tokenId,
+        string nftCID,
+        Asset asset,
         Evaluation evaluation
     );
 
-    event NFTEvent(uint256 tokenId, address owner, string nftCID);
-
     /** ===== method ===== */
 
-    function setBaseURI(string memory _newURI) external;
+    function setBaseURI(
+        string memory _newURI
+    ) external;
 
-    function setAdminAddress(address _newAdminAddress) external;
+    function setAdminAddress(
+        address _newAdminAddress
+    ) external;
 
-    function setMintingNFTFee(uint256 _newFee) external;
+    function addWhiteListEvaluationFee(
+        address _newAddressEvaluatonFee,
+        uint256 _newEvaluationFee
+    ) external;
 
-    function setAddressMintingFee(address _newAddressMintingFee) external;
+    function addWhiteListMintingFee(
+        address _newAddressMintingFee,
+        uint256 _newMintingFee
+    ) external;
 
     function createAssetRequest(
         string memory _assetCID,
@@ -74,21 +122,47 @@ interface IDFY_Hard_Evaluation is BaseInterface {
         CollectionStandard _collectionStandard
     ) external;
 
-    function evaluatedAsset(
+    function createAppointment(
         uint256 _assetId,
-        address _currency,
-        uint256 _price,
-        string memory _evaluationCID,
-        uint256 _depreciationRate
+        address _evaluator,
+        address _evaluationFeeAddress
     ) external;
 
-    function acceptEvaluation(uint256 _assetId, uint256 _evaluationId) external;
+    function acceptAppointment(
+        uint256 _appointmentId
+    ) external;
 
-    function rejectEvaluation(uint256 _assetId, uint256 _evaluationId) external;
+    function rejectAppointment(
+        uint256 _appointmentId,
+        string memory reason
+    ) external;
+
+    function cancelAppointment(
+        uint256 _appointmentId,
+        string memory reason
+    ) external;
+
+    function evaluatedAsset(
+        address _currency,
+        uint256 _appointmentId,
+        uint256 _price,
+        string memory _evaluationCID,
+        uint256 _depreciationRate,
+        address _mintingFeeAddress
+    ) external;
+
+    function acceptEvaluation(
+        uint256 _evaluationId
+    ) external;
+
+    function rejectEvaluation(
+        uint256 _evaluationId,
+        string memory reason
+    ) external;
 
     function createNftToken(
-        uint256 _assetId,
         uint256 _evaluationId,
         string memory _nftCID
     ) external;
+
 }

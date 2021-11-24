@@ -4,18 +4,17 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165CheckerUpgradeable.sol";
 import "../interface/IDFY_Hard_Evaluation.sol";
 import "../interface/IDFY_Hard_721.sol";
 import "../interface/IDFY_Hard_1155.sol";
-import "../../hub/Hub.sol";
+import "./Hard_Evaluation_Lib.sol";
 
 contract Hard_Evaluation is
     Initializable,
@@ -25,62 +24,80 @@ contract Hard_Evaluation is
     PausableUpgradeable,
     ReentrancyGuardUpgradeable
 {
+
     using CountersUpgradeable for CountersUpgradeable.Counter;
     using AddressUpgradeable for address;
     using SafeMathUpgradeable for uint256;
-    using SafeERC20Upgradeable for IERC20Upgradeable;
+    using ERC165CheckerUpgradeable for address;
 
+    // Admin address
+    address private adminAdress;
+    
     // Total asset
     CountersUpgradeable.Counter public totalAssets;
 
+    // Total appointment
+    CountersUpgradeable.Counter public totalAppointment;
+
     // Total evaluation
-    CountersUpgradeable.Counter public totalEvaluations;
+    CountersUpgradeable.Counter public totalEvaluation;
 
-    // Address admin receiver fee
-    address private addressAdmin;
-
-    // Address minting fee
-    address private mintingFeeAddress;
-
-    // Assuming baseUri = "https://ipfs.io/ipfs"
+    // Base URI token
     string public baseUri;
 
-    // Mintting NFT fee
-    uint256 public mintingNFTFee;
+    // Evaluation fee
+    uint256 public evaluationFee;
 
-    // Mapping list asset
-    // AssetId => Asset
+    // Minting fee
+    uint256 public mintingFee;
+
+    // White list evaluation fee
+    // Address evaluation fee => fee
+    mapping(address => uint256) whiteListEvaluationFee;
+
+    // White list minting fee
+    // Address minting fee => fee
+    mapping(address => uint256) whiteListMintingFee;
+
+    // Mapping asset list
+    // Asset id => Asset
     mapping(uint256 => Asset) public assetList;
 
-    // Mapping from creator to asset
-    // Creator => listAssetId
-    mapping(address => uint256[]) public assetListOfOwner;
+    // Mapping appointment list
+    // Appointmenty
+    mapping(uint256 => Appointment) public appointmentList;
 
-    // Mapping from creator address to assetId in his/her possession
-    // Creator => (assetId => bool)
-    mapping(address => mapping(uint256 => bool)) private assetsOfOwner;
+    // Mapping list appointment of asset
+    // Asset id => list appointment id
+    mapping(uint256 => uint256[]) public appointmentListOfAsset;
 
-    // Mapping list evaluation
-    // EvaluationId => evaluation
+    // Mapping evaluation list
+    // Evaluation id => list evaluation
     mapping(uint256 => Evaluation) public evaluationList;
 
-    // Mapping from asset to list evaluation
-    // AssetId => listEvaluationId
-    mapping(uint256 => uint256[]) public evaluationByAsset;
+    // Mapping list evaluation of asset
+    // Asset id => list evaluation id;
+    mapping(uint256 => uint256[]) public evaluationListOfAsset;
 
-    // Mapping from evaluator to evaluation
-    // Evaluator => listEvaluation
-    mapping(address => uint256[]) public evaluationListByEvaluator;
+    // Mapping asset of token id
+    // Token id => asset
+    mapping(uint256 => Asset) public assetOfTokenId;
 
-    // Mapping tokenId to asset
-    // TokenId => asset
-    mapping(uint256 => Asset) public tokenIdByAsset;
+    // Mapping evaluation of token id
+    // Token id => evaluation
+    mapping(uint256 => Evaluation) public evaluationOfTokenId;
 
-    // Mapping tokenId to evaluation
-    // TokenId => evaluation
-    mapping(uint256 => Evaluation) public tokenIdByEvaluation;
+    modifier onlyRoleAdmin(){
+        // todo call hub check role admin
+        _;
+    }
 
-    function initialize(string memory _uri, address _mintingFeeAddress)
+    modifier onlyRoleEvaluator(){
+        // todo call hub check role evaluator
+        _;
+    }
+
+    function initialize(string memory _uri)
         public
         initializer
     {
@@ -88,11 +105,7 @@ contract Hard_Evaluation is
 
         _setBaseURI(_uri);
 
-        _setMintingNFTFee(50 * 10**18);
-
         _setAdminAddress(msg.sender);
-
-        _setAddressMintingFee(_mintingFeeAddress);
     }
 
     function signature() external view override returns (bytes4) {
@@ -113,53 +126,94 @@ contract Hard_Evaluation is
             super.supportsInterface(interfaceId);
     }
 
-    function _setBaseURI(string memory _newURI) internal {
-        require(bytes(_newURI).length > 0, "Empty URI");
+    function _setBaseURI(string memory _newURI)
+        internal
+    {
+        require(bytes(_newURI).length > 0 , '0'); // New URI is blank
         baseUri = _newURI;
     }
 
-    // todo msg.sender = ADMIN_ROLE
-    function setBaseURI(string memory _newURI) external override {
+    function setBaseURI(string memory _newURI)
+        external
+        override
+        onlyRoleAdmin
+    {
         _setBaseURI(_newURI);
     }
 
-    function _setAdminAddress(address _newAdminAddress) internal {
-        addressAdmin = _newAdminAddress;
+    function _setAdminAddress(address _newAdminAddress)
+        internal
+    {
+        require(!_newAdminAddress.isContract(), '1'); // Address admin is contract
+        require(_newAdminAddress != address(0), '2'); // Address admin not address 0
+        adminAdress = _newAdminAddress;
     }
 
-    // todo msg.sender = ADMIN_ROLE
-    function setAdminAddress(address _newAdminAddress) external override {
+    function setAdminAddress(address _newAdminAddress)
+        external
+        override
+        onlyRoleAdmin
+    {
         _setAdminAddress(_newAdminAddress);
     }
 
-    function _setMintingNFTFee(uint256 _newFee) internal {
-        mintingNFTFee = _newFee;
+    function _addWhiteListEvaluationFee(
+        address _newAddressEvaluatonFee,
+        uint256 _newEvaluationFee
+    ) 
+        internal
+    {
+        if(_newAddressEvaluatonFee != address(0)){
+            require(_newAddressEvaluatonFee.isContract(), '3'); // Address evaluation fee is contract
+        }
+
+        require(_newEvaluationFee > 0, '4'); // Evaluation fee than more 0
+
+        whiteListEvaluationFee[_newAddressEvaluatonFee] = _newEvaluationFee;
     }
 
-    // todo msg.sender = ADMIN_ROLE
-    function setMintingNFTFee(uint256 _newFee) external override {
-        _setMintingNFTFee(_newFee);
+    function _addWhiteListMintingFee(
+        address _newAddressMintingFee,
+        uint256 _newMintingFee
+    ) 
+        internal
+    {
+        if(_newAddressMintingFee != address(0)){
+            require(_newAddressMintingFee.isContract(), '5'); // Address minting fee is contract
+        }
+
+        require(_newMintingFee > 0, '6'); // Minting fee than more 0
+
+        whiteListMintingFee[_newAddressMintingFee] = _newMintingFee;
     }
 
-    function _setAddressMintingFee(address _newAddressMintingFee) internal {
-        mintingFeeAddress = _newAddressMintingFee;
-    }
-
-    // todo msg.sender = ADMIN_ROLE
-    function setAddressMintingFee(address _newAddressMintingFee)
+    function addWhiteListEvaluationFee(
+        address _newAddressEvaluatonFee,
+        uint256 _newEvaluationFee
+    ) 
         external
         override
+        onlyRoleAdmin
     {
-        _setAddressMintingFee(_newAddressMintingFee);
+        _addWhiteListEvaluationFee(_newAddressEvaluatonFee, _newEvaluationFee);
     }
 
-    // todo msg.sender = ADMIN_ROLE
-    function pause() external {
+    function addWhiteListMintingFee(
+        address _newAddressMintingFee,
+        uint256 _newMintingFee
+    ) 
+        external
+        override
+        onlyRoleAdmin
+    {
+        _addWhiteListMintingFee(_newAddressMintingFee, _newMintingFee);
+    }
+
+    function pause() external onlyRoleAdmin {
         _pause();
     }
 
-    // todo msg.sender = ADMIN_ROLE
-    function unpause() external {
+    function unpause() external onlyRoleAdmin {
         _unpause();
     }
 
@@ -168,20 +222,35 @@ contract Hard_Evaluation is
         address _collectionAsset,
         uint256 _amount,
         CollectionStandard _collectionStandard
-    ) external override whenNotPaused {
-        // Require length _cid >0
-        require(bytes(_assetCID).length > 0, "0"); // 0 asset cid empty
-
-        // Create asset id
-        uint256 _assetId = totalAssets.current();
+    ) 
+        external
+        override
+        whenNotPaused
+    {
+        // Require asset CID
+        require(bytes(_assetCID).length > 0, "7"); // Asset CID is Blank
 
         uint256 _amountAsset = 0;
 
         if (_collectionStandard == CollectionStandard.NFT_HARD_721) {
-            _amountAsset = 1;
+
+            // Require collection asset
+            if (_collectionAsset.supportsInterface(type(IDFY_Hard_721).interfaceId)) {
+                _amountAsset = 1;
+            }else{
+                revert('8'); // Invalid collection
+            }
         } else {
-            _amountAsset = _amount;
+             // Require collection asset
+            if (_collectionAsset.supportsInterface(type(IDFY_Hard_1155).interfaceId)) {
+                _amountAsset = _amount;
+            }else{
+                revert('8'); // Invalid collection
+            }
         }
+
+        // Create asset id
+        uint256 _assetId = totalAssets.current();
 
         // Add asset from asset list
         assetList[_assetId] = Asset({
@@ -193,239 +262,305 @@ contract Hard_Evaluation is
             status: AssetStatus.OPEN
         });
 
-        // Add asset id from list asset id of owner
-        assetListOfOwner[msg.sender].push(_assetId);
-
-        // Update status from asset id of owner
-        assetsOfOwner[msg.sender][_assetId] = true;
-
         // Update total asset
         totalAssets.increment();
 
         emit AssetEvent(_assetId, assetList[_assetId]);
     }
 
-    // Function check asset of creator
-    function _isAssetOfOwner(address _owner, uint256 _assetId)
-        internal
-        view
-        returns (bool)
+    function createAppointment(
+        uint256 _assetId,
+        address _evaluator,
+        address _evaluationFeeAddress
+    ) 
+        external
+        override
+        whenNotPaused
     {
-        return assetsOfOwner[_owner][_assetId];
+        // Get asset by asset id
+        Asset storage _asset = assetList[_assetId];
+
+        require(
+            bytes(_asset.assetCID).length > 0 
+            && _asset.status == AssetStatus.OPEN 
+            && msg.sender == _asset.owner, '9'
+        ); // Invalid asset
+
+        require(!_evaluator.isContract() && _evaluator != _asset.owner, '11'); // Invalid evaluator
+
+        // Gennerate total appointment
+        uint256 _appointmentId = totalAppointment.current();
+
+        // Add appointment to list appointment 
+        appointmentList[_appointmentId] = Appointment({
+            assetId: _assetId,
+            assetOwner: _asset.owner,
+            evaluator: _evaluator,
+            evaluationFee: whiteListEvaluationFee[_evaluationFeeAddress],
+            evaluationFeeAddress: _evaluationFeeAddress,
+            status: AppointmentStatus.OPEN
+        });
+
+        // Add appointment id to appointment list of asset
+        appointmentListOfAsset[_assetId].push(_appointmentId);
+
+        // update status asset
+        _asset.status = AssetStatus.APPOINTMENTED;
+
+        Hard_Evaluation_Lib.safeTransfer(_evaluationFeeAddress, msg.sender, address(this), whiteListEvaluationFee[_evaluationFeeAddress]);
+
+        // Update total asset
+        totalAssets.increment();
+
+        // Send event
+        emit AppointmentEvent(_appointmentId, _asset, appointmentList[_appointmentId], '');
     }
 
-    // todo msg.sender = evaluator role
+    function acceptAppointment(
+        uint256 _appointmentId
+    ) 
+        external
+        override
+        onlyRoleEvaluator
+        whenNotPaused
+    {
+        Appointment storage _appointment = appointmentList[_appointmentId];
+
+        require(
+            _appointment.status == AppointmentStatus.OPEN
+            && _appointment.evaluator == msg.sender, '12');// Invalid appoinment
+
+        _appointment.status = AppointmentStatus.ACCEPTED;
+
+        emit AppointmentEvent(_appointmentId, assetList[_appointment.assetId], _appointment, '');
+    }
+
+    function rejectAppointment(
+        uint256 _appointmentId,
+        string memory reason
+    ) 
+        external
+        override
+        onlyRoleEvaluator
+        whenNotPaused
+    {
+        Appointment storage _appointment = appointmentList[_appointmentId];
+
+        require(
+            _appointment.status == AppointmentStatus.OPEN
+            && _appointment.evaluator == msg.sender, '13');// Invalid appoinment
+
+        _appointment.status = AppointmentStatus.REJECTED;
+
+        Asset storage _asset = assetList[_appointment.assetId];
+
+        _asset.status = AssetStatus.OPEN;
+
+        Hard_Evaluation_Lib.safeTransfer(_appointment.evaluationFeeAddress, address(this), _appointment.assetOwner, _appointment.evaluationFee);
+
+        emit AppointmentEvent(_appointmentId, assetList[_appointment.assetId], _appointment, reason);
+    }
+
+    function cancelAppointment(
+        uint256 _appointmentId,
+        string memory reason
+    ) 
+        external
+        override
+    {
+        Appointment storage _appointment = appointmentList[_appointmentId];
+
+        require(
+            _appointment.status != AppointmentStatus.EVALUATED
+            && _appointment.status != AppointmentStatus.CANCELLED
+            && _appointment.evaluator == msg.sender, '13');// Invalid appoinment
+
+        _appointment.status = AppointmentStatus.CANCELLED;
+
+        Asset storage _asset = assetList[_appointment.assetId];
+
+        _asset.status = AssetStatus.OPEN;
+
+        Hard_Evaluation_Lib.safeTransfer(_appointment.evaluationFeeAddress, address(this), _appointment.assetOwner, _appointment.evaluationFee);
+
+        emit AppointmentEvent(_appointmentId, assetList[_appointment.assetId], _appointment, reason);
+    }
+
     function evaluatedAsset(
-        uint256 _assetId,
         address _currency,
+        uint256 _appointmentId,
         uint256 _price,
         string memory _evaluationCID,
-        uint256 _depreciationRate
-    ) external override whenNotPaused {
-        // Check evaluation CID
-        require(bytes(_evaluationCID).length > 0, "1"); // Evaluation CID empty.
+        uint256 _depreciationRate,
+        address _mintingFeeAddress
+    ) 
+        external
+        override
+        onlyRoleEvaluator
+        whenNotPaused
+    {
+        Appointment storage _appointment = appointmentList[_appointmentId];
 
-        // Require address currency is contract except BNB - 0x0000000000000000000000000000000000000000
+        Asset storage _asset = assetList[_appointment.assetId];
+
+        require(
+            _appointment.status == AppointmentStatus.ACCEPTED
+            && _appointment.evaluator == msg.sender, '14');// Invalid appoinment
+
+        require(
+            _asset.status == AssetStatus.APPOINTMENTED
+            && _asset.owner != msg.sender, '15'); // Invalid asset
+
         if (_currency != address(0)) {
-            require(_currency.isContract(), "2"); // Currency is not defined.
+            require(_currency.isContract(), '16'); // Invalid currency
         }
 
-        // Require validation of asset via _assetId
-        require(_assetId >= 0, "3"); // Asset does not exist.
+        require (
+            bytes(_evaluationCID).length > 0
+            && _price > 0
+            && _depreciationRate > 0, '17'
+            ); // Invalid evaluation
+        
 
-        // Require validation is creator asset
-        require(!_isAssetOfOwner(msg.sender, _assetId), "4"); // Cant evaluted your asset.
+        // Gennerate evaluation id
+        uint256 _evaluationId = totalEvaluation.current();
 
-        // Get asset to asset id;
-        Asset memory _asset = assetList[_assetId];
-
-        // Check asset is exists
-        require(bytes(_asset.assetCID).length > 0, "5"); // Asset not exists.
-
-        // check status asset
-        require(_asset.status == AssetStatus.OPEN, "6"); // Asset not eveluated.
-
-        // Create evaluation id
-        uint256 _evaluationId = totalEvaluations.current();
-
-        // Add evaluation to evaluationList
         evaluationList[_evaluationId] = Evaluation({
-            assetId: _assetId,
+            assetId: _appointment.assetId,
+            appointmentId: _appointmentId,
             evaluationCID: _evaluationCID,
             depreciationRate: _depreciationRate,
             evaluator: msg.sender,
             currency: _currency,
             price: _price,
+            mintingFee: whiteListMintingFee[_mintingFeeAddress],
+            mintingFeeAddress: _mintingFeeAddress,
             collectionAddress: _asset.collectionAddress,
             collectionStandard: _asset.collectionStandard,
             status: EvaluationStatus.EVALUATED
         });
 
-        // Add evaluation id to list evaluation of asset
-        evaluationByAsset[_assetId].push(_evaluationId);
+        _appointment.status = AppointmentStatus.EVALUATED;
 
-        // Add evaluation id to list evaluation of evaluator
-        evaluationListByEvaluator[msg.sender].push(_evaluationId);
+        Hard_Evaluation_Lib.safeTransfer(_appointment.evaluationFeeAddress, address(this), msg.sender, _appointment.evaluationFee);
 
-        // Update total evaluation
-        totalEvaluations.increment();
+        totalEvaluation.increment();
 
-        emit EvaluationEvent(
-            _evaluationId,
-            _asset,
-            evaluationList[_evaluationId]
-        );
+        emit EvaluationEvent(_evaluationId, _asset, evaluationList[_evaluationId], '');
+
     }
 
-    function _checkDataAcceptOrReject(uint256 _assetId, uint256 _evaluationId)
-        internal
-        view
-        returns (bool)
-    {
-        // Check creator is address 0
-        require(msg.sender != address(0), "7"); // msg.sender must not be the zero address
-
-        // Check asset id
-        require(_assetId >= 0, "8"); // assetId must not be zero
-
-        // Check evaluation index
-        require(_evaluationId >= 0, "9"); // evaluationID must not be zero
-
-        // Get asset to asset id;
-        Asset memory _asset = assetList[_assetId];
-
-        // Check asset to creator
-        require(_asset.owner == msg.sender, "10"); // msg.sender must be the creator of the asset
-
-        // Check asset is exists
-        require(_asset.status == AssetStatus.OPEN, "11"); // asset status must be Open
-
-        // approve an evaluation by looking for its index in the array.
-        Evaluation memory _evaluation = evaluationList[_evaluationId];
-
-        // Check status evaluation
-        require(_evaluation.status == EvaluationStatus.EVALUATED, "12"); // evaluation status must be Evaluated
-
-        return true;
-    }
-
-    function acceptEvaluation(uint256 _assetId, uint256 _evaluationId)
+    function acceptEvaluation(
+        uint256 _evaluationId
+    ) 
         external
         override
         whenNotPaused
     {
-        // Check data
-        require(_checkDataAcceptOrReject(_assetId, _evaluationId));
 
-        // Get asset
-        Asset storage _asset = assetList[_assetId];
-
-        // Get evaluation
         Evaluation storage _evaluation = evaluationList[_evaluationId];
 
-        // Update status evaluation
+        require(
+            bytes(_evaluation.evaluationCID).length > 0
+            && _evaluation.status == EvaluationStatus.EVALUATED, '18'
+        ); // Invalid evaluation
+
+        
+        Asset storage _asset = assetList[_evaluation.assetId];
+
+        require(
+            bytes(_asset.assetCID).length > 0 
+            && _asset.status == AssetStatus.APPOINTMENTED
+            && _asset.owner == msg.sender, '19'
+        ); // Invalid asset
+ 
         _evaluation.status = EvaluationStatus.EVALUATION_ACCEPTED;
 
-        // Reject all other evaluation of asset
-        for (uint256 i = 0; i < evaluationByAsset[_assetId].length; i++) {
-            if (evaluationByAsset[_assetId][i] != _evaluationId) {
-                uint256 _evaluationIdReject = evaluationByAsset[_assetId][i];
+        for (uint256 i = 0; i < evaluationListOfAsset[_evaluation.assetId].length; i++) {
+            if (evaluationListOfAsset[_evaluation.assetId][i] != _evaluationId) {
 
-                // Get evaluation
-                Evaluation storage _otherEvaluation = evaluationList[
-                    _evaluationIdReject
-                ];
+                uint256 _evaluationIdReject = evaluationListOfAsset[_evaluation.assetId][i];
 
-                // Update status evaluation
-                _otherEvaluation.status = EvaluationStatus.EVALUATION_REJECTED;
+                Evaluation storage _evaluationReject = evaluationList[_evaluationIdReject];
 
-                emit EvaluationEvent(
-                    _evaluationIdReject,
-                    _asset,
-                    _otherEvaluation
-                );
+                if( _evaluationReject.status != EvaluationStatus.EVALUATION_REJECTED){
+                    _evaluationReject.status = EvaluationStatus.EVALUATION_REJECTED;
+
+                    emit EvaluationEvent(
+                        _evaluationIdReject,
+                        _asset,
+                        _evaluationReject,
+                        ''
+                    );
+                }    
             }
         }
 
-        // Update status asset
         _asset.status = AssetStatus.EVALUATED;
 
-        emit EvaluationEvent(_evaluationId, _asset, _evaluation);
+
+        Hard_Evaluation_Lib.safeTransfer(_evaluation.mintingFeeAddress, msg.sender, address(this), _evaluation.mintingFee);
+
+        emit EvaluationEvent(_evaluationId, _asset, _evaluation, '');
     }
 
-    function rejectEvaluation(uint256 _assetId, uint256 _evaluationId)
+    function rejectEvaluation(
+        uint256 _evaluationId,
+        string memory reason
+    ) 
         external
         override
         whenNotPaused
     {
-        // Check data
-        require(_checkDataAcceptOrReject(_assetId, _evaluationId));
-
-        // Get asset
-        Asset storage _asset = assetList[_assetId];
-
-        // Get evaluation
         Evaluation storage _evaluation = evaluationList[_evaluationId];
+
+        require(
+            bytes(_evaluation.evaluationCID).length > 0
+            && _evaluation.status == EvaluationStatus.EVALUATED, '20'
+        ); // Invalid evaluation
+
+        
+        Asset storage _asset = assetList[_evaluation.assetId];
+
+        require(
+            bytes(_asset.assetCID).length > 0 
+            && _asset.status == AssetStatus.APPOINTMENTED
+            && _asset.owner == msg.sender, '21'
+        ); // Invalid asset
 
         // Update status evaluation
         _evaluation.status = EvaluationStatus.EVALUATION_REJECTED;
 
-        emit EvaluationEvent(_evaluationId, _asset, _evaluation);
+        _asset.status = AssetStatus.OPEN;
+
+        emit EvaluationEvent(_evaluationId, _asset, _evaluation, reason);
     }
 
-    // todo msg.sender = evaluator role
     function createNftToken(
-        uint256 _assetId,
         uint256 _evaluationId,
         string memory _nftCID
-    ) external override whenNotPaused nonReentrant {
-        // Check nft CID
-        require(bytes(_nftCID).length > 0, "13"); // NFT CID not be empty.
+    ) 
+        external
+        override
+        onlyRoleEvaluator
+        whenNotPaused
+    {
+        require(bytes(_nftCID).length > 0, '22'); // Invalid nftCID
 
-        // Check asset id
-        require(_assetId >= 0, "14"); // Asset does not exists.
-
-        // Get asset
-        Asset storage _asset = assetList[_assetId];
-
-        // Check asset CID
-        require(bytes(_asset.assetCID).length > 0, "15"); // Asset does not exists
-
-        // Check status asset
-        require(_asset.status == AssetStatus.EVALUATED, "16"); // Asset have not evaluation.
-
-        // Check evaluationId
-        require(_evaluationId >= 0, "17"); // Evaluation does not exists.
-
-        // Get evaluation
         Evaluation storage _evaluation = evaluationList[_evaluationId];
 
-        // Check evaluation CID
-        require(bytes(_evaluation.evaluationCID).length > 0, "18"); // Evaluation does not exists
-
-        // Check status evaluation
         require(
-            _evaluation.status == EvaluationStatus.EVALUATION_ACCEPTED,
-            "19"
-        ); // Evaluation is not acceptable.
+            bytes(_evaluation.evaluationCID).length > 0
+            && _evaluation.status == EvaluationStatus.EVALUATION_ACCEPTED
+            && _evaluation.evaluator == msg.sender, '23'
+        ); // Invalid evaluation
 
-        // Check evaluator
-        require(msg.sender == _evaluation.evaluator, "20"); // Evaluator address does not match.
-
-        // Check balance
-        require(
-            IERC20Upgradeable(mintingFeeAddress).balanceOf(msg.sender) >=
-                (mintingNFTFee),
-            "21"
-        ); // Your balance is not enough.
+        Asset storage _asset = assetList[_evaluation.assetId];
 
         require(
-            IERC20Upgradeable(mintingFeeAddress).allowance(
-                msg.sender,
-                address(this)
-            ) >= (mintingNFTFee),
-            "22"
-        ); // You have not approve DFY.
+            bytes(_asset.assetCID).length > 0 
+            && _asset.status == AssetStatus.EVALUATED, '21'
+        ); // Invalid asset
 
         uint256 tokenId;
 
@@ -445,31 +580,16 @@ contract Hard_Evaluation is
             );
         }
 
-        // Tranfer minting fee to admin
-        IERC20Upgradeable(mintingFeeAddress).transferFrom(
-            msg.sender,
-            addressAdmin,
-            mintingNFTFee
-        );
+        Hard_Evaluation_Lib.safeTransfer(_evaluation.mintingFeeAddress, address(this), adminAdress, _evaluation.mintingFee);
 
-        // Update status asset
         _asset.status = AssetStatus.NFT_CREATED;
 
-        // Update status evaluation
         _evaluation.status = EvaluationStatus.NFT_CREATED;
 
-        // Add token id to list asset of owner
-        tokenIdByAsset[tokenId] = _asset;
+        assetOfTokenId[tokenId] = _asset;
 
-        // Add token id to list nft of evaluator
-        tokenIdByEvaluation[tokenId] = _evaluation;
+        evaluationOfTokenId[tokenId] = _evaluation;
 
-        emit NFTEvent(tokenId, _asset.owner, _nftCID);
-    }
-
-    Hub public hubContract;
-
-    function setContractHub(address _contractHubAddress) external {
-        hubContract = Hub(_contractHubAddress);
+        emit NFTEvent(tokenId, _nftCID, _asset, _evaluation);
     }
 }
