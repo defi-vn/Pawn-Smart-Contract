@@ -145,6 +145,18 @@ struct ContractLiquidationData_NFT {
     ContractLiquidedReasonType_NFT reasonType;
 }
 
+struct RepaymentEventData_NFT {
+    uint256 contractId;
+    uint256 paidPenaltyAmount;
+    uint256 paidInterestAmount;
+    uint256 paidLoanAmount;
+    uint256 paidPenaltyFeeAmount;
+    uint256 paidInterestFeeAmount;
+    uint256 prepaidAmount;
+    uint256 requestId;
+    uint256 UID;
+}
+
 library PawnNFTLib {
     using SafeERC20Upgradeable for IERC20Upgradeable;
 

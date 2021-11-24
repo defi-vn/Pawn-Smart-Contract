@@ -72,6 +72,8 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
         uint256 UID
     );
 
+    address abc;
+
     // Total collateral
     CountersUpgradeable.Counter public numberCollaterals;
 
@@ -124,7 +126,20 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
         */
 
         // Check white list nft contract
-        require(hubContract.whitelistCollateral[_nftContract] == 1, "0");
+
+        // require(
+        //     HubInterface(abc).PawnNFTConfig.whitelistedCollateral[
+        //         _nftContract
+        //     ] == 1,
+        //     "0"
+        // );
+
+        require(
+            HubInterface(hubContract).getWhitelistCollateral_NFT(
+                _nftContract
+            ) == 1,
+            "0"
+        );
         //   require(whitelistCollateral[_nftContract] == 1, "0");
 
         // Check loan amount
@@ -168,11 +183,10 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
         //     msg.sender,
         //     IReputation.ReasonType.BR_CREATE_COLLATERAL
         // );
-    }
-
-    function getReputation() internal returns (address) {
-        bytes4 signatureReputation = IReputation.signature();
-        return Hub.ContractRegistry[signatureReputation];
+        IReputation(getReputation()).adjustReputationScore(
+            msg.sender,
+            IReputation.ReasonType.BR_CREATE_COLLATERAL
+        );
     }
 
     function withdrawCollateral(uint256 _nftCollateralId, uint256 _UID)
@@ -230,7 +244,11 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
         delete collaterals[_nftCollateralId];
 
         // Adjust reputation score
-        reputation.adjustReputationScore(
+        // reputation.adjustReputationScore(
+        //     msg.sender,
+        //     IReputation.ReasonType.BR_CANCEL_COLLATERAL
+        // );
+        IReputation(getReputation()).adjustReputationScore(
             msg.sender,
             IReputation.ReasonType.BR_CANCEL_COLLATERAL
         );
@@ -332,7 +350,12 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
         );
 
         // Adjust reputation score
-        reputation.adjustReputationScore(
+        // reputation.adjustReputationScore(
+        //     msg.sender,
+        //     IReputation.ReasonType.LD_CREATE_OFFER
+        // );
+
+        IReputation(getReputation()).adjustReputationScore(
             msg.sender,
             IReputation.ReasonType.LD_CREATE_OFFER
         );
@@ -383,7 +406,11 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
             );
 
             // Adjust reputation score
-            reputation.adjustReputationScore(
+            // reputation.adjustReputationScore(
+            //     msg.sender,
+            //     IReputation.ReasonType.LD_CANCEL_OFFER
+            // );
+            IReputation(getReputation()).adjustReputationScore(
                 msg.sender,
                 IReputation.ReasonType.LD_CANCEL_OFFER
             );
@@ -411,7 +438,11 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
 
         require(offer.status == OfferStatus_NFT.PENDING, "3");
 
-        uint256 exchangeRate = exchange.exchangeRateOfOffer_NFT(
+        // uint256 exchangeRate = exchange.exchangeRateOfOffer_NFT(
+        //     collateral.loanAsset,
+        //     offer.repaymentAsset
+        // );
+        uint256 exchangeRate = Exchange(getExchange()).exchangeRateOfOffer_NFT(
             collateral.loanAsset,
             offer.repaymentAsset
         );
@@ -429,7 +460,8 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
             exchangeRate
         );
 
-        LoanContract_NFT.createContract(contractData, _UID);
+        //   LoanContract_NFT.createContract(contractData, _UID);
+        IPawnNFT(getLoanContractNFT()).createContract(contractData, _UID);
         // uint256 contractId = createContract(
         //     _nftCollateralId,
         //     collateral,
@@ -474,17 +506,27 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
         PawnNFTLib.safeTranferNFTToken(
             collateral.nftContract,
             address(this),
-            address(LoanContract_NFT),
+            address(getLoanContractNFT()),
             collateral.nftTokenId,
             collateral.nftTokenQuantity
         );
 
         // Adjust reputation score
-        reputation.adjustReputationScore(
+        // reputation.adjustReputationScore(
+        //     msg.sender,
+        //     IReputation.ReasonType.BR_ACCEPT_OFFER
+        // );
+        // reputation.adjustReputationScore(
+        //     offer.owner,
+        //     IReputation.ReasonType.LD_ACCEPT_OFFER
+        // );
+
+        IReputation(getReputation()).adjustReputationScore(
             msg.sender,
             IReputation.ReasonType.BR_ACCEPT_OFFER
         );
-        reputation.adjustReputationScore(
+
+        IReputation(getReputation()).adjustReputationScore(
             offer.owner,
             IReputation.ReasonType.LD_ACCEPT_OFFER
         );
@@ -511,7 +553,7 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
 
     function _isValidCaller() private view {
         require(
-            msg.sender == address(LoanContract_NFT) ||
+            msg.sender == getLoanContractNFT() ||
                 hasRole(OPERATOR_ROLE, msg.sender) ||
                 hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
             "0"
@@ -531,4 +573,22 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
     // {
     //     LoanContract_NFT = IPawnNFT(_pawnLoanAddress);
     // }
+    /** ==== Reputation =======*/
+    function getReputation() internal view returns (address) {
+        string memory nameContract = "Reputation";
+        return HubInterface(hubContract).getContractAddress(nameContract);
+    }
+
+    /**=== Exchange======= */
+    function getExchange() internal view returns (address) {
+        string memory nameContract = "Exchange";
+        return HubInterface(hubContract).getContractAddress(nameContract);
+    }
+
+    /**============get Loan Contract ================ */
+
+    function getLoanContractNFT() internal view returns (address) {
+        string memory nameContract = "LoanContractNFT";
+        return HubInterface(hubContract).getContractAddress(nameContract);
+    }
 }

@@ -4,25 +4,26 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
-import "../access/DFY-AccessControl.sol";
+// import "../access/DFY-AccessControl.sol";
 import "./HubInterface.sol";
+import "./HubLib.sol";
 
 contract Hub is
     Initializable,
     UUPSUpgradeable,
+    AccessControlUpgradeable,
     PausableUpgradeable,
-    HubInterface,
-    DFYAccessControl
+    HubInterface
 {
     using AddressUpgradeable for address;
 
-    mapping(bytes4 => address) public ContractRegistry;
+    mapping(string => address) public ContractRegistry;
 
     SystemConfig public systemConfig;
     PawnConfig public pawnConfig;
@@ -31,15 +32,18 @@ contract Hub is
     // TODO: New state variables must go below this line -----------------------------
 
     /** ==================== Contract initializing & configuration ==================== */
-    function initialize(address feeWallet, address feeToken)
-        public
-        initializer
-    {
+    function initialize(
+        address feeWallet,
+        address feeToken,
+        address operator
+    ) public initializer {
         __UUPSUpgradeable_init();
         __Pausable_init();
-        __DFYAccessControl_init();
+        __AccessControl_init();
         systemConfig.systemFeeWallet = feeWallet;
         systemConfig.systemFeeToken = feeToken;
+        systemConfig.Admin = msg.sender;
+        systemConfig.Admin = operator;
     }
 
     modifier whenContractNotPaused() {
@@ -61,10 +65,12 @@ contract Hub is
 
     /** ==================== Hub operation functions ==================== */
 
-    function setSystemConfig(address _FeeWallet, address _FeeToken)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function setSystemConfig(
+        address _FeeWallet,
+        address _FeeToken,
+        address _admin,
+        address _operator
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
         if (_FeeWallet != address(0)) {
             systemConfig.systemFeeWallet = _FeeWallet;
         }
@@ -72,13 +78,47 @@ contract Hub is
         if (_FeeToken != address(0)) {
             systemConfig.systemFeeToken = _FeeToken;
         }
+
+        if (_admin != address(0)) {
+            systemConfig.Admin = _admin;
+        }
+
+        if (_operator != address(0)) {
+            systemConfig.Operator = _operator;
+        }
     }
 
-    function registerContract(bytes4 signature, address contractAddress)
+    function getSystemConfig()
         external
-        onlyRole(DEFAULT_ADMIN_ROLE)
+        view
+        override
+        returns (
+            address _FeeWallet,
+            address _FeeToken,
+            address _admin,
+            address _operator
+        )
     {
-        ContractRegistry[signature] = contractAddress;
+        _FeeWallet = systemConfig.systemFeeWallet;
+        _FeeToken = systemConfig.systemFeeToken;
+        _admin = systemConfig.Admin;
+        _operator = systemConfig.Operator;
+    }
+
+    function registerContract(
+        string memory nameContract,
+        address contractAddress
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        ContractRegistry[nameContract] = contractAddress;
+    }
+
+    function getContractAddress(string memory _nameContract)
+        external
+        view
+        override
+        returns (address _contractAddres)
+    {
+        _contractAddres = ContractRegistry[_nameContract];
     }
 
     /** ==================== Standard interface function implementations ==================== */
@@ -108,11 +148,31 @@ contract Hub is
         ] = _status;
     }
 
+    function getEvaluationContract(address _evaluationContractAddress)
+        external
+        view
+        override
+        returns (uint256 _status)
+    {
+        _status = pawnNFTConfig.whitelistedEvaluationContract[
+            _evaluationContractAddress
+        ];
+    }
+
     function setWhitelistCollateral_NFT(address _token, uint256 _status)
         external
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
         pawnNFTConfig.whitelistedCollateral[_token] = _status;
+    }
+
+    function getWhitelistCollateral_NFT(address _token)
+        external
+        view
+        override
+        returns (uint256 _status)
+    {
+        _status = pawnNFTConfig.whitelistedCollateral[_token];
     }
 
     function setPawnNFTConfig(
@@ -143,6 +203,25 @@ contract Hub is
         }
     }
 
+    function getPawnNFTConfig()
+        external
+        view
+        override
+        returns (
+            uint256 _zoom,
+            uint256 _FeeRate,
+            uint256 _penaltyRate,
+            uint256 _prepaidFeedRate,
+            uint256 _lateThreshold
+        )
+    {
+        _zoom = pawnNFTConfig.ZOOM;
+        _FeeRate = pawnNFTConfig.systemFeeRate;
+        _penaltyRate = pawnNFTConfig.penaltyRate;
+        _prepaidFeedRate = pawnNFTConfig.prepaidFeeRate;
+        _lateThreshold = pawnNFTConfig.lateThreshold;
+    }
+
     /** ========== ConFIg PAWN crypto ===================*/
 
     function setWhitelistCollateral(address _token, uint256 _status)
@@ -150,6 +229,15 @@ contract Hub is
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
         pawnConfig.whitelistedCollateral[_token] = _status;
+    }
+
+    function getWhitelistCollateral(address _token)
+        external
+        view
+        override
+        returns (uint256 _status)
+    {
+        _status = pawnConfig.whitelistedCollateral[_token];
     }
 
     function setPawnConfig(
@@ -178,6 +266,25 @@ contract Hub is
         if (_lateThreshold >= 0) {
             pawnNFTConfig.lateThreshold = abs(_lateThreshold);
         }
+    }
+
+    function getPawnConfig()
+        external
+        view
+        override
+        returns (
+            uint256 _zoom,
+            uint256 _FeeRate,
+            uint256 _penaltyRate,
+            uint256 _prepaidFeeRate,
+            uint256 _lateThreshold
+        )
+    {
+        _zoom = pawnConfig.ZOOM;
+        _FeeRate = pawnConfig.systemFeeRate;
+        _penaltyRate = pawnConfig.penaltyRate;
+        _prepaidFeeRate = pawnConfig.prepaidFeeRate;
+        _lateThreshold = pawnConfig.lateThreshold;
     }
 
     /**======================= */

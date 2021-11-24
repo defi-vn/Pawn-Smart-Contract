@@ -7,6 +7,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC1155/utils/ERC1155HolderUpg
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/IAccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
@@ -20,6 +21,8 @@ import "../reputation/IReputation.sol";
 import "../pawn-nft-v2/PawnNFTLib.sol";
 import "../exchange/Exchange.sol";
 import "../hub/Hub.sol";
+import "../hub/HubInterface.sol";
+import "../hub/HubLib.sol";
 
 abstract contract PawnNFTModel is
     Initializable,
@@ -29,31 +32,6 @@ abstract contract PawnNFTModel is
     ERC1155HolderUpgradeable,
     DFYAccessControl
 {
-    Hub public hubContract;
-
-    function setContractHub(address _contractHubAddress)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
-        hubContract = Hub(_contractHubAddress);
-    }
-
-    modifier onlyAdmin() {
-        require(
-            hubContract.hasRole(hubContract.DEFAULT_ADMIN_ROLE(), msg.sender),
-            "is not Admin"
-        );
-        _;
-    }
-
-    modifier onlyOperator() {
-        require(
-            hubContract.hasRole(hubContract.OPERATOR_ROLE(), msg.sender),
-            "is not Operator"
-        );
-        _;
-    }
-
     // AssetEvaluation assetEvaluation;
 
     // mapping(address => uint256) public whitelistCollateral;
@@ -64,17 +42,19 @@ abstract contract PawnNFTModel is
     // uint256 public prepaidFeeRate;
 
     // uint256 public ZOOM;
+
     // address public admin;
     // address public operator;
 
     // DFY_Physical_NFTs dfy_physical_nfts;
     // AssetEvaluation assetEvaluation;
 
-    function initialize() public initializer {
+    function initialize(address _hubContract) public initializer {
         __ERC1155Holder_init();
         __DFYAccessControl_init();
         __Pausable_init();
         __UUPSUpgradeable_init();
+        hubContract = _hubContract;
         // admin = address(msg.sender);
         // ZOOM = _zoom;
     }
@@ -190,4 +170,35 @@ abstract contract PawnNFTModel is
     // {
     //     exchange = Exchange(_exchange);
     // }
+
+    address hubContract;
+
+    function setContractHub(address _contractHubAddress) external onlyAdmin {
+        hubContract = _contractHubAddress;
+    }
+
+    modifier onlyAdmin() {
+        // (, , address _admin, ) = HubInterface(hubContract).getSystemConfig();
+        // require(_admin == msg.sender, "is not admin");
+        require(
+            IAccessControlUpgradeable(hubContract).hasRole(
+                HubRoleLib.DEFAULT_ADMIN_ROLE,
+                msg.sender
+            )
+        );
+
+        _;
+    }
+
+    modifier onlyOperator() {
+        // (, , , address _operator) = HubInterface(hubContract).getSystemConfig();
+        // require(_operator == msg.sender, "is not operator");
+        require(
+            IAccessControlUpgradeable(hubContract).hasRole(
+                HubRoleLib.OPERATOR_ROLE,
+                msg.sender
+            )
+        );
+        _;
+    }
 }

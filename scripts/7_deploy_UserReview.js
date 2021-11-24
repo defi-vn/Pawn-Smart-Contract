@@ -2,7 +2,7 @@ require("@openzeppelin/hardhat-upgrades");
 
 const hre = require('hardhat');
 const { Proxies } = require('./.deployment_data.json');
-const proxies = Proxies.Dev2;
+const proxies = Proxies.Beta;
 
 const ReviewBuildName = "contracts/pawn/reputation/UserReview.sol:UserReview";
 const proxyType = { kind: "uups" };
