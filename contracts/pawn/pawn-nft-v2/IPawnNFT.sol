@@ -2,6 +2,7 @@
 
 pragma solidity ^0.8.4;
 import "./PawnNFTLib.sol";
+import "../../base/BaseInterface.sol";
 
 interface IPawnNFT {
     function createContract(

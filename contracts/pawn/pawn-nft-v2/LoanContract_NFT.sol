@@ -49,17 +49,19 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         PaymentRequest_NFT data
     );
 
-    event RepaymentEvent_NFT(
-        uint256 contractId,
-        uint256 paidPenaltyAmount,
-        uint256 paidInterestAmount,
-        uint256 paidLoanAmount,
-        uint256 paidPenaltyFeeAmount,
-        uint256 paidInterestFeeAmount,
-        uint256 prepaidAmount,
-        uint256 requestId,
-        uint256 UID
-    );
+    // event RepaymentEvent_NFT(
+    //     uint256 contractId,
+    //     uint256 paidPenaltyAmount,
+    //     uint256 paidInterestAmount,
+    //     uint256 paidLoanAmount,
+    //     uint256 paidPenaltyFeeAmount,
+    //     uint256 paidInterestFeeAmount,
+    //     uint256 prepaidAmount,
+    //     uint256 requestId,
+    //     uint256 UID
+    // );
+
+    event RepaymentEvent_NFT(RepaymentEventData_NFT repaymentData);
 
     //liquidity & defaul
     event ContractLiquidedEvent_NFT(ContractLiquidationData_NFT liquidation);
@@ -118,7 +120,14 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
     function createContract(
         ContractRawData_NFT calldata contractData,
         uint256 _UID
-    ) external override onlyRole(OPERATOR_ROLE) returns (uint256 _idx) {
+    ) external override onlyOperator returns (uint256 _idx) {
+        (
+            ,
+            uint256 systemFeeRate,
+            uint256 penaltyRate,
+            uint256 prepaidFeeRate,
+            uint256 lateThreshold
+        ) = HubInterface(hubContract).getPawnNFTConfig();
         //get Offer
         CollateralOfferList_NFT
             storage collateralOfferList = collateralOffersMapping[
@@ -180,7 +189,7 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         // uint256 _dueDateTimestamp,
         // bool _chargePrepaidFee
         PaymentRequestTypeEnum_NFT _paymentRequestType
-    ) external whenNotPaused onlyRole(OPERATOR_ROLE) {
+    ) external whenNotPaused onlyOperator {
         // get contract
         Contract_NFT storage currentContract = contractMustActive(_contractId);
 
@@ -205,7 +214,14 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
             // Validate: remaining loan must valid
             // require(previousRequest.remainingLoan == _remainingLoan, "1");
             _remainingLoan = previousRequest.remainingLoan;
-            _nextPhrasePenalty = exchange.calculatePenalty_NFT(
+            // _nextPhrasePenalty = exchange.calculatePenalty_NFT(
+            //     previousRequest,
+            //     currentContract,
+            //     penaltyRate
+            // );
+            (, , uint256 penaltyRate, , ) = HubInterface(hubContract)
+                .getPawnNFTConfig();
+            _nextPhrasePenalty = Exchange(getExchange()).calculatePenalty_NFT(
                 previousRequest,
                 currentContract,
                 penaltyRate
@@ -217,10 +233,12 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
                     currentContract.terms.repaymentCycleType
                 );
 
-                _nextPhraseInterest = exchange.calculateInterest_NFT(
-                    _remainingLoan,
-                    currentContract
-                );
+                // _nextPhraseInterest = exchange.calculateInterest_NFT(
+                //     _remainingLoan,
+                //     currentContract
+                // );
+                _nextPhraseInterest = Exchange(getExchange())
+                    .calculateInterest_NFT(_remainingLoan, currentContract);
             }
             if (_paymentRequestType == PaymentRequestTypeEnum_NFT.OVERDUE) {
                 _timeStamp = PawnNFTLib.calculatedueDateTimestampPenalty(
@@ -262,7 +280,12 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
                 currentContract.lateCount += 1;
 
                 // Adjust reputation score
-                reputation.adjustReputationScore(
+                // reputation.adjustReputationScore(
+                //     currentContract.terms.borrower,
+                //     IReputation.ReasonType.BR_LATE_PAYMENT
+                // );
+
+                IReputation(getReputation()).adjustReputationScore(
                     currentContract.terms.borrower,
                     IReputation.ReasonType.BR_LATE_PAYMENT
                 );
@@ -295,7 +318,12 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
                 previousRequest.status = PaymentRequestStatusEnum_NFT.COMPLETE;
 
                 // Adjust reputation score
-                reputation.adjustReputationScore(
+                // reputation.adjustReputationScore(
+                //     currentContract.terms.borrower,
+                //     IReputation.ReasonType.BR_ONTIME_PAYMENT
+                // );
+
+                IReputation(getReputation()).adjustReputationScore(
                     currentContract.terms.borrower,
                     IReputation.ReasonType.BR_ONTIME_PAYMENT
                 );
@@ -327,10 +355,14 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
             // Validate: remaining loan must valid
             // require(currentContract.terms.loanAmount == _remainingLoan, "4");
             _remainingLoan = currentContract.terms.loanAmount;
-            _nextPhraseInterest = exchange.calculateInterest_NFT(
-                _remainingLoan,
-                currentContract
-            );
+            // _nextPhraseInterest = exchange.calculateInterest_NFT(
+            //     _remainingLoan,
+            //     currentContract
+            // );
+            _nextPhraseInterest = Exchange(getExchange()).calculateInterest_NFT(
+                    _remainingLoan,
+                    currentContract
+                );
             _nextPhrasePenalty = 0;
             // Validate: Due date timestamp of next payment request must not over contract due date
             (, _dueDateTimestamp) = SafeMathUpgradeable.tryAdd(
@@ -431,7 +463,12 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         ];
         // _collateral.status = CollateralStatus_NFT.COMPLETED;
 
-        PawnContract_NFT.updateCollateralStatus(
+        // PawnContract_NFT.updateCollateralStatus(
+        //     _contract.nftCollateralId,
+        //     CollateralStatus_NFT.COMPLETED
+        // );
+
+        ILoanNFT(getPawnNFT()).updateCollateralStatus(
             _contract.nftCollateralId,
             CollateralStatus_NFT.COMPLETED
         );
@@ -446,12 +483,19 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
             (, , , , address token, , ) = AssetEvaluation(_evaluationContract)
                 .tokenIdByEvaluation(_collateral.nftTokenId);
 
+            // (
+            //     uint256 _tokenEvaluationRate,
+            //     uint256 _loanExchangeRate,
+            //     uint256 _repaymentExchangeRate,
+            //     uint256 _rateUpdateTime
+            // ) = exchange.RateAndTimestamp_NFT(_contract, token);
+
             (
                 uint256 _tokenEvaluationRate,
                 uint256 _loanExchangeRate,
                 uint256 _repaymentExchangeRate,
                 uint256 _rateUpdateTime
-            ) = exchange.RateAndTimestamp_NFT(_contract, token);
+            ) = Exchange(getExchange()).RateAndTimestamp_NFT(_contract, token);
 
             // Emit Event ContractLiquidedEvent
             liquidationData = ContractLiquidationData_NFT(
@@ -475,11 +519,21 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         );
 
         // Adjust reputation score
-        reputation.adjustReputationScore(
+        // reputation.adjustReputationScore(
+        //     _contract.terms.borrower,
+        //     IReputation.ReasonType.BR_LATE_PAYMENT
+        // );
+        // reputation.adjustReputationScore(
+        //     _contract.terms.borrower,
+        //     IReputation.ReasonType.BR_CONTRACT_DEFAULTED
+        // );
+
+        IReputation(getReputation()).adjustReputationScore(
             _contract.terms.borrower,
             IReputation.ReasonType.BR_LATE_PAYMENT
         );
-        reputation.adjustReputationScore(
+
+        IReputation(getReputation()).adjustReputationScore(
             _contract.terms.borrower,
             IReputation.ReasonType.BR_CONTRACT_DEFAULTED
         );
@@ -505,7 +559,11 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         ];
         _lastPaymentRequest.status = PaymentRequestStatusEnum_NFT.COMPLETE;
         // _collateral.status = CollateralStatus_NFT.COMPLETED;
-        PawnContract_NFT.updateCollateralStatus(
+        // PawnContract_NFT.updateCollateralStatus(
+        //     _contract.nftCollateralId,
+        //     CollateralStatus_NFT.COMPLETED
+        // );
+        ILoanNFT(getPawnNFT()).updateCollateralStatus(
             _contract.nftCollateralId,
             CollateralStatus_NFT.COMPLETED
         );
@@ -524,11 +582,21 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         );
 
         // Adjust reputation score
-        reputation.adjustReputationScore(
+        // reputation.adjustReputationScore(
+        //     _contract.terms.borrower,
+        //     IReputation.ReasonType.BR_ONTIME_PAYMENT
+        // );
+        // reputation.adjustReputationScore(
+        //     _contract.terms.borrower,
+        //     IReputation.ReasonType.BR_CONTRACT_COMPLETE
+        // );
+
+        IReputation(getReputation()).adjustReputationScore(
             _contract.terms.borrower,
             IReputation.ReasonType.BR_ONTIME_PAYMENT
         );
-        reputation.adjustReputationScore(
+
+        IReputation(getReputation()).adjustReputationScore(
             _contract.terms.borrower,
             IReputation.ReasonType.BR_CONTRACT_COMPLETE
         );
@@ -584,6 +652,8 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         }
 
         // Calculate fee amount based on paid amount
+
+        (uint256 ZOOM, , , , ) = HubInterface(hubContract).getPawnConfig();
         uint256 _feePenalty = PawnNFTLib.calculateSystemFee(
             _paidPenaltyAmount,
             _contract.terms.systemFeeRate,
@@ -610,7 +680,18 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         _paymentRequest.remainingLoan -= _paidLoanAmount;
 
         // emit event repayment
-        emit RepaymentEvent_NFT(
+        // emit RepaymentEvent_NFT(
+        //     _contractId,
+        //     _paidPenaltyAmount,
+        //     _paidInterestAmount,
+        //     _paidLoanAmount,
+        //     _feePenalty,
+        //     _feeInterest,
+        //     _prepaidFee,
+        //     _paymentRequest.requestId,
+        //     _UID
+        // );
+        RepaymentEventData_NFT memory repaymentData = RepaymentEventData_NFT(
             _contractId,
             _paidPenaltyAmount,
             _paidInterestAmount,
@@ -621,6 +702,7 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
             _paymentRequest.requestId,
             _UID
         );
+        emit RepaymentEvent_NFT(repaymentData);
 
         // If remaining loan = 0 => paidoff => execute release collateral
         if (
@@ -631,40 +713,40 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
 
         uint256 _totalFee;
         uint256 _totalTransferAmount;
+        uint256 total = _paidPenaltyAmount + _paidInterestAmount;
+        (address feeWallet, , , ) = HubInterface(hubContract).getSystemConfig();
+        {
+            if (total > 0) {
+                // Transfer fee to fee wallet
+                _totalFee = _feePenalty + _feeInterest;
+                PawnNFTLib.safeTransfer(
+                    _contract.terms.repaymentAsset,
+                    msg.sender,
+                    feeWallet,
+                    _totalFee
+                );
 
-        if (_paidPenaltyAmount + _paidInterestAmount > 0) {
-            // Transfer fee to fee wallet
-            _totalFee = _feePenalty + _feeInterest;
-            PawnNFTLib.safeTransfer(
-                _contract.terms.repaymentAsset,
-                msg.sender,
-                feeWallet,
-                _totalFee
-            );
-
-            // Transfer penalty and interest to lender except fee amount
-            _totalTransferAmount =
-                _paidPenaltyAmount +
-                _paidInterestAmount -
-                _feePenalty -
-                _feeInterest;
-            PawnNFTLib.safeTransfer(
-                _contract.terms.repaymentAsset,
-                msg.sender,
-                _contract.terms.lender,
-                _totalTransferAmount
-            );
+                // Transfer penalty and interest to lender except fee amount
+                _totalTransferAmount = total - _feePenalty - _feeInterest;
+                PawnNFTLib.safeTransfer(
+                    _contract.terms.repaymentAsset,
+                    msg.sender,
+                    _contract.terms.lender,
+                    _totalTransferAmount
+                );
+            }
         }
-
-        if (_paidLoanAmount > 0) {
-            // Transfer loan amount and prepaid fee to lender
-            _totalTransferAmount = _paidLoanAmount + _prepaidFee;
-            PawnNFTLib.safeTransfer(
-                _contract.terms.loanAsset,
-                msg.sender,
-                _contract.terms.lender,
-                _totalTransferAmount
-            );
+        {
+            if (_paidLoanAmount > 0) {
+                // Transfer loan amount and prepaid fee to lender
+                _totalTransferAmount = _paidLoanAmount + _prepaidFee;
+                PawnNFTLib.safeTransfer(
+                    _contract.terms.loanAsset,
+                    msg.sender,
+                    _contract.terms.lender,
+                    _totalTransferAmount
+                );
+            }
         }
     }
 
@@ -672,7 +754,7 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         // uint256 _collateralPerRepaymentTokenExchangeRate,
         // uint256 _collateralPerLoanAssetExchangeRate
         uint256 _contractId
-    ) external whenNotPaused onlyRole(OPERATOR_ROLE) {
+    ) external whenNotPaused onlyOperator {
         // Validate: Contract must active
         Contract_NFT storage _contract = contractMustActive(_contractId);
         Collateral_NFT storage _collateral = collaterals[
@@ -696,14 +778,24 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
                 _contractId,
                 _contract
             );
+        // (
+        //     uint256 _collateralPerRepaymentTokenExchangeRate,
+        //     uint256 _collateralPerLoanAssetExchangeRate
+        // ) = exchange.collateralPerRepaymentAndLoanTokenExchangeRate_NFT(
+        //         _contract,
+        //         token
+        //     );
+
         (
             uint256 _collateralPerRepaymentTokenExchangeRate,
             uint256 _collateralPerLoanAssetExchangeRate
-        ) = exchange.collateralPerRepaymentAndLoanTokenExchangeRate_NFT(
-                _contract,
-                token
-            );
+        ) = Exchange(getExchange())
+                .collateralPerRepaymentAndLoanTokenExchangeRate_NFT(
+                    _contract,
+                    token
+                );
         {
+            (uint256 ZOOM, , , , ) = HubInterface(hubContract).getPawnConfig();
             uint256 valueOfRemainingRepayment = (_collateralPerRepaymentTokenExchangeRate *
                     remainingRepayment) / (ZOOM * 10**5);
             uint256 valueOfRemainingLoan = (_collateralPerLoanAssetExchangeRate *
@@ -796,17 +888,32 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         }
     }
 
-    /** ==================== Pawn Contract functions & states ==================== */
-    ILoanNFT public PawnContract_NFT;
+    /**========================= */
 
-    function setPawnLoanContract(address _pawnAddress)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
-        PawnContract_NFT = ILoanNFT(_pawnAddress);
+    function getReputation() internal view returns (address) {
+        string memory nameContract = "Reputation";
+        return HubInterface(hubContract).getContractAddress(nameContract);
     }
 
-    // /** ===================================== REPUTATION FUNCTIONS & STATES ===================================== */
+    /**=== Exchange======= */
+    function getExchange() internal view returns (address) {
+        string memory nameContract = "Exchange";
+        return HubInterface(hubContract).getContractAddress(nameContract);
+    }
+
+    function getPawnNFT() internal view returns (address) {
+        string memory nameContract = "PawnNFTContract";
+        return HubInterface(hubContract).getContractAddress(nameContract);
+    }
+
+    /** ==================== Pawn Contract functions & states ==================== */
+    // ILoanNFT public PawnContract_NFT;
+
+    // function setPawnLoanContract() external onlyRole(DEFAULT_ADMIN_ROLE) {
+    //     PawnContract_NFT = ILoanNFT(getPawnNFT());
+    // }
+
+    /** ===================================== REPUTATION FUNCTIONS & STATES ===================================== */
 
     // IReputation public reputation;
 
@@ -814,6 +921,6 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
     //     external
     //     onlyRole(DEFAULT_ADMIN_ROLE)
     // {
-    //     reputation = IReputation(_reputationAddress);
+    //     reputation = IReputation(getReputation());
     // }
 }

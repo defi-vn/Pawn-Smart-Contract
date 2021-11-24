@@ -1580,7 +1580,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     IReputation public reputation;
 
     function setReputationContract(address _reputationAddress)
-        external
+        external    
         onlyAdmin
     {
         reputation = IReputation(_reputationAddress);
