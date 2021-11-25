@@ -11,8 +11,9 @@ import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 // import "../access/DFY-AccessControl.sol";
-import "./HubInterface.sol";
+import "../libs/CommonLib.sol";
 import "./HubLib.sol";
+import "./HubInterface.sol";
 
 contract Hub is
     Initializable,
@@ -30,6 +31,8 @@ contract Hub is
     PawnNFTConfig public pawnNFTConfig;
 
     // TODO: New state variables must go below this line -----------------------------
+    NFTCollectionConfig public nftCollectionConfig;
+    NFTMarketConfig public nftMarketConfig;
 
     /** ==================== Contract initializing & configuration ==================== */
     function initialize(
@@ -40,20 +43,22 @@ contract Hub is
         __UUPSUpgradeable_init();
         __Pausable_init();
         __AccessControl_init();
-        systemConfig.systemFeeWallet = feeWallet;
-        systemConfig.systemFeeToken = feeToken;
-        // systemConfig.Admin = msg.sender;
-        // systemConfig.Admin = operator;
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        
         _setupRole(HubRoleLib.DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(HubRoleLib.OPERATOR_ROLE, operator);
         _setupRole(HubRoleLib.PAUSER_ROLE, msg.sender);
         _setupRole(HubRoleLib.EVALUATOR_ROLE, msg.sender);
+
+        // Set OPERATOR_ROLE as EVALUATOR_ROLE's Admin Role
+        _setRoleAdmin(HubRoleLib.EVALUATOR_ROLE, HubRoleLib.OPERATOR_ROLE);
+
+        systemConfig.systemFeeWallet = feeWallet;
+        systemConfig.systemFeeToken = feeToken;
     }
 
     function setOperator(address _newOperator)
         external
-        onlyRole(DEFAULT_ADMIN_ROLE)
+        onlyRole(HubRoleLib.DEFAULT_ADMIN_ROLE)
     {
         // operator = _newOperator;
 
@@ -80,16 +85,56 @@ contract Hub is
         require(!paused(), "Pausable: paused");
     }
 
-    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function pause() external onlyRole(HubRoleLib.PAUSER_ROLE) {
         _pause();
     }
 
-    function unPause() external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function unPause() external onlyRole(HubRoleLib.PAUSER_ROLE) {
         _unpause();
     }
 
-    /** ==================== Hub operation functions ==================== */
+    function AdminRole() public pure override returns (bytes32) {
+        return HubRoleLib.DEFAULT_ADMIN_ROLE;
+    }
 
+    function OperatorRole() public pure override returns (bytes32) {
+        return HubRoleLib.OPERATOR_ROLE;
+    }
+
+    function PauserRole() public pure override returns (bytes32) {
+        return HubRoleLib.PAUSER_ROLE;
+    }
+
+    function EvaluatorRole() public pure override returns (bytes32) {
+        return HubRoleLib.EVALUATOR_ROLE;
+    }
+
+    /** ==================== Standard interface function implementations ==================== */
+
+    function _authorizeUpgrade(address)
+        internal
+        override
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {}
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(AccessControlUpgradeable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+
+    /** ==================== Hub operation functions ==================== */
+    function registerContract(bytes4 signature, address contractAddress)
+        external
+        override
+        onlyRole(HubRoleLib.DEFAULT_ADMIN_ROLE)
+    {
+        ContractRegistry[signature] = contractAddress;
+    }
+    
     function setSystemConfig(address _FeeWallet, address _FeeToken)
         external
         onlyRole(DEFAULT_ADMIN_ROLE)
@@ -113,38 +158,13 @@ contract Hub is
         _FeeToken = systemConfig.systemFeeToken;
     }
 
-    function registerContract(bytes4 nameContract, address contractAddress)
-        external
-        override
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
-        ContractRegistry[nameContract] = contractAddress;
-    }
-
-    function getContractAddress(bytes4 _nameContract)
+    function getContractAddress(bytes4 signature)
         external
         view
         override
-        returns (address _contractAddres)
+        returns (address contractAddress)
     {
-        _contractAddres = ContractRegistry[_nameContract];
-    }
-
-    /** ==================== Standard interface function implementations ==================== */
-
-    function _authorizeUpgrade(address)
-        internal
-        override
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {}
-
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(AccessControlUpgradeable)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
+        contractAddress = ContractRegistry[signature];
     }
 
     /** ================= config PAWN NFT ============== */
@@ -192,23 +212,23 @@ contract Hub is
         int256 _lateThreshold
     ) external onlyRole(DEFAULT_ADMIN_ROLE) {
         if (_zoom >= 0) {
-            pawnNFTConfig.ZOOM = abs(_zoom);
+            pawnNFTConfig.ZOOM = CommonLib.abs(_zoom);
         }
 
         if (_FeeRate >= 0) {
-            pawnNFTConfig.systemFeeRate = abs(_FeeRate);
+            pawnNFTConfig.systemFeeRate = CommonLib.abs(_FeeRate);
         }
 
         if (_penaltyRate >= 0) {
-            pawnNFTConfig.penaltyRate = abs(_penaltyRate);
+            pawnNFTConfig.penaltyRate = CommonLib.abs(_penaltyRate);
         }
 
         if (_prepaidFeedRate >= 0) {
-            pawnNFTConfig.prepaidFeeRate = abs(_prepaidFeedRate);
+            pawnNFTConfig.prepaidFeeRate = CommonLib.abs(_prepaidFeedRate);
         }
 
         if (_lateThreshold >= 0) {
-            pawnNFTConfig.lateThreshold = abs(_lateThreshold);
+            pawnNFTConfig.lateThreshold = CommonLib.abs(_lateThreshold);
         }
     }
 
@@ -231,7 +251,7 @@ contract Hub is
         _lateThreshold = pawnNFTConfig.lateThreshold;
     }
 
-    /** ========== ConFIg PAWN crypto ===================*/
+    /** =================== ConFIg PAWN crypto ===================*/
 
     function setWhitelistCollateral(address _token, uint256 _status)
         external
@@ -257,23 +277,23 @@ contract Hub is
         int256 _lateThreshold
     ) external onlyRole(DEFAULT_ADMIN_ROLE) {
         if (_zoom >= 0) {
-            pawnNFTConfig.ZOOM = abs(_zoom);
+            pawnNFTConfig.ZOOM = CommonLib.abs(_zoom);
         }
 
         if (_FeeRate >= 0) {
-            pawnNFTConfig.systemFeeRate = abs(_FeeRate);
+            pawnNFTConfig.systemFeeRate = CommonLib.abs(_FeeRate);
         }
 
         if (_penaltyRate >= 0) {
-            pawnNFTConfig.penaltyRate = abs(_penaltyRate);
+            pawnNFTConfig.penaltyRate = CommonLib.abs(_penaltyRate);
         }
 
         if (_prepaidFeedRate >= 0) {
-            pawnNFTConfig.prepaidFeeRate = abs(_prepaidFeedRate);
+            pawnNFTConfig.prepaidFeeRate = CommonLib.abs(_prepaidFeedRate);
         }
 
         if (_lateThreshold >= 0) {
-            pawnNFTConfig.lateThreshold = abs(_lateThreshold);
+            pawnNFTConfig.lateThreshold = CommonLib.abs(_lateThreshold);
         }
     }
 
@@ -296,11 +316,64 @@ contract Hub is
         _lateThreshold = pawnConfig.lateThreshold;
     }
 
-    /**======================= */
+    /** =================== Config NFT Collection & Market ===================*/
 
-    function abs(int256 _input) internal pure returns (uint256) {
-        return _input >= 0 ? uint256(_input) : uint256(_input * -1);
+    function setNFTConfiguration(
+        int256 collectionCreatingFee,
+        int256 mintingFee
+    ) external onlyRole(HubRoleLib.DEFAULT_ADMIN_ROLE) {
+        if (collectionCreatingFee >= 0) {
+            nftCollectionConfig.collectionCreatingFee = CommonLib.abs(
+                collectionCreatingFee
+            );
+        }
+        if (mintingFee >= 0) {
+            nftCollectionConfig.mintingFee = CommonLib.abs(mintingFee);
+        }
     }
+
+    function setNFTMarketConfig(
+        int256 zoom,
+        int256 marketFeeRate,
+        address marketFeeWallet
+    ) external onlyRole(HubRoleLib.DEFAULT_ADMIN_ROLE) {
+        if (zoom >= 0) {
+            nftMarketConfig.ZOOM = CommonLib.abs(zoom);
+        }
+        if (marketFeeRate >= 0) {
+            nftMarketConfig.marketFeeRate = CommonLib.abs(marketFeeRate);
+        }
+        if (marketFeeWallet != address(0) && !marketFeeWallet.isContract()) {
+            nftMarketConfig.marketFeeWallet = marketFeeWallet;
+        }
+    }
+
+    function getNFTCollectionConfig()
+        external
+        view
+        override
+        returns (uint256 collectionCreatingFee, uint256 mintingFee)
+    {
+        collectionCreatingFee = nftCollectionConfig.collectionCreatingFee;
+        mintingFee = nftCollectionConfig.mintingFee;
+    }
+
+    function getNFTMarketConfig()
+        external
+        view
+        override
+        returns (
+            uint256 zoom,
+            uint256 marketFeeRate,
+            address marketFeeWallet
+        )
+    {
+        zoom = nftMarketConfig.ZOOM;
+        marketFeeRate = nftMarketConfig.marketFeeRate;
+        marketFeeWallet = nftMarketConfig.marketFeeWallet;
+    }
+
+    /**======================= */
 
     event ContractAdminChanged(address from, address to);
 

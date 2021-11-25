@@ -279,7 +279,7 @@ contract Reputation is
         emit ReputationPointReduced(_from, _points, _reasonType);
     }
 
-    function signature() public view override returns (bytes4) {
+    function signature() public pure override returns (bytes4) {
         return type(IReputation).interfaceId;
     }
 
