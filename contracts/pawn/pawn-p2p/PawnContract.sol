@@ -2,6 +2,7 @@
 
 pragma solidity ^0.8.4;
 
+import "@openzeppelin/contracts-upgradeable/access/IAccessControlUpgradeable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
@@ -10,6 +11,9 @@ import "./IPawn.sol";
 import "../reputation/IReputation.sol";
 import "../exchange/Exchange.sol";
 import "../pawn-p2p-v2/ILoan.sol";
+import "../hub/HubInterface.sol";
+import "../hub/HubLib.sol";
+import "../hub/Hub.sol";
 
 contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     using SafeERC20Upgradeable for IERC20Upgradeable;
@@ -17,35 +21,37 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     using OfferLib for Offer;
     using PawnPackageLib for PawnShopPackage;
 
-    mapping(address => uint256) public whitelistCollateral;
-    address public operator;
-    address public feeWallet = address(this);
-    uint256 public penaltyRate;
-    uint256 public systemFeeRate;
-    uint256 public lateThreshold;
-    uint256 public prepaidFeeRate;
-    uint256 public ZOOM;
+    // mapping(address => uint256) public whitelistCollateral;
+    // address public operator;
+    // address public feeWallet = address(this);
+    // uint256 public penaltyRate;
+    // uint256 public systemFeeRate;
+    // uint256 public lateThreshold;
+    // uint256 public prepaidFeeRate;
+    // uint256 public ZOOM;
     bool public initialized = false;
-    address public admin;
+    address hubContract;
 
-    /**
-     * @dev initialize function
-     * @param _zoom is coefficient used to represent risk params
-     */
+    //  address public admin;
 
-    function initialize(uint256 _zoom) external notInitialized {
-        ZOOM = _zoom;
+    function initialize(address _HubContractAddress) external notInitialized {
+        //  ZOOM = _zoom;
         initialized = true;
-        admin = address(msg.sender);
+        hubContract = _HubContractAddress;
+        //  admin = address(msg.sender);
     }
 
-    function setOperator(address _newOperator) external onlyAdmin {
-        operator = _newOperator;
+    function setContractHub(address _contractHubAddress) external onlyAdmin {
+        hubContract = _contractHubAddress;
     }
 
-    function setFeeWallet(address _newFeeWallet) external onlyAdmin {
-        feeWallet = _newFeeWallet;
-    }
+    // function setOperator(address _newOperator) external onlyAdmin {
+    //     operator = _newOperator;
+    // }
+
+    // function setFeeWallet(address _newFeeWallet) external onlyAdmin {
+    //     feeWallet = _newFeeWallet;
+    // }
 
     function pause() external onlyAdmin {
         _pause();
@@ -55,41 +61,41 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         _unpause();
     }
 
-    /**
-     * @dev set fee for each token
-     * @param _feeRate is percentage of tokens to pay for the transaction
-     */
+    // /**
+    //  * @dev set fee for each token
+    //  * @param _feeRate is percentage of tokens to pay for the transaction
+    //  */
 
-    function setSystemFeeRate(uint256 _feeRate) external onlyAdmin {
-        systemFeeRate = _feeRate;
-    }
+    // function setSystemFeeRate(uint256 _feeRate) external onlyAdmin {
+    //     systemFeeRate = _feeRate;
+    // }
 
-    /**
-     * @dev set fee for each token
-     * @param _feeRate is percentage of tokens to pay for the penalty
-     */
-    function setPenaltyRate(uint256 _feeRate) external onlyAdmin {
-        penaltyRate = _feeRate;
-    }
+    // /**
+    //  * @dev set fee for each token
+    //  * @param _feeRate is percentage of tokens to pay for the penalty
+    //  */
+    // function setPenaltyRate(uint256 _feeRate) external onlyAdmin {
+    //     penaltyRate = _feeRate;
+    // }
 
-    /**
-     * @dev set fee for each token
-     * @param _threshold is number of time allowed for late repayment
-     */
-    function setLateThreshold(uint256 _threshold) external onlyAdmin {
-        lateThreshold = _threshold;
-    }
+    // /**
+    //  * @dev set fee for each token
+    //  * @param _threshold is number of time allowed for late repayment
+    //  */
+    // function setLateThreshold(uint256 _threshold) external onlyAdmin {
+    //     lateThreshold = _threshold;
+    // }
 
-    function setPrepaidFeeRate(uint256 _feeRate) external onlyAdmin {
-        prepaidFeeRate = _feeRate;
-    }
+    // function setPrepaidFeeRate(uint256 _feeRate) external onlyAdmin {
+    //     prepaidFeeRate = _feeRate;
+    // }
 
-    function setWhitelistCollateral(address _token, uint256 _status)
-        external
-        onlyAdmin
-    {
-        whitelistCollateral[_token] = _status;
-    }
+    // function setWhitelistCollateral(address _token, uint256 _status)
+    //     external
+    //     onlyAdmin
+    // {
+    //     whitelistCollateral[_token] = _status;
+    // }
 
     modifier notInitialized() {
         require(!initialized, "-2"); //initialized
@@ -102,7 +108,13 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     }
 
     function _onlyOperator() private view {
-        require(operator == msg.sender, "-0"); //operator
+        require(
+            IAccessControlUpgradeable(hubContract).hasRole(
+                HubRoleLib.OPERATOR_ROLE,
+                msg.sender
+            ),
+            "-0"
+        );
     }
 
     modifier onlyOperator() {
@@ -112,7 +124,13 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     }
 
     function _onlyAdmin() private view {
-        require(admin == msg.sender, "-1"); //admin
+        require(
+            IAccessControlUpgradeable(hubContract).hasRole(
+                HubRoleLib.DEFAULT_ADMIN_ROLE,
+                msg.sender
+            ),
+            "-1"
+        ); //admin
     }
 
     modifier onlyAdmin() {
@@ -140,7 +158,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         PawnLib.safeTransfer(
             _token,
             address(this),
-            admin,
+            msg.sender,
             PawnLib.calculateAmount(_token, address(this))
         );
     }
@@ -174,7 +192,13 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         LoanDurationType _expectedDurationType
     ) external payable whenContractNotPaused returns (uint256 _idx) {
         //check whitelist collateral token
-        require(whitelistCollateral[_collateralAddress] == 1, "0"); //n-sup-col
+        // require(whitelistCollateral[_collateralAddress] == 1, "0"); //n-sup-col
+        require(
+            HubInterface(hubContract).getWhitelistCollateral(
+                _collateralAddress
+            ) == 1,
+            "0"
+        );
         //validate: cannot use BNB as loanAsset
         require(_loanAsset != address(0), "1"); //bnb
 
@@ -325,8 +349,14 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     function _isValidCaller() private view {
         require(
             msg.sender == address(pawnLoanContract) ||
-                msg.sender == operator ||
-                msg.sender == admin,
+                IAccessControlUpgradeable(hubContract).hasRole(
+                    HubRoleLib.OPERATOR_ROLE,
+                    msg.sender
+                ) ||
+                IAccessControlUpgradeable(hubContract).hasRole(
+                    HubRoleLib.DEFAULT_ADMIN_ROLE,
+                    msg.sender
+                ),
             "0"
         ); // caller not allowed
     }
@@ -1566,21 +1596,21 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
     /** ===================================== CONTRACT ADMIN ============================= */
 
-    event AdminChanged(address _from, address _to);
+    // event AdminChanged(address _from, address _to);
 
-    function changeAdmin(address newAddress) external onlyAdmin {
-        address oldAdmin = admin;
-        admin = newAddress;
+    // function changeAdmin(address newAddress) external onlyAdmin {
+    //     address oldAdmin = admin;
+    //     admin = newAddress;
 
-        emit AdminChanged(oldAdmin, newAddress);
-    }
+    //     emit AdminChanged(oldAdmin, newAddress);
+    // }
 
     /** ===================================== REPUTATION FUNCTIONS & STATES ===================================== */
 
     IReputation public reputation;
 
     function setReputationContract(address _reputationAddress)
-        external    
+        external
         onlyAdmin
     {
         reputation = IReputation(_reputationAddress);

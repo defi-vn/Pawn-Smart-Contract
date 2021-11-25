@@ -301,4 +301,23 @@ contract Hub is
     function abs(int256 _input) internal pure returns (uint256) {
         return _input >= 0 ? uint256(_input) : uint256(_input * -1);
     }
+
+    event ContractAdminChanged(address from, address to);
+
+    /**
+     * @dev change contract's admin to a new address
+     */
+    function changeContractAdmin(address newAdmin)
+        public
+        virtual
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
+        // Check if the new Admin address is a contract address
+        require(!newAdmin.isContract(), "New admin must not be a contract");
+
+        grantRole(DEFAULT_ADMIN_ROLE, newAdmin);
+        renounceRole(DEFAULT_ADMIN_ROLE, _msgSender());
+
+        emit ContractAdminChanged(_msgSender(), newAdmin);
+    }
 }
