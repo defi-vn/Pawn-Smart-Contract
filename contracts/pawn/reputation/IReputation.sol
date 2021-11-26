@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.4;
+import "../../base/BaseInterface.sol";
 
-interface IReputation {
+interface IReputation is BaseInterface {
     // Reason for Reputation point adjustment
     /**
      * @dev Reputation points in correspondence with ReasonType

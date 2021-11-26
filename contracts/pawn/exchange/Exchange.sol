@@ -2,33 +2,58 @@
 pragma solidity ^0.8.4;
 import "../pawn-p2p-v2/PawnLib.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
-import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+//import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
-
+import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/IAccessControlUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol";
+import "./IExchange.sol";
 import "../pawn-nft-v2/PawnNFTLib.sol";
 
-contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
+import "../hub/HubInterface.sol";
+import "../hub/HubLib.sol";
+
+contract Exchange is
+    Initializable,
+    UUPSUpgradeable,
+    IExchange,
+    ERC165Upgradeable
+{
     mapping(address => address) public ListCryptoExchange;
+    address hubContract;
 
-    function initialize() public initializer {
-        __AccessControl_init();
+    function initialize(address _HubContractAddress) public initializer {
         __UUPSUpgradeable_init();
+        hubContract = _HubContractAddress;
 
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        // _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
-    function _authorizeUpgrade(address)
-        internal
-        override
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {}
+    function setContractHub(address _contractHubAddress) external onlyAdmin {
+        hubContract = _contractHubAddress;
+    }
+
+    modifier onlyAdmin() {
+        // (, , address _admin, ) = HubInterface(hubContract).getSystemConfig();
+        // require(_admin == msg.sender, "is not admin");
+        require(
+            IAccessControlUpgradeable(hubContract).hasRole(
+                HubRoleLib.DEFAULT_ADMIN_ROLE,
+                msg.sender
+            )
+        );
+
+        _;
+    }
+
+    function _authorizeUpgrade(address) internal override onlyAdmin {}
 
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(AccessControlUpgradeable)
+        override(IERC165Upgradeable, ERC165Upgradeable)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
@@ -38,7 +63,7 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
     function setCryptoExchange(
         address _cryptoAddress,
         address _latestPriceAddress
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    ) external override onlyAdmin {
         ListCryptoExchange[_cryptoAddress] = _latestPriceAddress;
     }
 
@@ -764,5 +789,15 @@ contract Exchange is Initializable, UUPSUpgradeable, AccessControlUpgradeable {
         }
         uint256 rouding = tm * 10**13;
         return rouding;
+    }
+
+    /**============  signature ====================*/
+
+    function signature() public view override returns (bytes4) {
+        return type(IExchange).interfaceId;
+    }
+
+    function RegistrywithHubContract() external {
+        HubInterface(hubContract).registerContract(signature(), address(this));
     }
 }

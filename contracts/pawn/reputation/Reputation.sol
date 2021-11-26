@@ -11,6 +11,7 @@ import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "./IReputation.sol";
+import "../hub/HubInterface.sol";
 
 contract Reputation is
     IReputation,
@@ -276,5 +277,19 @@ contract Reputation is
         _reputationScore[_from] = success == true ? result.toUint32() : 0;
 
         emit ReputationPointReduced(_from, _points, _reasonType);
+    }
+
+    function signature() public pure override returns (bytes4) {
+        return type(IReputation).interfaceId;
+    }
+
+    address hubContract;
+
+    function setContractHub(address _contractHubAddress) external {
+        hubContract = _contractHubAddress;
+    }
+
+    function RegistrywithHubContract() external {
+        HubInterface(hubContract).registerContract(signature(), address(this));
     }
 }

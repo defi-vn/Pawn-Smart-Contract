@@ -714,7 +714,7 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         uint256 _totalFee;
         uint256 _totalTransferAmount;
         uint256 total = _paidPenaltyAmount + _paidInterestAmount;
-        (address feeWallet, , , ) = HubInterface(hubContract).getSystemConfig();
+        (address feeWallet, ) = HubInterface(hubContract).getSystemConfig();
         {
             if (total > 0) {
                 // Transfer fee to fee wallet
@@ -890,20 +890,36 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
 
     /**========================= */
 
-    function getReputation() internal view returns (address) {
-        string memory nameContract = "Reputation";
-        return HubInterface(hubContract).getContractAddress(nameContract);
+    function signature() public view override returns (bytes4) {
+        return type(IPawnNFT).interfaceId;
     }
 
-    /**=== Exchange======= */
+    function RegistrywithHubContract() external {
+        HubInterface(hubContract).registerContract(signature(), address(this));
+    }
+
+    /**=========================== */
+
+    function getReputation() internal view returns (address) {
+        return
+            HubInterface(hubContract).getContractAddress(
+                type(IReputation).interfaceId
+            );
+    }
+
+    /**================== Exchange======= */
     function getExchange() internal view returns (address) {
-        string memory nameContract = "Exchange";
-        return HubInterface(hubContract).getContractAddress(nameContract);
+        return
+            HubInterface(hubContract).getContractAddress(
+                type(IExchange).interfaceId
+            );
     }
 
     function getPawnNFT() internal view returns (address) {
-        string memory nameContract = "PawnNFTContract";
-        return HubInterface(hubContract).getContractAddress(nameContract);
+        return
+            HubInterface(hubContract).getContractAddress(
+                type(ILoanNFT).interfaceId
+            );
     }
 
     /** ==================== Pawn Contract functions & states ==================== */

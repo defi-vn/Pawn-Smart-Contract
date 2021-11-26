@@ -6,8 +6,8 @@ interface HubInterface {
     struct SystemConfig {
         address systemFeeWallet;
         address systemFeeToken;
-        address Admin;
-        address Operator;
+        // address Admin;
+        // address Operator;
     }
 
     struct PawnConfig {
@@ -28,6 +28,37 @@ interface HubInterface {
         mapping(address => uint256) whitelistedEvaluationContract;
         mapping(address => uint256) whitelistedCollateral;
     }
+
+    struct NFTCollectionConfig {
+        uint256 collectionCreatingFee;
+        uint256 mintingFee;
+    }
+
+    struct NFTMarketConfig {
+        uint256 ZOOM;
+        uint256 marketFeeRate;
+        address marketFeeWallet;
+    }
+
+    /** Functions */
+    /** ROLES */
+    function AdminRole() external pure returns (bytes32);
+    function OperatorRole() external pure returns (bytes32);
+    function PauserRole() external pure returns (bytes32);
+    function EvaluatorRole() external pure returns (bytes32);
+
+    function registerContract(bytes4 nameContract, address contractAddress)
+        external;
+
+    function getContractAddress(bytes4 signature)
+        external
+        view
+        returns (address contractAddres);
+
+    function getSystemConfig()
+        external
+        view
+        returns (address feeWallet, address feeToken);
 
     function getEvaluationContract(address _evaluationContractAddress)
         external
@@ -66,18 +97,17 @@ interface HubInterface {
             uint256 _lateThreshold
         );
 
-    function getContractAddress(string memory _nameContract)
+    function getNFTCollectionConfig()
         external
         view
-        returns (address _contractAddres);
+        returns (uint256 collectionCreatingFee, uint256 mintingFee);
 
-    function getSystemConfig()
+    function getNFTMarketConfig()
         external
         view
         returns (
-            address _FeeWallet,
-            address _FeeToken,
-            address _admin,
-            address _operator
+            uint256 zoom,
+            uint256 marketFeeRate,
+            address marketFeeWallet
         );
 }
