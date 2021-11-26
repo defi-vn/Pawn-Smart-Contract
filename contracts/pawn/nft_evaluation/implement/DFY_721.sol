@@ -63,6 +63,7 @@ contract DFY_721 is
         string memory _uri,
         string memory _collectionCID,
         uint256 _defaultRoyaltyRate,
+        // address _evaluationAddress
         address payable _owner
     ) public initializer {
         __ERC721_init(_name, _symbol);
@@ -77,6 +78,7 @@ contract DFY_721 is
 
         _setupRole(DEFAULT_ADMIN_ROLE, _owner);
         _setupRole(MINTER_ROLE, _owner);
+        // _setupRole(MINTER_ROLE, _evaluationAddress);
     }
 
     function signature() external view override returns (bytes4) {
@@ -94,7 +96,9 @@ contract DFY_721 is
         )
         returns (bool)
     {
-        return super.supportsInterface(interfaceId);
+        return
+            interfaceId == type(IDFY_721).interfaceId ||
+            super.supportsInterface(interfaceId);
     }
 
     function _authorizeUpgrade(address)

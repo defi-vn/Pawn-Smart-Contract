@@ -65,6 +65,8 @@ contract DFY_1155 is
         string memory _uri,
         string memory _collectionCID,
         uint256 _defaultRoyaltyRate,
+        // address _evaluationAddress
+
         address payable _owner
     ) public initializer {
         __ERC1155_init("");
@@ -83,6 +85,7 @@ contract DFY_1155 is
 
         _setupRole(DEFAULT_ADMIN_ROLE, _owner);
         _setupRole(MINTER_ROLE, _owner);
+        // _setupRole(MINTER_ROLE, _evaluationAddress);
     }
 
     function signature() external view override returns (bytes4) {
@@ -99,7 +102,9 @@ contract DFY_1155 is
         )
         returns (bool)
     {
-        return super.supportsInterface(interfaceId);
+        return
+            interfaceId == type(IDFY_1155).interfaceId ||
+            super.supportsInterface(interfaceId);
     }
 
     function _authorizeUpgrade(address)

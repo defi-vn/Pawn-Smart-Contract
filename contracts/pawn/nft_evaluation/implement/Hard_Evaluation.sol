@@ -236,33 +236,10 @@ contract Hard_Evaluation is
     function createAssetRequest(
         string memory _assetCID,
         address _collectionAsset,
-        uint256 _amount,
         CollectionStandard _collectionStandard
     ) external override whenNotPaused {
         // Require asset CID
         require(bytes(_assetCID).length > 0, "7"); // Asset CID is Blank
-
-        uint256 _amountAsset = 0;
-
-        if (_collectionStandard == CollectionStandard.NFT_721) {
-            // Require collection asset
-            if (
-                _collectionAsset.supportsInterface(type(IDFY_721).interfaceId)
-            ) {
-                _amountAsset = 1;
-            } else {
-                revert("8"); // Invalid collection
-            }
-        } else {
-            // Require collection asset
-            if (
-                _collectionAsset.supportsInterface(type(IDFY_1155).interfaceId)
-            ) {
-                _amountAsset = _amount;
-            } else {
-                revert("8"); // Invalid collection
-            }
-        }
 
         // Create asset id
         uint256 _assetId = totalAssets.current();
@@ -272,7 +249,6 @@ contract Hard_Evaluation is
             assetCID: _assetCID,
             owner: msg.sender,
             collectionAddress: _collectionAsset,
-            amount: _amountAsset,
             collectionStandard: _collectionStandard,
             status: AssetStatus.OPEN
         });
@@ -602,12 +578,11 @@ contract Hard_Evaluation is
         emit EvaluationEvent(_evaluationId, _asset, _evaluation, reason);
     }
 
-    function createNftToken(uint256 _evaluationId, string memory _nftCID)
-        external
-        override
-        onlyRoleEvaluator
-        whenNotPaused
-    {
+    function createNftToken(
+        uint256 _evaluationId,
+        uint256 _amount,
+        string memory _nftCID
+    ) external override onlyRoleEvaluator whenNotPaused {
         require(bytes(_nftCID).length > 0, "22"); // Invalid nftCID
 
         Evaluation storage _evaluation = evaluationList[_evaluationId];
@@ -638,7 +613,7 @@ contract Hard_Evaluation is
         } else {
             tokenId = IDFY_1155(_asset.collectionAddress).mint(
                 _asset.owner,
-                _asset.amount,
+                _amount,
                 _nftCID,
                 "",
                 _evaluation.depreciationRate

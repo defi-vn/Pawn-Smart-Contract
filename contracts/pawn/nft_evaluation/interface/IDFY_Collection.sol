@@ -3,20 +3,18 @@ pragma solidity ^0.8.4;
 
 import "../../../base/BaseInterface.sol";
 
-interface IDFY_Collection is BaseInterface
-{
-
+interface IDFY_Collection is BaseInterface {
     // enum type
-    enum CollectionStatus{
+    enum CollectionStatus {
         OPEN
     }
 
-    enum CollectionType{
+    enum CollectionType {
         Collection_Hard,
         Collection_Soft
     }
 
-    enum CollectionStandard{
+    enum CollectionStandard {
         Collection_721,
         Collection_1155
     }
@@ -41,7 +39,7 @@ interface IDFY_Collection is BaseInterface
         string memory _collectionCID,
         string memory _uri,
         uint256 _royaltyRate,
-        CollectionType _collectionType,
-        CollectionStandard _collectionStandard
+        // address _evaluationAddress
+        CollectionType _collectionType
     ) external returns (address newAddressCollection);
 }

@@ -43,7 +43,6 @@ interface IDFY_Hard_Evaluation is BaseInterface {
         string assetCID;
         address owner;
         address collectionAddress;
-        uint256 amount;
         CollectionStandard collectionStandard;
         AssetStatus status;
     }
@@ -132,7 +131,6 @@ interface IDFY_Hard_Evaluation is BaseInterface {
     function createAssetRequest(
         string memory _assetCID,
         address _collectionAsset,
-        uint256 _amount,
         CollectionStandard _collectionStandard
     ) external;
 
@@ -164,8 +162,11 @@ interface IDFY_Hard_Evaluation is BaseInterface {
     function rejectEvaluation(uint256 _evaluationId, string memory reason)
         external;
 
-    function createNftToken(uint256 _evaluationId, string memory _nftCID)
-        external;
+    function createNftToken(
+        uint256 _evaluationId,
+        uint256 _amount,
+        string memory _nftCID
+    ) external;
 
     function createSoftNftToken(
         address _currency,
