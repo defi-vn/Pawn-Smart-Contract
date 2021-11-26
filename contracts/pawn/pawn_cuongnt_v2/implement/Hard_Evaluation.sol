@@ -12,8 +12,8 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165CheckerUpgradeable.sol";
 import "../interface/IDFY_Hard_Evaluation.sol";
-import "../interface/IDFY_Hard_721.sol";
-import "../interface/IDFY_Hard_1155.sol";
+import "../interface/IDFY_721.sol";
+import "../interface/IDFY_1155.sol";
 import "./Hard_Evaluation_Lib.sol";
 
 contract Hard_Evaluation is
@@ -235,14 +235,14 @@ contract Hard_Evaluation is
         if (_collectionStandard == CollectionStandard.NFT_HARD_721) {
 
             // Require collection asset
-            if (_collectionAsset.supportsInterface(type(IDFY_Hard_721).interfaceId)) {
+            if (_collectionAsset.supportsInterface(type(IDFY_721).interfaceId)) {
                 _amountAsset = 1;
             }else{
                 revert('8'); // Invalid collection
             }
         } else {
              // Require collection asset
-            if (_collectionAsset.supportsInterface(type(IDFY_Hard_1155).interfaceId)) {
+            if (_collectionAsset.supportsInterface(type(IDFY_1155).interfaceId)) {
                 _amountAsset = _amount;
             }else{
                 revert('8'); // Invalid collection
@@ -565,18 +565,18 @@ contract Hard_Evaluation is
         uint256 tokenId;
 
         if (_asset.collectionStandard == CollectionStandard.NFT_HARD_721) {
-            tokenId = IDFY_Hard_721(_asset.collectionAddress).mint(
-                msg.sender,
+            tokenId = IDFY_721(_asset.collectionAddress).mint(
                 _asset.owner,
-                _nftCID
+                _nftCID,
+                _evaluation.depreciationRate
             );
         } else {
-            tokenId = IDFY_Hard_1155(_asset.collectionAddress).mint(
+            tokenId = IDFY_1155(_asset.collectionAddress).mint(
                 _asset.owner,
-                msg.sender,
                 _asset.amount,
                 _nftCID,
-                ""
+                "",
+                _evaluation.depreciationRate
             );
         }
 

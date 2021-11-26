@@ -3,6 +3,13 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol";
+
+enum CollectionStandard{
+    Collection_721,
+    Collection_1155
+}
 
 library Hard_Evaluation_Lib {
     using SafeERC20Upgradeable for IERC20Upgradeable;
@@ -50,6 +57,51 @@ library Hard_Evaluation_Lib {
                 "not-transfer-enough"
             );
         }
+    }
+
+    function safeTranferNFTToken(
+        address _nftToken,
+        address _from,
+        address _to,
+        uint256 _id,
+        uint256 _amount,
+        CollectionStandard collectionStandard
+    ) internal {
+        // check address token
+        require(
+            _nftToken != address(0),
+            "Address token must be different address(0)."
+        );
+
+        // check address from
+        require(
+            _from != address(0),
+            "Address from must be different address(0)."
+        );
+
+        // check address from
+        require(_to != address(0), "Address to must be different address(0).");
+
+        if(collectionStandard == CollectionStandard.Collection_721){
+             // Check balance of from,
+            require(
+                IERC721Upgradeable(_nftToken).balanceOf(_from) >= _amount,
+                "Your balance not enough."
+            );
+
+            // Transfer token
+            IERC721Upgradeable(_nftToken).safeTransferFrom(_from, _to, _id, "");
+        }else{
+             // Check balance of from,
+            require(
+                IERC1155Upgradeable(_nftToken).balanceOf(_from, _id) >= _amount,
+                "Your balance not enough."
+            );
+
+            // Transfer token
+            IERC1155Upgradeable(_nftToken).safeTransferFrom(_from, _to, _id, _amount,"");
+        }
+       
     }
 
 
