@@ -102,6 +102,7 @@ interface IDFY_Hard_Evaluation is BaseInterface {
     event NFTEvent(
         uint256 tokenId,
         string nftCID,
+        uint256 amount,
         Asset asset,
         Evaluation evaluation
     );
@@ -109,6 +110,7 @@ interface IDFY_Hard_Evaluation is BaseInterface {
     event SoftNFTEvent(
         uint256 tokenId,
         string nftCID,
+        uint256 amount,
         EvaluationOfSoftNFT evaluationOfSoftNFT
     );
 

@@ -641,7 +641,7 @@ contract Hard_Evaluation is
             evaluation1155OfTokenId[tokenId] = _evaluation;
         }
 
-        emit NFTEvent(tokenId, _nftCID, _asset, _evaluation);
+        emit NFTEvent(tokenId, _nftCID, _amount, _asset, _evaluation);
     }
 
     function createSoftNftToken(
@@ -717,6 +717,7 @@ contract Hard_Evaluation is
             emit SoftNFTEvent(
                 tokenId,
                 _nftCID,
+                _amount,
                 evaluation721OfSoftTokenId[tokenId]
             );
         }
