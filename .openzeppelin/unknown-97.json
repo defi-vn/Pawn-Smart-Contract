@@ -610,6 +610,11 @@
       "address": "0x99E88BA3D6d0f0Ec14D876cF3f828D5D7B98919d",
       "txHash": "0x977704a78e13268b8c7657f730529c636ab599d5424b7ac6044fe590207e83a8",
       "kind": "uups"
+    },
+    {
+      "address": "0x83A1688D28992c4c3c82B73b23aC74Cc397ee71F",
+      "txHash": "0xe98ef8f20859a90d75d7968b108a3790ef7b18679a7b31f3be63bacd305b0892",
+      "kind": "uups"
     }
   ],
   "impls": {
@@ -27545,7 +27550,7 @@
           {
             "contract": "AccessControlUpgradeable",
             "label": "_roles",
-            "type": "t_mapping(t_bytes32,t_struct(RoleData)89_storage)",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)43_storage)",
             "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:63"
           },
           {
@@ -27575,19 +27580,19 @@
           {
             "contract": "Hub",
             "label": "systemConfig",
-            "type": "t_struct(SystemConfig)10787_storage",
+            "type": "t_struct(SystemConfig)2811_storage",
             "src": "contracts\\pawn\\hub\\Hub.sol:28"
           },
           {
             "contract": "Hub",
             "label": "pawnConfig",
-            "type": "t_struct(PawnConfig)10802_storage",
+            "type": "t_struct(PawnConfig)2826_storage",
             "src": "contracts\\pawn\\hub\\Hub.sol:29"
           },
           {
             "contract": "Hub",
             "label": "pawnNFTConfig",
-            "type": "t_struct(PawnNFTConfig)10821_storage",
+            "type": "t_struct(PawnNFTConfig)2845_storage",
             "src": "contracts\\pawn\\hub\\Hub.sol:30"
           }
         ],
@@ -27601,7 +27606,7 @@
           "t_address": {
             "label": "address"
           },
-          "t_struct(SystemConfig)10787_storage": {
+          "t_struct(SystemConfig)2811_storage": {
             "label": "struct HubInterface.SystemConfig",
             "members": [
               {
@@ -27622,7 +27627,7 @@
               }
             ]
           },
-          "t_struct(PawnConfig)10802_storage": {
+          "t_struct(PawnConfig)2826_storage": {
             "label": "struct HubInterface.PawnConfig",
             "members": [
               {
@@ -27657,7 +27662,7 @@
           "t_mapping(t_address,t_uint256)": {
             "label": "mapping(address => uint256)"
           },
-          "t_struct(PawnNFTConfig)10821_storage": {
+          "t_struct(PawnNFTConfig)2845_storage": {
             "label": "struct HubInterface.PawnNFTConfig",
             "members": [
               {
@@ -27696,13 +27701,13 @@
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
           },
-          "t_mapping(t_bytes32,t_struct(RoleData)89_storage)": {
+          "t_mapping(t_bytes32,t_struct(RoleData)43_storage)": {
             "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
           },
           "t_bytes32": {
             "label": "bytes32"
           },
-          "t_struct(RoleData)89_storage": {
+          "t_struct(RoleData)43_storage": {
             "label": "struct AccessControlUpgradeable.RoleData",
             "members": [
               {
@@ -28092,6 +28097,221 @@
             "label": "bytes32"
           },
           "t_struct(RoleData)89_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "595c0f6c25262cc1ff7270193fb05bab8e3fc77b9a3827f2e83b1f0fb95f0a93": {
+      "address": "0x54175cC3D6Faa16ed65ED5e65f046D4bfFeeF57F",
+      "txHash": "0x272e46ff372af73dc17ea0cf508787dadced0cb2f05901f5fd4478ce9a1c2ca8",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)43_storage)",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:63"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:219"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "Hub",
+            "label": "ContractRegistry",
+            "type": "t_mapping(t_bytes4,t_address)",
+            "src": "contracts\\pawn\\hub\\Hub.sol:26"
+          },
+          {
+            "contract": "Hub",
+            "label": "systemConfig",
+            "type": "t_struct(SystemConfig)2867_storage",
+            "src": "contracts\\pawn\\hub\\Hub.sol:28"
+          },
+          {
+            "contract": "Hub",
+            "label": "pawnConfig",
+            "type": "t_struct(PawnConfig)2882_storage",
+            "src": "contracts\\pawn\\hub\\Hub.sol:29"
+          },
+          {
+            "contract": "Hub",
+            "label": "pawnNFTConfig",
+            "type": "t_struct(PawnNFTConfig)2901_storage",
+            "src": "contracts\\pawn\\hub\\Hub.sol:30"
+          }
+        ],
+        "types": {
+          "t_mapping(t_bytes4,t_address)": {
+            "label": "mapping(bytes4 => address)"
+          },
+          "t_bytes4": {
+            "label": "bytes4"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_struct(SystemConfig)2867_storage": {
+            "label": "struct HubInterface.SystemConfig",
+            "members": [
+              {
+                "label": "systemFeeWallet",
+                "type": "t_address"
+              },
+              {
+                "label": "systemFeeToken",
+                "type": "t_address"
+              }
+            ]
+          },
+          "t_struct(PawnConfig)2882_storage": {
+            "label": "struct HubInterface.PawnConfig",
+            "members": [
+              {
+                "label": "ZOOM",
+                "type": "t_uint256"
+              },
+              {
+                "label": "systemFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penaltyRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "prepaidFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "lateThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "whitelistedCollateral",
+                "type": "t_mapping(t_address,t_uint256)"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_struct(PawnNFTConfig)2901_storage": {
+            "label": "struct HubInterface.PawnNFTConfig",
+            "members": [
+              {
+                "label": "ZOOM",
+                "type": "t_uint256"
+              },
+              {
+                "label": "systemFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penaltyRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "prepaidFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "lateThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "whitelistedEvaluationContract",
+                "type": "t_mapping(t_address,t_uint256)"
+              },
+              {
+                "label": "whitelistedCollateral",
+                "type": "t_mapping(t_address,t_uint256)"
+              }
+            ]
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)43_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(RoleData)43_storage": {
             "label": "struct AccessControlUpgradeable.RoleData",
             "members": [
               {

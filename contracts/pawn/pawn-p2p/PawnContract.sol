@@ -14,6 +14,7 @@ import "../pawn-p2p-v2/ILoan.sol";
 import "../hub/HubInterface.sol";
 import "../hub/HubLib.sol";
 import "../hub/Hub.sol";
+import "../exchange/IExchange.sol";
 
 contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     using SafeERC20Upgradeable for IERC20Upgradeable;
@@ -547,7 +548,13 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
         // Validataion logic: whitelist collateral, ranges must have upper greater than lower, duration type
         for (uint256 i = 0; i < _collateralAcceptance.length; i++) {
-            require(whitelistCollateral[_collateralAcceptance[i]] == 1, "0"); // col
+            // require(whitelistCollateral[_collateralAcceptance[i]] == 1, "0"); // col
+            require(
+                HubInterface(hubContract).getWhitelistCollateral(
+                    _collateralAcceptance[i]
+                ) == 1,
+                "0"
+            );
         }
 
         require(_loanAmountRange.lowerBound < _loanAmountRange.upperBound, "1"); // loan-rge
@@ -722,7 +729,11 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
         // Check for owner of packageId
         require(
-            pawnShopPackage.owner == msg.sender || msg.sender == operator,
+            pawnShopPackage.owner == msg.sender ||
+                IAccessControlUpgradeable(hubContract).hasRole(
+                    HubRoleLib.DEFAULT_ADMIN_ROLE,
+                    msg.sender
+                ),
             "0"
         ); // owner-or-oper
 
@@ -1207,17 +1218,18 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
     /** ===================================== 3.2. REPAYMENT ============================= */
 
-    event RepaymentEvent(
-        uint256 contractId,
-        uint256 paidPenaltyAmount,
-        uint256 paidInterestAmount,
-        uint256 paidLoanAmount,
-        uint256 paidPenaltyFeeAmount,
-        uint256 paidInterestFeeAmount,
-        uint256 prepaidAmount,
-        uint256 paymentRequestId,
-        uint256 UID
-    );
+    // event RepaymentEvent(
+    //     uint256 contractId,
+    //     uint256 paidPenaltyAmount,
+    //     uint256 paidInterestAmount,
+    //     uint256 paidLoanAmount,
+    //     uint256 paidPenaltyFeeAmount,
+    //     uint256 paidInterestFeeAmount,
+    //     uint256 prepaidAmount,
+    //     uint256 paymentRequestId,
+    //     uint256 UID
+    // );
+    event RepaymentEvent(DataRepaymentEvent dataRepayment);
 
     /**
         End lend period settlement and generate invoice for next period
@@ -1242,23 +1254,29 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
         // Validation: current payment request must active and not over due
         require(_paymentRequest.status == PaymentRequestStatusEnum.ACTIVE, "2"); // not-act
-        if (_paidPenaltyAmount + _paidInterestAmount > 0) {
-            require(block.timestamp <= _paymentRequest.dueDateTimestamp, "3"); // over-due
+
+        {
+            if (_paidPenaltyAmount + _paidInterestAmount > 0) {
+                require(
+                    block.timestamp <= _paymentRequest.dueDateTimestamp,
+                    "3"
+                ); // over-due
+            }
+            // Calculate paid amount / remaining amount, if greater => get paid amount
+            if (_paidPenaltyAmount > _paymentRequest.remainingPenalty) {
+                _paidPenaltyAmount = _paymentRequest.remainingPenalty;
+            }
+
+            if (_paidInterestAmount > _paymentRequest.remainingInterest) {
+                _paidInterestAmount = _paymentRequest.remainingInterest;
+            }
+
+            if (_paidLoanAmount > _paymentRequest.remainingLoan) {
+                _paidLoanAmount = _paymentRequest.remainingLoan;
+            }
         }
 
-        // Calculate paid amount / remaining amount, if greater => get paid amount
-        if (_paidPenaltyAmount > _paymentRequest.remainingPenalty) {
-            _paidPenaltyAmount = _paymentRequest.remainingPenalty;
-        }
-
-        if (_paidInterestAmount > _paymentRequest.remainingInterest) {
-            _paidInterestAmount = _paymentRequest.remainingInterest;
-        }
-
-        if (_paidLoanAmount > _paymentRequest.remainingLoan) {
-            _paidLoanAmount = _paymentRequest.remainingLoan;
-        }
-
+        (uint256 ZOOM, , , , ) = HubInterface(hubContract).getPawnConfig();
         // Calculate fee amount based on paid amount
         uint256 _feePenalty = PawnLib.calculateSystemFee(
             _paidPenaltyAmount,
@@ -1281,62 +1299,81 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         }
 
         // Update paid amount on payment request
-        _paymentRequest.remainingPenalty -= _paidPenaltyAmount;
-        _paymentRequest.remainingInterest -= _paidInterestAmount;
-        _paymentRequest.remainingLoan -= _paidLoanAmount;
-
-        // emit event repayment
-        emit RepaymentEvent(
-            _contractId,
-            _paidPenaltyAmount,
-            _paidInterestAmount,
-            _paidLoanAmount,
-            _feePenalty,
-            _feeInterest,
-            _prepaidFee,
-            _paymentRequest.requestId,
-            _UID
-        );
-
-        // If remaining loan = 0 => paidoff => execute release collateral
-        if (
-            _paymentRequest.remainingLoan == 0 &&
-            _paymentRequest.remainingPenalty == 0 &&
-            _paymentRequest.remainingInterest == 0
-        ) {
-            _returnCollateralToBorrowerAndCloseContract(_contractId);
+        {
+            _paymentRequest.remainingPenalty -= _paidPenaltyAmount;
+            _paymentRequest.remainingInterest -= _paidInterestAmount;
+            _paymentRequest.remainingLoan -= _paidLoanAmount;
         }
 
-        if (_paidPenaltyAmount + _paidInterestAmount > 0) {
-            // Transfer fee to fee wallet
-            PawnLib.safeTransfer(
-                _contract.terms.repaymentAsset,
-                msg.sender,
-                feeWallet,
-                _feePenalty + _feeInterest
+        {
+            // emit event repayment
+            // emit RepaymentEvent(
+            //     _contractId,
+            //     _paidPenaltyAmount,
+            //     _paidInterestAmount,
+            //     _paidLoanAmount,
+            //     _feePenalty,
+            //     _feeInterest,
+            //     _prepaidFee,
+            //     _paymentRequest.requestId,
+            //     _UID
+            // );
+            DataRepaymentEvent memory dataRepayment = DataRepaymentEvent(
+                _contractId,
+                _paidPenaltyAmount,
+                _paidInterestAmount,
+                _paidLoanAmount,
+                _feePenalty,
+                _feeInterest,
+                _prepaidFee,
+                _paymentRequest.requestId,
+                _UID
             );
-
-            // Transfer penalty and interest to lender except fee amount
-            uint256 transferAmount = _paidPenaltyAmount +
-                _paidInterestAmount -
-                _feePenalty -
-                _feeInterest;
-            PawnLib.safeTransfer(
-                _contract.terms.repaymentAsset,
-                msg.sender,
-                _contract.terms.lender,
-                transferAmount
-            );
+            emit RepaymentEvent(dataRepayment);
         }
 
-        if (_paidLoanAmount > 0) {
-            // Transfer loan amount and prepaid fee to lender
-            PawnLib.safeTransfer(
-                _contract.terms.loanAsset,
-                msg.sender,
-                _contract.terms.lender,
-                _paidLoanAmount + _prepaidFee
-            );
+        {
+            // If remaining loan = 0 => paidoff => execute release collateral
+            if (
+                _paymentRequest.remainingLoan == 0 &&
+                _paymentRequest.remainingPenalty == 0 &&
+                _paymentRequest.remainingInterest == 0
+            ) {
+                _returnCollateralToBorrowerAndCloseContract(_contractId);
+            }
+
+            (address feeWallet, ) = HubInterface(hubContract).getSystemConfig();
+            if (_paidPenaltyAmount + _paidInterestAmount > 0) {
+                // Transfer fee to fee wallet
+                PawnLib.safeTransfer(
+                    _contract.terms.repaymentAsset,
+                    msg.sender,
+                    feeWallet,
+                    _feePenalty + _feeInterest
+                );
+
+                // Transfer penalty and interest to lender except fee amount
+                uint256 transferAmount = _paidPenaltyAmount +
+                    _paidInterestAmount -
+                    _feePenalty -
+                    _feeInterest;
+                PawnLib.safeTransfer(
+                    _contract.terms.repaymentAsset,
+                    msg.sender,
+                    _contract.terms.lender,
+                    transferAmount
+                );
+            }
+
+            if (_paidLoanAmount > 0) {
+                // Transfer loan amount and prepaid fee to lender
+                PawnLib.safeTransfer(
+                    _contract.terms.loanAsset,
+                    msg.sender,
+                    _contract.terms.lender,
+                    _paidLoanAmount + _prepaidFee
+                );
+            }
         }
     }
 
@@ -1357,6 +1394,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     ) external whenNotPaused onlyOperator {
         // Validate: Contract must active
         Contract storage _contract = contractMustActive(_contractId);
+        (uint256 ZOOM, , , , ) = HubInterface(hubContract).getPawnConfig();
 
         (
             uint256 remainingRepayment,
@@ -1463,7 +1501,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         ContractLiquidedReasonType _reasonType
     ) internal {
         Contract storage _contract = contracts[_contractId];
-
+        (uint256 ZOOM, , , , ) = HubInterface(hubContract).getPawnConfig();
         // Execute: calculate system fee of collateral and transfer collateral except system fee amount to lender
         uint256 _systemFeeAmount = PawnLib.calculateSystemFee(
             _contract.terms.collateralAmount,
@@ -1503,7 +1541,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             _contract.terms.lender,
             _liquidAmount
         );
-
+        (address feeWallet, ) = HubInterface(hubContract).getSystemConfig();
         // Transfer to system fee wallet fee amount
         PawnLib.safeTransfer(
             _contract.terms.collateralAsset,
@@ -1609,25 +1647,34 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
     IReputation public reputation;
 
-    function setReputationContract(address _reputationAddress)
-        external
-        onlyAdmin
-    {
-        reputation = IReputation(_reputationAddress);
+    function setReputationContract() external onlyAdmin {
+        reputation = IReputation(
+            HubInterface(hubContract).getContractAddress(
+                type(IReputation).interfaceId
+            )
+        );
     }
 
     /** ==================== Exchange functions & states ==================== */
-    Exchange public exchange;
+    IExchange public exchange;
 
-    function setExchangeContract(address _exchangeAddress) external onlyAdmin {
-        exchange = Exchange(_exchangeAddress);
+    function setExchangeContract() external onlyAdmin {
+        exchange = IExchange(
+            HubInterface(hubContract).getContractAddress(
+                type(IExchange).interfaceId
+            )
+        );
     }
 
     /** ==================== Loan Contract functions & states ==================== */
     ILoan public pawnLoanContract;
 
-    function setPawnLoanContract(address _pawnLoanAddress) external onlyAdmin {
-        pawnLoanContract = ILoan(_pawnLoanAddress);
+    function setPawnLoanContract() external onlyAdmin {
+        pawnLoanContract = ILoan(
+            HubInterface(hubContract).getContractAddress(
+                type(ILoan).interfaceId
+            )
+        );
     }
 
     /** ==================== User-reviews related functions ==================== */

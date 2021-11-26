@@ -653,7 +653,7 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
 
         // Calculate fee amount based on paid amount
 
-        (uint256 ZOOM, , , , ) = HubInterface(hubContract).getPawnConfig();
+        (uint256 ZOOM, , , , ) = HubInterface(hubContract).getPawnNFTConfig();
         uint256 _feePenalty = PawnNFTLib.calculateSystemFee(
             _paidPenaltyAmount,
             _contract.terms.systemFeeRate,
@@ -795,7 +795,8 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
                     token
                 );
         {
-            (uint256 ZOOM, , , , ) = HubInterface(hubContract).getPawnConfig();
+            (uint256 ZOOM, , , , ) = HubInterface(hubContract)
+                .getPawnNFTConfig();
             uint256 valueOfRemainingRepayment = (_collateralPerRepaymentTokenExchangeRate *
                     remainingRepayment) / (ZOOM * 10**5);
             uint256 valueOfRemainingLoan = (_collateralPerLoanAssetExchangeRate *

@@ -554,8 +554,14 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
     function _isValidCaller() private view {
         require(
             msg.sender == getLoanContractNFT() ||
-                hasRole(OPERATOR_ROLE, msg.sender) ||
-                hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
+                IAccessControlUpgradeable(hubContract).hasRole(
+                    HubRoleLib.OPERATOR_ROLE,
+                    msg.sender
+                ) ||
+                IAccessControlUpgradeable(hubContract).hasRole(
+                    HubRoleLib.DEFAULT_ADMIN_ROLE,
+                    msg.sender
+                ),
             "0"
         ); // caller not allowed
     }
@@ -576,7 +582,7 @@ contract PawnNFTContract is PawnNFTModel, ILoanNFT {
     /** ==== Reputation =======*/
 
     function signature() public view override returns (bytes4) {
-        return type(IPawnNFT).interfaceId;
+        return type(ILoanNFT).interfaceId;
     }
 
     function getReputation() internal view returns (address) {

@@ -22,7 +22,8 @@
             "NFT_CONTRACT_ADDRESS":         "",
             "REPUTATION_CONTRACT_ADDRESS":  "",
             "PAWN_NFT_CONTRACT_ADDRESS":    "",
-            "EXCHANGE_CONTRACT_ADDRESS":    ""
+            "EXCHANGE_CONTRACT_ADDRESS":    "",
+            "HUB_CONTRACT_ADDRESS": "0x83A1688D28992c4c3c82B73b23aC74Cc397ee71F"
         },
         "Dev2": {
             "PAWN_CONTRACT_ADDRESS":            "0x85e63AAA2CE9144bf7E716dF8CfAB1EcaE1E203A",

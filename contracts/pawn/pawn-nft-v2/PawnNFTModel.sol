@@ -24,14 +24,16 @@ import "../hub/Hub.sol";
 import "../hub/HubInterface.sol";
 import "../hub/HubLib.sol";
 import "../exchange/IExchange.sol";
+import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 
 abstract contract PawnNFTModel is
     Initializable,
     UUPSUpgradeable,
     PausableUpgradeable,
     ReentrancyGuardUpgradeable,
-    ERC1155HolderUpgradeable,
-    DFYAccessControl
+    ERC165Upgradeable
 {
     // AssetEvaluation assetEvaluation;
 
@@ -51,8 +53,6 @@ abstract contract PawnNFTModel is
     // AssetEvaluation assetEvaluation;
 
     function initialize(address _hubContract) public initializer {
-        __ERC1155Holder_init();
-        __DFYAccessControl_init();
         __Pausable_init();
         __UUPSUpgradeable_init();
         hubContract = _hubContract;
@@ -65,7 +65,7 @@ abstract contract PawnNFTModel is
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC1155ReceiverUpgradeable, AccessControlUpgradeable)
+        override(ERC165Upgradeable)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);

@@ -187,6 +187,18 @@ struct ContractLiquidationData {
     ContractLiquidedReasonType reasonType;
 }
 
+struct DataRepaymentEvent {
+    uint256 contractId;
+    uint256 paidPenaltyAmount;
+    uint256 paidInterestAmount;
+    uint256 paidLoanAmount;
+    uint256 feePenalty;
+    uint256 feeInterest;
+    uint256 prepaidFee;
+    uint256 requestId;
+    uint256 UID;
+}
+
 library PawnLib {
     using SafeERC20Upgradeable for IERC20Upgradeable;
 
