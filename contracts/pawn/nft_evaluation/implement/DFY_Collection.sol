@@ -9,17 +9,24 @@ import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeabl
 import "../interface/IDFY_Collection.sol";
 import "../implement/DFY_721.sol";
 import "../implement/DFY_1155.sol";
+import "@openzeppelin/contracts-upgradeable/access/IAccessControlUpgradeable.sol";
+import "../../hub/HubLib.sol";
 
-contract DFY_Collection is 
+contract DFY_Collection is
     Initializable,
     UUPSUpgradeable,
     PausableUpgradeable,
     ERC165Upgradeable,
     IDFY_Collection
 {
-    
-    modifier onlyRoleAdmin(){
-        // todo call hub check role admin
+    address hubContract;
+    modifier onlyRoleAdmin() {
+        require(
+            IAccessControlUpgradeable(hubContract).hasRole(
+                HubRoleLib.DEFAULT_ADMIN_ROLE,
+                msg.sender
+            )
+        );
         _;
     }
 
@@ -32,26 +39,26 @@ contract DFY_Collection is
     function initialize(
         string memory _name,
         string memory _symbol,
-        string memory _uri
+        string memory _uri,
+        address _hubContract
     ) public initializer {
         __Pausable_init();
         __UUPSUpgradeable_init();
+        hubContract = _hubContract;
     }
 
-    function signature() 
-        external
-        view
-        override
-        returns(bytes4) 
-    {
+    function signature() external view override returns (bytes4) {
         return type(IDFY_721).interfaceId;
     }
 
-    function _authorizeUpgrade(address)
-        internal
-        override
+    function setContractHub(address _contractHubAddress)
+        external
         onlyRoleAdmin
-    {}
+    {
+        hubContract = _contractHubAddress;
+    }
+
+    function _authorizeUpgrade(address) internal override onlyRoleAdmin {}
 
     function supportsInterface(bytes4 interfaceId)
         public
@@ -78,24 +85,26 @@ contract DFY_Collection is
         uint256 _royaltyRate,
         CollectionType _collectionType,
         CollectionStandard _collectionStandard
-    ) 
-        external
-        override
-        returns (address newAddressCollection)
-    {
+    ) external override returns (address newAddressCollection) {
         require(
-            bytes(_name).length > 0
-            && bytes(_symbol).length > 0
-            && bytes(_uri).length > 0
-            && bytes(_collectionCID).length > 0,
+            bytes(_name).length > 0 &&
+                bytes(_symbol).length > 0 &&
+                bytes(_uri).length > 0 &&
+                bytes(_collectionCID).length > 0,
             "Invalid collection"
         );
 
-        if(_collectionStandard == CollectionStandard.Collection_721){
-
-            if(_collectionType == CollectionType.Collection_Hard){
+        if (_collectionStandard == CollectionStandard.Collection_721) {
+            if (_collectionType == CollectionType.Collection_Hard) {
                 DFY_721 newCollection721 = new DFY_721();
-                newCollection721.initialize(_name, _symbol, _uri, _collectionCID, 0, payable(msg.sender));
+                newCollection721.initialize(
+                    _name,
+                    _symbol,
+                    _uri,
+                    _collectionCID,
+                    0,
+                    payable(msg.sender)
+                );
                 collections721ByOwner[msg.sender].push(newCollection721);
                 emit CollectionEvent(
                     address(newCollection721),
@@ -108,9 +117,16 @@ contract DFY_Collection is
                     _collectionStandard,
                     CollectionStatus.OPEN
                 );
-            }else{
+            } else {
                 DFY_721 newCollection721 = new DFY_721();
-                newCollection721.initialize(_name, _symbol, _uri, _collectionCID, _royaltyRate, payable(msg.sender));
+                newCollection721.initialize(
+                    _name,
+                    _symbol,
+                    _uri,
+                    _collectionCID,
+                    _royaltyRate,
+                    payable(msg.sender)
+                );
                 collections721ByOwner[msg.sender].push(newCollection721);
                 emit CollectionEvent(
                     address(newCollection721),
@@ -124,12 +140,17 @@ contract DFY_Collection is
                     CollectionStatus.OPEN
                 );
             }
-
-        }else{
-
-            if(_collectionType == CollectionType.Collection_Hard){
+        } else {
+            if (_collectionType == CollectionType.Collection_Hard) {
                 DFY_1155 newCollection1155 = new DFY_1155();
-                newCollection1155.initialize(_name, _symbol, _uri, _collectionCID, 0, payable(msg.sender));
+                newCollection1155.initialize(
+                    _name,
+                    _symbol,
+                    _uri,
+                    _collectionCID,
+                    0,
+                    payable(msg.sender)
+                );
                 collections1155ByOwner[msg.sender].push(newCollection1155);
                 emit CollectionEvent(
                     address(newCollection1155),
@@ -142,9 +163,16 @@ contract DFY_Collection is
                     _collectionStandard,
                     CollectionStatus.OPEN
                 );
-            }else{
+            } else {
                 DFY_1155 newCollection1155 = new DFY_1155();
-                newCollection1155.initialize(_name, _symbol, _uri, _collectionCID, _royaltyRate, payable(msg.sender));
+                newCollection1155.initialize(
+                    _name,
+                    _symbol,
+                    _uri,
+                    _collectionCID,
+                    _royaltyRate,
+                    payable(msg.sender)
+                );
                 collections1155ByOwner[msg.sender].push(newCollection1155);
                 emit CollectionEvent(
                     address(newCollection1155),
@@ -158,7 +186,6 @@ contract DFY_Collection is
                     CollectionStatus.OPEN
                 );
             }
-     
         }
     }
 }
