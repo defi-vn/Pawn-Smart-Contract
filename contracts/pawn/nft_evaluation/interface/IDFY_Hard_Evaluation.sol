@@ -4,7 +4,8 @@ pragma solidity ^0.8.4;
 import "../../../base/BaseInterface.sol";
 
 interface IDFY_Hard_Evaluation is BaseInterface {
-    /** ===== Enum ===== */
+
+    /* ===== Enum ===== */
     enum AssetStatus {
         OPEN,
         APPOINTMENTED,
@@ -19,14 +20,9 @@ interface IDFY_Hard_Evaluation is BaseInterface {
         NFT_CREATED
     }
 
-    enum CollectionType {
-        NFT_HARD,
-        NFT_SOFT
-    }
-
     enum CollectionStandard {
-        NFT_721,
-        NFT_1155
+        NFT_HARD_721,
+        NFT_HARD_1155
     }
 
     enum AppointmentStatus {
@@ -37,8 +33,7 @@ interface IDFY_Hard_Evaluation is BaseInterface {
         EVALUATED
     }
 
-    /** ===== Data type ===== */
-
+    /* ===== Data type ===== */
     struct Asset {
         string assetCID;
         address owner;
@@ -71,18 +66,7 @@ interface IDFY_Hard_Evaluation is BaseInterface {
         EvaluationStatus status;
     }
 
-    struct EvaluationOfSoftNFT {
-        address owner;
-        address currency;
-        uint256 price;
-        uint256 depreciationRate;
-        uint256 mintingFee;
-        address mintingFeeAddress;
-        address collectionAddress;
-        CollectionStandard collectionStandard;
-    }
-
-    /** ===== event ===== */
+    /* ===== Event ===== */
     event AssetEvent(uint256 assetId, Asset asset);
 
     event AppointmentEvent(
@@ -107,18 +91,10 @@ interface IDFY_Hard_Evaluation is BaseInterface {
         Evaluation evaluation
     );
 
-    event SoftNFTEvent(
-        uint256 tokenId,
-        string nftCID,
-        uint256 amount,
-        EvaluationOfSoftNFT evaluationOfSoftNFT
-    );
-
-    /** ===== method ===== */
-
-    function setBaseURI(string memory _newURI) external;
-
-    function setAdminAddress(address _newAdminAddress) external;
+    /* ===== Method ===== */
+    function setAdminAddress(
+        address _newAdminAddress
+    ) external;
 
     function addWhiteListEvaluationFee(
         address _newAddressEvaluatonFee,
@@ -142,13 +118,19 @@ interface IDFY_Hard_Evaluation is BaseInterface {
         address _evaluationFeeAddress
     ) external;
 
-    function acceptAppointment(uint256 _appointmentId) external;
+    function acceptAppointment(
+        uint256 _appointmentId
+    ) external;
 
-    function rejectAppointment(uint256 _appointmentId, string memory reason)
-        external;
+    function rejectAppointment(
+        uint256 _appointmentId,
+        string memory reason
+    ) external;
 
-    function cancelAppointment(uint256 _appointmentId, string memory reason)
-        external;
+    function cancelAppointment(
+        uint256 _appointmentId,
+        string memory reason
+    ) external;
 
     function evaluatedAsset(
         address _currency,
@@ -159,26 +141,18 @@ interface IDFY_Hard_Evaluation is BaseInterface {
         address _mintingFeeAddress
     ) external;
 
-    function acceptEvaluation(uint256 _evaluationId) external;
+    function acceptEvaluation(
+        uint256 _evaluationId
+    ) external;
 
-    function rejectEvaluation(uint256 _evaluationId, string memory reason)
-        external;
+    function rejectEvaluation(
+        uint256 _evaluationId,
+        string memory reason
+    ) external;
 
     function createNftToken(
         uint256 _evaluationId,
         uint256 _amount,
         string memory _nftCID
-    ) external;
-
-    function createSoftNftToken(
-        address _currency,
-        uint256 _price,
-        uint256 _amount,
-        uint256 _depreciationRate,
-        address _mintingFeeAddress,
-        address _collectionAddress,
-        string memory _nftCID,
-        CollectionType _collectionType,
-        CollectionStandard _collectionStandard
     ) external;
 }

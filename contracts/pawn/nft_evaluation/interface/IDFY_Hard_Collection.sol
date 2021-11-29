@@ -3,23 +3,18 @@ pragma solidity ^0.8.4;
 
 import "../../../base/BaseInterface.sol";
 
-interface IDFY_Collection is BaseInterface {
-    // enum type
+interface IDFY_Hard_Collection is BaseInterface {
+    /* ===== Enum ===== */
     enum CollectionStatus {
         OPEN
     }
 
-    enum CollectionType {
-        Collection_Hard,
-        Collection_Soft
-    }
-
     enum CollectionStandard {
-        Collection_721,
-        Collection_1155
+        Collection_Hard_721,
+        Collection_Hard_1155
     }
 
-    // event
+    /* ===== Event ===== */
     event CollectionEvent(
         address collection,
         address owner,
@@ -27,19 +22,16 @@ interface IDFY_Collection is BaseInterface {
         string symbol,
         string collectionCID,
         uint256 royaltyRate,
-        CollectionType collectionType,
         CollectionStandard collectionStandard,
         CollectionStatus collectionStatus
     );
 
-    // function
+    /* ===== Method ===== */
     function createCollection(
         string memory _name,
         string memory _symbol,
         string memory _collectionCID,
-        string memory _uri,
         uint256 _royaltyRate,
-        // address _evaluationAddress
-        CollectionType _collectionType
-    ) external returns (address newAddressCollection);
+        address _evaluationAddress
+    ) external returns (address newColection);
 }
