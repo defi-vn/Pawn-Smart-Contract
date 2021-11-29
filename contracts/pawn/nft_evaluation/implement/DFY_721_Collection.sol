@@ -32,18 +32,13 @@ contract DFY_721_Collection is
     // Mapping collection 721 of owner
     mapping(address => DFY_721[]) public collections721ByOwner;
 
-    function initialize(
-        string memory _name,
-        string memory _symbol,
-        string memory _uri,
-        address _hubContract
-    ) public initializer {
+    function initialize(address _hubContract) public initializer {
         __Pausable_init();
         __UUPSUpgradeable_init();
         hubContract = _hubContract;
     }
 
-    function signature() external view override returns (bytes4) {
+    function signature() external pure override returns (bytes4) {
         return type(IDFY_721).interfaceId;
     }
 
@@ -90,8 +85,8 @@ contract DFY_721_Collection is
             "Invalid collection"
         );
         if (_collectionType == CollectionType.Collection_Hard) {
-            DFY_721 newAddressCollection = new DFY_721();
-            newAddressCollection.initialize(
+            DFY_721 newAddressCollectionHard = new DFY_721();
+            newAddressCollectionHard.initialize(
                 _name,
                 _symbol,
                 _uri,
@@ -100,9 +95,9 @@ contract DFY_721_Collection is
                 0,
                 payable(msg.sender)
             );
-            collections721ByOwner[msg.sender].push(newAddressCollection);
+            collections721ByOwner[msg.sender].push(newAddressCollectionHard);
             emit CollectionEvent(
-                address(newAddressCollection),
+                address(newAddressCollectionHard),
                 msg.sender,
                 _name,
                 _symbol,
@@ -113,8 +108,8 @@ contract DFY_721_Collection is
                 CollectionStatus.OPEN
             );
         } else {
-            DFY_721 newAddressCollection = new DFY_721();
-            newAddressCollection.initialize(
+            DFY_721 newAddressCollectionSoft = new DFY_721();
+            newAddressCollectionSoft.initialize(
                 _name,
                 _symbol,
                 _uri,
@@ -123,9 +118,9 @@ contract DFY_721_Collection is
                 _royaltyRate,
                 payable(msg.sender)
             );
-            collections721ByOwner[msg.sender].push(newAddressCollection);
+            collections721ByOwner[msg.sender].push(newAddressCollectionSoft);
             emit CollectionEvent(
-                address(newAddressCollection),
+                address(newAddressCollectionSoft),
                 msg.sender,
                 _name,
                 _symbol,

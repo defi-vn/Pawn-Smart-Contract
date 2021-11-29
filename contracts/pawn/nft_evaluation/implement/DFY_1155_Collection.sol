@@ -32,18 +32,13 @@ contract DFY_1155_Collection is
     // Mapping collection 1155 of owner
     mapping(address => DFY_1155[]) public collections1155ByOwner;
 
-    function initialize(
-        string memory _name,
-        string memory _symbol,
-        string memory _uri,
-        address _hubContract
-    ) public initializer {
+    function initialize(address _hubContract) public initializer {
         __Pausable_init();
         __UUPSUpgradeable_init();
         hubContract = _hubContract;
     }
 
-    function signature() external view override returns (bytes4) {
+    function signature() external pure override returns (bytes4) {
         return type(IDFY_1155).interfaceId;
     }
 
@@ -90,8 +85,8 @@ contract DFY_1155_Collection is
             "Invalid collection"
         );
         if (_collectionType == CollectionType.Collection_Hard) {
-            DFY_1155 newAddressCollection = new DFY_1155();
-            newAddressCollection.initialize(
+            DFY_1155 newAddressCollectionHard = new DFY_1155();
+            newAddressCollectionHard.initialize(
                 _name,
                 _symbol,
                 _uri,
@@ -100,9 +95,9 @@ contract DFY_1155_Collection is
                 payable(msg.sender)
                 // _evaluationAddress
             );
-            collections1155ByOwner[msg.sender].push(newAddressCollection);
+            collections1155ByOwner[msg.sender].push(newAddressCollectionHard);
             emit CollectionEvent(
-                address(newAddressCollection),
+                address(newAddressCollectionHard),
                 msg.sender,
                 _name,
                 _symbol,
@@ -113,8 +108,8 @@ contract DFY_1155_Collection is
                 CollectionStatus.OPEN
             );
         } else {
-            DFY_1155 newAddressCollection = new DFY_1155();
-            newAddressCollection.initialize(
+            DFY_1155 newAddressCollectionSoft = new DFY_1155();
+            newAddressCollectionSoft.initialize(
                 _name,
                 _symbol,
                 _uri,
@@ -123,9 +118,9 @@ contract DFY_1155_Collection is
                 payable(msg.sender)
                 // _evaluationAddress
             );
-            collections1155ByOwner[msg.sender].push(newAddressCollection);
+            collections1155ByOwner[msg.sender].push(newAddressCollectionSoft);
             emit CollectionEvent(
-                address(newAddressCollection),
+                address(newAddressCollectionSoft),
                 msg.sender,
                 _name,
                 _symbol,

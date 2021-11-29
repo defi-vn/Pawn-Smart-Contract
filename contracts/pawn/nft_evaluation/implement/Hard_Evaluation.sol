@@ -144,7 +144,7 @@ contract Hard_Evaluation is
         hubContract = _contractHubAddress;
     }
 
-    function signature() external view override returns (bytes4) {
+    function signature() external pure override returns (bytes4) {
         return type(IDFY_Hard_Evaluation).interfaceId;
     }
 
@@ -685,6 +685,7 @@ contract Hard_Evaluation is
             emit SoftNFTEvent(
                 tokenId,
                 _nftCID,
+                _amount,
                 evaluation721OfSoftTokenId[tokenId]
             );
         } else {
