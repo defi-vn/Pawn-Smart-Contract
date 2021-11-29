@@ -11,20 +11,22 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165CheckerUpgradeable.sol";
-import "../interface/IDFY_Hard_Evaluation.sol";
-import "../interface/IDFY_721.sol";
-import "../interface/IDFY_1155.sol";
-import "./Hard_Evaluation_Lib.sol";
 import "@openzeppelin/contracts-upgradeable/access/IAccessControlUpgradeable.sol";
+import "../interface/IDFY_Hard_Evaluation.sol";
+import "../interface/IDFY_Hard_721.sol";
+import "../interface/IDFY_Hard_1155.sol";
+import "./Hard_Evaluation_Lib.sol";
 import "../../hub/HubLib.sol";
+import "../../../base/BaseContract.sol";
 
 contract Hard_Evaluation is
     Initializable,
-    IDFY_Hard_Evaluation,
-    ERC165Upgradeable,
     UUPSUpgradeable,
     PausableUpgradeable,
-    ReentrancyGuardUpgradeable
+    ReentrancyGuardUpgradeable,
+    ERC165Upgradeable,
+    IDFY_Hard_Evaluation,
+    BaseContract
 {
     using CountersUpgradeable for CountersUpgradeable.Counter;
     using AddressUpgradeable for address;
@@ -36,16 +38,13 @@ contract Hard_Evaluation is
     address hubContract;
 
     // Total asset
-    CountersUpgradeable.Counter public totalAssets;
+    CountersUpgradeable.Counter private _totalAssets;
 
     // Total appointment
-    CountersUpgradeable.Counter public totalAppointment;
+    CountersUpgradeable.Counter private _totalAppointment;
 
     // Total evaluation
-    CountersUpgradeable.Counter public totalEvaluation;
-
-    // Base URI token
-    string public baseUri;
+    CountersUpgradeable.Counter private _totalEvaluation;
 
     // Evaluation fee
     uint256 public evaluationFee;
@@ -97,24 +96,6 @@ contract Hard_Evaluation is
     // Token id => evaluation 1155
     mapping(uint256 => Evaluation) public evaluation1155OfTokenId;
 
-    // Mapping evaluation 721 of soft nft token id
-    // Token id => evaluation 721
-    mapping(uint256 => EvaluationOfSoftNFT) public evaluation721OfSoftTokenId;
-
-    // Mapping evaluation 1155 of token id
-    // Token id => evaluation 1155
-    mapping(uint256 => EvaluationOfSoftNFT) public evaluation1155OfSoftTokenId;
-
-    modifier onlyRoleAdmin() {
-        require(
-            IAccessControlUpgradeable(hubContract).hasRole(
-                HubRoleLib.DEFAULT_ADMIN_ROLE,
-                msg.sender
-            )
-        );
-        _;
-    }
-
     modifier onlyRoleEvaluator() {
         require(
             IAccessControlUpgradeable(hubContract).hasRole(
@@ -125,30 +106,22 @@ contract Hard_Evaluation is
         _;
     }
 
-    function initialize(string memory _uri, address _hubContract)
+    function initialize(address _hubContract)
         public
         initializer
     {
         __Pausable_init();
 
-        _setBaseURI(_uri);
-
         _setAdminAddress(msg.sender);
-        hubContract = _hubContract;
-    }
 
-    function setContractHub(address _contractHubAddress)
-        external
-        onlyRoleAdmin
-    {
-        hubContract = _contractHubAddress;
+        __BaseContract_init(_hubContract);
+
+        hubContract = _hubContract;
     }
 
     function signature() external view override returns (bytes4) {
         return type(IDFY_Hard_Evaluation).interfaceId;
     }
-
-    function _authorizeUpgrade(address) internal override {}
 
     function supportsInterface(bytes4 interfaceId)
         public
@@ -160,15 +133,6 @@ contract Hard_Evaluation is
         return
             interfaceId == type(IDFY_Hard_Evaluation).interfaceId ||
             super.supportsInterface(interfaceId);
-    }
-
-    function _setBaseURI(string memory _newURI) internal {
-        require(bytes(_newURI).length > 0, "0"); // New URI is blank
-        baseUri = _newURI;
-    }
-
-    function setBaseURI(string memory _newURI) external override onlyRoleAdmin {
-        _setBaseURI(_newURI);
     }
 
     function _setAdminAddress(address _newAdminAddress) internal {
@@ -225,14 +189,6 @@ contract Hard_Evaluation is
         _addWhiteListMintingFee(_newAddressMintingFee, _newMintingFee);
     }
 
-    function pause() external onlyRoleAdmin {
-        _pause();
-    }
-
-    function unpause() external onlyRoleAdmin {
-        _unpause();
-    }
-
     function createAssetRequest(
         string memory _assetCID,
         address _collectionAsset,
@@ -241,8 +197,14 @@ contract Hard_Evaluation is
         // Require asset CID
         require(bytes(_assetCID).length > 0, "7"); // Asset CID is Blank
 
+        if(_collectionStandard == CollectionStandard.NFT_HARD_721){
+            require(_collectionAsset.supportsInterface(type(IDFY_Hard_721).interfaceId), ""); // Invalid Collection
+        }else{
+            require(_collectionAsset.supportsInterface(type(IDFY_Hard_1155).interfaceId), ""); // Invalid Collection
+        }
+
         // Create asset id
-        uint256 _assetId = totalAssets.current();
+        uint256 _assetId = _totalAssets.current();
 
         // Add asset from asset list
         assetList[_assetId] = Asset({
@@ -254,7 +216,7 @@ contract Hard_Evaluation is
         });
 
         // Update total asset
-        totalAssets.increment();
+        _totalAssets.increment();
 
         emit AssetEvent(_assetId, assetList[_assetId]);
     }
@@ -269,15 +231,19 @@ contract Hard_Evaluation is
 
         require(
             bytes(_asset.assetCID).length > 0 &&
-                _asset.status == AssetStatus.OPEN &&
-                msg.sender == _asset.owner,
+            _asset.status == AssetStatus.OPEN &&
+            msg.sender == _asset.owner,
             "9"
         ); // Invalid asset
 
-        require(!_evaluator.isContract() && _evaluator != _asset.owner, "11"); // Invalid evaluator
+        require(
+            !_evaluator.isContract() &&
+            _evaluator != _asset.owner,
+            "11"
+        ); // Invalid evaluator
 
         // Gennerate total appointment
-        uint256 _appointmentId = totalAppointment.current();
+        uint256 _appointmentId = _totalAppointment.current();
 
         // Add appointment to list appointment
         appointmentList[_appointmentId] = Appointment({
@@ -302,8 +268,8 @@ contract Hard_Evaluation is
             whiteListEvaluationFee[_evaluationFeeAddress]
         );
 
-        // Update total asset
-        totalAssets.increment();
+        // Update total appoinment
+        _totalAppointment.increment();
 
         // Send event
         emit AppointmentEvent(
@@ -324,7 +290,7 @@ contract Hard_Evaluation is
 
         require(
             _appointment.status == AppointmentStatus.OPEN &&
-                _appointment.evaluator == msg.sender,
+            _appointment.evaluator == msg.sender,
             "12"
         ); // Invalid appoinment
 
@@ -381,8 +347,7 @@ contract Hard_Evaluation is
 
         require(
             _appointment.status != AppointmentStatus.EVALUATED &&
-                _appointment.status != AppointmentStatus.CANCELLED &&
-                _appointment.evaluator == msg.sender,
+            _appointment.status != AppointmentStatus.CANCELLED,
             "13"
         ); // Invalid appoinment
 
@@ -417,17 +382,17 @@ contract Hard_Evaluation is
     ) external override onlyRoleEvaluator whenNotPaused {
         Appointment storage _appointment = appointmentList[_appointmentId];
 
-        Asset storage _asset = assetList[_appointment.assetId];
-
         require(
             _appointment.status == AppointmentStatus.ACCEPTED &&
-                _appointment.evaluator == msg.sender,
+            _appointment.evaluator == msg.sender,
             "14"
         ); // Invalid appoinment
 
+        Asset storage _asset = assetList[_appointment.assetId];
+
         require(
             _asset.status == AssetStatus.APPOINTMENTED &&
-                _asset.owner != msg.sender,
+            _asset.owner != msg.sender,
             "15"
         ); // Invalid asset
 
@@ -437,13 +402,13 @@ contract Hard_Evaluation is
 
         require(
             bytes(_evaluationCID).length > 0 &&
-                _price > 0 &&
-                _depreciationRate > 0,
+            _price > 0 &&
+            _depreciationRate > 0,
             "17"
         ); // Invalid evaluation
 
         // Gennerate evaluation id
-        uint256 _evaluationId = totalEvaluation.current();
+        uint256 _evaluationId = _totalEvaluation.current();
 
         evaluationList[_evaluationId] = Evaluation({
             assetId: _appointment.assetId,
@@ -469,7 +434,7 @@ contract Hard_Evaluation is
             _appointment.evaluationFee
         );
 
-        totalEvaluation.increment();
+        _totalEvaluation.increment();
 
         emit EvaluationEvent(
             _evaluationId,
@@ -496,8 +461,8 @@ contract Hard_Evaluation is
 
         require(
             bytes(_asset.assetCID).length > 0 &&
-                _asset.status == AssetStatus.APPOINTMENTED &&
-                _asset.owner == msg.sender,
+            _asset.status == AssetStatus.APPOINTMENTED &&
+            _asset.owner == msg.sender,
             "19"
         ); // Invalid asset
 
@@ -604,14 +569,14 @@ contract Hard_Evaluation is
 
         uint256 tokenId;
 
-        if (_asset.collectionStandard == CollectionStandard.NFT_721) {
-            tokenId = IDFY_721(_asset.collectionAddress).mint(
+        if (_asset.collectionStandard == CollectionStandard.NFT_HARD_721) {
+            tokenId = IDFY_Hard_721(_asset.collectionAddress).mint(
                 _asset.owner,
                 _nftCID,
                 _evaluation.depreciationRate
             );
         } else {
-            tokenId = IDFY_1155(_asset.collectionAddress).mint(
+            tokenId = IDFY_Hard_1155(_asset.collectionAddress).mint(
                 _asset.owner,
                 _amount,
                 _nftCID,
@@ -631,7 +596,7 @@ contract Hard_Evaluation is
 
         _evaluation.status = EvaluationStatus.NFT_CREATED;
 
-        if (_asset.collectionStandard == CollectionStandard.NFT_721) {
+        if (_asset.collectionStandard == CollectionStandard.NFT_HARD_721) {
             asset721OfTokenId[tokenId] = _asset;
 
             evaluation721OfTokenId[tokenId] = _evaluation;
@@ -644,82 +609,4 @@ contract Hard_Evaluation is
         emit NFTEvent(tokenId, _nftCID, _amount, _asset, _evaluation);
     }
 
-    function createSoftNftToken(
-        address _currency,
-        uint256 _price,
-        uint256 _amount,
-        uint256 _depreciationRate,
-        address _mintingFeeAddress,
-        address _collectionAddress,
-        string memory _nftCID,
-        CollectionType _collectionType,
-        CollectionStandard _collectionStandard
-    ) external override {
-        require(_collectionType == CollectionType.NFT_SOFT, "cannot-find");
-
-        if (_collectionStandard == CollectionStandard.NFT_721) {
-            uint256 tokenId = IDFY_721(_collectionAddress).mint(
-                msg.sender,
-                _nftCID,
-                _depreciationRate
-            );
-
-            evaluation721OfSoftTokenId[tokenId] = EvaluationOfSoftNFT({
-                owner: msg.sender,
-                currency: _currency,
-                price: _price,
-                depreciationRate: _depreciationRate,
-                mintingFee: whiteListMintingFee[_mintingFeeAddress],
-                mintingFeeAddress: _mintingFeeAddress,
-                collectionAddress: _collectionAddress,
-                collectionStandard: _collectionStandard
-            });
-
-            Hard_Evaluation_Lib.safeTransfer(
-                _mintingFeeAddress,
-                msg.sender,
-                adminAdress,
-                whiteListMintingFee[_mintingFeeAddress]
-            );
-
-            emit SoftNFTEvent(
-                tokenId,
-                _nftCID,
-                evaluation721OfSoftTokenId[tokenId]
-            );
-        } else {
-            uint256 tokenId = IDFY_1155(_collectionAddress).mint(
-                msg.sender,
-                _amount,
-                _nftCID,
-                "",
-                _depreciationRate
-            );
-
-            evaluation1155OfSoftTokenId[tokenId] = EvaluationOfSoftNFT({
-                owner: msg.sender,
-                currency: _currency,
-                price: _price,
-                depreciationRate: _depreciationRate,
-                mintingFee: whiteListMintingFee[_mintingFeeAddress],
-                mintingFeeAddress: _mintingFeeAddress,
-                collectionAddress: _collectionAddress,
-                collectionStandard: _collectionStandard
-            });
-
-            Hard_Evaluation_Lib.safeTransfer(
-                _mintingFeeAddress,
-                msg.sender,
-                adminAdress,
-                whiteListMintingFee[_mintingFeeAddress]
-            );
-
-            emit SoftNFTEvent(
-                tokenId,
-                _nftCID,
-                _amount,
-                evaluation721OfSoftTokenId[tokenId]
-            );
-        }
-    }
 }

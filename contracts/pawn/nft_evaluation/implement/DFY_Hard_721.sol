@@ -1,25 +1,28 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721BurnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "../interface/IDFY_721.sol";
+import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol";
+import "../interface/IDFY_Hard_721.sol";
+import "../../../base/BaseContract.sol";
 
-contract DFY_721 is
+contract DFY_Hard_721 is
     Initializable,
-    IDFY_721,
     UUPSUpgradeable,
-    AccessControlUpgradeable,
     PausableUpgradeable,
+    AccessControlUpgradeable,
+    BaseContract,
+    IDFY_Hard_721,
     ERC721Upgradeable,
     ERC721EnumerableUpgradeable,
     ERC721URIStorageUpgradeable,
@@ -44,10 +47,10 @@ contract DFY_721 is
     string public collectionCID;
 
     // Base URI NFT Token
-    string public tokenBaseUri;
+    string public constant collectionBaseUri = "https://defiforyou.mypinata.cloud/ipfs/";
 
     // Total NFT_Hard_721 token
-    CountersUpgradeable.Counter public totalToken;
+    CountersUpgradeable.Counter private _totalToken;
 
     // Mapping token to CID
     // TokenId => CID
@@ -60,16 +63,14 @@ contract DFY_721 is
     function initialize(
         string memory _name,
         string memory _symbol,
-        string memory _uri,
         string memory _collectionCID,
         uint256 _defaultRoyaltyRate,
-        // address _evaluationAddress
+        address _evaluationAddress,
         address payable _owner
     ) public initializer {
         __ERC721_init(_name, _symbol);
         __Pausable_init();
         __UUPSUpgradeable_init();
-        _setBaseURI(_uri);
 
         factory = msg.sender;
         originalCreator = _owner;
@@ -78,69 +79,40 @@ contract DFY_721 is
 
         _setupRole(DEFAULT_ADMIN_ROLE, _owner);
         _setupRole(MINTER_ROLE, _owner);
-        // _setupRole(MINTER_ROLE, _evaluationAddress);
+
+        if(_evaluationAddress.isContract() && _evaluationAddress!=address(0)){
+            _setupRole(MINTER_ROLE, _evaluationAddress);
+        }
     }
 
     function signature() external view override returns (bytes4) {
-        return type(IDFY_721).interfaceId;
+        return type(IDFY_Hard_721).interfaceId;
     }
 
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(
-            ERC721Upgradeable,
-            ERC721EnumerableUpgradeable,
-            AccessControlUpgradeable,
-            IERC165Upgradeable
-        )
+        override
+    (
+        ERC721Upgradeable,
+        ERC721EnumerableUpgradeable,
+        AccessControlUpgradeable,
+        ERC165Upgradeable,
+        IERC165Upgradeable
+    )
         returns (bool)
     {
         return
-            interfaceId == type(IDFY_721).interfaceId ||
+            interfaceId == type(IDFY_Hard_721).interfaceId ||
             super.supportsInterface(interfaceId);
     }
 
-    function _authorizeUpgrade(address)
-        internal
-        override
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {}
-
-    function _setBaseURI(string memory _newURI) internal {
-        require(bytes(_newURI).length > 0, "Blank");
-        tokenBaseUri = _newURI;
+    function collectionURI() public view returns (string memory) {
+        return string(abi.encodePacked(_baseURI(), collectionCID));
     }
 
-    function setBaseURI(string memory _newURI)
-        external
-        override
-        onlyRole(DEFAULT_ADMIN_ROLE)
-        whenNotPaused
-    {
-        _setBaseURI(_newURI);
-    }
-
-    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) {
-        _pause();
-    }
-
-    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) {
-        _unpause();
-    }
-
-    function uri(uint256 _tokenId)
-        external
-        view
-        whenNotPaused
-        returns (string memory)
-    {
-        require(bytes(cidOfToken[_tokenId]).length > 0, "Invalid token");
-
-        return
-            bytes(tokenBaseUri).length > 0
-                ? string(abi.encodePacked(tokenBaseUri, cidOfToken[_tokenId]))
-                : "";
+    function _baseURI() internal pure override returns (string memory) {
+        return collectionBaseUri;
     }
 
     function mint(
@@ -155,7 +127,7 @@ contract DFY_721 is
         returns (uint256 tokenId)
     {
         // Generate token id
-        tokenId = totalToken.current();
+        tokenId = _totalToken.current();
 
         // Add mapping cid of token id token id
         cidOfToken[tokenId] = _cid;
@@ -167,7 +139,7 @@ contract DFY_721 is
         _safeMint(_owner, tokenId);
 
         // Update total token
-        totalToken.increment();
+        _totalToken.increment();
 
         return tokenId;
     }

@@ -3,23 +3,26 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155BurnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "../interface/IDFY_1155.sol";
+import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol";
+import "../interface/IDFY_Hard_1155.sol";
+import "../../../base/BaseContract.sol";
 
-contract DFY_1155 is
+contract DFY_Hard_1155 is
     Initializable,
     UUPSUpgradeable,
     PausableUpgradeable,
     AccessControlUpgradeable,
-    IDFY_1155,
+    IDFY_Hard_1155,
     ERC1155Upgradeable,
-    ERC1155BurnableUpgradeable
+    ERC1155BurnableUpgradeable,
+    BaseContract
 {
     using CountersUpgradeable for CountersUpgradeable.Counter;
     using AddressUpgradeable for address;
@@ -40,10 +43,10 @@ contract DFY_1155 is
     string public collectionCID;
 
     // Base URI NFT Token
-    string public tokenBaseUri;
+    string public constant collectionBaseUri = "https://defiforyou.mypinata.cloud/ipfs/";
 
     // Total NFT_Hard_721 token
-    CountersUpgradeable.Counter public totalToken;
+    CountersUpgradeable.Counter private _totalToken;
 
     // Name NFT_Hard_721 token
     string public name;
@@ -62,18 +65,15 @@ contract DFY_1155 is
     function initialize(
         string memory _name,
         string memory _symbol,
-        string memory _uri,
         string memory _collectionCID,
         uint256 _defaultRoyaltyRate,
-        // address _evaluationAddress
-
+        address _evaluationAddress,
         address payable _owner
     ) public initializer {
         __ERC1155_init("");
         __Pausable_init();
         __ERC1155Burnable_init();
         __UUPSUpgradeable_init();
-        _setBaseURI(_uri);
 
         name = _name;
         symbol = _symbol;
@@ -85,80 +85,37 @@ contract DFY_1155 is
 
         _setupRole(DEFAULT_ADMIN_ROLE, _owner);
         _setupRole(MINTER_ROLE, _owner);
-        // _setupRole(MINTER_ROLE, _evaluationAddress);
+        if(_evaluationAddress.isContract() && _evaluationAddress!=address(0)){
+            _setupRole(MINTER_ROLE, _evaluationAddress);
+        }
     }
 
     function signature() external view override returns (bytes4) {
-        return type(IDFY_1155).interfaceId;
+        return type(IDFY_Hard_1155).interfaceId;
     }
 
     function supportsInterface(bytes4 interfaceId)
         public
         view
         override(
-            ERC1155Upgradeable,
             IERC165Upgradeable,
+            ERC165Upgradeable,
+            ERC1155Upgradeable,
             AccessControlUpgradeable
         )
         returns (bool)
     {
         return
-            interfaceId == type(IDFY_1155).interfaceId ||
+            interfaceId == type(IDFY_Hard_1155).interfaceId ||
             super.supportsInterface(interfaceId);
     }
 
-    function _authorizeUpgrade(address)
-        internal
-        override
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {}
-
-    function _setBaseURI(string memory _newURI) internal {
-        require(bytes(_newURI).length > 0, "Blank");
-        tokenBaseUri = _newURI;
+    function collectionURI() public view returns (string memory) {
+        return string(abi.encodePacked(_baseURI(), collectionCID));
     }
 
-    function setBaseURI(string memory _newURI)
-        external
-        override
-        whenNotPaused
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
-        _setBaseURI(_newURI);
-    }
-
-    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) {
-        _pause();
-    }
-
-    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) {
-        _unpause();
-    }
-
-    function uri(uint256 _tokenId)
-        public
-        view
-        virtual
-        override
-        returns (string memory)
-    {
-        require(bytes(cidOfToken[_tokenId]).length > 0, "Invalid token");
-
-        return
-            bytes(tokenBaseUri).length > 0
-                ? string(abi.encodePacked(tokenBaseUri, cidOfToken[_tokenId]))
-                : "";
-    }
-
-    function _beforeTokenTransfer(
-        address operator,
-        address from,
-        address to,
-        uint256[] memory ids,
-        uint256[] memory amounts,
-        bytes memory data
-    ) internal override whenNotPaused {
-        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+    function _baseURI() internal pure returns (string memory) {
+        return collectionBaseUri;
     }
 
     function mint(
@@ -175,7 +132,7 @@ contract DFY_1155 is
         returns (uint256 tokenId)
     {
         // Generate token id
-        tokenId = totalToken.current();
+        tokenId = _totalToken.current();
 
         // Add mapping cid of token id token id
         cidOfToken[tokenId] = _cid;
@@ -187,9 +144,21 @@ contract DFY_1155 is
         _mint(_assetOwner, tokenId, _amount, _data);
 
         // Update total token
-        totalToken.increment();
+        _totalToken.increment();
 
         return tokenId;
+    }
+
+    
+    function _beforeTokenTransfer(
+        address operator,
+        address from,
+        address to,
+        uint256[] memory ids,
+        uint256[] memory amounts,
+        bytes memory data
+    ) internal override whenNotPaused {
+        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 
     function setDefaultRoyaltyRateCollection(uint256 _newRoyaltyRate)
