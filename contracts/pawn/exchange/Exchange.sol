@@ -519,8 +519,8 @@ contract Exchange is
         } else {
             // all LoanAsset and repaymentAsset are crypto or token is different BNB
             (, uint256 exRate) = SafeMathUpgradeable.tryDiv(
-                (getLatesPriceToUSD(_adLoanAsset) * 10**18),
-                getLatesPriceToUSD(_adRepayment)
+                (10000000 * 10**18),
+                20000000
             );
             exchangeRate = exRate;
         }
@@ -561,7 +561,7 @@ contract Exchange is
             );
             (, uint256 interestRate) = SafeMathUpgradeable.tryMul(
                 interestToAmount,
-                getLatesPriceToUSD(_contract.terms.loanAsset)
+                10000000
             );
             (, uint256 itrestRate) = SafeMathUpgradeable.tryDiv(
                 interestRate,
@@ -594,9 +594,7 @@ contract Exchange is
             _repaymentAssetToUSD = RateBNBwithUSD();
         } else {
             // neu dong tra kha BNB
-            _repaymentAssetToUSD = getLatesPriceToUSD(
-                _contract.terms.repaymentAsset
-            );
+            _repaymentAssetToUSD = 20000000;
         }
 
         // tien lai theo moi kỳ tinh ra dong tra
@@ -682,9 +680,7 @@ contract Exchange is
             priceRepaymentAset = RateBNBwithUSD();
         } else {
             // neu la cac dong khac
-            priceRepaymentAset = getLatesPriceToUSD(
-                _contract.terms.repaymentAsset
-            );
+            priceRepaymentAset = 20000000;
         }
 
         if (_contract.terms.loanAsset == address(0)) {
@@ -692,7 +688,7 @@ contract Exchange is
             priceLoanAsset = RateBNBwithUSD();
         } else {
             // cac dong khac
-            priceLoanAsset = getLatesPriceToUSD(_contract.terms.loanAsset);
+            priceLoanAsset = 10000000;
         }
 
         if (_adEvaluationAsset == address(0)) {
@@ -700,7 +696,7 @@ contract Exchange is
             priceCollateralAsset = RateBNBwithUSD();
         } else {
             // la cac dong khac
-            priceCollateralAsset = getLatesPriceToUSD(_adEvaluationAsset);
+            priceCollateralAsset = 30000000;
         }
 
         bool success;
