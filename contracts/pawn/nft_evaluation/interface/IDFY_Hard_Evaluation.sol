@@ -4,7 +4,6 @@ pragma solidity ^0.8.4;
 import "../../../base/BaseInterface.sol";
 
 interface IDFY_Hard_Evaluation is BaseInterface {
-
     /* ===== Enum ===== */
     enum AssetStatus {
         OPEN,
@@ -92,9 +91,7 @@ interface IDFY_Hard_Evaluation is BaseInterface {
     );
 
     /* ===== Method ===== */
-    function setAdminAddress(
-        address _newAdminAddress
-    ) external;
+    function setAdminAddress(address _newAdminAddress) external;
 
     function addWhiteListEvaluationFee(
         address _newAddressEvaluatonFee,
@@ -118,19 +115,13 @@ interface IDFY_Hard_Evaluation is BaseInterface {
         address _evaluationFeeAddress
     ) external;
 
-    function acceptAppointment(
-        uint256 _appointmentId
-    ) external;
+    function acceptAppointment(uint256 _appointmentId) external;
 
-    function rejectAppointment(
-        uint256 _appointmentId,
-        string memory reason
-    ) external;
+    function rejectAppointment(uint256 _appointmentId, string memory reason)
+        external;
 
-    function cancelAppointment(
-        uint256 _appointmentId,
-        string memory reason
-    ) external;
+    function cancelAppointment(uint256 _appointmentId, string memory reason)
+        external;
 
     function evaluatedAsset(
         address _currency,
@@ -141,14 +132,10 @@ interface IDFY_Hard_Evaluation is BaseInterface {
         address _mintingFeeAddress
     ) external;
 
-    function acceptEvaluation(
-        uint256 _evaluationId
-    ) external;
+    function acceptEvaluation(uint256 _evaluationId) external;
 
-    function rejectEvaluation(
-        uint256 _evaluationId,
-        string memory reason
-    ) external;
+    function rejectEvaluation(uint256 _evaluationId, string memory reason)
+        external;
 
     function createNftToken(
         uint256 _evaluationId,

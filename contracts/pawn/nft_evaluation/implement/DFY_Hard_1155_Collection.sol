@@ -25,9 +25,7 @@ contract DFY_Hard_1155_Collection is
     // Mapping collection 1155 of owner
     mapping(address => DFY_Hard_1155[]) public collections1155ByOwner;
 
-    function initialize(
-        address _hubContract
-    ) public initializer {
+    function initialize(address _hubContract) public initializer {
         __Pausable_init();
         __UUPSUpgradeable_init();
         __BaseContract_init(_hubContract);
@@ -56,29 +54,29 @@ contract DFY_Hard_1155_Collection is
     ) external override returns (address newCollection) {
         require(
             bytes(_name).length > 0 &&
-            bytes(_symbol).length > 0 &&
-            bytes(_collectionCID).length > 0,
+                bytes(_symbol).length > 0 &&
+                bytes(_collectionCID).length > 0,
             "Invalid collection"
         );
         DFY_Hard_1155 newCollection = new DFY_Hard_1155();
         newCollection.initialize(
-                _name,
-                _symbol,
-                _collectionCID,
-                _royaltyRate,
-                _evaluationAddress,
-                payable(msg.sender)
+            _name,
+            _symbol,
+            _collectionCID,
+            _royaltyRate,
+            _evaluationAddress,
+            payable(msg.sender)
         );
         collections1155ByOwner[msg.sender].push(newCollection);
         emit CollectionEvent(
-                address(newCollection),
-                msg.sender,
-                _name,
-                _symbol,
-                _collectionCID,
-                _royaltyRate,
-                CollectionStandard.Collection_Hard_1155,
-                CollectionStatus.OPEN
+            address(newCollection),
+            msg.sender,
+            _name,
+            _symbol,
+            _collectionCID,
+            _royaltyRate,
+            CollectionStandard.Collection_Hard_1155,
+            CollectionStatus.OPEN
         );
         return address(newCollection);
     }

@@ -56,6 +56,7 @@ abstract contract PawnNFTModel is
         __Pausable_init();
         __UUPSUpgradeable_init();
         hubContract = _hubContract;
+
         // admin = address(msg.sender);
         // ZOOM = _zoom;
     }

@@ -3,7 +3,7 @@ require('@nomiclabs/hardhat-ethers');
 const hre = require('hardhat');
 const { PawnConfig } = require('./.deployment_data.json');
 
-const Collection721BuildName = "contracts/pawn/nft_evaluation/implement/DFY_721_Collection.sol:DFY_721_Collection";
+const Collection721BuildName = "contracts/pawn/nft_evaluation/implement/DFY_Hard_721_Collection.sol:DFY_Hard_721_Collection";
 
 const proxyType = { kind: "uups" };
 
@@ -19,7 +19,7 @@ async function main() {
 
     const Collection721Factory = await hre.ethers.getContractFactory(Collection721BuildName);
     const Collection721Artifact = await hre.artifacts.readArtifact(Collection721BuildName);
-    const Collection721Contract = await hre.upgrades.deployProxy(Collection721Factory,["quang","abc","https://defiforyou.mypinata.cloud/ipfs/","0xd247F1f6455E747d9854282115bd6D1CB9b39206"],proxyType);
+    const Collection721Contract = await hre.upgrades.deployProxy(Collection721Factory,["0x703204148eEa1a70b28BAAFa99f4d14bB7FA8Ea9"],proxyType);
 
     await Collection721Contract.deployed();
 

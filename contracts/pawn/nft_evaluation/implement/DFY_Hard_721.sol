@@ -47,7 +47,8 @@ contract DFY_Hard_721 is
     string public collectionCID;
 
     // Base URI NFT Token
-    string public constant collectionBaseUri = "https://defiforyou.mypinata.cloud/ipfs/";
+    string public constant collectionBaseUri =
+        "https://defiforyou.mypinata.cloud/ipfs/";
 
     // Total NFT_Hard_721 token
     CountersUpgradeable.Counter private _totalToken;
@@ -65,11 +66,7 @@ contract DFY_Hard_721 is
         string memory _symbol,
         string memory _collectionCID,
         uint256 _defaultRoyaltyRate,
-<<<<<<< HEAD:contracts/pawn/nft_evaluation/implement/DFY_721.sol
-        address additionalMinter,
-=======
         address _evaluationAddress,
->>>>>>> 81cc903e668793f1517f9f0c140f188438ac31eb:contracts/pawn/nft_evaluation/implement/DFY_Hard_721.sol
         address payable _owner
     ) public initializer {
         __ERC721_init(_name, _symbol);
@@ -83,39 +80,28 @@ contract DFY_Hard_721 is
 
         _setupRole(DEFAULT_ADMIN_ROLE, _owner);
         _setupRole(MINTER_ROLE, _owner);
-<<<<<<< HEAD:contracts/pawn/nft_evaluation/implement/DFY_721.sol
-        // _setupRole(MINTER_ROLE, _evaluationAddress);
 
-        if (additionalMinter != address(0)) {
-            _setupRole(MINTER_ROLE, additionalMinter);
-        }
-    }
-
-    function signature() external pure override returns (bytes4) {
-        return type(IDFY_721).interfaceId;
-=======
-
-        if(_evaluationAddress.isContract() && _evaluationAddress!=address(0)){
+        if (
+            _evaluationAddress.isContract() && _evaluationAddress != address(0)
+        ) {
             _setupRole(MINTER_ROLE, _evaluationAddress);
         }
     }
 
     function signature() external view override returns (bytes4) {
         return type(IDFY_Hard_721).interfaceId;
->>>>>>> 81cc903e668793f1517f9f0c140f188438ac31eb:contracts/pawn/nft_evaluation/implement/DFY_Hard_721.sol
     }
 
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override
-    (
-        ERC721Upgradeable,
-        ERC721EnumerableUpgradeable,
-        AccessControlUpgradeable,
-        ERC165Upgradeable,
-        IERC165Upgradeable
-    )
+        override(
+            ERC721Upgradeable,
+            ERC721EnumerableUpgradeable,
+            AccessControlUpgradeable,
+            ERC165Upgradeable,
+            IERC165Upgradeable
+        )
         returns (bool)
     {
         return

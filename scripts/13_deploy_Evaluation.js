@@ -19,7 +19,7 @@ async function main() {
 
     const EvaluationFactory = await hre.ethers.getContractFactory(EvaluationBuildName);
     const EvaluationArtifact = await hre.artifacts.readArtifact(EvaluationBuildName);
-    const EvaluationContract = await hre.upgrades.deployProxy(EvaluationFactory,["https://defiforyou.mypinata.cloud/ipfs/","0xd247F1f6455E747d9854282115bd6D1CB9b39206"],proxyType);
+    const EvaluationContract = await hre.upgrades.deployProxy(EvaluationFactory,["0xd247F1f6455E747d9854282115bd6D1CB9b39206"],proxyType);
 
     await EvaluationContract.deployed();
 

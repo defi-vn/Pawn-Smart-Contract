@@ -43,7 +43,8 @@ contract DFY_Hard_1155 is
     string public collectionCID;
 
     // Base URI NFT Token
-    string public constant collectionBaseUri = "https://defiforyou.mypinata.cloud/ipfs/";
+    string public constant collectionBaseUri =
+        "https://defiforyou.mypinata.cloud/ipfs/";
 
     // Total NFT_Hard_721 token
     CountersUpgradeable.Counter private _totalToken;
@@ -85,7 +86,9 @@ contract DFY_Hard_1155 is
 
         _setupRole(DEFAULT_ADMIN_ROLE, _owner);
         _setupRole(MINTER_ROLE, _owner);
-        if(_evaluationAddress.isContract() && _evaluationAddress!=address(0)){
+        if (
+            _evaluationAddress.isContract() && _evaluationAddress != address(0)
+        ) {
             _setupRole(MINTER_ROLE, _evaluationAddress);
         }
     }
@@ -149,7 +152,6 @@ contract DFY_Hard_1155 is
         return tokenId;
     }
 
-    
     function _beforeTokenTransfer(
         address operator,
         address from,

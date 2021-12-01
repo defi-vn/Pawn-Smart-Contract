@@ -6,7 +6,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeab
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol";
 
-enum CollectionStandard{
+enum CollectionStandard {
     Collection_721,
     Collection_1155
 }
@@ -33,7 +33,6 @@ library Hard_Evaluation_Lib {
                 // Send from other address to another address
                 revert("not-allow-transfer");
             }
-
         } else {
             // Handle ERC20
             uint256 prebalance = IERC20Upgradeable(currency).balanceOf(to);
@@ -46,14 +45,17 @@ library Hard_Evaluation_Lib {
                 IERC20Upgradeable(currency).safeTransfer(to, amount);
             } else {
                 require(
-                    IERC20Upgradeable(currency).allowance(from, address(this)) >=
-                        amount,
+                    IERC20Upgradeable(currency).allowance(
+                        from,
+                        address(this)
+                    ) >= amount,
                     "not-enough-allowance"
                 );
                 IERC20Upgradeable(currency).safeTransferFrom(from, to, amount);
             }
             require(
-                IERC20Upgradeable(currency).balanceOf(to) - amount == prebalance,
+                IERC20Upgradeable(currency).balanceOf(to) - amount ==
+                    prebalance,
                 "not-transfer-enough"
             );
         }
@@ -82,8 +84,8 @@ library Hard_Evaluation_Lib {
         // check address from
         require(_to != address(0), "Address to must be different address(0).");
 
-        if(collectionStandard == CollectionStandard.Collection_721){
-             // Check balance of from,
+        if (collectionStandard == CollectionStandard.Collection_721) {
+            // Check balance of from,
             require(
                 IERC721Upgradeable(_nftToken).balanceOf(_from) >= _amount,
                 "Your balance not enough."
@@ -91,18 +93,21 @@ library Hard_Evaluation_Lib {
 
             // Transfer token
             IERC721Upgradeable(_nftToken).safeTransferFrom(_from, _to, _id, "");
-        }else{
-             // Check balance of from,
+        } else {
+            // Check balance of from,
             require(
                 IERC1155Upgradeable(_nftToken).balanceOf(_from, _id) >= _amount,
                 "Your balance not enough."
             );
 
             // Transfer token
-            IERC1155Upgradeable(_nftToken).safeTransferFrom(_from, _to, _id, _amount,"");
+            IERC1155Upgradeable(_nftToken).safeTransferFrom(
+                _from,
+                _to,
+                _id,
+                _amount,
+                ""
+            );
         }
-       
     }
-
-
 }

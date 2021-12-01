@@ -43,7 +43,7 @@ contract Hub is
         __UUPSUpgradeable_init();
         __Pausable_init();
         __AccessControl_init();
-        
+
         _setupRole(HubRoleLib.DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(HubRoleLib.OPERATOR_ROLE, operator);
         _setupRole(HubRoleLib.PAUSER_ROLE, msg.sender);
@@ -127,14 +127,17 @@ contract Hub is
     }
 
     /** ==================== Hub operation functions ==================== */
+    uint256 public numContract;
+
     function registerContract(bytes4 signature, address contractAddress)
         external
         override
         onlyRole(HubRoleLib.DEFAULT_ADMIN_ROLE)
     {
         ContractRegistry[signature] = contractAddress;
+        numContract++;
     }
-    
+
     function setSystemConfig(address _FeeWallet, address _FeeToken)
         external
         onlyRole(DEFAULT_ADMIN_ROLE)

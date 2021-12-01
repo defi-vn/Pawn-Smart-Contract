@@ -17,13 +17,14 @@
     },
     "Proxies": {
         "Dev1": {
-            "PAWN_CONTRACT_ADDRESS":        "",
+            "PAWN_NFT_CONTRACT_ADDRESS":    "",
             "EVALUATION_CONTRACT_ADDRESS":  "",
             "NFT_CONTRACT_ADDRESS":         "",
             "REPUTATION_CONTRACT_ADDRESS":  "",
-            "PAWN_NFT_CONTRACT_ADDRESS":    "",
+            "LOAN_NFT_CONTRACT_ADDRESS":    "",
             "EXCHANGE_CONTRACT_ADDRESS":    "",
-            "HUB_CONTRACT_ADDRESS": "0x83A1688D28992c4c3c82B73b23aC74Cc397ee71F"
+            "HUB_CONTRACT_ADDRESS": "0x703204148eEa1a70b28BAAFa99f4d14bB7FA8Ea9",
+            "EVALUATION_ADDRESS" : "0xF124Ac6EAe6a1CD22a5D4cab44C0D4A428334520"
         },
         "Dev2": {
             "PAWN_CONTRACT_ADDRESS":            "0x85e63AAA2CE9144bf7E716dF8CfAB1EcaE1E203A",

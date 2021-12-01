@@ -61,7 +61,7 @@ abstract contract BaseContract is
         _unpause();
     }
 
-    function setContractHub(address _hub) external override onlyRoleAdmin {
+    function setContractHub(address _hub) external onlyRoleAdmin {
         contractHub = _hub;
     }
 
@@ -70,9 +70,5 @@ abstract contract BaseContract is
     //     IAccessControlUpgradeable(contractHub).renounceRole(HubRoleLib.REGISTRANT, address(this));
     // }
 
-    function _authorizeUpgrade(address)
-        internal
-        override
-        onlyRoleAdmin
-    {}
+    function _authorizeUpgrade(address) internal override onlyRoleAdmin {}
 }
