@@ -15,6 +15,8 @@ import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeab
 import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol";
 import "../interface/IDFY_Hard_721.sol";
 import "../../../base/BaseContract.sol";
+import "../interface/IDFY_Hard_Collection.sol";
+import "../../hub/HubInterface.sol";
 
 contract DFY_Hard_721 is
     Initializable,
@@ -88,7 +90,7 @@ contract DFY_Hard_721 is
         }
     }
 
-    function signature() external view override returns (bytes4) {
+    function signature() external pure override returns (bytes4) {
         return type(IDFY_Hard_721).interfaceId;
     }
 
