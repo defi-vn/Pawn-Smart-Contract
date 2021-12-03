@@ -55,11 +55,11 @@ contract Hard_Evaluation is
 
     // White list evaluation fee
     // Address evaluation fee => fee
-    mapping(address => uint256) whiteListEvaluationFee;
+    mapping(address => uint256) public whiteListEvaluationFee;
 
     // White list minting fee
     // Address minting fee => fee
-    mapping(address => uint256) whiteListMintingFee;
+    mapping(address => uint256) public whiteListMintingFee;
 
     // Mapping asset list
     // Asset id => Asset
