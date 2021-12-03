@@ -136,7 +136,7 @@ contract Hard_Evaluation is
     function initialize(address _hubContract) public initializer {
         __Pausable_init();
 
-        _setAdminAddress();
+        //   _setAdminAddress(msg.sender);
 
         __BaseContract_init(_hubContract);
 

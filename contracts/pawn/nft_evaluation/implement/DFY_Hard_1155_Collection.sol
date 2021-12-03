@@ -32,7 +32,7 @@ contract DFY_Hard_1155_Collection is
         hubContract = _hubContract;
     }
 
-    function signature() external view override returns (bytes4) {
+    function signature() external pure override returns (bytes4) {
         return type(IDFY_Hard_1155).interfaceId;
     }
 
