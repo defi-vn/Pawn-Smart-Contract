@@ -91,7 +91,7 @@ interface IDFY_Hard_Evaluation is BaseInterface {
     );
 
     /* ===== Method ===== */
-    function setAdminAddress() external;
+    // function setAdminAddress() external;
 
     function addWhiteListEvaluationFee(
         address _newAddressEvaluatonFee,
