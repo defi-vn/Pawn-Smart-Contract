@@ -142,4 +142,17 @@ interface IDFY_Hard_Evaluation is BaseInterface {
         uint256 _amount,
         string memory _nftCID
     ) external;
+
+    function getEvaluationWithTokenId(
+        address _addressCollection,
+        uint256 _tokenId
+    )
+        external
+        view
+        returns (
+            address _currency,
+            uint256 _price,
+            uint256 _depreciationRate,
+            CollectionStandard _collectionStandard
+        );
 }

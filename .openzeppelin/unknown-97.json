@@ -710,6 +710,41 @@
       "address": "0x5c42Ec0414C78C7c13899b4F452f315CE22A8F44",
       "txHash": "0x48b0da3d07e9af12a9177d3c39c6e3ea978cb40871d42df8767010ae3e3f4618",
       "kind": "uups"
+    },
+    {
+      "address": "0x4638e02E0d7a545e3b3Fde1404ae5Dd8090025Da",
+      "txHash": "0x9edd5887ed11291c78ac20a8ae9e767f4e97b4f691705c35b1f02e19cb47797a",
+      "kind": "uups"
+    },
+    {
+      "address": "0x5C41978001FCDf630f6a66d4f8F3f491D5aA8F7F",
+      "txHash": "0x99428d1dba2e9545cedc0b6823b39c9d493d2b3cd485d89a9752cda4f1134f74",
+      "kind": "uups"
+    },
+    {
+      "address": "0x0f1Bf7F0A0A0Ab443fA7a4a5D89d8f2fB3772b8E",
+      "txHash": "0xc0535c988997dfd014d43b8db2e63ee16fea5cdf7fff953aa269032b09061d00",
+      "kind": "uups"
+    },
+    {
+      "address": "0xA23881EA2A75f419f02358B432379E8a63D466F6",
+      "txHash": "0xb2685038db616920a62c00585773459e0c32c454e9b9818a00314351b6edb857",
+      "kind": "uups"
+    },
+    {
+      "address": "0x14f0714b8CcA57895F29911B5751acbBA2b0b1F9",
+      "txHash": "0xff2b46b793ff78581c07247044c832790698f167e028be6126731955e0096207",
+      "kind": "uups"
+    },
+    {
+      "address": "0x5a8F734169901730c4C19A5Dc5022983A10D3d84",
+      "txHash": "0xe79500c5a3da9b464ff627b88ec5c0417408e0d7e31ea208d2b3c62ab4b6a04d",
+      "kind": "uups"
+    },
+    {
+      "address": "0xe61E5b37C3583feC88d047801a80F6c3E05c66eE",
+      "txHash": "0xf08d3996ef2fe36db57932309d655155bcf2e07afd27ac00271841fa24858657",
+      "kind": "uups"
     }
   ],
   "impls": {
@@ -33545,7 +33580,7 @@
           {
             "contract": "PawnNFTContractV2",
             "label": "collaterals",
-            "type": "t_mapping(t_uint256,t_struct(Collateral_NFT)19631_storage)",
+            "type": "t_mapping(t_uint256,t_struct(Collateral_NFT)19627_storage)",
             "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:81"
           },
           {
@@ -33557,7 +33592,7 @@
           {
             "contract": "PawnNFTContractV2",
             "label": "collateralOffersMapping",
-            "type": "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19642_storage)",
+            "type": "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19638_storage)",
             "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:87"
           },
           {
@@ -33569,13 +33604,13 @@
           {
             "contract": "PawnNFTContractV2",
             "label": "contracts",
-            "type": "t_mapping(t_uint256,t_struct(Contract_NFT)19715_storage)",
+            "type": "t_mapping(t_uint256,t_struct(Contract_NFT)19711_storage)",
             "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:93"
           },
           {
             "contract": "PawnNFTContractV2",
             "label": "contractPaymentRequestMapping",
-            "type": "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)19738_storage)dyn_storage)",
+            "type": "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)19734_storage)dyn_storage)",
             "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:96"
           }
         ],
@@ -33595,10 +33630,10 @@
           "t_uint256": {
             "label": "uint256"
           },
-          "t_mapping(t_uint256,t_struct(Collateral_NFT)19631_storage)": {
+          "t_mapping(t_uint256,t_struct(Collateral_NFT)19627_storage)": {
             "label": "mapping(uint256 => struct Collateral_NFT)"
           },
-          "t_struct(Collateral_NFT)19631_storage": {
+          "t_struct(Collateral_NFT)19627_storage": {
             "label": "struct Collateral_NFT",
             "members": [
               {
@@ -33631,22 +33666,22 @@
               },
               {
                 "label": "durationType",
-                "type": "t_enum(LoanDurationType_NFT)19583"
+                "type": "t_enum(LoanDurationType_NFT)19579"
               },
               {
                 "label": "status",
-                "type": "t_enum(CollateralStatus_NFT)19588"
+                "type": "t_enum(CollateralStatus_NFT)19584"
               }
             ]
           },
-          "t_enum(LoanDurationType_NFT)19583": {
+          "t_enum(LoanDurationType_NFT)19579": {
             "label": "enum LoanDurationType_NFT",
             "members": [
               "WEEK",
               "MONTH"
             ]
           },
-          "t_enum(CollateralStatus_NFT)19588": {
+          "t_enum(CollateralStatus_NFT)19584": {
             "label": "enum CollateralStatus_NFT",
             "members": [
               "OPEN",
@@ -33655,15 +33690,15 @@
               "CANCEL"
             ]
           },
-          "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19642_storage)": {
+          "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19638_storage)": {
             "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
           },
-          "t_struct(CollateralOfferList_NFT)19642_storage": {
+          "t_struct(CollateralOfferList_NFT)19638_storage": {
             "label": "struct CollateralOfferList_NFT",
             "members": [
               {
                 "label": "offerMapping",
-                "type": "t_mapping(t_uint256,t_struct(Offer_NFT)19666_storage)"
+                "type": "t_mapping(t_uint256,t_struct(Offer_NFT)19662_storage)"
               },
               {
                 "label": "offerIdList",
@@ -33675,10 +33710,10 @@
               }
             ]
           },
-          "t_mapping(t_uint256,t_struct(Offer_NFT)19666_storage)": {
+          "t_mapping(t_uint256,t_struct(Offer_NFT)19662_storage)": {
             "label": "mapping(uint256 => struct Offer_NFT)"
           },
-          "t_struct(Offer_NFT)19666_storage": {
+          "t_struct(Offer_NFT)19662_storage": {
             "label": "struct Offer_NFT",
             "members": [
               {
@@ -33707,15 +33742,15 @@
               },
               {
                 "label": "status",
-                "type": "t_enum(OfferStatus_NFT)19593"
+                "type": "t_enum(OfferStatus_NFT)19589"
               },
               {
                 "label": "loanDurationType",
-                "type": "t_enum(LoanDurationType_NFT)19583"
+                "type": "t_enum(LoanDurationType_NFT)19579"
               },
               {
                 "label": "repaymentCycleType",
-                "type": "t_enum(LoanDurationType_NFT)19583"
+                "type": "t_enum(LoanDurationType_NFT)19579"
               },
               {
                 "label": "liquidityThreshold",
@@ -33729,7 +33764,7 @@
           "t_bool": {
             "label": "bool"
           },
-          "t_enum(OfferStatus_NFT)19593": {
+          "t_enum(OfferStatus_NFT)19589": {
             "label": "enum OfferStatus_NFT",
             "members": [
               "PENDING",
@@ -33738,10 +33773,10 @@
               "CANCEL"
             ]
           },
-          "t_mapping(t_uint256,t_struct(Contract_NFT)19715_storage)": {
+          "t_mapping(t_uint256,t_struct(Contract_NFT)19711_storage)": {
             "label": "mapping(uint256 => struct Contract_NFT)"
           },
-          "t_struct(Contract_NFT)19715_storage": {
+          "t_struct(Contract_NFT)19711_storage": {
             "label": "struct Contract_NFT",
             "members": [
               {
@@ -33754,11 +33789,11 @@
               },
               {
                 "label": "terms",
-                "type": "t_struct(ContractTerms_NFT)19702_storage"
+                "type": "t_struct(ContractTerms_NFT)19698_storage"
               },
               {
                 "label": "status",
-                "type": "t_enum(ContractStatus_NFT)19597"
+                "type": "t_enum(ContractStatus_NFT)19593"
               },
               {
                 "label": "lateCount",
@@ -33766,7 +33801,7 @@
               }
             ]
           },
-          "t_struct(ContractTerms_NFT)19702_storage": {
+          "t_struct(ContractTerms_NFT)19698_storage": {
             "label": "struct ContractTerms_NFT",
             "members": [
               {
@@ -33807,7 +33842,7 @@
               },
               {
                 "label": "repaymentCycleType",
-                "type": "t_enum(LoanDurationType_NFT)19583"
+                "type": "t_enum(LoanDurationType_NFT)19579"
               },
               {
                 "label": "liquidityThreshold",
@@ -33839,7 +33874,7 @@
               }
             ]
           },
-          "t_enum(ContractStatus_NFT)19597": {
+          "t_enum(ContractStatus_NFT)19593": {
             "label": "enum ContractStatus_NFT",
             "members": [
               "ACTIVE",
@@ -33850,13 +33885,13 @@
           "t_uint8": {
             "label": "uint8"
           },
-          "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)19738_storage)dyn_storage)": {
+          "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)19734_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest_NFT[])"
           },
-          "t_array(t_struct(PaymentRequest_NFT)19738_storage)dyn_storage": {
+          "t_array(t_struct(PaymentRequest_NFT)19734_storage)dyn_storage": {
             "label": "struct PaymentRequest_NFT[]"
           },
-          "t_struct(PaymentRequest_NFT)19738_storage": {
+          "t_struct(PaymentRequest_NFT)19734_storage": {
             "label": "struct PaymentRequest_NFT",
             "members": [
               {
@@ -33865,7 +33900,7 @@
               },
               {
                 "label": "paymentRequestType",
-                "type": "t_enum(PaymentRequestTypeEnum_NFT)19606"
+                "type": "t_enum(PaymentRequestTypeEnum_NFT)19602"
               },
               {
                 "label": "remainingLoan",
@@ -33897,11 +33932,11 @@
               },
               {
                 "label": "status",
-                "type": "t_enum(PaymentRequestStatusEnum_NFT)19602"
+                "type": "t_enum(PaymentRequestStatusEnum_NFT)19598"
               }
             ]
           },
-          "t_enum(PaymentRequestTypeEnum_NFT)19606": {
+          "t_enum(PaymentRequestTypeEnum_NFT)19602": {
             "label": "enum PaymentRequestTypeEnum_NFT",
             "members": [
               "INTEREST",
@@ -33909,7 +33944,7 @@
               "LOAN"
             ]
           },
-          "t_enum(PaymentRequestStatusEnum_NFT)19602": {
+          "t_enum(PaymentRequestStatusEnum_NFT)19598": {
             "label": "enum PaymentRequestStatusEnum_NFT",
             "members": [
               "ACTIVE",
@@ -33923,6 +33958,4613 @@
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
+          }
+        }
+      }
+    },
+    "08dac05ed905ff3656831e6c83856ab03001f252ce6f82e3a743d7ccbd2373c3": {
+      "address": "0xCd6557c7f9cBd2720ce0760b78122A1987C41edb",
+      "txHash": "0x4a4847ce4e848f395bc35e03ccf84963846c338f101b95561f34de9c97cf24f9",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "_status",
+            "type": "t_uint256",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:37"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:67"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "PawnNFTModel",
+            "label": "hubContract",
+            "type": "t_address",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTModel.sol:176"
+          },
+          {
+            "contract": "LoanContract",
+            "label": "pawnContract",
+            "type": "t_contract(IPawnNFT)16665",
+            "src": "contracts\\pawn\\pawn-nft-v2\\LoanContract_NFT.sol:18"
+          },
+          {
+            "contract": "LoanContract",
+            "label": "numberCollaterals",
+            "type": "t_struct(Counter)5648_storage",
+            "src": "contracts\\pawn\\pawn-nft-v2\\LoanContract_NFT.sol:81"
+          },
+          {
+            "contract": "LoanContract",
+            "label": "collaterals",
+            "type": "t_mapping(t_uint256,t_struct(Collateral_NFT)19627_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\LoanContract_NFT.sol:84"
+          },
+          {
+            "contract": "LoanContract",
+            "label": "numberOffers",
+            "type": "t_struct(Counter)5648_storage",
+            "src": "contracts\\pawn\\pawn-nft-v2\\LoanContract_NFT.sol:87"
+          },
+          {
+            "contract": "LoanContract",
+            "label": "collateralOffersMapping",
+            "type": "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19638_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\LoanContract_NFT.sol:90"
+          },
+          {
+            "contract": "LoanContract",
+            "label": "numberContracts",
+            "type": "t_uint256",
+            "src": "contracts\\pawn\\pawn-nft-v2\\LoanContract_NFT.sol:93"
+          },
+          {
+            "contract": "LoanContract",
+            "label": "contracts",
+            "type": "t_mapping(t_uint256,t_struct(Contract_NFT)19711_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\LoanContract_NFT.sol:96"
+          },
+          {
+            "contract": "LoanContract",
+            "label": "contractPaymentRequestMapping",
+            "type": "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)19734_storage)dyn_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\LoanContract_NFT.sol:99"
+          }
+        ],
+        "types": {
+          "t_contract(IPawnNFT)16665": {
+            "label": "contract IPawnNFT"
+          },
+          "t_struct(Counter)5648_storage": {
+            "label": "struct CountersUpgradeable.Counter",
+            "members": [
+              {
+                "label": "_value",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(Collateral_NFT)19627_storage)": {
+            "label": "mapping(uint256 => struct Collateral_NFT)"
+          },
+          "t_struct(Collateral_NFT)19627_storage": {
+            "label": "struct Collateral_NFT",
+            "members": [
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "nftContract",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenQuantity",
+                "type": "t_uint256"
+              },
+              {
+                "label": "expectedDurationQty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "durationType",
+                "type": "t_enum(LoanDurationType_NFT)19579"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(CollateralStatus_NFT)19584"
+              }
+            ]
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_enum(LoanDurationType_NFT)19579": {
+            "label": "enum LoanDurationType_NFT",
+            "members": [
+              "WEEK",
+              "MONTH"
+            ]
+          },
+          "t_enum(CollateralStatus_NFT)19584": {
+            "label": "enum CollateralStatus_NFT",
+            "members": [
+              "OPEN",
+              "DOING",
+              "COMPLETED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19638_storage)": {
+            "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
+          },
+          "t_struct(CollateralOfferList_NFT)19638_storage": {
+            "label": "struct CollateralOfferList_NFT",
+            "members": [
+              {
+                "label": "offerMapping",
+                "type": "t_mapping(t_uint256,t_struct(Offer_NFT)19662_storage)"
+              },
+              {
+                "label": "offerIdList",
+                "type": "t_array(t_uint256)dyn_storage"
+              },
+              {
+                "label": "isInit",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Offer_NFT)19662_storage)": {
+            "label": "mapping(uint256 => struct Offer_NFT)"
+          },
+          "t_struct(Offer_NFT)19662_storage": {
+            "label": "struct Offer_NFT",
+            "members": [
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanToValue",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "duration",
+                "type": "t_uint256"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(OfferStatus_NFT)19589"
+              },
+              {
+                "label": "loanDurationType",
+                "type": "t_enum(LoanDurationType_NFT)19579"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType_NFT)19579"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_enum(OfferStatus_NFT)19589": {
+            "label": "enum OfferStatus_NFT",
+            "members": [
+              "PENDING",
+              "ACCEPTED",
+              "COMPLETED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Contract_NFT)19711_storage)": {
+            "label": "mapping(uint256 => struct Contract_NFT)"
+          },
+          "t_struct(Contract_NFT)19711_storage": {
+            "label": "struct Contract_NFT",
+            "members": [
+              {
+                "label": "nftCollateralId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "offerId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "terms",
+                "type": "t_struct(ContractTerms_NFT)19698_storage"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(ContractStatus_NFT)19593"
+              },
+              {
+                "label": "lateCount",
+                "type": "t_uint8"
+              }
+            ]
+          },
+          "t_struct(ContractTerms_NFT)19698_storage": {
+            "label": "struct ContractTerms_NFT",
+            "members": [
+              {
+                "label": "borrower",
+                "type": "t_address"
+              },
+              {
+                "label": "lender",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "nftCollateralAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "nftCollateralAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType_NFT)19579"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractStartDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractEndDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "lateThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "systemFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penaltyRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "prepaidFeeRate",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_enum(ContractStatus_NFT)19593": {
+            "label": "enum ContractStatus_NFT",
+            "members": [
+              "ACTIVE",
+              "COMPLETED",
+              "DEFAULT"
+            ]
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)19734_storage)dyn_storage)": {
+            "label": "mapping(uint256 => struct PaymentRequest_NFT[])"
+          },
+          "t_array(t_struct(PaymentRequest_NFT)19734_storage)dyn_storage": {
+            "label": "struct PaymentRequest_NFT[]"
+          },
+          "t_struct(PaymentRequest_NFT)19734_storage": {
+            "label": "struct PaymentRequest_NFT",
+            "members": [
+              {
+                "label": "requestId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "paymentRequestType",
+                "type": "t_enum(PaymentRequestTypeEnum_NFT)19602"
+              },
+              {
+                "label": "remainingLoan",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingPenalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingInterest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "dueDateTimestamp",
+                "type": "t_uint256"
+              },
+              {
+                "label": "chargePrepaidFee",
+                "type": "t_bool"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(PaymentRequestStatusEnum_NFT)19598"
+              }
+            ]
+          },
+          "t_enum(PaymentRequestTypeEnum_NFT)19602": {
+            "label": "enum PaymentRequestTypeEnum_NFT",
+            "members": [
+              "INTEREST",
+              "OVERDUE",
+              "LOAN"
+            ]
+          },
+          "t_enum(PaymentRequestStatusEnum_NFT)19598": {
+            "label": "enum PaymentRequestStatusEnum_NFT",
+            "members": [
+              "ACTIVE",
+              "LATE",
+              "COMPLETE",
+              "DEFAULT"
+            ]
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          }
+        }
+      }
+    },
+    "59f64a6bf3dac9d2fc71ff8f91397321ededfd77ea619ba271767d644ac027f1": {
+      "address": "0xd90ef53a94709a5367cBc85Ed7793fBdf59278F0",
+      "txHash": "0x41284620ac5d08b1c0e1d10ec3d2bff06f98417d4b9eeab17a56221459b4f71a",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "Exchange",
+            "label": "ListCryptoExchange",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "contracts\\pawn\\exchange\\Exchange.sol:24"
+          },
+          {
+            "contract": "Exchange",
+            "label": "hubContract",
+            "type": "t_address",
+            "src": "contracts\\pawn\\exchange\\Exchange.sol:25"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_bool": {
+            "label": "bool"
+          }
+        }
+      }
+    },
+    "fc9f14aee1ff55e4b8debef9ee2c861e552439fa2af9d7b7075b821ca91eac40": {
+      "address": "0x22665951e60b2921d84d887D03A4452800dB3D1B",
+      "txHash": "0xd394a3d4feb5a0417dba6dd3bbbca52002dad5efc9569f74eb31c0c0d267b9a5",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)89_storage)",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:63"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:219"
+          },
+          {
+            "contract": "Reputation",
+            "label": "_reputationScore",
+            "type": "t_mapping(t_address,t_uint32)",
+            "src": "contracts\\pawn\\reputation\\Reputation.sol:33"
+          },
+          {
+            "contract": "Reputation",
+            "label": "_rewardByReason",
+            "type": "t_mapping(t_enum(ReasonType)30962,t_int8)",
+            "src": "contracts\\pawn\\reputation\\Reputation.sol:35"
+          },
+          {
+            "contract": "Reputation",
+            "label": "whitelistedContractCaller",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "contracts\\pawn\\reputation\\Reputation.sol:37"
+          },
+          {
+            "contract": "Reputation",
+            "label": "hubContract",
+            "type": "t_address",
+            "src": "contracts\\pawn\\reputation\\Reputation.sol:286"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_uint32)": {
+            "label": "mapping(address => uint32)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_mapping(t_enum(ReasonType)30962,t_int8)": {
+            "label": "mapping(enum IReputation.ReasonType => int8)"
+          },
+          "t_enum(ReasonType)30962": {
+            "label": "enum IReputation.ReasonType",
+            "members": [
+              "LD_CREATE_PACKAGE",
+              "LD_CANCEL_PACKAGE",
+              "LD_REOPEN_PACKAGE",
+              "LD_GENERATE_CONTRACT",
+              "LD_CREATE_OFFER",
+              "LD_CANCEL_OFFER",
+              "LD_ACCEPT_OFFER",
+              "BR_CREATE_COLLATERAL",
+              "BR_CANCEL_COLLATERAL",
+              "BR_ONTIME_PAYMENT",
+              "BR_LATE_PAYMENT",
+              "BR_ACCEPT_OFFER",
+              "BR_CONTRACT_COMPLETE",
+              "BR_CONTRACT_DEFAULTED",
+              "LD_REVIEWED_BY_BORROWER_1",
+              "LD_REVIEWED_BY_BORROWER_2",
+              "LD_REVIEWED_BY_BORROWER_3",
+              "LD_REVIEWED_BY_BORROWER_4",
+              "LD_REVIEWED_BY_BORROWER_5",
+              "LD_KYC",
+              "BR_REVIEWED_BY_LENDER_1",
+              "BR_REVIEWED_BY_LENDER_2",
+              "BR_REVIEWED_BY_LENDER_3",
+              "BR_REVIEWED_BY_LENDER_4",
+              "BR_REVIEWED_BY_LENDER_5",
+              "BR_KYC"
+            ]
+          },
+          "t_int8": {
+            "label": "int8"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)89_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(RoleData)89_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "367ef7bdd289196314a388ec3d3ecd6d3fc0115d351f8c180ce1b1b47c33f8ac": {
+      "address": "0x616f3C609F0C36b292e2f41423F98f8ee92D681e",
+      "txHash": "0x937283d9da04ef718206b8fe83bbbe36123d06118765ff9588a583b0e5b993ed",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)89_storage)",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:63"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:219"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "Hub",
+            "label": "ContractRegistry",
+            "type": "t_mapping(t_bytes4,t_address)",
+            "src": "contracts\\pawn\\hub\\Hub.sol:27"
+          },
+          {
+            "contract": "Hub",
+            "label": "systemConfig",
+            "type": "t_struct(SystemConfig)7673_storage",
+            "src": "contracts\\pawn\\hub\\Hub.sol:29"
+          },
+          {
+            "contract": "Hub",
+            "label": "pawnConfig",
+            "type": "t_struct(PawnConfig)7688_storage",
+            "src": "contracts\\pawn\\hub\\Hub.sol:30"
+          },
+          {
+            "contract": "Hub",
+            "label": "pawnNFTConfig",
+            "type": "t_struct(PawnNFTConfig)7707_storage",
+            "src": "contracts\\pawn\\hub\\Hub.sol:31"
+          },
+          {
+            "contract": "Hub",
+            "label": "nftCollectionConfig",
+            "type": "t_struct(NFTCollectionConfig)7712_storage",
+            "src": "contracts\\pawn\\hub\\Hub.sol:34"
+          },
+          {
+            "contract": "Hub",
+            "label": "nftMarketConfig",
+            "type": "t_struct(NFTMarketConfig)7719_storage",
+            "src": "contracts\\pawn\\hub\\Hub.sol:35"
+          },
+          {
+            "contract": "Hub",
+            "label": "numContract",
+            "type": "t_uint256",
+            "src": "contracts\\pawn\\hub\\Hub.sol:130"
+          }
+        ],
+        "types": {
+          "t_mapping(t_bytes4,t_address)": {
+            "label": "mapping(bytes4 => address)"
+          },
+          "t_bytes4": {
+            "label": "bytes4"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_struct(SystemConfig)7673_storage": {
+            "label": "struct HubInterface.SystemConfig",
+            "members": [
+              {
+                "label": "systemFeeWallet",
+                "type": "t_address"
+              },
+              {
+                "label": "systemFeeToken",
+                "type": "t_address"
+              }
+            ]
+          },
+          "t_struct(PawnConfig)7688_storage": {
+            "label": "struct HubInterface.PawnConfig",
+            "members": [
+              {
+                "label": "ZOOM",
+                "type": "t_uint256"
+              },
+              {
+                "label": "systemFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penaltyRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "prepaidFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "lateThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "whitelistedCollateral",
+                "type": "t_mapping(t_address,t_uint256)"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_struct(PawnNFTConfig)7707_storage": {
+            "label": "struct HubInterface.PawnNFTConfig",
+            "members": [
+              {
+                "label": "ZOOM",
+                "type": "t_uint256"
+              },
+              {
+                "label": "systemFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penaltyRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "prepaidFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "lateThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "whitelistedEvaluationContract",
+                "type": "t_mapping(t_address,t_uint256)"
+              },
+              {
+                "label": "whitelistedCollateral",
+                "type": "t_mapping(t_address,t_uint256)"
+              }
+            ]
+          },
+          "t_struct(NFTCollectionConfig)7712_storage": {
+            "label": "struct HubInterface.NFTCollectionConfig",
+            "members": [
+              {
+                "label": "collectionCreatingFee",
+                "type": "t_uint256"
+              },
+              {
+                "label": "mintingFee",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_struct(NFTMarketConfig)7719_storage": {
+            "label": "struct HubInterface.NFTMarketConfig",
+            "members": [
+              {
+                "label": "ZOOM",
+                "type": "t_uint256"
+              },
+              {
+                "label": "marketFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "marketFeeWallet",
+                "type": "t_address"
+              }
+            ]
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)89_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(RoleData)89_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "c0aa9a74ee30be36a6b9aa54732d2c0ca7410929d6903c585a5cc47a39574fe6": {
+      "address": "0x54b121819Ad44012D25a1f03313348121890c5d5",
+      "txHash": "0xcab4e54cd70a81b843ee5534a5ab1f55aa2c4053d7bb55ad0a3b8a174a28b0e0",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "_status",
+            "type": "t_uint256",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:37"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:67"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "PawnNFTModel",
+            "label": "hubContract",
+            "type": "t_address",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTModel.sol:177"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "abc",
+            "type": "t_address",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:75"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberCollaterals",
+            "type": "t_struct(Counter)2270_storage",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:78"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "collaterals",
+            "type": "t_mapping(t_uint256,t_struct(Collateral_NFT)9315_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:81"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberOffers",
+            "type": "t_struct(Counter)2270_storage",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:84"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "collateralOffersMapping",
+            "type": "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)9326_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:87"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberContracts",
+            "type": "t_uint256",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:90"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "contracts",
+            "type": "t_mapping(t_uint256,t_struct(Contract_NFT)9399_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:93"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "contractPaymentRequestMapping",
+            "type": "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)9422_storage)dyn_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:96"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_struct(Counter)2270_storage": {
+            "label": "struct CountersUpgradeable.Counter",
+            "members": [
+              {
+                "label": "_value",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(Collateral_NFT)9315_storage)": {
+            "label": "mapping(uint256 => struct Collateral_NFT)"
+          },
+          "t_struct(Collateral_NFT)9315_storage": {
+            "label": "struct Collateral_NFT",
+            "members": [
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "nftContract",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenQuantity",
+                "type": "t_uint256"
+              },
+              {
+                "label": "expectedDurationQty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "durationType",
+                "type": "t_enum(LoanDurationType_NFT)9264"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(CollateralStatus_NFT)9269"
+              }
+            ]
+          },
+          "t_enum(LoanDurationType_NFT)9264": {
+            "label": "enum LoanDurationType_NFT",
+            "members": [
+              "WEEK",
+              "MONTH"
+            ]
+          },
+          "t_enum(CollateralStatus_NFT)9269": {
+            "label": "enum CollateralStatus_NFT",
+            "members": [
+              "OPEN",
+              "DOING",
+              "COMPLETED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)9326_storage)": {
+            "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
+          },
+          "t_struct(CollateralOfferList_NFT)9326_storage": {
+            "label": "struct CollateralOfferList_NFT",
+            "members": [
+              {
+                "label": "offerMapping",
+                "type": "t_mapping(t_uint256,t_struct(Offer_NFT)9350_storage)"
+              },
+              {
+                "label": "offerIdList",
+                "type": "t_array(t_uint256)dyn_storage"
+              },
+              {
+                "label": "isInit",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Offer_NFT)9350_storage)": {
+            "label": "mapping(uint256 => struct Offer_NFT)"
+          },
+          "t_struct(Offer_NFT)9350_storage": {
+            "label": "struct Offer_NFT",
+            "members": [
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanToValue",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "duration",
+                "type": "t_uint256"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(OfferStatus_NFT)9274"
+              },
+              {
+                "label": "loanDurationType",
+                "type": "t_enum(LoanDurationType_NFT)9264"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType_NFT)9264"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_enum(OfferStatus_NFT)9274": {
+            "label": "enum OfferStatus_NFT",
+            "members": [
+              "PENDING",
+              "ACCEPTED",
+              "COMPLETED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Contract_NFT)9399_storage)": {
+            "label": "mapping(uint256 => struct Contract_NFT)"
+          },
+          "t_struct(Contract_NFT)9399_storage": {
+            "label": "struct Contract_NFT",
+            "members": [
+              {
+                "label": "nftCollateralId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "offerId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "terms",
+                "type": "t_struct(ContractTerms_NFT)9386_storage"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(ContractStatus_NFT)9278"
+              },
+              {
+                "label": "lateCount",
+                "type": "t_uint8"
+              }
+            ]
+          },
+          "t_struct(ContractTerms_NFT)9386_storage": {
+            "label": "struct ContractTerms_NFT",
+            "members": [
+              {
+                "label": "borrower",
+                "type": "t_address"
+              },
+              {
+                "label": "lender",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "nftCollateralAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "nftCollateralAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType_NFT)9264"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractStartDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractEndDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "lateThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "systemFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penaltyRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "prepaidFeeRate",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_enum(ContractStatus_NFT)9278": {
+            "label": "enum ContractStatus_NFT",
+            "members": [
+              "ACTIVE",
+              "COMPLETED",
+              "DEFAULT"
+            ]
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)9422_storage)dyn_storage)": {
+            "label": "mapping(uint256 => struct PaymentRequest_NFT[])"
+          },
+          "t_array(t_struct(PaymentRequest_NFT)9422_storage)dyn_storage": {
+            "label": "struct PaymentRequest_NFT[]"
+          },
+          "t_struct(PaymentRequest_NFT)9422_storage": {
+            "label": "struct PaymentRequest_NFT",
+            "members": [
+              {
+                "label": "requestId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "paymentRequestType",
+                "type": "t_enum(PaymentRequestTypeEnum_NFT)9287"
+              },
+              {
+                "label": "remainingLoan",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingPenalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingInterest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "dueDateTimestamp",
+                "type": "t_uint256"
+              },
+              {
+                "label": "chargePrepaidFee",
+                "type": "t_bool"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(PaymentRequestStatusEnum_NFT)9283"
+              }
+            ]
+          },
+          "t_enum(PaymentRequestTypeEnum_NFT)9287": {
+            "label": "enum PaymentRequestTypeEnum_NFT",
+            "members": [
+              "INTEREST",
+              "OVERDUE",
+              "LOAN"
+            ]
+          },
+          "t_enum(PaymentRequestStatusEnum_NFT)9283": {
+            "label": "enum PaymentRequestStatusEnum_NFT",
+            "members": [
+              "ACTIVE",
+              "LATE",
+              "COMPLETE",
+              "DEFAULT"
+            ]
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          }
+        }
+      }
+    },
+    "1e3136092cc4f73533eb5a1fd79e21371470c25d0f0409f0fcab8a10221d80d2": {
+      "address": "0x7A3FEf0d20fDEDdf590DA5b4ae2E00dCfDE3dAbD",
+      "txHash": "0x733a7bbeee2d27c4c7c73c9d24aff49a625be71e679db3eae588236caf742895",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "_status",
+            "type": "t_uint256",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:37"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:67"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "PawnNFTModel",
+            "label": "hubContract",
+            "type": "t_address",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTModel.sol:177"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "abc",
+            "type": "t_address",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:75"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberCollaterals",
+            "type": "t_struct(Counter)5697_storage",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:78"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "collaterals",
+            "type": "t_mapping(t_uint256,t_struct(Collateral_NFT)19708_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:81"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberOffers",
+            "type": "t_struct(Counter)5697_storage",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:84"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "collateralOffersMapping",
+            "type": "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19719_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:87"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberContracts",
+            "type": "t_uint256",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:90"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "contracts",
+            "type": "t_mapping(t_uint256,t_struct(Contract_NFT)19792_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:93"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "contractPaymentRequestMapping",
+            "type": "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)19815_storage)dyn_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:96"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_struct(Counter)5697_storage": {
+            "label": "struct CountersUpgradeable.Counter",
+            "members": [
+              {
+                "label": "_value",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(Collateral_NFT)19708_storage)": {
+            "label": "mapping(uint256 => struct Collateral_NFT)"
+          },
+          "t_struct(Collateral_NFT)19708_storage": {
+            "label": "struct Collateral_NFT",
+            "members": [
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "nftContract",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenQuantity",
+                "type": "t_uint256"
+              },
+              {
+                "label": "expectedDurationQty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "durationType",
+                "type": "t_enum(LoanDurationType_NFT)19657"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(CollateralStatus_NFT)19662"
+              }
+            ]
+          },
+          "t_enum(LoanDurationType_NFT)19657": {
+            "label": "enum LoanDurationType_NFT",
+            "members": [
+              "WEEK",
+              "MONTH"
+            ]
+          },
+          "t_enum(CollateralStatus_NFT)19662": {
+            "label": "enum CollateralStatus_NFT",
+            "members": [
+              "OPEN",
+              "DOING",
+              "COMPLETED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19719_storage)": {
+            "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
+          },
+          "t_struct(CollateralOfferList_NFT)19719_storage": {
+            "label": "struct CollateralOfferList_NFT",
+            "members": [
+              {
+                "label": "offerMapping",
+                "type": "t_mapping(t_uint256,t_struct(Offer_NFT)19743_storage)"
+              },
+              {
+                "label": "offerIdList",
+                "type": "t_array(t_uint256)dyn_storage"
+              },
+              {
+                "label": "isInit",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Offer_NFT)19743_storage)": {
+            "label": "mapping(uint256 => struct Offer_NFT)"
+          },
+          "t_struct(Offer_NFT)19743_storage": {
+            "label": "struct Offer_NFT",
+            "members": [
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanToValue",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "duration",
+                "type": "t_uint256"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(OfferStatus_NFT)19667"
+              },
+              {
+                "label": "loanDurationType",
+                "type": "t_enum(LoanDurationType_NFT)19657"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType_NFT)19657"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_enum(OfferStatus_NFT)19667": {
+            "label": "enum OfferStatus_NFT",
+            "members": [
+              "PENDING",
+              "ACCEPTED",
+              "COMPLETED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Contract_NFT)19792_storage)": {
+            "label": "mapping(uint256 => struct Contract_NFT)"
+          },
+          "t_struct(Contract_NFT)19792_storage": {
+            "label": "struct Contract_NFT",
+            "members": [
+              {
+                "label": "nftCollateralId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "offerId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "terms",
+                "type": "t_struct(ContractTerms_NFT)19779_storage"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(ContractStatus_NFT)19671"
+              },
+              {
+                "label": "lateCount",
+                "type": "t_uint8"
+              }
+            ]
+          },
+          "t_struct(ContractTerms_NFT)19779_storage": {
+            "label": "struct ContractTerms_NFT",
+            "members": [
+              {
+                "label": "borrower",
+                "type": "t_address"
+              },
+              {
+                "label": "lender",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "nftCollateralAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "nftCollateralAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType_NFT)19657"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractStartDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractEndDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "lateThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "systemFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penaltyRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "prepaidFeeRate",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_enum(ContractStatus_NFT)19671": {
+            "label": "enum ContractStatus_NFT",
+            "members": [
+              "ACTIVE",
+              "COMPLETED",
+              "DEFAULT"
+            ]
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)19815_storage)dyn_storage)": {
+            "label": "mapping(uint256 => struct PaymentRequest_NFT[])"
+          },
+          "t_array(t_struct(PaymentRequest_NFT)19815_storage)dyn_storage": {
+            "label": "struct PaymentRequest_NFT[]"
+          },
+          "t_struct(PaymentRequest_NFT)19815_storage": {
+            "label": "struct PaymentRequest_NFT",
+            "members": [
+              {
+                "label": "requestId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "paymentRequestType",
+                "type": "t_enum(PaymentRequestTypeEnum_NFT)19680"
+              },
+              {
+                "label": "remainingLoan",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingPenalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingInterest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "dueDateTimestamp",
+                "type": "t_uint256"
+              },
+              {
+                "label": "chargePrepaidFee",
+                "type": "t_bool"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(PaymentRequestStatusEnum_NFT)19676"
+              }
+            ]
+          },
+          "t_enum(PaymentRequestTypeEnum_NFT)19680": {
+            "label": "enum PaymentRequestTypeEnum_NFT",
+            "members": [
+              "INTEREST",
+              "OVERDUE",
+              "LOAN"
+            ]
+          },
+          "t_enum(PaymentRequestStatusEnum_NFT)19676": {
+            "label": "enum PaymentRequestStatusEnum_NFT",
+            "members": [
+              "ACTIVE",
+              "LATE",
+              "COMPLETE",
+              "DEFAULT"
+            ]
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          }
+        }
+      }
+    },
+    "27dcfbb80438b35b549414f1a58e3387ac2c8ac2bb8f6399df9752cc924e25e8": {
+      "address": "0x6A4037643D1C1D468e966A46243a7aAdA4098948",
+      "txHash": "0x9a036634719775b1c4eb12454699e760390accf28edb37fb59d28801e6ea9f2e",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "_status",
+            "type": "t_uint256",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:37"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:67"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "ERC1155ReceiverUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\token\\ERC1155\\utils\\ERC1155ReceiverUpgradeable.sol:26"
+          },
+          {
+            "contract": "ERC1155HolderUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\token\\ERC1155\\utils\\ERC1155HolderUpgradeable.sol:39"
+          },
+          {
+            "contract": "ERC721HolderUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\token\\ERC721\\utils\\ERC721HolderUpgradeable.sol:34"
+          },
+          {
+            "contract": "PawnNFTModel",
+            "label": "hubContract",
+            "type": "t_address",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTModel.sol:179"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "abc",
+            "type": "t_address",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:75"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberCollaterals",
+            "type": "t_struct(Counter)5697_storage",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:78"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "collaterals",
+            "type": "t_mapping(t_uint256,t_struct(Collateral_NFT)19708_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:81"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberOffers",
+            "type": "t_struct(Counter)5697_storage",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:84"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "collateralOffersMapping",
+            "type": "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19719_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:87"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberContracts",
+            "type": "t_uint256",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:90"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "contracts",
+            "type": "t_mapping(t_uint256,t_struct(Contract_NFT)19792_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:93"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "contractPaymentRequestMapping",
+            "type": "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)19815_storage)dyn_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:96"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_struct(Counter)5697_storage": {
+            "label": "struct CountersUpgradeable.Counter",
+            "members": [
+              {
+                "label": "_value",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(Collateral_NFT)19708_storage)": {
+            "label": "mapping(uint256 => struct Collateral_NFT)"
+          },
+          "t_struct(Collateral_NFT)19708_storage": {
+            "label": "struct Collateral_NFT",
+            "members": [
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "nftContract",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenQuantity",
+                "type": "t_uint256"
+              },
+              {
+                "label": "expectedDurationQty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "durationType",
+                "type": "t_enum(LoanDurationType_NFT)19657"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(CollateralStatus_NFT)19662"
+              }
+            ]
+          },
+          "t_enum(LoanDurationType_NFT)19657": {
+            "label": "enum LoanDurationType_NFT",
+            "members": [
+              "WEEK",
+              "MONTH"
+            ]
+          },
+          "t_enum(CollateralStatus_NFT)19662": {
+            "label": "enum CollateralStatus_NFT",
+            "members": [
+              "OPEN",
+              "DOING",
+              "COMPLETED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19719_storage)": {
+            "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
+          },
+          "t_struct(CollateralOfferList_NFT)19719_storage": {
+            "label": "struct CollateralOfferList_NFT",
+            "members": [
+              {
+                "label": "offerMapping",
+                "type": "t_mapping(t_uint256,t_struct(Offer_NFT)19743_storage)"
+              },
+              {
+                "label": "offerIdList",
+                "type": "t_array(t_uint256)dyn_storage"
+              },
+              {
+                "label": "isInit",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Offer_NFT)19743_storage)": {
+            "label": "mapping(uint256 => struct Offer_NFT)"
+          },
+          "t_struct(Offer_NFT)19743_storage": {
+            "label": "struct Offer_NFT",
+            "members": [
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanToValue",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "duration",
+                "type": "t_uint256"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(OfferStatus_NFT)19667"
+              },
+              {
+                "label": "loanDurationType",
+                "type": "t_enum(LoanDurationType_NFT)19657"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType_NFT)19657"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_enum(OfferStatus_NFT)19667": {
+            "label": "enum OfferStatus_NFT",
+            "members": [
+              "PENDING",
+              "ACCEPTED",
+              "COMPLETED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Contract_NFT)19792_storage)": {
+            "label": "mapping(uint256 => struct Contract_NFT)"
+          },
+          "t_struct(Contract_NFT)19792_storage": {
+            "label": "struct Contract_NFT",
+            "members": [
+              {
+                "label": "nftCollateralId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "offerId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "terms",
+                "type": "t_struct(ContractTerms_NFT)19779_storage"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(ContractStatus_NFT)19671"
+              },
+              {
+                "label": "lateCount",
+                "type": "t_uint8"
+              }
+            ]
+          },
+          "t_struct(ContractTerms_NFT)19779_storage": {
+            "label": "struct ContractTerms_NFT",
+            "members": [
+              {
+                "label": "borrower",
+                "type": "t_address"
+              },
+              {
+                "label": "lender",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "nftCollateralAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "nftCollateralAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType_NFT)19657"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractStartDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractEndDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "lateThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "systemFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penaltyRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "prepaidFeeRate",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_enum(ContractStatus_NFT)19671": {
+            "label": "enum ContractStatus_NFT",
+            "members": [
+              "ACTIVE",
+              "COMPLETED",
+              "DEFAULT"
+            ]
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)19815_storage)dyn_storage)": {
+            "label": "mapping(uint256 => struct PaymentRequest_NFT[])"
+          },
+          "t_array(t_struct(PaymentRequest_NFT)19815_storage)dyn_storage": {
+            "label": "struct PaymentRequest_NFT[]"
+          },
+          "t_struct(PaymentRequest_NFT)19815_storage": {
+            "label": "struct PaymentRequest_NFT",
+            "members": [
+              {
+                "label": "requestId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "paymentRequestType",
+                "type": "t_enum(PaymentRequestTypeEnum_NFT)19680"
+              },
+              {
+                "label": "remainingLoan",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingPenalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingInterest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "dueDateTimestamp",
+                "type": "t_uint256"
+              },
+              {
+                "label": "chargePrepaidFee",
+                "type": "t_bool"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(PaymentRequestStatusEnum_NFT)19676"
+              }
+            ]
+          },
+          "t_enum(PaymentRequestTypeEnum_NFT)19680": {
+            "label": "enum PaymentRequestTypeEnum_NFT",
+            "members": [
+              "INTEREST",
+              "OVERDUE",
+              "LOAN"
+            ]
+          },
+          "t_enum(PaymentRequestStatusEnum_NFT)19676": {
+            "label": "enum PaymentRequestStatusEnum_NFT",
+            "members": [
+              "ACTIVE",
+              "LATE",
+              "COMPLETE",
+              "DEFAULT"
+            ]
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          }
+        }
+      }
+    },
+    "e490493a673f77a27f0f1f5b0193a67b2521a3f24b4492efe22e2790df6c56f4": {
+      "address": "0x17847e0A55B8a805F6f3857E3EDD95Ed005F5a5e",
+      "txHash": "0x995353b0f7e3e059c1e0d50a75f691c3961836d89ae8845def136ecf783dd606",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "_status",
+            "type": "t_uint256",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:37"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:67"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "ERC1155ReceiverUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\token\\ERC1155\\utils\\ERC1155ReceiverUpgradeable.sol:26"
+          },
+          {
+            "contract": "ERC1155HolderUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\token\\ERC1155\\utils\\ERC1155HolderUpgradeable.sol:39"
+          },
+          {
+            "contract": "ERC721HolderUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\token\\ERC721\\utils\\ERC721HolderUpgradeable.sol:34"
+          },
+          {
+            "contract": "PawnNFTModel",
+            "label": "hubContract",
+            "type": "t_address",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTModel.sol:179"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "abc",
+            "type": "t_address",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:75"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberCollaterals",
+            "type": "t_struct(Counter)2270_storage",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:78"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "collaterals",
+            "type": "t_mapping(t_uint256,t_struct(Collateral_NFT)9315_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:81"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberOffers",
+            "type": "t_struct(Counter)2270_storage",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:84"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "collateralOffersMapping",
+            "type": "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)9326_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:87"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberContracts",
+            "type": "t_uint256",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:90"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "contracts",
+            "type": "t_mapping(t_uint256,t_struct(Contract_NFT)9399_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:93"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "contractPaymentRequestMapping",
+            "type": "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)9422_storage)dyn_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:96"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_struct(Counter)2270_storage": {
+            "label": "struct CountersUpgradeable.Counter",
+            "members": [
+              {
+                "label": "_value",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(Collateral_NFT)9315_storage)": {
+            "label": "mapping(uint256 => struct Collateral_NFT)"
+          },
+          "t_struct(Collateral_NFT)9315_storage": {
+            "label": "struct Collateral_NFT",
+            "members": [
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "nftContract",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenQuantity",
+                "type": "t_uint256"
+              },
+              {
+                "label": "expectedDurationQty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "durationType",
+                "type": "t_enum(LoanDurationType_NFT)9264"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(CollateralStatus_NFT)9269"
+              }
+            ]
+          },
+          "t_enum(LoanDurationType_NFT)9264": {
+            "label": "enum LoanDurationType_NFT",
+            "members": [
+              "WEEK",
+              "MONTH"
+            ]
+          },
+          "t_enum(CollateralStatus_NFT)9269": {
+            "label": "enum CollateralStatus_NFT",
+            "members": [
+              "OPEN",
+              "DOING",
+              "COMPLETED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)9326_storage)": {
+            "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
+          },
+          "t_struct(CollateralOfferList_NFT)9326_storage": {
+            "label": "struct CollateralOfferList_NFT",
+            "members": [
+              {
+                "label": "offerMapping",
+                "type": "t_mapping(t_uint256,t_struct(Offer_NFT)9350_storage)"
+              },
+              {
+                "label": "offerIdList",
+                "type": "t_array(t_uint256)dyn_storage"
+              },
+              {
+                "label": "isInit",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Offer_NFT)9350_storage)": {
+            "label": "mapping(uint256 => struct Offer_NFT)"
+          },
+          "t_struct(Offer_NFT)9350_storage": {
+            "label": "struct Offer_NFT",
+            "members": [
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanToValue",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "duration",
+                "type": "t_uint256"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(OfferStatus_NFT)9274"
+              },
+              {
+                "label": "loanDurationType",
+                "type": "t_enum(LoanDurationType_NFT)9264"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType_NFT)9264"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_enum(OfferStatus_NFT)9274": {
+            "label": "enum OfferStatus_NFT",
+            "members": [
+              "PENDING",
+              "ACCEPTED",
+              "COMPLETED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Contract_NFT)9399_storage)": {
+            "label": "mapping(uint256 => struct Contract_NFT)"
+          },
+          "t_struct(Contract_NFT)9399_storage": {
+            "label": "struct Contract_NFT",
+            "members": [
+              {
+                "label": "nftCollateralId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "offerId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "terms",
+                "type": "t_struct(ContractTerms_NFT)9386_storage"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(ContractStatus_NFT)9278"
+              },
+              {
+                "label": "lateCount",
+                "type": "t_uint8"
+              }
+            ]
+          },
+          "t_struct(ContractTerms_NFT)9386_storage": {
+            "label": "struct ContractTerms_NFT",
+            "members": [
+              {
+                "label": "borrower",
+                "type": "t_address"
+              },
+              {
+                "label": "lender",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "nftCollateralAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "nftCollateralAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType_NFT)9264"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractStartDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractEndDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "lateThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "systemFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penaltyRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "prepaidFeeRate",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_enum(ContractStatus_NFT)9278": {
+            "label": "enum ContractStatus_NFT",
+            "members": [
+              "ACTIVE",
+              "COMPLETED",
+              "DEFAULT"
+            ]
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)9422_storage)dyn_storage)": {
+            "label": "mapping(uint256 => struct PaymentRequest_NFT[])"
+          },
+          "t_array(t_struct(PaymentRequest_NFT)9422_storage)dyn_storage": {
+            "label": "struct PaymentRequest_NFT[]"
+          },
+          "t_struct(PaymentRequest_NFT)9422_storage": {
+            "label": "struct PaymentRequest_NFT",
+            "members": [
+              {
+                "label": "requestId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "paymentRequestType",
+                "type": "t_enum(PaymentRequestTypeEnum_NFT)9287"
+              },
+              {
+                "label": "remainingLoan",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingPenalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingInterest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "dueDateTimestamp",
+                "type": "t_uint256"
+              },
+              {
+                "label": "chargePrepaidFee",
+                "type": "t_bool"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(PaymentRequestStatusEnum_NFT)9283"
+              }
+            ]
+          },
+          "t_enum(PaymentRequestTypeEnum_NFT)9287": {
+            "label": "enum PaymentRequestTypeEnum_NFT",
+            "members": [
+              "INTEREST",
+              "OVERDUE",
+              "LOAN"
+            ]
+          },
+          "t_enum(PaymentRequestStatusEnum_NFT)9283": {
+            "label": "enum PaymentRequestStatusEnum_NFT",
+            "members": [
+              "ACTIVE",
+              "LATE",
+              "COMPLETE",
+              "DEFAULT"
+            ]
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          }
+        }
+      }
+    },
+    "4c2e96f57d98bb69fb870abb2629fe5f06ea9ee6114916d4aa00aa5b9bf07b5b": {
+      "address": "0xb40D96ed48f137608dd48EE793CEAc006a8c4953",
+      "txHash": "0xe3abe79f6f3354e658d2a6d6ce66bc579d9927bd44d3a195c6007e7f72751646",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "_status",
+            "type": "t_uint256",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:37"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:67"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "ERC1155ReceiverUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\token\\ERC1155\\utils\\ERC1155ReceiverUpgradeable.sol:26"
+          },
+          {
+            "contract": "ERC1155HolderUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\token\\ERC1155\\utils\\ERC1155HolderUpgradeable.sol:39"
+          },
+          {
+            "contract": "ERC721HolderUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\token\\ERC721\\utils\\ERC721HolderUpgradeable.sol:34"
+          },
+          {
+            "contract": "PawnNFTModel",
+            "label": "hubContract",
+            "type": "t_address",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTModel.sol:179"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "abc",
+            "type": "t_address",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:75"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberCollaterals",
+            "type": "t_struct(Counter)2270_storage",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:78"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "collaterals",
+            "type": "t_mapping(t_uint256,t_struct(Collateral_NFT)9315_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:81"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberOffers",
+            "type": "t_struct(Counter)2270_storage",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:84"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "collateralOffersMapping",
+            "type": "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)9326_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:87"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberContracts",
+            "type": "t_uint256",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:90"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "contracts",
+            "type": "t_mapping(t_uint256,t_struct(Contract_NFT)9399_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:93"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "contractPaymentRequestMapping",
+            "type": "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)9422_storage)dyn_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:96"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_struct(Counter)2270_storage": {
+            "label": "struct CountersUpgradeable.Counter",
+            "members": [
+              {
+                "label": "_value",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(Collateral_NFT)9315_storage)": {
+            "label": "mapping(uint256 => struct Collateral_NFT)"
+          },
+          "t_struct(Collateral_NFT)9315_storage": {
+            "label": "struct Collateral_NFT",
+            "members": [
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "nftContract",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenQuantity",
+                "type": "t_uint256"
+              },
+              {
+                "label": "expectedDurationQty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "durationType",
+                "type": "t_enum(LoanDurationType_NFT)9264"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(CollateralStatus_NFT)9269"
+              }
+            ]
+          },
+          "t_enum(LoanDurationType_NFT)9264": {
+            "label": "enum LoanDurationType_NFT",
+            "members": [
+              "WEEK",
+              "MONTH"
+            ]
+          },
+          "t_enum(CollateralStatus_NFT)9269": {
+            "label": "enum CollateralStatus_NFT",
+            "members": [
+              "OPEN",
+              "DOING",
+              "COMPLETED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)9326_storage)": {
+            "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
+          },
+          "t_struct(CollateralOfferList_NFT)9326_storage": {
+            "label": "struct CollateralOfferList_NFT",
+            "members": [
+              {
+                "label": "offerMapping",
+                "type": "t_mapping(t_uint256,t_struct(Offer_NFT)9350_storage)"
+              },
+              {
+                "label": "offerIdList",
+                "type": "t_array(t_uint256)dyn_storage"
+              },
+              {
+                "label": "isInit",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Offer_NFT)9350_storage)": {
+            "label": "mapping(uint256 => struct Offer_NFT)"
+          },
+          "t_struct(Offer_NFT)9350_storage": {
+            "label": "struct Offer_NFT",
+            "members": [
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanToValue",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "duration",
+                "type": "t_uint256"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(OfferStatus_NFT)9274"
+              },
+              {
+                "label": "loanDurationType",
+                "type": "t_enum(LoanDurationType_NFT)9264"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType_NFT)9264"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_enum(OfferStatus_NFT)9274": {
+            "label": "enum OfferStatus_NFT",
+            "members": [
+              "PENDING",
+              "ACCEPTED",
+              "COMPLETED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Contract_NFT)9399_storage)": {
+            "label": "mapping(uint256 => struct Contract_NFT)"
+          },
+          "t_struct(Contract_NFT)9399_storage": {
+            "label": "struct Contract_NFT",
+            "members": [
+              {
+                "label": "nftCollateralId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "offerId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "terms",
+                "type": "t_struct(ContractTerms_NFT)9386_storage"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(ContractStatus_NFT)9278"
+              },
+              {
+                "label": "lateCount",
+                "type": "t_uint8"
+              }
+            ]
+          },
+          "t_struct(ContractTerms_NFT)9386_storage": {
+            "label": "struct ContractTerms_NFT",
+            "members": [
+              {
+                "label": "borrower",
+                "type": "t_address"
+              },
+              {
+                "label": "lender",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "nftCollateralAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "nftCollateralAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType_NFT)9264"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractStartDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractEndDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "lateThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "systemFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penaltyRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "prepaidFeeRate",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_enum(ContractStatus_NFT)9278": {
+            "label": "enum ContractStatus_NFT",
+            "members": [
+              "ACTIVE",
+              "COMPLETED",
+              "DEFAULT"
+            ]
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)9422_storage)dyn_storage)": {
+            "label": "mapping(uint256 => struct PaymentRequest_NFT[])"
+          },
+          "t_array(t_struct(PaymentRequest_NFT)9422_storage)dyn_storage": {
+            "label": "struct PaymentRequest_NFT[]"
+          },
+          "t_struct(PaymentRequest_NFT)9422_storage": {
+            "label": "struct PaymentRequest_NFT",
+            "members": [
+              {
+                "label": "requestId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "paymentRequestType",
+                "type": "t_enum(PaymentRequestTypeEnum_NFT)9287"
+              },
+              {
+                "label": "remainingLoan",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingPenalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingInterest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "dueDateTimestamp",
+                "type": "t_uint256"
+              },
+              {
+                "label": "chargePrepaidFee",
+                "type": "t_bool"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(PaymentRequestStatusEnum_NFT)9283"
+              }
+            ]
+          },
+          "t_enum(PaymentRequestTypeEnum_NFT)9287": {
+            "label": "enum PaymentRequestTypeEnum_NFT",
+            "members": [
+              "INTEREST",
+              "OVERDUE",
+              "LOAN"
+            ]
+          },
+          "t_enum(PaymentRequestStatusEnum_NFT)9283": {
+            "label": "enum PaymentRequestStatusEnum_NFT",
+            "members": [
+              "ACTIVE",
+              "LATE",
+              "COMPLETE",
+              "DEFAULT"
+            ]
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          }
+        }
+      }
+    },
+    "62484eb601bda5e6fc0b98798c67fe6045ad7c3ba3dc49dee764665dc1168b3f": {
+      "address": "0x0FAe9da1DB32d877fd258cAF0705c49fbE181546",
+      "txHash": "0xed211b0471a13c5de64c31114afa1f7f80ee210c8cbcc5c894b51dcd241705a0",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "_status",
+            "type": "t_uint256",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:37"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:67"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "ERC1155ReceiverUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\token\\ERC1155\\utils\\ERC1155ReceiverUpgradeable.sol:26"
+          },
+          {
+            "contract": "ERC1155HolderUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\token\\ERC1155\\utils\\ERC1155HolderUpgradeable.sol:39"
+          },
+          {
+            "contract": "ERC721HolderUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\token\\ERC721\\utils\\ERC721HolderUpgradeable.sol:34"
+          },
+          {
+            "contract": "PawnNFTModel",
+            "label": "hubContract",
+            "type": "t_address",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTModel.sol:179"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "abc",
+            "type": "t_address",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:75"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberCollaterals",
+            "type": "t_struct(Counter)5697_storage",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:78"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "collaterals",
+            "type": "t_mapping(t_uint256,t_struct(Collateral_NFT)19725_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:81"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberOffers",
+            "type": "t_struct(Counter)5697_storage",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:84"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "collateralOffersMapping",
+            "type": "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19736_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:87"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "numberContracts",
+            "type": "t_uint256",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:90"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "contracts",
+            "type": "t_mapping(t_uint256,t_struct(Contract_NFT)19809_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:93"
+          },
+          {
+            "contract": "PawnNFTContractV2",
+            "label": "contractPaymentRequestMapping",
+            "type": "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)19832_storage)dyn_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTContractV2.sol:96"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_struct(Counter)5697_storage": {
+            "label": "struct CountersUpgradeable.Counter",
+            "members": [
+              {
+                "label": "_value",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(Collateral_NFT)19725_storage)": {
+            "label": "mapping(uint256 => struct Collateral_NFT)"
+          },
+          "t_struct(Collateral_NFT)19725_storage": {
+            "label": "struct Collateral_NFT",
+            "members": [
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "nftContract",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenQuantity",
+                "type": "t_uint256"
+              },
+              {
+                "label": "expectedDurationQty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "durationType",
+                "type": "t_enum(LoanDurationType_NFT)19674"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(CollateralStatus_NFT)19679"
+              }
+            ]
+          },
+          "t_enum(LoanDurationType_NFT)19674": {
+            "label": "enum LoanDurationType_NFT",
+            "members": [
+              "WEEK",
+              "MONTH"
+            ]
+          },
+          "t_enum(CollateralStatus_NFT)19679": {
+            "label": "enum CollateralStatus_NFT",
+            "members": [
+              "OPEN",
+              "DOING",
+              "COMPLETED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19736_storage)": {
+            "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
+          },
+          "t_struct(CollateralOfferList_NFT)19736_storage": {
+            "label": "struct CollateralOfferList_NFT",
+            "members": [
+              {
+                "label": "offerMapping",
+                "type": "t_mapping(t_uint256,t_struct(Offer_NFT)19760_storage)"
+              },
+              {
+                "label": "offerIdList",
+                "type": "t_array(t_uint256)dyn_storage"
+              },
+              {
+                "label": "isInit",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Offer_NFT)19760_storage)": {
+            "label": "mapping(uint256 => struct Offer_NFT)"
+          },
+          "t_struct(Offer_NFT)19760_storage": {
+            "label": "struct Offer_NFT",
+            "members": [
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanToValue",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "duration",
+                "type": "t_uint256"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(OfferStatus_NFT)19684"
+              },
+              {
+                "label": "loanDurationType",
+                "type": "t_enum(LoanDurationType_NFT)19674"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType_NFT)19674"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_enum(OfferStatus_NFT)19684": {
+            "label": "enum OfferStatus_NFT",
+            "members": [
+              "PENDING",
+              "ACCEPTED",
+              "COMPLETED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Contract_NFT)19809_storage)": {
+            "label": "mapping(uint256 => struct Contract_NFT)"
+          },
+          "t_struct(Contract_NFT)19809_storage": {
+            "label": "struct Contract_NFT",
+            "members": [
+              {
+                "label": "nftCollateralId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "offerId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "terms",
+                "type": "t_struct(ContractTerms_NFT)19796_storage"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(ContractStatus_NFT)19688"
+              },
+              {
+                "label": "lateCount",
+                "type": "t_uint8"
+              }
+            ]
+          },
+          "t_struct(ContractTerms_NFT)19796_storage": {
+            "label": "struct ContractTerms_NFT",
+            "members": [
+              {
+                "label": "borrower",
+                "type": "t_address"
+              },
+              {
+                "label": "lender",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "nftCollateralAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "nftCollateralAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType_NFT)19674"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractStartDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractEndDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "lateThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "systemFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penaltyRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "prepaidFeeRate",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_enum(ContractStatus_NFT)19688": {
+            "label": "enum ContractStatus_NFT",
+            "members": [
+              "ACTIVE",
+              "COMPLETED",
+              "DEFAULT"
+            ]
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)19832_storage)dyn_storage)": {
+            "label": "mapping(uint256 => struct PaymentRequest_NFT[])"
+          },
+          "t_array(t_struct(PaymentRequest_NFT)19832_storage)dyn_storage": {
+            "label": "struct PaymentRequest_NFT[]"
+          },
+          "t_struct(PaymentRequest_NFT)19832_storage": {
+            "label": "struct PaymentRequest_NFT",
+            "members": [
+              {
+                "label": "requestId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "paymentRequestType",
+                "type": "t_enum(PaymentRequestTypeEnum_NFT)19697"
+              },
+              {
+                "label": "remainingLoan",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingPenalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingInterest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "dueDateTimestamp",
+                "type": "t_uint256"
+              },
+              {
+                "label": "chargePrepaidFee",
+                "type": "t_bool"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(PaymentRequestStatusEnum_NFT)19693"
+              }
+            ]
+          },
+          "t_enum(PaymentRequestTypeEnum_NFT)19697": {
+            "label": "enum PaymentRequestTypeEnum_NFT",
+            "members": [
+              "INTEREST",
+              "OVERDUE",
+              "LOAN"
+            ]
+          },
+          "t_enum(PaymentRequestStatusEnum_NFT)19693": {
+            "label": "enum PaymentRequestStatusEnum_NFT",
+            "members": [
+              "ACTIVE",
+              "LATE",
+              "COMPLETE",
+              "DEFAULT"
+            ]
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          }
+        }
+      }
+    },
+    "484480f3dbd8cc47a777666e6f265cb198694695782b23f70083fc5414fe636e": {
+      "address": "0xE40EfF6551c947d9bd7b1608c44620A6D75fE469",
+      "txHash": "0xafb54f4f2749029a24d27a085d31ae3277ee794f16a3d12e7320f776f90ca714",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "_status",
+            "type": "t_uint256",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:37"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:67"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "ERC1155ReceiverUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\token\\ERC1155\\utils\\ERC1155ReceiverUpgradeable.sol:26"
+          },
+          {
+            "contract": "ERC1155HolderUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\token\\ERC1155\\utils\\ERC1155HolderUpgradeable.sol:39"
+          },
+          {
+            "contract": "ERC721HolderUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\token\\ERC721\\utils\\ERC721HolderUpgradeable.sol:34"
+          },
+          {
+            "contract": "PawnNFTModel",
+            "label": "hubContract",
+            "type": "t_address",
+            "src": "contracts\\pawn\\pawn-nft-v2\\PawnNFTModel.sol:179"
+          },
+          {
+            "contract": "LoanContract",
+            "label": "pawnContract",
+            "type": "t_contract(IPawnNFT)16714",
+            "src": "contracts\\pawn\\pawn-nft-v2\\LoanContract_NFT.sol:18"
+          },
+          {
+            "contract": "LoanContract",
+            "label": "numberCollaterals",
+            "type": "t_struct(Counter)5697_storage",
+            "src": "contracts\\pawn\\pawn-nft-v2\\LoanContract_NFT.sol:81"
+          },
+          {
+            "contract": "LoanContract",
+            "label": "collaterals",
+            "type": "t_mapping(t_uint256,t_struct(Collateral_NFT)19696_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\LoanContract_NFT.sol:84"
+          },
+          {
+            "contract": "LoanContract",
+            "label": "numberOffers",
+            "type": "t_struct(Counter)5697_storage",
+            "src": "contracts\\pawn\\pawn-nft-v2\\LoanContract_NFT.sol:87"
+          },
+          {
+            "contract": "LoanContract",
+            "label": "collateralOffersMapping",
+            "type": "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19707_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\LoanContract_NFT.sol:90"
+          },
+          {
+            "contract": "LoanContract",
+            "label": "numberContracts",
+            "type": "t_uint256",
+            "src": "contracts\\pawn\\pawn-nft-v2\\LoanContract_NFT.sol:93"
+          },
+          {
+            "contract": "LoanContract",
+            "label": "contracts",
+            "type": "t_mapping(t_uint256,t_struct(Contract_NFT)19780_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\LoanContract_NFT.sol:96"
+          },
+          {
+            "contract": "LoanContract",
+            "label": "contractPaymentRequestMapping",
+            "type": "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)19803_storage)dyn_storage)",
+            "src": "contracts\\pawn\\pawn-nft-v2\\LoanContract_NFT.sol:99"
+          }
+        ],
+        "types": {
+          "t_contract(IPawnNFT)16714": {
+            "label": "contract IPawnNFT"
+          },
+          "t_struct(Counter)5697_storage": {
+            "label": "struct CountersUpgradeable.Counter",
+            "members": [
+              {
+                "label": "_value",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(Collateral_NFT)19696_storage)": {
+            "label": "mapping(uint256 => struct Collateral_NFT)"
+          },
+          "t_struct(Collateral_NFT)19696_storage": {
+            "label": "struct Collateral_NFT",
+            "members": [
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "nftContract",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenQuantity",
+                "type": "t_uint256"
+              },
+              {
+                "label": "expectedDurationQty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "durationType",
+                "type": "t_enum(LoanDurationType_NFT)19645"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(CollateralStatus_NFT)19650"
+              }
+            ]
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_enum(LoanDurationType_NFT)19645": {
+            "label": "enum LoanDurationType_NFT",
+            "members": [
+              "WEEK",
+              "MONTH"
+            ]
+          },
+          "t_enum(CollateralStatus_NFT)19650": {
+            "label": "enum CollateralStatus_NFT",
+            "members": [
+              "OPEN",
+              "DOING",
+              "COMPLETED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19707_storage)": {
+            "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
+          },
+          "t_struct(CollateralOfferList_NFT)19707_storage": {
+            "label": "struct CollateralOfferList_NFT",
+            "members": [
+              {
+                "label": "offerMapping",
+                "type": "t_mapping(t_uint256,t_struct(Offer_NFT)19731_storage)"
+              },
+              {
+                "label": "offerIdList",
+                "type": "t_array(t_uint256)dyn_storage"
+              },
+              {
+                "label": "isInit",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Offer_NFT)19731_storage)": {
+            "label": "mapping(uint256 => struct Offer_NFT)"
+          },
+          "t_struct(Offer_NFT)19731_storage": {
+            "label": "struct Offer_NFT",
+            "members": [
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanToValue",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "duration",
+                "type": "t_uint256"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(OfferStatus_NFT)19655"
+              },
+              {
+                "label": "loanDurationType",
+                "type": "t_enum(LoanDurationType_NFT)19645"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType_NFT)19645"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_enum(OfferStatus_NFT)19655": {
+            "label": "enum OfferStatus_NFT",
+            "members": [
+              "PENDING",
+              "ACCEPTED",
+              "COMPLETED",
+              "CANCEL"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Contract_NFT)19780_storage)": {
+            "label": "mapping(uint256 => struct Contract_NFT)"
+          },
+          "t_struct(Contract_NFT)19780_storage": {
+            "label": "struct Contract_NFT",
+            "members": [
+              {
+                "label": "nftCollateralId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "offerId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "terms",
+                "type": "t_struct(ContractTerms_NFT)19767_storage"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(ContractStatus_NFT)19659"
+              },
+              {
+                "label": "lateCount",
+                "type": "t_uint8"
+              }
+            ]
+          },
+          "t_struct(ContractTerms_NFT)19767_storage": {
+            "label": "struct ContractTerms_NFT",
+            "members": [
+              {
+                "label": "borrower",
+                "type": "t_address"
+              },
+              {
+                "label": "lender",
+                "type": "t_address"
+              },
+              {
+                "label": "nftTokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "nftCollateralAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "nftCollateralAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "loanAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "loanAmount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentAsset",
+                "type": "t_address"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "repaymentCycleType",
+                "type": "t_enum(LoanDurationType_NFT)19645"
+              },
+              {
+                "label": "liquidityThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractStartDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "contractEndDate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "lateThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "systemFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penaltyRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "prepaidFeeRate",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_enum(ContractStatus_NFT)19659": {
+            "label": "enum ContractStatus_NFT",
+            "members": [
+              "ACTIVE",
+              "COMPLETED",
+              "DEFAULT"
+            ]
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_uint256,t_array(t_struct(PaymentRequest_NFT)19803_storage)dyn_storage)": {
+            "label": "mapping(uint256 => struct PaymentRequest_NFT[])"
+          },
+          "t_array(t_struct(PaymentRequest_NFT)19803_storage)dyn_storage": {
+            "label": "struct PaymentRequest_NFT[]"
+          },
+          "t_struct(PaymentRequest_NFT)19803_storage": {
+            "label": "struct PaymentRequest_NFT",
+            "members": [
+              {
+                "label": "requestId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "paymentRequestType",
+                "type": "t_enum(PaymentRequestTypeEnum_NFT)19668"
+              },
+              {
+                "label": "remainingLoan",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "interest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingPenalty",
+                "type": "t_uint256"
+              },
+              {
+                "label": "remainingInterest",
+                "type": "t_uint256"
+              },
+              {
+                "label": "dueDateTimestamp",
+                "type": "t_uint256"
+              },
+              {
+                "label": "chargePrepaidFee",
+                "type": "t_bool"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(PaymentRequestStatusEnum_NFT)19664"
+              }
+            ]
+          },
+          "t_enum(PaymentRequestTypeEnum_NFT)19668": {
+            "label": "enum PaymentRequestTypeEnum_NFT",
+            "members": [
+              "INTEREST",
+              "OVERDUE",
+              "LOAN"
+            ]
+          },
+          "t_enum(PaymentRequestStatusEnum_NFT)19664": {
+            "label": "enum PaymentRequestStatusEnum_NFT",
+            "members": [
+              "ACTIVE",
+              "LATE",
+              "COMPLETE",
+              "DEFAULT"
+            ]
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          }
+        }
+      }
+    },
+    "2a35ec0610a25156f212ef7b6e6876d93f9fd3b6eff81434290397e25917e2c8": {
+      "address": "0x27cd613368F302b267d7DA6E9149405524De180D",
+      "txHash": "0x1b74b76e02ee180d7c854d5e7c533cb975510fb09acf7041476395146bc7db8c",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)89_storage)",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:63"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:219"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "Hub",
+            "label": "ContractRegistry",
+            "type": "t_mapping(t_bytes4,t_address)",
+            "src": "contracts\\pawn\\hub\\Hub.sol:28"
+          },
+          {
+            "contract": "Hub",
+            "label": "systemConfig",
+            "type": "t_struct(SystemConfig)12719_storage",
+            "src": "contracts\\pawn\\hub\\Hub.sol:30"
+          },
+          {
+            "contract": "Hub",
+            "label": "pawnConfig",
+            "type": "t_struct(PawnConfig)12734_storage",
+            "src": "contracts\\pawn\\hub\\Hub.sol:31"
+          },
+          {
+            "contract": "Hub",
+            "label": "pawnNFTConfig",
+            "type": "t_struct(PawnNFTConfig)12753_storage",
+            "src": "contracts\\pawn\\hub\\Hub.sol:32"
+          },
+          {
+            "contract": "Hub",
+            "label": "nftCollectionConfig",
+            "type": "t_struct(NFTCollectionConfig)12758_storage",
+            "src": "contracts\\pawn\\hub\\Hub.sol:35"
+          },
+          {
+            "contract": "Hub",
+            "label": "nftMarketConfig",
+            "type": "t_struct(NFTMarketConfig)12765_storage",
+            "src": "contracts\\pawn\\hub\\Hub.sol:36"
+          },
+          {
+            "contract": "Hub",
+            "label": "numContract",
+            "type": "t_uint256",
+            "src": "contracts\\pawn\\hub\\Hub.sol:139"
+          }
+        ],
+        "types": {
+          "t_mapping(t_bytes4,t_address)": {
+            "label": "mapping(bytes4 => address)"
+          },
+          "t_bytes4": {
+            "label": "bytes4"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_struct(SystemConfig)12719_storage": {
+            "label": "struct HubInterface.SystemConfig",
+            "members": [
+              {
+                "label": "systemFeeWallet",
+                "type": "t_address"
+              },
+              {
+                "label": "systemFeeToken",
+                "type": "t_address"
+              }
+            ]
+          },
+          "t_struct(PawnConfig)12734_storage": {
+            "label": "struct HubInterface.PawnConfig",
+            "members": [
+              {
+                "label": "ZOOM",
+                "type": "t_uint256"
+              },
+              {
+                "label": "systemFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penaltyRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "prepaidFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "lateThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "whitelistedCollateral",
+                "type": "t_mapping(t_address,t_uint256)"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_struct(PawnNFTConfig)12753_storage": {
+            "label": "struct HubInterface.PawnNFTConfig",
+            "members": [
+              {
+                "label": "ZOOM",
+                "type": "t_uint256"
+              },
+              {
+                "label": "systemFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "penaltyRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "prepaidFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "lateThreshold",
+                "type": "t_uint256"
+              },
+              {
+                "label": "whitelistedEvaluationContract",
+                "type": "t_mapping(t_address,t_uint256)"
+              },
+              {
+                "label": "whitelistedCollateral",
+                "type": "t_mapping(t_address,t_uint256)"
+              }
+            ]
+          },
+          "t_struct(NFTCollectionConfig)12758_storage": {
+            "label": "struct HubInterface.NFTCollectionConfig",
+            "members": [
+              {
+                "label": "collectionCreatingFee",
+                "type": "t_uint256"
+              },
+              {
+                "label": "mintingFee",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_struct(NFTMarketConfig)12765_storage": {
+            "label": "struct HubInterface.NFTMarketConfig",
+            "members": [
+              {
+                "label": "ZOOM",
+                "type": "t_uint256"
+              },
+              {
+                "label": "marketFeeRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "marketFeeWallet",
+                "type": "t_address"
+              }
+            ]
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)89_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(RoleData)89_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
           }
         }
       }

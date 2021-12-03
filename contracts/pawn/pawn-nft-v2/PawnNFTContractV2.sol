@@ -151,13 +151,23 @@ contract PawnNFTContractV2 is PawnNFTModel, ILoanNFT {
         // Create Collateral Id
         uint256 collateralId = numberCollaterals.current();
 
+        (
+            ,
+            ,
+            ,
+            IDFY_Hard_Evaluation.CollectionStandard _collectionStandard
+        ) = IDFY_Hard_Evaluation(getEvaluation()).getEvaluationWithTokenId(
+                _nftContract,
+                _nftTokenId
+            );
         // Transfer token
         PawnNFTLib.safeTranferNFTToken(
             _nftContract,
             msg.sender,
             address(this),
             _nftTokenId,
-            _nftTokenQuantity
+            _nftTokenQuantity,
+            _collectionStandard
         );
 
         // Create collateral
@@ -202,13 +212,24 @@ contract PawnNFTContractV2 is PawnNFTModel, ILoanNFT {
             "0"
         );
 
+        (
+            ,
+            ,
+            ,
+            IDFY_Hard_Evaluation.CollectionStandard _collectionStandard
+        ) = IDFY_Hard_Evaluation(getEvaluation()).getEvaluationWithTokenId(
+                _collateral.nftContract,
+                _collateral.nftTokenId
+            );
+
         // Return NFT token to owner
         PawnNFTLib.safeTranferNFTToken(
             _collateral.nftContract,
             address(this),
             _collateral.owner,
             _collateral.nftTokenId,
-            _collateral.nftTokenQuantity
+            _collateral.nftTokenQuantity,
+            _collectionStandard
         );
 
         // Remove relation of collateral and offers
@@ -442,7 +463,7 @@ contract PawnNFTContractV2 is PawnNFTModel, ILoanNFT {
         //     collateral.loanAsset,
         //     offer.repaymentAsset
         // );
-        uint256 exchangeRate = Exchange(getExchange()).exchangeRateOfOffer_NFT(
+        uint256 exchangeRate = IExchange(getExchange()).exchangeRateOfOffer_NFT(
             collateral.loanAsset,
             offer.repaymentAsset
         );
@@ -503,12 +524,22 @@ contract PawnNFTContractV2 is PawnNFTModel, ILoanNFT {
             offer.loanAmount
         );
 
+        (
+            ,
+            ,
+            ,
+            IDFY_Hard_Evaluation.CollectionStandard _collectionStandard
+        ) = IDFY_Hard_Evaluation(getEvaluation()).getEvaluationWithTokenId(
+                collateral.nftContract,
+                collateral.nftTokenId
+            );
         PawnNFTLib.safeTranferNFTToken(
             collateral.nftContract,
             address(this),
             address(getLoanContractNFT()),
             collateral.nftTokenId,
-            collateral.nftTokenQuantity
+            collateral.nftTokenQuantity,
+            _collectionStandard
         );
 
         // Adjust reputation score
@@ -581,27 +612,12 @@ contract PawnNFTContractV2 is PawnNFTModel, ILoanNFT {
     // }
     /** ==== Reputation =======*/
 
-    function signature() public view override returns (bytes4) {
+    function signature() public pure override returns (bytes4) {
         return type(ILoanNFT).interfaceId;
     }
 
     function RegistrywithHubContract() external {
         HubInterface(hubContract).registerContract(signature(), address(this));
-    }
-
-    function getReputation() internal view returns (address) {
-        return
-            HubInterface(hubContract).getContractAddress(
-                type(IReputation).interfaceId
-            );
-    }
-
-    /**=== Exchange======= */
-    function getExchange() internal view returns (address) {
-        return
-            HubInterface(hubContract).getContractAddress(
-                type(IExchange).interfaceId
-            );
     }
 
     /**============get Loan Contract ================ */

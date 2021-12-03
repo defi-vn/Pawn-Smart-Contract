@@ -178,6 +178,13 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
             newContract,
             _UID
         );
+
+        // chot ky dau tien khi tao contract
+        closePaymentRequestAndStarNew(
+            0,
+            _idx,
+            PaymentRequestTypeEnum_NFT.INTEREST
+        );
     }
 
     function closePaymentRequestAndStarNew(
@@ -189,7 +196,7 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         // uint256 _dueDateTimestamp,
         // bool _chargePrepaidFee
         PaymentRequestTypeEnum_NFT _paymentRequestType
-    ) external whenNotPaused onlyOperator {
+    ) public whenNotPaused onlyOperator {
         // get contract
         Contract_NFT storage currentContract = contractMustActive(_contractId);
 
@@ -221,7 +228,7 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
             // );
             (, , uint256 penaltyRate, , ) = HubInterface(hubContract)
                 .getPawnNFTConfig();
-            _nextPhrasePenalty = Exchange(getExchange()).calculatePenalty_NFT(
+            _nextPhrasePenalty = IExchange(getExchange()).calculatePenalty_NFT(
                 previousRequest,
                 currentContract,
                 penaltyRate
@@ -237,7 +244,7 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
                 //     _remainingLoan,
                 //     currentContract
                 // );
-                _nextPhraseInterest = Exchange(getExchange())
+                _nextPhraseInterest = IExchange(getExchange())
                     .calculateInterest_NFT(_remainingLoan, currentContract);
             }
             if (_paymentRequestType == PaymentRequestTypeEnum_NFT.OVERDUE) {
@@ -359,10 +366,8 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
             //     _remainingLoan,
             //     currentContract
             // );
-            _nextPhraseInterest = Exchange(getExchange()).calculateInterest_NFT(
-                    _remainingLoan,
-                    currentContract
-                );
+            _nextPhraseInterest = IExchange(getExchange())
+                .calculateInterest_NFT(_remainingLoan, currentContract);
             _nextPhrasePenalty = 0;
             // Validate: Due date timestamp of next payment request must not over contract due date
             (, _dueDateTimestamp) = SafeMathUpgradeable.tryAdd(
@@ -476,12 +481,18 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         ContractLiquidationData_NFT memory liquidationData;
 
         {
-            (address _evaluationContract, ) = IDFY_Physical_NFTs(
-                _collateral.nftContract
-            ).getEvaluationOfToken(_collateral.nftTokenId);
+            // (address _evaluationContract, ) = IDFY_Physical_NFTs(
+            //     _collateral.nftContract
+            // ).getEvaluationOfToken(_collateral.nftTokenId);
 
-            (, , , , address token, , ) = AssetEvaluation(_evaluationContract)
-                .tokenIdByEvaluation(_collateral.nftTokenId);
+            // (, , , , address token, , ) = AssetEvaluation(_evaluationContract)
+            //     .tokenIdByEvaluation(_collateral.nftTokenId);
+
+            (address token, , , ) = IDFY_Hard_Evaluation(getEvaluation())
+                .getEvaluationWithTokenId(
+                    _collateral.nftContract,
+                    _collateral.nftTokenId
+                );
 
             // (
             //     uint256 _tokenEvaluationRate,
@@ -495,7 +506,7 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
                 uint256 _loanExchangeRate,
                 uint256 _repaymentExchangeRate,
                 uint256 _rateUpdateTime
-            ) = Exchange(getExchange()).RateAndTimestamp_NFT(_contract, token);
+            ) = IExchange(getExchange()).RateAndTimestamp_NFT(_contract, token);
 
             // Emit Event ContractLiquidedEvent
             liquidationData = ContractLiquidationData_NFT(
@@ -510,12 +521,23 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
 
         emit ContractLiquidedEvent_NFT(liquidationData);
         // Transfer to lender collateral
+
+        (
+            ,
+            ,
+            ,
+            IDFY_Hard_Evaluation.CollectionStandard _collectionStandard
+        ) = IDFY_Hard_Evaluation(getEvaluation()).getEvaluationWithTokenId(
+                _collateral.nftContract,
+                _collateral.nftTokenId
+            );
         PawnNFTLib.safeTranferNFTToken(
             _contract.terms.nftCollateralAsset,
             address(this),
             _contract.terms.lender,
             _contract.terms.nftTokenId,
-            _contract.terms.nftCollateralAmount
+            _contract.terms.nftCollateralAmount,
+            _collectionStandard
         );
 
         // Adjust reputation score
@@ -558,6 +580,10 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
             _paymentRequests.length - 1
         ];
         _lastPaymentRequest.status = PaymentRequestStatusEnum_NFT.COMPLETE;
+
+        Collateral_NFT storage _collateral = collaterals[
+            _contract.nftCollateralId
+        ];
         // _collateral.status = CollateralStatus_NFT.COMPLETED;
         // PawnContract_NFT.updateCollateralStatus(
         //     _contract.nftCollateralId,
@@ -573,12 +599,23 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         emit PaymentRequestEvent_NFT(-1, _contractId, _lastPaymentRequest);
 
         // Execute: Transfer collateral to borrower
+
+        (
+            ,
+            ,
+            ,
+            IDFY_Hard_Evaluation.CollectionStandard _collectionStandard
+        ) = IDFY_Hard_Evaluation(getEvaluation()).getEvaluationWithTokenId(
+                _collateral.nftContract,
+                _collateral.nftTokenId
+            );
         PawnNFTLib.safeTranferNFTToken(
             _contract.terms.nftCollateralAsset,
             address(this),
             _contract.terms.borrower,
             _contract.terms.nftTokenId,
-            _contract.terms.nftCollateralAmount
+            _contract.terms.nftCollateralAmount,
+            _collectionStandard
         );
 
         // Adjust reputation score
@@ -762,14 +799,21 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         ];
 
         //get Address of EvaluationContract
-        (address _evaluationContract, ) = IDFY_Physical_NFTs(
-            _collateral.nftContract
-        ).getEvaluationOfToken(_collateral.nftTokenId);
+        // (address _evaluationContract, ) = IDFY_Physical_NFTs(
+        //     _collateral.nftContract
+        // ).getEvaluationOfToken(_collateral.nftTokenId);
 
         // get Evaluation from address of EvaluationContract
-        (, , , , address token, uint256 price, ) = AssetEvaluation(
-            _evaluationContract
-        ).tokenIdByEvaluation(_collateral.nftTokenId);
+        // (, , , , address token, uint256 price, ) = AssetEvaluation(
+        //     _evaluationContract
+        // ).tokenIdByEvaluation(_collateral.nftTokenId);
+
+        (address token, uint256 price, , ) = IDFY_Hard_Evaluation(
+            getEvaluation()
+        ).getEvaluationWithTokenId(
+                _collateral.nftContract,
+                _collateral.nftTokenId
+            );
 
         (
             uint256 remainingRepayment,
@@ -789,7 +833,7 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         (
             uint256 _collateralPerRepaymentTokenExchangeRate,
             uint256 _collateralPerLoanAssetExchangeRate
-        ) = Exchange(getExchange())
+        ) = IExchange(getExchange())
                 .collateralPerRepaymentAndLoanTokenExchangeRate_NFT(
                     _contract,
                     token
@@ -891,7 +935,7 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
 
     /**========================= */
 
-    function signature() public view override returns (bytes4) {
+    function signature() public pure override returns (bytes4) {
         return type(IPawnNFT).interfaceId;
     }
 
@@ -900,21 +944,6 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
     }
 
     /**=========================== */
-
-    function getReputation() internal view returns (address) {
-        return
-            HubInterface(hubContract).getContractAddress(
-                type(IReputation).interfaceId
-            );
-    }
-
-    /**================== Exchange======= */
-    function getExchange() internal view returns (address) {
-        return
-            HubInterface(hubContract).getContractAddress(
-                type(IExchange).interfaceId
-            );
-    }
 
     function getPawnNFT() internal view returns (address) {
         return

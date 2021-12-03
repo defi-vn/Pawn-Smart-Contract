@@ -14,6 +14,7 @@ import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "../libs/CommonLib.sol";
 import "./HubLib.sol";
 import "./HubInterface.sol";
+import "../pawn-nft-v2/ILoanNFT.sol";
 
 contract Hub is
     Initializable,
@@ -76,6 +77,14 @@ contract Hub is
         grantRole(HubRoleLib.EVALUATOR_ROLE, _newEvaluationRole);
     }
 
+    function setRolePawnNFTContract()
+        external
+        onlyRole(HubRoleLib.DEFAULT_ADMIN_ROLE)
+    {
+        address _pawnNFT = ContractRegistry[type(ILoanNFT).interfaceId];
+        grantRole(HubRoleLib.OPERATOR_ROLE, _pawnNFT);
+    }
+
     modifier whenContractNotPaused() {
         _whenNotPaused();
         _;
@@ -132,7 +141,6 @@ contract Hub is
     function registerContract(bytes4 signature, address contractAddress)
         external
         override
-        onlyRole(HubRoleLib.DEFAULT_ADMIN_ROLE)
     {
         ContractRegistry[signature] = contractAddress;
         numContract++;

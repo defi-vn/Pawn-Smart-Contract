@@ -17,6 +17,7 @@ import "../interface/IDFY_Hard_721.sol";
 import "../interface/IDFY_Hard_1155.sol";
 import "./Hard_Evaluation_Lib.sol";
 import "../../hub/HubLib.sol";
+import "../../hub/HubInterface.sol";
 import "../../../base/BaseContract.sol";
 
 contract Hard_Evaluation is
@@ -47,10 +48,10 @@ contract Hard_Evaluation is
     CountersUpgradeable.Counter private _totalEvaluation;
 
     // Evaluation fee
-    uint256 public evaluationFee;
+    // uint256 public evaluationFee;
 
-    // Minting fee
-    uint256 public mintingFee;
+    // // Minting fee
+    // uint256 public mintingFee;
 
     // White list evaluation fee
     // Address evaluation fee => fee
@@ -72,6 +73,12 @@ contract Hard_Evaluation is
     // Asset id => list appointment id
     mapping(uint256 => uint256[]) public appointmentListOfAsset;
 
+    mapping(address => mapping(uint256 => Evaluation))
+        public evaluationWithTokenId;
+
+    // mapping(address => mapping(uint256 => Evaluation))
+    //     public evaluation1155WithTokenId;
+
     // Mapping evaluation list
     // Evaluation id => list evaluation
     mapping(uint256 => Evaluation) public evaluationList;
@@ -82,19 +89,19 @@ contract Hard_Evaluation is
 
     // Mapping asset 721 of token id
     // Token id => asset 721
-    mapping(uint256 => Asset) public asset721OfTokenId;
+    //  mapping(uint256 => Asset) public asset721OfTokenId;
 
     // Mapping evaluation 721 of token id
     // Token id => evaluation 721
-    mapping(uint256 => Evaluation) public evaluation721OfTokenId;
+    //  mapping(uint256 => Evaluation) public evaluation721OfTokenId;
 
     // Mapping asset 1155 of token id
     // Token id => asset 1155
-    mapping(uint256 => Asset) public asset1155OfTokenId;
+    // mapping(uint256 => Asset) public asset1155OfTokenId;
 
     // Mapping evaluation 1155 of token id
     // Token id => evaluation 1155
-    mapping(uint256 => Evaluation) public evaluation1155OfTokenId;
+    //  mapping(uint256 => Evaluation) public evaluation1155OfTokenId;
 
     modifier onlyRoleEvaluator() {
         require(
@@ -113,7 +120,7 @@ contract Hard_Evaluation is
                 HubRoleLib.OPERATOR_ROLE,
                 msg.sender
             ),
-            "abcsd"
+            "is not admin"
         );
         _;
     }
@@ -136,8 +143,12 @@ contract Hard_Evaluation is
         hubContract = _hubContract;
     }
 
-    function signature() external pure override returns (bytes4) {
+    function signature() public pure override returns (bytes4) {
         return type(IDFY_Hard_Evaluation).interfaceId;
+    }
+
+    function RegistrywithHubContract() external {
+        HubInterface(hubContract).registerContract(signature(), address(this));
     }
 
     function supportsInterface(bytes4 interfaceId)
@@ -204,6 +215,31 @@ contract Hard_Evaluation is
         uint256 _newMintingFee
     ) external override onlyRoleAdmin {
         _addWhiteListMintingFee(_newAddressMintingFee, _newMintingFee);
+    }
+
+    function getEvaluationWithTokenId(
+        address addressCollection,
+        uint256 tokenId
+    )
+        external
+        view
+        override
+        returns (
+            address _currency,
+            uint256 _price,
+            uint256 _depreciationRate,
+            CollectionStandard _collectionStandard
+        )
+    {
+        _currency = evaluationWithTokenId[addressCollection][tokenId].currency;
+
+        _price = evaluationWithTokenId[addressCollection][tokenId].price;
+
+        _depreciationRate = evaluationWithTokenId[addressCollection][tokenId]
+            .depreciationRate;
+
+        _collectionStandard = evaluationWithTokenId[addressCollection][tokenId]
+            .collectionStandard;
     }
 
     function createAssetRequest(
@@ -619,15 +655,23 @@ contract Hard_Evaluation is
 
         _evaluation.status = EvaluationStatus.NFT_CREATED;
 
-        if (_asset.collectionStandard == CollectionStandard.NFT_HARD_721) {
-            asset721OfTokenId[tokenId] = _asset;
+        evaluationWithTokenId[_evaluation.collectionAddress][
+            tokenId
+        ] = _evaluation;
 
-            evaluation721OfTokenId[tokenId] = _evaluation;
-        } else {
-            asset1155OfTokenId[tokenId] = _asset;
-
-            evaluation1155OfTokenId[tokenId] = _evaluation;
-        }
+        // if (_asset.collectionStandard == CollectionStandard.NFT_HARD_721) {
+        //     // asset721OfTokenId[tokenId] = _asset;
+        //     // evaluation721OfTokenId[tokenId] = _evaluation;
+        //     evaluation721WithTokenId[_evaluation.collectionAddress][
+        //         tokenId
+        //     ] = _evaluation;
+        // } else {
+        //     // asset1155OfTokenId[tokenId] = _asset;
+        //     // evaluation1155OfTokenId[tokenId] = _evaluation;
+        //     evaluation1155WithTokenId[_evaluation.collectionAddress][
+        //         tokenId
+        //     ] = _evaluation;
+        // }
 
         emit NFTEvent(tokenId, _nftCID, _amount, _asset, _evaluation);
     }

@@ -4,6 +4,7 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/utils/ERC1155HolderUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/utils/ERC721HolderUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
@@ -19,7 +20,7 @@ import "../evaluation/EvaluationContract.sol";
 import "../evaluation/IBEP20.sol";
 import "../reputation/IReputation.sol";
 import "../pawn-nft-v2/PawnNFTLib.sol";
-import "../exchange/Exchange.sol";
+// import "../exchange/Exchange.sol";
 import "../hub/Hub.sol";
 import "../hub/HubInterface.sol";
 import "../hub/HubLib.sol";
@@ -27,13 +28,16 @@ import "../exchange/IExchange.sol";
 import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import "../nft_evaluation/interface/IDFY_Hard_Evaluation.sol";
 
 abstract contract PawnNFTModel is
     Initializable,
     UUPSUpgradeable,
     PausableUpgradeable,
     ReentrancyGuardUpgradeable,
-    ERC165Upgradeable
+    ERC165Upgradeable,
+    ERC1155HolderUpgradeable,
+    ERC721HolderUpgradeable
 {
     // AssetEvaluation assetEvaluation;
 
@@ -66,7 +70,7 @@ abstract contract PawnNFTModel is
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC165Upgradeable)
+        override(ERC165Upgradeable, ERC1155ReceiverUpgradeable)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
@@ -186,7 +190,8 @@ abstract contract PawnNFTModel is
             IAccessControlUpgradeable(hubContract).hasRole(
                 HubRoleLib.DEFAULT_ADMIN_ROLE,
                 msg.sender
-            )
+            ),
+            "not admin"
         );
 
         _;
@@ -199,8 +204,31 @@ abstract contract PawnNFTModel is
             IAccessControlUpgradeable(hubContract).hasRole(
                 HubRoleLib.OPERATOR_ROLE,
                 msg.sender
-            )
+            ),
+            "not operator"
         );
         _;
+    }
+
+    function getEvaluation() internal view returns (address) {
+        return
+            HubInterface(hubContract).getContractAddress(
+                (type(IDFY_Hard_Evaluation).interfaceId)
+            );
+    }
+
+    function getReputation() internal view returns (address) {
+        return
+            HubInterface(hubContract).getContractAddress(
+                type(IReputation).interfaceId
+            );
+    }
+
+    /**================== Exchange======= */
+    function getExchange() internal view returns (address) {
+        return
+            HubInterface(hubContract).getContractAddress(
+                type(IExchange).interfaceId
+            );
     }
 }

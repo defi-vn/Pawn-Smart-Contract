@@ -5,6 +5,11 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
+import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol";
+import "../nft_evaluation/interface/IDFY_Hard_Evaluation.sol";
+
 /** ==================================Collateral============================ */
 
 // Enum
@@ -45,6 +50,11 @@ enum ContractLiquidedReasonType_NFT {
     RISK,
     UNPAID
 }
+
+// enum CollectionStandard {
+//     NFT_HARD_721,
+//     NFT_HARD_1155
+// }
 
 struct Collateral_NFT {
     address owner;
@@ -211,12 +221,48 @@ library PawnNFTLib {
         }
     }
 
+    // function safeTranferNFTToken(
+    //     address _nftToken,
+    //     address _from,
+    //     address _to,
+    //     uint256 _id,
+    //     uint256 _amount
+    // ) internal {
+    //     // check address token
+    //     require(
+    //         _nftToken != address(0),
+    //         "Address token must be different address(0)."
+    //     );
+
+    //     // check address from
+    //     require(
+    //         _from != address(0),
+    //         "Address from must be different address(0)."
+    //     );
+
+    //     // check address from
+    //     require(_to != address(0), "Address to must be different address(0).");
+
+    //     // Check amount token
+    //     //        require(_amount > 0, "Amount must be grean than 0.");
+
+    //     // Check balance of from,
+    //     require(
+    //         IERC721(_nftToken).balanceOf(_from) >= _amount,
+    //         "Your balance not enough."
+    //     );
+
+    //     // Transfer token
+    //     IERC721(_nftToken).safeTransferFrom(_from, _to, _id, "");
+    // }
+
     function safeTranferNFTToken(
         address _nftToken,
         address _from,
         address _to,
         uint256 _id,
-        uint256 _amount
+        uint256 _amount,
+        IDFY_Hard_Evaluation.CollectionStandard collectionStandard
     ) internal {
         // check address token
         require(
@@ -233,17 +279,34 @@ library PawnNFTLib {
         // check address from
         require(_to != address(0), "Address to must be different address(0).");
 
-        // Check amount token
-        //        require(_amount > 0, "Amount must be grean than 0.");
+        if (
+            collectionStandard ==
+            IDFY_Hard_Evaluation.CollectionStandard.NFT_HARD_721
+        ) {
+            // Check balance of from,
+            require(
+                IERC721Upgradeable(_nftToken).balanceOf(_from) >= _amount,
+                "Your balance not enough."
+            );
 
-        // Check balance of from,
-        require(
-            IERC721(_nftToken).balanceOf(_from) >= _amount,
-            "Your balance not enough."
-        );
+            // Transfer token
+            IERC721Upgradeable(_nftToken).safeTransferFrom(_from, _to, _id, "");
+        } else {
+            // Check balance of from,
+            require(
+                IERC1155Upgradeable(_nftToken).balanceOf(_from, _id) >= _amount,
+                "Your balance not enough."
+            );
 
-        // Transfer token
-        IERC721(_nftToken).safeTransferFrom(_from, _to, _id, "");
+            // Transfer token
+            IERC1155Upgradeable(_nftToken).safeTransferFrom(
+                _from,
+                _to,
+                _id,
+                _amount,
+                ""
+            );
+        }
     }
 
     /**
