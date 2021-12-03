@@ -35,7 +35,7 @@ contract Hard_Evaluation is
     using ERC165CheckerUpgradeable for address;
 
     // Admin address
-    address public adminAdress;
+    // address public adminAdress;
     address public hubContract;
 
     // Total asset
@@ -163,15 +163,15 @@ contract Hard_Evaluation is
             super.supportsInterface(interfaceId);
     }
 
-    function _setAdminAddress() internal {
-        // require(!_newAdminAddress.isContract(), "1"); // Address admin is contract
-        // require(_newAdminAddress != address(0), "2"); // Address admin not address 0
-        (adminAdress, ) = HubInterface(hubContract).getSystemConfig();
-    }
+    // function _setAdminAddress() internal {
+    //     // require(!_newAdminAddress.isContract(), "1"); // Address admin is contract
+    //     // require(_newAdminAddress != address(0), "2"); // Address admin not address 0
+    //     (adminAdress, ) = HubInterface(hubContract).getSystemConfig();
+    // }
 
-    function setAdminAddress() external override onlyRoleAdmin {
-        _setAdminAddress();
-    }
+    // function setAdminAddress() external override onlyRoleAdmin {
+    //     _setAdminAddress();
+    // }
 
     function _addWhiteListEvaluationFee(
         address _newAddressEvaluatonFee,
@@ -639,6 +639,8 @@ contract Hard_Evaluation is
                 _evaluation.depreciationRate
             );
         }
+
+        (address adminAdress, ) = HubInterface(hubContract).getSystemConfig();
 
         Hard_Evaluation_Lib.safeTransfer(
             _evaluation.mintingFeeAddress,
