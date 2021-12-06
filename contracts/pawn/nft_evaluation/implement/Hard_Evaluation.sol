@@ -476,6 +476,7 @@ contract Hard_Evaluation is
             mintingFee: whiteListMintingFee[_mintingFeeAddress],
             mintingFeeAddress: _mintingFeeAddress,
             collectionAddress: _asset.collectionAddress,
+            timeOfEvaluation: block.timestamp,
             collectionStandard: _asset.collectionStandard,
             status: EvaluationStatus.EVALUATED
         });

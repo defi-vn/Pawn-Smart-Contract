@@ -61,6 +61,7 @@ interface IDFY_Hard_Evaluation is BaseInterface {
         uint256 mintingFee;
         address mintingFeeAddress;
         address collectionAddress;
+        uint256 timeOfEvaluation;
         CollectionStandard collectionStandard;
         EvaluationStatus status;
     }
