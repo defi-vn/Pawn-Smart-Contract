@@ -84,11 +84,10 @@ abstract contract PawnNFTModel is
     //     exchange = Exchange(_exchange);
     // }
 
-    function getEvaluation() internal view returns (address) {
-        return
-            HubInterface(hubContract).getContractAddress(
-                (type(IDFY_Hard_Evaluation).interfaceId)
-            );
+    function getEvaluation() internal view returns (address _Evaluation) {
+        (_Evaluation, ) = HubInterface(contractHub).getContractAddress(
+            (type(IDFY_Hard_Evaluation).interfaceId)
+        );
     }
 
     function getReputation()
@@ -96,14 +95,14 @@ abstract contract PawnNFTModel is
         view
         returns (address _ReputationAddress)
     {
-        (_ReputationAddress, ) = HubInterface(hubContract).getContractAddress(
+        (_ReputationAddress, ) = HubInterface(contractHub).getContractAddress(
             (type(IDFY_Hard_Evaluation).interfaceId)
         );
     }
 
     /**================== Exchange======= */
     function getExchange() internal view returns (address _exchangeAddress) {
-        (_exchangeAddress, ) = HubInterface(hubContract).getContractAddress(
+        (_exchangeAddress, ) = HubInterface(contractHub).getContractAddress(
             type(IExchange).interfaceId
         );
     }

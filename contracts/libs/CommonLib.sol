@@ -68,6 +68,20 @@ library CommonLib {
         }
     }
 
+    function calculateAmount(address _token, address from)
+        internal
+        view
+        returns (uint256 _amount)
+    {
+        if (_token == address(0)) {
+            // BNB
+            _amount = from.balance;
+        } else {
+            // ERC20
+            _amount = IERC20Upgradeable(_token).balanceOf(from);
+        }
+    }
+
     /**
      * @dev Calculate fee of system
      * @param  amount amount charged to the system

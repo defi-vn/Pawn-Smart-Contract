@@ -9,9 +9,8 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
-import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "../interface/IDFY_Hard_721.sol";
+import "../interface/IDFY_Hard_Collection.sol";
 
 contract DFY_Hard_721 is
     AccessControl,
@@ -65,11 +64,14 @@ contract DFY_Hard_721 is
         address payable _owner
     ) ERC721(_name, _symbol) {
         factory = msg.sender;
+
         originalCreator = _owner;
         collectionCID = _collectionCID;
         defaultRoyaltyRate = _defaultRoyaltyRate;
+
         _setupRole(DEFAULT_ADMIN_ROLE, _owner);
         _setupRole(MINTER_ROLE, _owner);
+
         if (
             _evaluationAddress.isContract() && _evaluationAddress != address(0)
         ) {

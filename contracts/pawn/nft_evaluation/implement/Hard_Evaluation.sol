@@ -1,34 +1,19 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165CheckerUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/IAccessControlUpgradeable.sol";
+import "../../../hub/HubLib.sol";
+import "../../../hub/HubInterface.sol";
+import "../../../base/BaseContract.sol";
 import "../interface/IDFY_Hard_Evaluation.sol";
 import "../interface/IDFY_Hard_721.sol";
 import "../interface/IDFY_Hard_1155.sol";
-import "./Hard_Evaluation_Lib.sol";
-import "../../hub/HubLib.sol";
-import "../../hub/HubInterface.sol";
-import "../../../base/BaseContract.sol";
 
-contract Hard_Evaluation is
-    Initializable,
-    UUPSUpgradeable,
-    PausableUpgradeable,
-    ReentrancyGuardUpgradeable,
-    ERC165Upgradeable,
-    IDFY_Hard_Evaluation,
-    BaseContract
-{
+// import "./CommonLib.sol";
+
+contract Hard_Evaluation is IDFY_Hard_Evaluation, BaseContract {
     using CountersUpgradeable for CountersUpgradeable.Counter;
     using AddressUpgradeable for address;
     using SafeMathUpgradeable for uint256;
@@ -46,14 +31,6 @@ contract Hard_Evaluation is
 
     // Total evaluation
     CountersUpgradeable.Counter private _totalEvaluation;
-
-    // White list evaluation fee
-    // Address evaluation fee => fee
-    // mapping(address => uint256) public whiteListEvaluationFee;
-
-    // // White list minting fee
-    // // Address minting fee => fee
-    // mapping(address => uint256) public whiteListMintingFee;
 
     // white list Fee
     mapping(address => WhiteListFee) public WhiteListFees;
@@ -81,31 +58,14 @@ contract Hard_Evaluation is
     // Asset id => list evaluation id;
     mapping(uint256 => uint256[]) public evaluationListOfAsset;
 
-    modifier onlyRoleEvaluator() {
-        require(
-            IAccessControlUpgradeable(hubContract).hasRole(
-                HubRoles.EVALUATOR_ROLE,
-                msg.sender
-            ),
-            "0"
-        );
-        _;
-    }
-
-    modifier onlyAdmin() {
-        require(
-            IAccessControlUpgradeable(hubContract).hasRole(
-                HubRoles.OPERATOR_ROLE,
-                msg.sender
-            ),
-            "is not admin"
-        );
+    modifier onlyEvaluator() {
+        _onlyRole(HubRoles.EVALUATOR_ROLE);
         _;
     }
 
     function add(uint256 a, uint256 b)
         external
-        onlyRoleEvaluator
+        onlyEvaluator
         returns (uint256)
     {
         return a + b;
@@ -137,29 +97,6 @@ contract Hard_Evaluation is
             super.supportsInterface(interfaceId);
     }
 
-    // function _setAdminAddress() internal {
-    //     // require(!_newAdminAddress.isContract(), "1"); // Address admin is contract
-    //     // require(_newAdminAddress != address(0), "2"); // Address admin not address 0
-    //     (adminAdress, ) = HubInterface(hubContract).getSystemConfig();
-    // }
-
-    // function setAdminAddress() external override onlyRoleAdmin {
-    //     _setAdminAddress();
-    // }
-
-    // function _addWhiteListEvaluationFee(
-    //     address _newAddressEvaluatonFee,
-    //     uint256 _newEvaluationFee
-    // ) internal {
-    //     if (_newAddressEvaluatonFee != address(0)) {
-    //         require(_newAddressEvaluatonFee.isContract(), "3"); // Address evaluation fee is contract
-    //     }
-
-    //     require(_newEvaluationFee > 0, "4"); // Evaluation fee than more 0
-
-    //     whiteListEvaluationFee[_newAddressEvaluatonFee] = _newEvaluationFee;
-    // }
-
     function _addWhiteFee(
         address _newAddressFee,
         uint256 _newEvaluationFee,
@@ -181,16 +118,9 @@ contract Hard_Evaluation is
         address _newAddressFee,
         uint256 _newEvaluationFee,
         uint256 _newMintingFee
-    ) external override onlyRoleAdmin {
+    ) external override onlyAdmin {
         _addWhiteFee(_newAddressFee, _newEvaluationFee, _newMintingFee);
     }
-
-    // function addWhiteListMintingFee(
-    //     address _newAddressMintingFee,
-    //     uint256 _newMintingFee
-    // ) external override onlyRoleAdmin {
-    //     _addWhiteListMintingFee(_newAddressMintingFee, _newMintingFee);
-    // }
 
     function getEvaluationWithTokenId(
         address addressCollection,
@@ -295,7 +225,7 @@ contract Hard_Evaluation is
         // update status asset
         _asset.status = AssetStatus.APPOINTMENTED;
 
-        Hard_Evaluation_Lib.safeTransfer(
+        CommonLib.safeTransfer(
             _evaluationFeeAddress,
             msg.sender,
             address(this),
@@ -317,7 +247,7 @@ contract Hard_Evaluation is
     function acceptAppointment(uint256 _appointmentId)
         external
         override
-        onlyRoleEvaluator
+        onlyEvaluator
         whenNotPaused
     {
         Appointment storage _appointment = appointmentList[_appointmentId];
@@ -341,7 +271,7 @@ contract Hard_Evaluation is
     function rejectAppointment(uint256 _appointmentId, string memory reason)
         external
         override
-        onlyRoleEvaluator
+        onlyEvaluator
         whenNotPaused
     {
         Appointment storage _appointment = appointmentList[_appointmentId];
@@ -358,7 +288,7 @@ contract Hard_Evaluation is
 
         _asset.status = AssetStatus.OPEN;
 
-        Hard_Evaluation_Lib.safeTransfer(
+        CommonLib.safeTransfer(
             _appointment.evaluationFeeAddress,
             address(this),
             _appointment.assetOwner,
@@ -391,7 +321,7 @@ contract Hard_Evaluation is
 
         _asset.status = AssetStatus.OPEN;
 
-        Hard_Evaluation_Lib.safeTransfer(
+        CommonLib.safeTransfer(
             _appointment.evaluationFeeAddress,
             address(this),
             _appointment.assetOwner,
@@ -413,7 +343,7 @@ contract Hard_Evaluation is
         string memory _evaluationCID,
         uint256 _depreciationRate,
         address _mintingFeeAddress
-    ) external override onlyRoleEvaluator whenNotPaused {
+    ) external override onlyEvaluator whenNotPaused {
         Appointment storage _appointment = appointmentList[_appointmentId];
 
         require(
@@ -462,7 +392,7 @@ contract Hard_Evaluation is
 
         _appointment.status = AppointmentStatus.EVALUATED;
 
-        Hard_Evaluation_Lib.safeTransfer(
+        CommonLib.safeTransfer(
             _appointment.evaluationFeeAddress,
             address(this),
             msg.sender,
@@ -538,7 +468,7 @@ contract Hard_Evaluation is
 
         _asset.status = AssetStatus.EVALUATED;
 
-        Hard_Evaluation_Lib.safeTransfer(
+        CommonLib.safeTransfer(
             _evaluation.mintingFeeAddress,
             msg.sender,
             address(this),
@@ -582,7 +512,7 @@ contract Hard_Evaluation is
         uint256 _evaluationId,
         uint256 _amount,
         string memory _nftCID
-    ) external override onlyRoleEvaluator whenNotPaused {
+    ) external override onlyEvaluator whenNotPaused {
         require(bytes(_nftCID).length > 0, "22"); // Invalid nftCID
 
         Evaluation storage _evaluation = evaluationList[_evaluationId];
@@ -622,7 +552,7 @@ contract Hard_Evaluation is
 
         (address adminAdress, ) = HubInterface(hubContract).getSystemConfig();
 
-        Hard_Evaluation_Lib.safeTransfer(
+        CommonLib.safeTransfer(
             _evaluation.mintingFeeAddress,
             address(this),
             adminAdress,
@@ -636,20 +566,6 @@ contract Hard_Evaluation is
         evaluationWithTokenId[_evaluation.collectionAddress][
             tokenId
         ] = _evaluation;
-
-        // if (_asset.collectionStandard == CollectionStandard.NFT_HARD_721) {
-        //     // asset721OfTokenId[tokenId] = _asset;
-        //     // evaluation721OfTokenId[tokenId] = _evaluation;
-        //     evaluation721WithTokenId[_evaluation.collectionAddress][
-        //         tokenId
-        //     ] = _evaluation;
-        // } else {
-        //     // asset1155OfTokenId[tokenId] = _asset;
-        //     // evaluation1155OfTokenId[tokenId] = _evaluation;
-        //     evaluation1155WithTokenId[_evaluation.collectionAddress][
-        //         tokenId
-        //     ] = _evaluation;
-        // }
 
         emit NFTEvent(tokenId, _nftCID, _amount, _asset, _evaluation);
     }

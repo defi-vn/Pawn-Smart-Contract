@@ -4,6 +4,7 @@ pragma solidity ^0.8.4;
 import "../../base/BaseInterface.sol";
 import "../pawn-p2p-v2/PawnLib.sol";
 import "../pawn-nft-v2/PawnNFTLib.sol";
+import "../pawn-base/IPawnNFTBase.sol";
 
 interface IExchange is BaseInterface {
     // lay gia cua dong BNB
@@ -78,17 +79,17 @@ interface IExchange is BaseInterface {
 
     function calculateInterest_NFT(
         uint256 _remainingLoan,
-        Contract_NFT memory _contract
+        IPawnNFTBase.NFTLoanContract memory _contract
     ) external view returns (uint256 interest);
 
     function calculatePenalty_NFT(
-        PaymentRequest_NFT memory _paymentrequest,
-        Contract_NFT memory _contract,
+        IPawnNFTBase.NFTPaymentRequest memory _paymentrequest,
+        IPawnNFTBase.NFTLoanContract memory _contract,
         uint256 _penaltyRate
     ) external pure returns (uint256 valuePenalty);
 
     function collateralPerRepaymentAndLoanTokenExchangeRate_NFT(
-        Contract_NFT memory _contract,
+        IPawnNFTBase.NFTLoanContract memory _contract,
         address _adEvaluationAsset
     )
         external
@@ -99,7 +100,7 @@ interface IExchange is BaseInterface {
         );
 
     function RateAndTimestamp_NFT(
-        Contract_NFT memory _contract,
+        IPawnNFTBase.NFTLoanContract memory _contract,
         address _adEvaluationAsset
     )
         external

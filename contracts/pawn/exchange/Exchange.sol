@@ -516,7 +516,7 @@ contract Exchange is BaseContract, IExchange {
 
     function calculateInterest_NFT(
         uint256 _remainingLoan,
-        Contract_NFT memory _contract
+        IPawnNFTBase.NFTLoanContract memory _contract
     ) external view override returns (uint256 interest) {
         uint256 _interestToUSD;
         uint256 _repaymentAssetToUSD;
@@ -557,7 +557,9 @@ contract Exchange is BaseContract, IExchange {
         }
 
         // tinh tien lai cho moi ky thanh toan
-        if (_contract.terms.repaymentCycleType == LoanDurationType_NFT.WEEK) {
+        if (
+            _contract.terms.repaymentCycleType == IEnums.LoanDurationType.WEEK
+        ) {
             // neu thoi gian vay theo tuan thì L = loanAmount * interest * 7 /365
             (, uint256 _interest) = SafeMathUpgradeable.tryDiv(
                 (_interestToUSD * 7),
@@ -598,12 +600,14 @@ contract Exchange is BaseContract, IExchange {
     /** =========== Tinh penalty ================ */
 
     function calculatePenalty_NFT(
-        PaymentRequest_NFT memory _paymentrequest,
-        Contract_NFT memory _contract,
+        IPawnNFTBase.NFTPaymentRequest memory _paymentrequest,
+        IPawnNFTBase.NFTLoanContract memory _contract,
         uint256 _penaltyRate
     ) external pure override returns (uint256 valuePenalty) {
         uint256 _interestOfPenalty;
-        if (_contract.terms.repaymentCycleType == LoanDurationType_NFT.WEEK) {
+        if (
+            _contract.terms.repaymentCycleType == IEnums.LoanDurationType.WEEK
+        ) {
             // neu ky vay theo tuan thi (L) = interest * 7 /365
             //_interestByLoanDurationType =(_contract.terms.interest * 7) / (100 * 365);
             (, uint256 saInterestByLoanDurationType) = SafeMathUpgradeable
@@ -649,7 +653,7 @@ contract Exchange is BaseContract, IExchange {
 
     // tinh ti gia cua repayment / collateralAsset  va   loanAsset / collateralAsset
     function collateralPerRepaymentAndLoanTokenExchangeRate_NFT(
-        Contract_NFT memory _contract,
+        IPawnNFTBase.NFTLoanContract memory _contract,
         address _adEvaluationAsset
     )
         external
@@ -715,7 +719,7 @@ contract Exchange is BaseContract, IExchange {
     /** ============ Tinh rate va thoi gian cap nhat Rate do ======================== */
     // lay Rate va thoi gian cap nhat ti gia do
     function RateAndTimestamp_NFT(
-        Contract_NFT memory _contract,
+        IPawnNFTBase.NFTLoanContract memory _contract,
         address _adEvaluationAsset
     )
         external
