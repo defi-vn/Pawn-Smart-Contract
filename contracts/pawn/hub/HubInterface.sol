@@ -79,11 +79,11 @@ interface HubInterface {
         external
         view
         returns (
-            uint256 _zoom,
-            uint256 _FeeRate,
-            uint256 _penaltyRate,
-            uint256 _prepaidFeedRate,
-            uint256 _lateThreshold
+            uint256 zoom,
+            uint256 feeRate,
+            uint256 penaltyRate,
+            uint256 prepaidFeeRate,
+            uint256 lateThreshold
         );
 
     function getWhitelistCollateral(address cryptoTokenAddress)
