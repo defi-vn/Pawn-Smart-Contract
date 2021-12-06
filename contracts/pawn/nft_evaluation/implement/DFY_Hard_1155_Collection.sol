@@ -9,7 +9,7 @@ import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeabl
 import "@openzeppelin/contracts-upgradeable/access/IAccessControlUpgradeable.sol";
 import "../interface/IDFY_Hard_Collection.sol";
 import "../implement/DFY_Hard_1155.sol";
-import "../../hub/HubLib.sol";
+import "../../../hub/HubLib.sol";
 import "../../../base/BaseContract.sol";
 
 contract DFY_Hard_1155_Collection is

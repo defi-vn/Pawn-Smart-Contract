@@ -16,7 +16,7 @@ import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeabl
 import "../interface/IDFY_Hard_721.sol";
 import "../../../base/BaseContract.sol";
 import "../interface/IDFY_Hard_Collection.sol";
-import "../../hub/HubInterface.sol";
+import "../../../hub/HubInterface.sol";
 
 contract DFY_Hard_721 is
     Initializable,

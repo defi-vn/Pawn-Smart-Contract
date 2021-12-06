@@ -6,76 +6,15 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeab
 import "./PawnNFTModel.sol";
 import "./IPawnNFT.sol";
 import "./PawnNFTLib.sol";
-import "../access/DFY-AccessControl.sol";
-import "../reputation/IReputation.sol";
 import "./ILoanNFT.sol";
 
-contract LoanContract is PawnNFTModel, IPawnNFT {
+contract LoanNFTContract is PawnNFTModel, ILoanNFT {
+
     using CountersUpgradeable for CountersUpgradeable.Counter;
     using AddressUpgradeable for address;
     using SafeMathUpgradeable for uint256;
 
     IPawnNFT public pawnContract;
-
-    /** ======================================= EVENT ================================== */
-
-    event CollateralEvent_NFT(
-        uint256 nftCollateralId,
-        Collateral_NFT data,
-        uint256 UID
-    );
-
-    //create offer & cancel
-    event OfferEvent_NFT(
-        uint256 offerId,
-        uint256 nftCollateralId,
-        Offer_NFT data,
-        uint256 UID
-    );
-
-    //accept offer
-    event LoanContractCreatedEvent_NFT(
-        uint256 exchangeRate,
-        address fromAddress,
-        uint256 contractId,
-        Contract_NFT data,
-        uint256 UID
-    );
-
-    //repayment
-    event PaymentRequestEvent_NFT(
-        int256 paymentRequestId,
-        uint256 contractId,
-        PaymentRequest_NFT data
-    );
-
-    // event RepaymentEvent_NFT(
-    //     uint256 contractId,
-    //     uint256 paidPenaltyAmount,
-    //     uint256 paidInterestAmount,
-    //     uint256 paidLoanAmount,
-    //     uint256 paidPenaltyFeeAmount,
-    //     uint256 paidInterestFeeAmount,
-    //     uint256 prepaidAmount,
-    //     uint256 requestId,
-    //     uint256 UID
-    // );
-
-    event RepaymentEvent_NFT(RepaymentEventData_NFT repaymentData);
-
-    //liquidity & defaul
-    event ContractLiquidedEvent_NFT(ContractLiquidationData_NFT liquidation);
-
-    event LoanContractCompletedEvent_NFT(uint256 contractId);
-
-    event CancelOfferEvent_NFT(
-        uint256 offerId,
-        uint256 nftCollateralId,
-        address offerOwner,
-        uint256 UID
-    );
-
-    event CountLateCount(uint256 LateThreshold, uint256 lateCount);
 
     // Total collateral
     CountersUpgradeable.Counter public numberCollaterals;
@@ -952,21 +891,20 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
             );
     }
 
-    /** ==================== Pawn Contract functions & states ==================== */
-    // ILoanNFT public PawnContract_NFT;
-
-    // function setPawnLoanContract() external onlyRole(DEFAULT_ADMIN_ROLE) {
-    //     PawnContract_NFT = ILoanNFT(getPawnNFT());
-    // }
-
-    /** ===================================== REPUTATION FUNCTIONS & STATES ===================================== */
-
-    // IReputation public reputation;
-
-    // function setReputationContract(address _reputationAddress)
-    //     external
-    //     onlyRole(DEFAULT_ADMIN_ROLE)
-    // {
-    //     reputation = IReputation(getReputation());
-    // }
+    /** ==================== User-reviews related functions ==================== */
+    function getContractInfoForReview(uint256 contractId)
+        external
+        view
+        override
+        returns (
+            address borrower,
+            address lender,
+            ContractStatus status
+        )
+    {
+        Contract storage _contract = contracts[contractId];
+        borrower = _contract.terms.borrower;
+        lender = _contract.terms.lender;
+        status = _contract.status;
+    }
 }

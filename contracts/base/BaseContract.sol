@@ -8,15 +8,18 @@ import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/IAccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol";
-import "../pawn/libs/CommonLib.sol";
-import "../pawn/hub/HubLib.sol";
-import "../pawn/hub/HubInterface.sol";
+import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
+import "../libs/CommonLib.sol";
+import "../hub/HubLib.sol";
+import "../hub/HubInterface.sol";
 import "./BaseInterface.sol";
 
 abstract contract BaseContract is
     Initializable,
     UUPSUpgradeable,
     PausableUpgradeable,
+    ReentrancyGuardUpgradeable,
     ERC165Upgradeable,
     BaseInterface
 {
@@ -33,15 +36,19 @@ abstract contract BaseContract is
         __Pausable_init();
     }
 
-    modifier onlyRoleAdmin() {
-        _onlyRole(HubRoleLib.DEFAULT_ADMIN_ROLE);
+    modifier onlyAdmin() {
+        _onlyRole(HubRoles.DEFAULT_ADMIN_ROLE);
         _;
     }
 
-    function _onlyRole(bytes32 role) private view {
-        require(
-            IAccessControlUpgradeable(contractHub).hasRole(role, msg.sender)
-        );
+    modifier onlyOperator() {
+        _onlyRole(HubRoles.OPERATOR_ROLE);
+        _;
+    }
+
+    modifier onlyPauser() {
+        _onlyRole(HubRoles.PAUSER_ROLE);
+        _;
     }
 
     modifier whenContractNotPaused() {
@@ -53,22 +60,47 @@ abstract contract BaseContract is
         require(!paused(), "Pausable: paused");
     }
 
-    function pause() external onlyRoleAdmin {
+    function _onlyRole(bytes32 role) internal view {
+        _checkRole(role, _msgSender());
+    }
+
+    /**
+     * @dev Revert with a standard message if msg.sender is missing `role`.
+     *
+     * The format of the revert reason is given by the following regular expression:
+     *
+     *  /^AccessControl: account (0x[0-9a-f]{40}) is missing role (0x[0-9a-f]{64})$/
+     */
+     function _checkRole(bytes32 role, address account) private view {
+        if (!IAccessControlUpgradeable(contractHub).hasRole(role, account)) {
+            revert(
+                string(
+                    abi.encodePacked(
+                        "AccessControl: account ",
+                        StringsUpgradeable.toHexString(uint160(account), 20),
+                        " is missing role ",
+                        StringsUpgradeable.toHexString(uint256(role), 32)
+                    )
+                )
+            );
+        }
+    }
+
+    function pause() external onlyPauser {
         _pause();
     }
 
-    function unPause() external onlyRoleAdmin {
+    function unPause() external onlyPauser {
         _unpause();
     }
 
-    function setContractHub(address _hub) external onlyRoleAdmin {
+    function setContractHub(address _hub) external override onlyAdmin {
         contractHub = _hub;
     }
 
-    // function _registerToHub() private {
-    //     HubInterface(contractHub).registerContract(this.signature(), address(this));
-    //     IAccessControlUpgradeable(contractHub).renounceRole(HubRoleLib.REGISTRANT, address(this));
-    // }
-
-    function _authorizeUpgrade(address) internal override onlyRoleAdmin {}
+    function _authorizeUpgrade(address)
+        internal
+        override
+        onlyAdmin
+    {}
 }

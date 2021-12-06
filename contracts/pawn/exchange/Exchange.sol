@@ -1,63 +1,43 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
-import "../pawn-p2p-v2/PawnLib.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
-//import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/IAccessControlUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol";
-import "./IExchange.sol";
+import "../../base/BaseContract.sol";
+import "../../hub/HubInterface.sol";
+import "../../hub/HubLib.sol";
+import "../pawn-p2p-v2/PawnLib.sol";
 import "../pawn-nft-v2/PawnNFTLib.sol";
+import "./IExchange.sol";
 
-import "../hub/HubInterface.sol";
-import "../hub/HubLib.sol";
-
-contract Exchange is
-    Initializable,
-    UUPSUpgradeable,
-    IExchange,
-    ERC165Upgradeable
+contract Exchange is 
+    BaseContract, 
+    IExchange 
 {
+    
     mapping(address => address) public ListCryptoExchange;
-    address hubContract;
 
-    function initialize(address _HubContractAddress) public initializer {
-        __UUPSUpgradeable_init();
-        hubContract = _HubContractAddress;
-
-        // _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+    function initialize(address _hub) public initializer {
+        __BaseContract_init(_hub);
     }
 
-    function setContractHub(address _contractHubAddress) external onlyAdmin {
-        hubContract = _contractHubAddress;
-    }
-
-    modifier onlyAdmin() {
-        // (, , address _admin, ) = HubInterface(hubContract).getSystemConfig();
-        // require(_admin == msg.sender, "is not admin");
-        require(
-            IAccessControlUpgradeable(hubContract).hasRole(
-                HubRoleLib.DEFAULT_ADMIN_ROLE,
-                msg.sender
-            )
-        );
-
-        _;
-    }
-
-    function _authorizeUpgrade(address) internal override onlyAdmin {}
+    /** ==================== Standard interface function implementations ==================== */
 
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(IERC165Upgradeable, ERC165Upgradeable)
+        override(ERC165Upgradeable, IERC165Upgradeable)
         returns (bool)
     {
-        return super.supportsInterface(interfaceId);
+        return
+            interfaceId == type(IExchange).interfaceId ||
+            super.supportsInterface(interfaceId);
     }
+
+    function signature() external pure override returns (bytes4) {
+        return type(IExchange).interfaceId;
+    }
+
+    /** ==================== Exchange functions ==================== */
 
     // set dia chi cac token ( crypto) tuong ung voi dia chi chuyen doi ra USD tren chain link
     function setCryptoExchange(
@@ -131,7 +111,12 @@ contract Exchange is
     function calculateLoanAmountAndExchangeRate(
         Collateral memory _col,
         PawnShopPackage memory _pkg
-    ) external view returns (uint256 loanAmount, uint256 exchangeRate) {
+    )
+        external
+        view
+        override
+        returns (uint256 loanAmount, uint256 exchangeRate)
+    {
         (loanAmount, exchangeRate, , , ) = calcLoanAmountAndExchangeRate(
             _col.collateralAddress,
             _col.amount,
@@ -150,6 +135,7 @@ contract Exchange is
     )
         public
         view
+        override
         returns (
             uint256 loanAmount,
             uint256 exchangeRate,
@@ -231,6 +217,7 @@ contract Exchange is
     function exchangeRateofOffer(address _adLoanAsset, address _adRepayment)
         external
         view
+        override
         returns (uint256 exchangeRateOfOffer)
     {
         //  exchangeRateOffer = loanAsset / repaymentAsset
@@ -258,7 +245,7 @@ contract Exchange is
     function calculateInterest(
         uint256 _remainingLoan,
         Contract memory _contract
-    ) external view returns (uint256 interest) {
+    ) external view override returns (uint256 interest) {
         uint256 _interestToUSD;
         uint256 _repaymentAssetToUSD;
         uint256 _interestByLoanDurationType;
@@ -345,7 +332,7 @@ contract Exchange is
         PaymentRequest memory _paymentrequest,
         Contract memory _contract,
         uint256 _penaltyRate
-    ) external pure returns (uint256 valuePenalty) {
+    ) external pure override returns (uint256 valuePenalty) {
         uint256 _interestOfPenalty;
         if (_contract.terms.repaymentCycleType == LoanDurationType.WEEK) {
             // neu ky vay theo tuan thi (L) = interest * 7 /365
@@ -393,6 +380,7 @@ contract Exchange is
     function RateAndTimestamp(Contract memory _contract)
         external
         view
+        override
         returns (
             uint256 _collateralExchangeRate,
             uint256 _loanExchangeRate,
@@ -440,6 +428,7 @@ contract Exchange is
     )
         external
         view
+        override
         returns (
             uint256 _collateralPerRepaymentTokenExchangeRate,
             uint256 _collateralPerLoanAssetExchangeRate
@@ -506,6 +495,7 @@ contract Exchange is
     function exchangeRateOfOffer_NFT(address _adLoanAsset, address _adRepayment)
         external
         view
+        override
         returns (uint256 exchangeRate)
     {
         // exchangeRate = loan / repayment
@@ -531,7 +521,7 @@ contract Exchange is
     function calculateInterest_NFT(
         uint256 _remainingLoan,
         Contract_NFT memory _contract
-    ) external view returns (uint256 interest) {
+    ) external view override returns (uint256 interest) {
         uint256 _interestToUSD;
         uint256 _repaymentAssetToUSD;
         uint256 _interestByLoanDurationType;
@@ -615,7 +605,7 @@ contract Exchange is
         PaymentRequest_NFT memory _paymentrequest,
         Contract_NFT memory _contract,
         uint256 _penaltyRate
-    ) external pure returns (uint256 valuePenalty) {
+    ) external pure override returns (uint256 valuePenalty) {
         uint256 _interestOfPenalty;
         if (_contract.terms.repaymentCycleType == LoanDurationType_NFT.WEEK) {
             // neu ky vay theo tuan thi (L) = interest * 7 /365
@@ -668,6 +658,7 @@ contract Exchange is
     )
         external
         view
+        override
         returns (
             uint256 _collateralPerRepaymentTokenExchangeRate,
             uint256 _collateralPerLoanAssetExchangeRate
@@ -733,6 +724,7 @@ contract Exchange is
     )
         external
         view
+        override
         returns (
             uint256 _collateralExchangeRate,
             uint256 _loanExchangeRate,
@@ -774,7 +766,7 @@ contract Exchange is
         }
     }
 
-    /** =================================== ROUNDING    ============================= */
+    /** =================================== ROUNDING ============================= */
 
     function DivRound(uint256 a) private pure returns (uint256) {
         // kiem tra so du khi chia 10**13. Neu lon hon 5 *10**12 khi chia xong thi lam tron len(+1) roi nhan lai voi 10**13
@@ -789,15 +781,5 @@ contract Exchange is
         }
         uint256 rouding = tm * 10**13;
         return rouding;
-    }
-
-    /**============  signature ====================*/
-
-    function signature() public view override returns (bytes4) {
-        return type(IExchange).interfaceId;
-    }
-
-    function RegistrywithHubContract() external {
-        HubInterface(hubContract).registerContract(signature(), address(this));
     }
 }
