@@ -1,11 +1,15 @@
 require('@nomiclabs/hardhat-ethers');
 
 const hre = require('hardhat');
-const { PawnConfig } = require('./.deployment_data.json');
+const { Proxies } = require('./.deployment_data.json');
 
 const ExchangeBuildName = "contracts/pawn/exchange/Exchange.sol:Exchange";
 
 const proxyType = { kind: "uups" };
+
+const proxies = Proxies.Dev1;
+
+const HubProxyAddr = proxies.HUB_CONTRACT_ADDRESS;
 
 const decimals      = 10**18;
 
@@ -19,7 +23,7 @@ async function main() {
   
     const ExchangeFactory   = await hre.ethers.getContractFactory(ExchangeBuildName);
     const ExchangeArtifact  = await hre.artifacts.readArtifact(ExchangeBuildName);
-    const ExchangeContract  = await hre.upgrades.deployProxy(ExchangeFactory, proxyType);
+    const ExchangeContract  = await hre.upgrades.deployProxy(ExchangeFactory,[HubProxyAddr], proxyType);
 
     await ExchangeContract.deployed();
 

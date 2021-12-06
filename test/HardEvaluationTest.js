@@ -6,25 +6,18 @@ const artifactHub = "Hub";
 const artifactPawnNFTContractV2 = "PawnNFTContractV2";
 const artifactHardEvaluation = "Hard_Evaluation";
 const { expect, assert } = require("chai");
-const BNB_ADDRESS = "0x0000000000000000000000000000000000000000";
-const decimals = 10 ** 18;
-const { time } = require("@openzeppelin/test-helpers");
+
 
 
 describe("Deploy DFY Factory", (done) => {
 
     let _DFYHard721Contract = null;
     let _loanTokenContract = null;
-    let _repaymentTokenContract = null;
     let _hubContract = null;
-    let _pawnNFTContractV2 = null;
     let _hardEvaluationContract = null;
 
     let _evaluationFeeRate = BigInt(10 * 10 ** 5);
     let _assetCID = "Example";
-    let _zoom = 1e5;
-    let _fistToken = 1;
-    let _loanAmount = BigInt(1 * 10 ** 18);
     let _tokenName = "DFYHard721NFT";
     let _symbol = "DFY";
     let _collectionCID = "EXAMPLE";
