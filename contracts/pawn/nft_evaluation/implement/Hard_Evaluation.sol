@@ -47,12 +47,6 @@ contract Hard_Evaluation is
     // Total evaluation
     CountersUpgradeable.Counter private _totalEvaluation;
 
-    // Evaluation fee
-    // uint256 public evaluationFee;
-
-    // // Minting fee
-    // uint256 public mintingFee;
-
     // White list evaluation fee
     // Address evaluation fee => fee
     mapping(address => uint256) public whiteListEvaluationFee;
@@ -76,9 +70,6 @@ contract Hard_Evaluation is
     mapping(address => mapping(uint256 => Evaluation))
         public evaluationWithTokenId;
 
-    // mapping(address => mapping(uint256 => Evaluation))
-    //     public evaluation1155WithTokenId;
-
     // Mapping evaluation list
     // Evaluation id => list evaluation
     mapping(uint256 => Evaluation) public evaluationList;
@@ -86,22 +77,6 @@ contract Hard_Evaluation is
     // Mapping list evaluation of asset
     // Asset id => list evaluation id;
     mapping(uint256 => uint256[]) public evaluationListOfAsset;
-
-    // Mapping asset 721 of token id
-    // Token id => asset 721
-    //  mapping(uint256 => Asset) public asset721OfTokenId;
-
-    // Mapping evaluation 721 of token id
-    // Token id => evaluation 721
-    //  mapping(uint256 => Evaluation) public evaluation721OfTokenId;
-
-    // Mapping asset 1155 of token id
-    // Token id => asset 1155
-    // mapping(uint256 => Asset) public asset1155OfTokenId;
-
-    // Mapping evaluation 1155 of token id
-    // Token id => evaluation 1155
-    //  mapping(uint256 => Evaluation) public evaluation1155OfTokenId;
 
     modifier onlyRoleEvaluator() {
         require(

@@ -1,12 +1,9 @@
 const hre = require("hardhat");
 const artifactDFYHard721 = "DFY_Hard_721";
 const artifactLoanToken = "LoanToken";
-const artifactRepaymentToken = "RepaymentToken";
 const artifactHub = "Hub";
-const artifactPawnNFTContractV2 = "PawnNFTContractV2";
 const artifactHardEvaluation = "Hard_Evaluation";
 const { expect, assert } = require("chai");
-
 
 
 describe("Deploy DFY Factory", (done) => {
@@ -15,7 +12,6 @@ describe("Deploy DFY Factory", (done) => {
     let _loanTokenContract = null;
     let _hubContract = null;
     let _hardEvaluationContract = null;
-
     let _evaluationFeeRate = BigInt(10 * 10 ** 5);
     let _assetCID = "Example";
     let _tokenName = "DFYHard721NFT";
@@ -27,22 +23,15 @@ describe("Deploy DFY Factory", (done) => {
         [
             _deployer,
             _borrower,
-            _lender,
             _evaluator,
             _feeWallet,
             _feeToken
-
         ] = await ethers.getSigners();
 
         // loan Token 
         const loanTokenFactory = await hre.ethers.getContractFactory(artifactLoanToken);
         const loanContract = await loanTokenFactory.deploy();
         _loanTokenContract = await loanContract.deployed();
-
-        // repayment Token 
-        const repaymentTokenFactory = await hre.ethers.getContractFactory(artifactRepaymentToken);
-        const repaymentContract = await repaymentTokenFactory.deploy();
-        _repaymentTokenContract = await repaymentContract.deployed();
 
         // contract Hub 
         const hubContractFactory = await hre.ethers.getContractFactory(artifactHub);
@@ -70,30 +59,15 @@ describe("Deploy DFY Factory", (done) => {
             { kind: "uups" }
         );
         _DFYHard721Contract = await DFYHard721Contract.deployed();
-
-
-        // pawnNFTContractV2 
-        const pawnNFTContractV2Factory = await hre.ethers.getContractFactory(artifactPawnNFTContractV2);
-        const pawnNFTContract = await pawnNFTContractV2Factory.deploy();
-        _pawnNFTContractV2 = await pawnNFTContract.deployed();
     });
 
     describe("unit PawnNFTContract V2  ", async () => {
 
-        it("hard evaluation addWhiteListEvaluationFee and addWhiteListMintingFee after check it information ", async () => {
+        it("borrower create asset request and check it information : ", async () => {
 
+            // addWhiteListEvaluationFee and addWhiteListMintingFee
             await _hardEvaluationContract.connect(_deployer).addWhiteListEvaluationFee(_loanTokenContract.address, _evaluationFeeRate);
             await _hardEvaluationContract.addWhiteListMintingFee(_loanTokenContract.address, _evaluationFeeRate);
-
-            // output : trả về _evaluationFeeRate tương ứng với address token 
-            let getWhiteListEvaluationFee = await _hardEvaluationContract.whiteListEvaluationFee(_loanTokenContract.address);
-            let getwhiteListMintingFee = await _hardEvaluationContract.whiteListMintingFee(_loanTokenContract.address);
-
-            console.log(getWhiteListEvaluationFee.toString(), "getWhiteListEvaluationFee");
-            console.log(getwhiteListMintingFee.toString(), "getwhiteListMintingFee");
-        });
-
-        it("borrower create asset request and check it information : ", async () => {
 
             // create Asset request 
             await _hardEvaluationContract.connect(_borrower).createAssetRequest(_assetCID, _DFYHard721Contract.address, 0);
@@ -286,6 +260,5 @@ describe("Deploy DFY Factory", (done) => {
             expect(balanceOfBorrowerBeforeTXT).to.equal(BigInt(balanceOfBorrowerAfterTXT));
             expect(balanceOfContractHardEvaluationBeforeTXT).to.equal(BigInt(balanceOfContractHardEvaluationAfterTXT));
         });
-
     });
 });
