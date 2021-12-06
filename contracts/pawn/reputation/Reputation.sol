@@ -288,8 +288,4 @@ contract Reputation is
     function setContractHub(address _contractHubAddress) external {
         hubContract = _contractHubAddress;
     }
-
-    function RegistrywithHubContract() external {
-        HubInterface(hubContract).registerContract(signature(), address(this));
-    }
 }

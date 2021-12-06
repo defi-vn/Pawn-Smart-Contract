@@ -34,7 +34,7 @@ abstract contract BaseContract is
     }
 
     modifier onlyRoleAdmin() {
-        _onlyRole(HubRoleLib.DEFAULT_ADMIN_ROLE);
+        _onlyRole(HubRoles.DEFAULT_ADMIN_ROLE);
         _;
     }
 

@@ -939,17 +939,12 @@ contract LoanContract is PawnNFTModel, IPawnNFT {
         return type(IPawnNFT).interfaceId;
     }
 
-    function RegistrywithHubContract() external {
-        HubInterface(hubContract).registerContract(signature(), address(this));
-    }
-
     /**=========================== */
 
-    function getPawnNFT() internal view returns (address) {
-        return
-            HubInterface(hubContract).getContractAddress(
-                type(ILoanNFT).interfaceId
-            );
+    function getPawnNFT() internal view returns (address _PawnAddress) {
+        (_PawnAddress, ) = HubInterface(hubContract).getContractAddress(
+            type(ILoanNFT).interfaceId
+        );
     }
 
     /** ==================== Pawn Contract functions & states ==================== */

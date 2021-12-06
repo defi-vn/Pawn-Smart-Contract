@@ -188,7 +188,7 @@ abstract contract PawnNFTModel is
         // require(_admin == msg.sender, "is not admin");
         require(
             IAccessControlUpgradeable(hubContract).hasRole(
-                HubRoleLib.DEFAULT_ADMIN_ROLE,
+                HubRoles.DEFAULT_ADMIN_ROLE,
                 msg.sender
             ),
             "not admin"
@@ -202,7 +202,7 @@ abstract contract PawnNFTModel is
         // require(_operator == msg.sender, "is not operator");
         require(
             IAccessControlUpgradeable(hubContract).hasRole(
-                HubRoleLib.OPERATOR_ROLE,
+                HubRoles.OPERATOR_ROLE,
                 msg.sender
             ),
             "not operator"
@@ -210,25 +210,30 @@ abstract contract PawnNFTModel is
         _;
     }
 
-    function getEvaluation() internal view returns (address) {
-        return
-            HubInterface(hubContract).getContractAddress(
-                (type(IDFY_Hard_Evaluation).interfaceId)
-            );
+    function getEvaluation()
+        internal
+        view
+        returns (address _EvaluationAddress)
+    {
+        (_EvaluationAddress, ) = HubInterface(hubContract).getContractAddress(
+            (type(IDFY_Hard_Evaluation).interfaceId)
+        );
     }
 
-    function getReputation() internal view returns (address) {
-        return
-            HubInterface(hubContract).getContractAddress(
-                type(IReputation).interfaceId
-            );
+    function getReputation()
+        internal
+        view
+        returns (address _ReputationAddress)
+    {
+        (_ReputationAddress, ) = HubInterface(hubContract).getContractAddress(
+            (type(IDFY_Hard_Evaluation).interfaceId)
+        );
     }
 
     /**================== Exchange======= */
-    function getExchange() internal view returns (address) {
-        return
-            HubInterface(hubContract).getContractAddress(
-                type(IExchange).interfaceId
-            );
+    function getExchange() internal view returns (address _exchangeAddress) {
+        (_exchangeAddress, ) = HubInterface(hubContract).getContractAddress(
+            type(IExchange).interfaceId
+        );
     }
 }

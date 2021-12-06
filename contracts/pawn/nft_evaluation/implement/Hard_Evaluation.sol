@@ -49,11 +49,14 @@ contract Hard_Evaluation is
 
     // White list evaluation fee
     // Address evaluation fee => fee
-    mapping(address => uint256) public whiteListEvaluationFee;
+    // mapping(address => uint256) public whiteListEvaluationFee;
 
-    // White list minting fee
-    // Address minting fee => fee
-    mapping(address => uint256) public whiteListMintingFee;
+    // // White list minting fee
+    // // Address minting fee => fee
+    // mapping(address => uint256) public whiteListMintingFee;
+
+    // white list Fee
+    mapping(address => WhiteListFee) public WhiteListFees;
 
     // Mapping asset list
     // Asset id => Asset
@@ -81,7 +84,7 @@ contract Hard_Evaluation is
     modifier onlyRoleEvaluator() {
         require(
             IAccessControlUpgradeable(hubContract).hasRole(
-                HubRoleLib.EVALUATOR_ROLE,
+                HubRoles.EVALUATOR_ROLE,
                 msg.sender
             ),
             "0"
@@ -92,7 +95,7 @@ contract Hard_Evaluation is
     modifier onlyAdmin() {
         require(
             IAccessControlUpgradeable(hubContract).hasRole(
-                HubRoleLib.OPERATOR_ROLE,
+                HubRoles.OPERATOR_ROLE,
                 msg.sender
             ),
             "is not admin"
@@ -122,10 +125,6 @@ contract Hard_Evaluation is
         return type(IDFY_Hard_Evaluation).interfaceId;
     }
 
-    function RegistrywithHubContract() external {
-        HubInterface(hubContract).registerContract(signature(), address(this));
-    }
-
     function supportsInterface(bytes4 interfaceId)
         public
         view
@@ -148,45 +147,50 @@ contract Hard_Evaluation is
     //     _setAdminAddress();
     // }
 
-    function _addWhiteListEvaluationFee(
-        address _newAddressEvaluatonFee,
-        uint256 _newEvaluationFee
-    ) internal {
-        if (_newAddressEvaluatonFee != address(0)) {
-            require(_newAddressEvaluatonFee.isContract(), "3"); // Address evaluation fee is contract
-        }
+    // function _addWhiteListEvaluationFee(
+    //     address _newAddressEvaluatonFee,
+    //     uint256 _newEvaluationFee
+    // ) internal {
+    //     if (_newAddressEvaluatonFee != address(0)) {
+    //         require(_newAddressEvaluatonFee.isContract(), "3"); // Address evaluation fee is contract
+    //     }
 
-        require(_newEvaluationFee > 0, "4"); // Evaluation fee than more 0
+    //     require(_newEvaluationFee > 0, "4"); // Evaluation fee than more 0
 
-        whiteListEvaluationFee[_newAddressEvaluatonFee] = _newEvaluationFee;
-    }
+    //     whiteListEvaluationFee[_newAddressEvaluatonFee] = _newEvaluationFee;
+    // }
 
-    function _addWhiteListMintingFee(
-        address _newAddressMintingFee,
+    function _addWhiteFee(
+        address _newAddressFee,
+        uint256 _newEvaluationFee,
         uint256 _newMintingFee
     ) internal {
-        if (_newAddressMintingFee != address(0)) {
-            require(_newAddressMintingFee.isContract(), "5"); // Address minting fee is contract
+        if (_newAddressFee != address(0)) {
+            require(_newAddressFee.isContract(), "5"); // Address minting fee is contract
         }
 
-        require(_newMintingFee > 0, "6"); // Minting fee than more 0
+        //    require(_newMintingFee > 0, "6"); // Minting fee than more 0
 
-        whiteListMintingFee[_newAddressMintingFee] = _newMintingFee;
+        WhiteListFees[_newAddressFee] = WhiteListFee(
+            _newEvaluationFee,
+            _newMintingFee
+        );
     }
 
-    function addWhiteListEvaluationFee(
-        address _newAddressEvaluatonFee,
-        uint256 _newEvaluationFee
-    ) external override onlyRoleAdmin {
-        _addWhiteListEvaluationFee(_newAddressEvaluatonFee, _newEvaluationFee);
-    }
-
-    function addWhiteListMintingFee(
-        address _newAddressMintingFee,
+    function addWhiteListFee(
+        address _newAddressFee,
+        uint256 _newEvaluationFee,
         uint256 _newMintingFee
     ) external override onlyRoleAdmin {
-        _addWhiteListMintingFee(_newAddressMintingFee, _newMintingFee);
+        _addWhiteFee(_newAddressFee, _newEvaluationFee, _newMintingFee);
     }
+
+    // function addWhiteListMintingFee(
+    //     address _newAddressMintingFee,
+    //     uint256 _newMintingFee
+    // ) external override onlyRoleAdmin {
+    //     _addWhiteListMintingFee(_newAddressMintingFee, _newMintingFee);
+    // }
 
     function getEvaluationWithTokenId(
         address addressCollection,
@@ -280,7 +284,7 @@ contract Hard_Evaluation is
             assetId: _assetId,
             assetOwner: _asset.owner,
             evaluator: _evaluator,
-            evaluationFee: whiteListEvaluationFee[_evaluationFeeAddress],
+            evaluationFee: WhiteListFees[_evaluationFeeAddress].EvaluationFee,
             evaluationFeeAddress: _evaluationFeeAddress,
             status: AppointmentStatus.OPEN
         });
@@ -295,7 +299,7 @@ contract Hard_Evaluation is
             _evaluationFeeAddress,
             msg.sender,
             address(this),
-            whiteListEvaluationFee[_evaluationFeeAddress]
+            WhiteListFees[_evaluationFeeAddress].EvaluationFee
         );
 
         // Update total appoinment
@@ -448,7 +452,7 @@ contract Hard_Evaluation is
             evaluator: msg.sender,
             currency: _currency,
             price: _price,
-            mintingFee: whiteListMintingFee[_mintingFeeAddress],
+            mintingFee: WhiteListFees[_mintingFeeAddress].MintingFee,
             mintingFeeAddress: _mintingFeeAddress,
             collectionAddress: _asset.collectionAddress,
             timeOfEvaluation: block.timestamp,

@@ -1,11 +1,12 @@
 require('@nomiclabs/hardhat-ethers');
 
 const hre = require('hardhat');
-const { PawnConfig } = require('./.deployment_data.json');
+const { Proxies } = require('./.deployment_data.json');
 
-const Collection721BuildName = "contracts/pawn/nft_evaluation/implement/DFY_Hard_721_Collection.sol:DFY_Hard_721_Collection";
-
+const Collection721BuildName = "contracts/pawn/nft_evaluation/implement/DFY_Hard_721_Factory.sol:DFY_Hard_721_Factory";
+const HubProxy = Proxies.Dev1.HUB_CONTRACT_ADDRESS;
 const proxyType = { kind: "uups" };
+const HubBuildName = "Hub";
 
 const decimals      = 10**18;
 
@@ -19,15 +20,25 @@ async function main() {
 
     const Collection721Factory = await hre.ethers.getContractFactory(Collection721BuildName);
     const Collection721Artifact = await hre.artifacts.readArtifact(Collection721BuildName);
-    const Collection721Contract = await hre.upgrades.deployProxy(Collection721Factory,["0x703204148eEa1a70b28BAAFa99f4d14bB7FA8Ea9"],proxyType);
+    const Collection721Contract = await hre.upgrades.deployProxy(Collection721Factory,[HubProxy],proxyType);
 
     await Collection721Contract.deployed();
+    const signature = await Collection721Contract.signature();
 
     console.log(`COLLECTION_721_CONTRACT_ADDRESS: ${Collection721Contract.address}`);
+    console.log(`Signature: \x1b[36m${signature}\x1b[0m`);
 
     implementtationAddress = await hre.upgrades.erc1967.getImplementationAddress(Collection721Contract.address);
     console.log(`${Collection721Artifact.contractName} implementation address: ${implementtationAddress}`);
+    
+    const HubFactory = await hre.ethers.getContractFactory(HubBuildName);
+    const HubArtifact = await hre.artifacts.readArtifact(HubBuildName);
+    const HubContract = HubFactory.attach(HubProxy);
 
+    console.log(`HUB_ADDRESS: \x1b[31m${HubContract.address}\x1b[0m`);
+    console.log(`Registering \x1b[36m${Collection721Artifact.contractName}\x1b[0m to \x1b[31m${HubArtifact.contractName}\x1b[0m...`);
+
+    await HubContract.registerContract(signature,Collection721Contract.address,Collection721Artifact.contractName);
     console.log("===========================\n\r");
 
 }

@@ -66,6 +66,11 @@ interface IDFY_Hard_Evaluation is BaseInterface {
         EvaluationStatus status;
     }
 
+    struct WhiteListFee {
+        uint256 EvaluationFee;
+        uint256 MintingFee;
+    }
+
     /* ===== Event ===== */
     event AssetEvent(uint256 assetId, Asset asset);
 
@@ -94,13 +99,9 @@ interface IDFY_Hard_Evaluation is BaseInterface {
     /* ===== Method ===== */
     // function setAdminAddress() external;
 
-    function addWhiteListEvaluationFee(
-        address _newAddressEvaluatonFee,
-        uint256 _newEvaluationFee
-    ) external;
-
-    function addWhiteListMintingFee(
-        address _newAddressMintingFee,
+    function addWhiteListFee(
+        address _newAddressFee,
+        uint256 _newEvaluationFee,
         uint256 _newMintingFee
     ) external;
 

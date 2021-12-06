@@ -2,7 +2,6 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts-upgradeable/access/IAccessControlUpgradeable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
@@ -11,10 +10,6 @@ import "./IPawn.sol";
 import "../reputation/IReputation.sol";
 import "../exchange/Exchange.sol";
 import "../pawn-p2p-v2/ILoan.sol";
-import "../hub/HubInterface.sol";
-import "../hub/HubLib.sol";
-import "../hub/Hub.sol";
-import "../exchange/IExchange.sol";
 
 contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     using SafeERC20Upgradeable for IERC20Upgradeable;
@@ -22,37 +17,35 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     using OfferLib for Offer;
     using PawnPackageLib for PawnShopPackage;
 
-    // mapping(address => uint256) public whitelistCollateral;
-    // address public operator;
-    // address public feeWallet = address(this);
-    // uint256 public penaltyRate;
-    // uint256 public systemFeeRate;
-    // uint256 public lateThreshold;
-    // uint256 public prepaidFeeRate;
-    // uint256 public ZOOM;
+    mapping(address => uint256) public whitelistCollateral;
+    address public operator;
+    address public feeWallet = address(this);
+    uint256 public penaltyRate;
+    uint256 public systemFeeRate;
+    uint256 public lateThreshold;
+    uint256 public prepaidFeeRate;
+    uint256 public ZOOM;
     bool public initialized = false;
-    address hubContract;
+    address public admin;
 
-    //  address public admin;
+    /**
+     * @dev initialize function
+     * @param _zoom is coefficient used to represent risk params
+     */
 
-    function initialize(address _HubContractAddress) external notInitialized {
-        //  ZOOM = _zoom;
+    function initialize(uint256 _zoom) external notInitialized {
+        ZOOM = _zoom;
         initialized = true;
-        hubContract = _HubContractAddress;
-        //  admin = address(msg.sender);
+        admin = address(msg.sender);
     }
 
-    function setContractHub(address _contractHubAddress) external onlyAdmin {
-        hubContract = _contractHubAddress;
+    function setOperator(address _newOperator) external onlyAdmin {
+        operator = _newOperator;
     }
 
-    // function setOperator(address _newOperator) external onlyAdmin {
-    //     operator = _newOperator;
-    // }
-
-    // function setFeeWallet(address _newFeeWallet) external onlyAdmin {
-    //     feeWallet = _newFeeWallet;
-    // }
+    function setFeeWallet(address _newFeeWallet) external onlyAdmin {
+        feeWallet = _newFeeWallet;
+    }
 
     function pause() external onlyAdmin {
         _pause();
@@ -62,41 +55,41 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         _unpause();
     }
 
-    // /**
-    //  * @dev set fee for each token
-    //  * @param _feeRate is percentage of tokens to pay for the transaction
-    //  */
+    /**
+     * @dev set fee for each token
+     * @param _feeRate is percentage of tokens to pay for the transaction
+     */
 
-    // function setSystemFeeRate(uint256 _feeRate) external onlyAdmin {
-    //     systemFeeRate = _feeRate;
-    // }
+    function setSystemFeeRate(uint256 _feeRate) external onlyAdmin {
+        systemFeeRate = _feeRate;
+    }
 
-    // /**
-    //  * @dev set fee for each token
-    //  * @param _feeRate is percentage of tokens to pay for the penalty
-    //  */
-    // function setPenaltyRate(uint256 _feeRate) external onlyAdmin {
-    //     penaltyRate = _feeRate;
-    // }
+    /**
+     * @dev set fee for each token
+     * @param _feeRate is percentage of tokens to pay for the penalty
+     */
+    function setPenaltyRate(uint256 _feeRate) external onlyAdmin {
+        penaltyRate = _feeRate;
+    }
 
-    // /**
-    //  * @dev set fee for each token
-    //  * @param _threshold is number of time allowed for late repayment
-    //  */
-    // function setLateThreshold(uint256 _threshold) external onlyAdmin {
-    //     lateThreshold = _threshold;
-    // }
+    /**
+     * @dev set fee for each token
+     * @param _threshold is number of time allowed for late repayment
+     */
+    function setLateThreshold(uint256 _threshold) external onlyAdmin {
+        lateThreshold = _threshold;
+    }
 
-    // function setPrepaidFeeRate(uint256 _feeRate) external onlyAdmin {
-    //     prepaidFeeRate = _feeRate;
-    // }
+    function setPrepaidFeeRate(uint256 _feeRate) external onlyAdmin {
+        prepaidFeeRate = _feeRate;
+    }
 
-    // function setWhitelistCollateral(address _token, uint256 _status)
-    //     external
-    //     onlyAdmin
-    // {
-    //     whitelistCollateral[_token] = _status;
-    // }
+    function setWhitelistCollateral(address _token, uint256 _status)
+        external
+        onlyAdmin
+    {
+        whitelistCollateral[_token] = _status;
+    }
 
     modifier notInitialized() {
         require(!initialized, "-2"); //initialized
@@ -109,13 +102,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     }
 
     function _onlyOperator() private view {
-        require(
-            IAccessControlUpgradeable(hubContract).hasRole(
-                HubRoleLib.OPERATOR_ROLE,
-                msg.sender
-            ),
-            "-0"
-        );
+        require(operator == msg.sender, "-0"); //operator
     }
 
     modifier onlyOperator() {
@@ -125,13 +112,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     }
 
     function _onlyAdmin() private view {
-        require(
-            IAccessControlUpgradeable(hubContract).hasRole(
-                HubRoleLib.DEFAULT_ADMIN_ROLE,
-                msg.sender
-            ),
-            "-1"
-        ); //admin
+        require(admin == msg.sender, "-1"); //admin
     }
 
     modifier onlyAdmin() {
@@ -159,7 +140,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         PawnLib.safeTransfer(
             _token,
             address(this),
-            msg.sender,
+            admin,
             PawnLib.calculateAmount(_token, address(this))
         );
     }
@@ -193,13 +174,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         LoanDurationType _expectedDurationType
     ) external payable whenContractNotPaused returns (uint256 _idx) {
         //check whitelist collateral token
-        // require(whitelistCollateral[_collateralAddress] == 1, "0"); //n-sup-col
-        require(
-            HubInterface(hubContract).getWhitelistCollateral(
-                _collateralAddress
-            ) == 1,
-            "0"
-        );
+        require(whitelistCollateral[_collateralAddress] == 1, "0"); //n-sup-col
         //validate: cannot use BNB as loanAsset
         require(_loanAsset != address(0), "1"); //bnb
 
@@ -350,14 +325,8 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     function _isValidCaller() private view {
         require(
             msg.sender == address(pawnLoanContract) ||
-                IAccessControlUpgradeable(hubContract).hasRole(
-                    HubRoleLib.OPERATOR_ROLE,
-                    msg.sender
-                ) ||
-                IAccessControlUpgradeable(hubContract).hasRole(
-                    HubRoleLib.DEFAULT_ADMIN_ROLE,
-                    msg.sender
-                ),
+                msg.sender == operator ||
+                msg.sender == admin,
             "0"
         ); // caller not allowed
     }
@@ -548,13 +517,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
         // Validataion logic: whitelist collateral, ranges must have upper greater than lower, duration type
         for (uint256 i = 0; i < _collateralAcceptance.length; i++) {
-            // require(whitelistCollateral[_collateralAcceptance[i]] == 1, "0"); // col
-            require(
-                HubInterface(hubContract).getWhitelistCollateral(
-                    _collateralAcceptance[i]
-                ) == 1,
-                "0"
-            );
+            require(whitelistCollateral[_collateralAcceptance[i]] == 1, "0"); // col
         }
 
         require(_loanAmountRange.lowerBound < _loanAmountRange.upperBound, "1"); // loan-rge
@@ -729,11 +692,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
         // Check for owner of packageId
         require(
-            pawnShopPackage.owner == msg.sender ||
-                IAccessControlUpgradeable(hubContract).hasRole(
-                    HubRoleLib.DEFAULT_ADMIN_ROLE,
-                    msg.sender
-                ),
+            pawnShopPackage.owner == msg.sender || msg.sender == operator,
             "0"
         ); // owner-or-oper
 
@@ -1218,18 +1177,17 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
     /** ===================================== 3.2. REPAYMENT ============================= */
 
-    // event RepaymentEvent(
-    //     uint256 contractId,
-    //     uint256 paidPenaltyAmount,
-    //     uint256 paidInterestAmount,
-    //     uint256 paidLoanAmount,
-    //     uint256 paidPenaltyFeeAmount,
-    //     uint256 paidInterestFeeAmount,
-    //     uint256 prepaidAmount,
-    //     uint256 paymentRequestId,
-    //     uint256 UID
-    // );
-    event RepaymentEvent(DataRepaymentEvent dataRepayment);
+    event RepaymentEvent(
+        uint256 contractId,
+        uint256 paidPenaltyAmount,
+        uint256 paidInterestAmount,
+        uint256 paidLoanAmount,
+        uint256 paidPenaltyFeeAmount,
+        uint256 paidInterestFeeAmount,
+        uint256 prepaidAmount,
+        uint256 paymentRequestId,
+        uint256 UID
+    );
 
     /**
         End lend period settlement and generate invoice for next period
@@ -1254,29 +1212,23 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
         // Validation: current payment request must active and not over due
         require(_paymentRequest.status == PaymentRequestStatusEnum.ACTIVE, "2"); // not-act
-
-        {
-            if (_paidPenaltyAmount + _paidInterestAmount > 0) {
-                require(
-                    block.timestamp <= _paymentRequest.dueDateTimestamp,
-                    "3"
-                ); // over-due
-            }
-            // Calculate paid amount / remaining amount, if greater => get paid amount
-            if (_paidPenaltyAmount > _paymentRequest.remainingPenalty) {
-                _paidPenaltyAmount = _paymentRequest.remainingPenalty;
-            }
-
-            if (_paidInterestAmount > _paymentRequest.remainingInterest) {
-                _paidInterestAmount = _paymentRequest.remainingInterest;
-            }
-
-            if (_paidLoanAmount > _paymentRequest.remainingLoan) {
-                _paidLoanAmount = _paymentRequest.remainingLoan;
-            }
+        if (_paidPenaltyAmount + _paidInterestAmount > 0) {
+            require(block.timestamp <= _paymentRequest.dueDateTimestamp, "3"); // over-due
         }
 
-        (uint256 ZOOM, , , , ) = HubInterface(hubContract).getPawnConfig();
+        // Calculate paid amount / remaining amount, if greater => get paid amount
+        if (_paidPenaltyAmount > _paymentRequest.remainingPenalty) {
+            _paidPenaltyAmount = _paymentRequest.remainingPenalty;
+        }
+
+        if (_paidInterestAmount > _paymentRequest.remainingInterest) {
+            _paidInterestAmount = _paymentRequest.remainingInterest;
+        }
+
+        if (_paidLoanAmount > _paymentRequest.remainingLoan) {
+            _paidLoanAmount = _paymentRequest.remainingLoan;
+        }
+
         // Calculate fee amount based on paid amount
         uint256 _feePenalty = PawnLib.calculateSystemFee(
             _paidPenaltyAmount,
@@ -1299,81 +1251,62 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         }
 
         // Update paid amount on payment request
-        {
-            _paymentRequest.remainingPenalty -= _paidPenaltyAmount;
-            _paymentRequest.remainingInterest -= _paidInterestAmount;
-            _paymentRequest.remainingLoan -= _paidLoanAmount;
+        _paymentRequest.remainingPenalty -= _paidPenaltyAmount;
+        _paymentRequest.remainingInterest -= _paidInterestAmount;
+        _paymentRequest.remainingLoan -= _paidLoanAmount;
+
+        // emit event repayment
+        emit RepaymentEvent(
+            _contractId,
+            _paidPenaltyAmount,
+            _paidInterestAmount,
+            _paidLoanAmount,
+            _feePenalty,
+            _feeInterest,
+            _prepaidFee,
+            _paymentRequest.requestId,
+            _UID
+        );
+
+        // If remaining loan = 0 => paidoff => execute release collateral
+        if (
+            _paymentRequest.remainingLoan == 0 &&
+            _paymentRequest.remainingPenalty == 0 &&
+            _paymentRequest.remainingInterest == 0
+        ) {
+            _returnCollateralToBorrowerAndCloseContract(_contractId);
         }
 
-        {
-            // emit event repayment
-            // emit RepaymentEvent(
-            //     _contractId,
-            //     _paidPenaltyAmount,
-            //     _paidInterestAmount,
-            //     _paidLoanAmount,
-            //     _feePenalty,
-            //     _feeInterest,
-            //     _prepaidFee,
-            //     _paymentRequest.requestId,
-            //     _UID
-            // );
-            DataRepaymentEvent memory dataRepayment = DataRepaymentEvent(
-                _contractId,
-                _paidPenaltyAmount,
-                _paidInterestAmount,
-                _paidLoanAmount,
-                _feePenalty,
-                _feeInterest,
-                _prepaidFee,
-                _paymentRequest.requestId,
-                _UID
+        if (_paidPenaltyAmount + _paidInterestAmount > 0) {
+            // Transfer fee to fee wallet
+            PawnLib.safeTransfer(
+                _contract.terms.repaymentAsset,
+                msg.sender,
+                feeWallet,
+                _feePenalty + _feeInterest
             );
-            emit RepaymentEvent(dataRepayment);
+
+            // Transfer penalty and interest to lender except fee amount
+            uint256 transferAmount = _paidPenaltyAmount +
+                _paidInterestAmount -
+                _feePenalty -
+                _feeInterest;
+            PawnLib.safeTransfer(
+                _contract.terms.repaymentAsset,
+                msg.sender,
+                _contract.terms.lender,
+                transferAmount
+            );
         }
 
-        {
-            // If remaining loan = 0 => paidoff => execute release collateral
-            if (
-                _paymentRequest.remainingLoan == 0 &&
-                _paymentRequest.remainingPenalty == 0 &&
-                _paymentRequest.remainingInterest == 0
-            ) {
-                _returnCollateralToBorrowerAndCloseContract(_contractId);
-            }
-
-            (address feeWallet, ) = HubInterface(hubContract).getSystemConfig();
-            if (_paidPenaltyAmount + _paidInterestAmount > 0) {
-                // Transfer fee to fee wallet
-                PawnLib.safeTransfer(
-                    _contract.terms.repaymentAsset,
-                    msg.sender,
-                    feeWallet,
-                    _feePenalty + _feeInterest
-                );
-
-                // Transfer penalty and interest to lender except fee amount
-                uint256 transferAmount = _paidPenaltyAmount +
-                    _paidInterestAmount -
-                    _feePenalty -
-                    _feeInterest;
-                PawnLib.safeTransfer(
-                    _contract.terms.repaymentAsset,
-                    msg.sender,
-                    _contract.terms.lender,
-                    transferAmount
-                );
-            }
-
-            if (_paidLoanAmount > 0) {
-                // Transfer loan amount and prepaid fee to lender
-                PawnLib.safeTransfer(
-                    _contract.terms.loanAsset,
-                    msg.sender,
-                    _contract.terms.lender,
-                    _paidLoanAmount + _prepaidFee
-                );
-            }
+        if (_paidLoanAmount > 0) {
+            // Transfer loan amount and prepaid fee to lender
+            PawnLib.safeTransfer(
+                _contract.terms.loanAsset,
+                msg.sender,
+                _contract.terms.lender,
+                _paidLoanAmount + _prepaidFee
+            );
         }
     }
 
@@ -1394,7 +1327,6 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
     ) external whenNotPaused onlyOperator {
         // Validate: Contract must active
         Contract storage _contract = contractMustActive(_contractId);
-        (uint256 ZOOM, , , , ) = HubInterface(hubContract).getPawnConfig();
 
         (
             uint256 remainingRepayment,
@@ -1501,7 +1433,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
         ContractLiquidedReasonType _reasonType
     ) internal {
         Contract storage _contract = contracts[_contractId];
-        (uint256 ZOOM, , , , ) = HubInterface(hubContract).getPawnConfig();
+
         // Execute: calculate system fee of collateral and transfer collateral except system fee amount to lender
         uint256 _systemFeeAmount = PawnLib.calculateSystemFee(
             _contract.terms.collateralAmount,
@@ -1541,7 +1473,7 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
             _contract.terms.lender,
             _liquidAmount
         );
-        (address feeWallet, ) = HubInterface(hubContract).getSystemConfig();
+
         // Transfer to system fee wallet fee amount
         PawnLib.safeTransfer(
             _contract.terms.collateralAsset,
@@ -1634,47 +1566,38 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
     /** ===================================== CONTRACT ADMIN ============================= */
 
-    // event AdminChanged(address _from, address _to);
+    event AdminChanged(address _from, address _to);
 
-    // function changeAdmin(address newAddress) external onlyAdmin {
-    //     address oldAdmin = admin;
-    //     admin = newAddress;
+    function changeAdmin(address newAddress) external onlyAdmin {
+        address oldAdmin = admin;
+        admin = newAddress;
 
-    //     emit AdminChanged(oldAdmin, newAddress);
-    // }
+        emit AdminChanged(oldAdmin, newAddress);
+    }
 
     /** ===================================== REPUTATION FUNCTIONS & STATES ===================================== */
 
     IReputation public reputation;
 
-    function setReputationContract() external onlyAdmin {
-        reputation = IReputation(
-            HubInterface(hubContract).getContractAddress(
-                type(IReputation).interfaceId
-            )
-        );
+    function setReputationContract(address _reputationAddress)
+        external
+        onlyAdmin
+    {
+        reputation = IReputation(_reputationAddress);
     }
 
     /** ==================== Exchange functions & states ==================== */
-    IExchange public exchange;
+    Exchange public exchange;
 
-    function setExchangeContract() external onlyAdmin {
-        exchange = IExchange(
-            HubInterface(hubContract).getContractAddress(
-                type(IExchange).interfaceId
-            )
-        );
+    function setExchangeContract(address _exchangeAddress) external onlyAdmin {
+        exchange = Exchange(_exchangeAddress);
     }
 
     /** ==================== Loan Contract functions & states ==================== */
     ILoan public pawnLoanContract;
 
-    function setPawnLoanContract() external onlyAdmin {
-        pawnLoanContract = ILoan(
-            HubInterface(hubContract).getContractAddress(
-                type(ILoan).interfaceId
-            )
-        );
+    function setPawnLoanContract(address _pawnLoanAddress) external onlyAdmin {
+        pawnLoanContract = ILoan(_pawnLoanAddress);
     }
 
     /** ==================== User-reviews related functions ==================== */

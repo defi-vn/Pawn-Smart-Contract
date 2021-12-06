@@ -22,16 +22,15 @@ abstract contract PawnModel is
     UUPSUpgradeable,
     DFYAccessControl,
     PausableUpgradeable,
-    ReentrancyGuardUpgradeable 
+    ReentrancyGuardUpgradeable
 {
-    
     /** ==================== Common state variables ==================== */
-    
+
     mapping(address => uint256) public whitelistCollateral;
     address public feeWallet;
     uint256 public lateThreshold;
     uint256 public penaltyRate;
-    uint256 public systemFeeRate; 
+    uint256 public systemFeeRate;
     uint256 public prepaidFeeRate;
     uint256 public ZOOM;
 
@@ -52,9 +51,9 @@ abstract contract PawnModel is
     /** ==================== Initialization ==================== */
 
     /**
-    * @dev initialize function
-    * @param _zoom is coefficient used to represent risk params
-    */
+     * @dev initialize function
+     * @param _zoom is coefficient used to represent risk params
+     */
     function __PawnModel_init(uint256 _zoom) internal initializer {
         __PawnModel_init_unchained();
 
@@ -79,53 +78,74 @@ abstract contract PawnModel is
     function _whenNotPaused() private view {
         require(!paused(), "Pausable: paused");
     }
-    
-    function pause() onlyRole(DEFAULT_ADMIN_ROLE) external {
+
+    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) {
         _pause();
     }
 
-    function unPause() onlyRole(DEFAULT_ADMIN_ROLE) external {
+    function unPause() external onlyRole(DEFAULT_ADMIN_ROLE) {
         _unpause();
     }
 
-    function setOperator(address _newOperator) onlyRole(DEFAULT_ADMIN_ROLE) external {
+    function setOperator(address _newOperator)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         // operator = _newOperator;
         grantRole(OPERATOR_ROLE, _newOperator);
     }
 
-    function setFeeWallet(address _newFeeWallet) onlyRole(DEFAULT_ADMIN_ROLE) external {
+    function setFeeWallet(address _newFeeWallet)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         feeWallet = _newFeeWallet;
     }
 
     /**
-    * @dev set fee for each token
-    * @param _feeRate is percentage of tokens to pay for the transaction
-    */
-    function setSystemFeeRate(uint256 _feeRate) external onlyRole(DEFAULT_ADMIN_ROLE) {
+     * @dev set fee for each token
+     * @param _feeRate is percentage of tokens to pay for the transaction
+     */
+    function setSystemFeeRate(uint256 _feeRate)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         systemFeeRate = _feeRate;
     }
 
     /**
-    * @dev set fee for each token
-    * @param _feeRate is percentage of tokens to pay for the penalty
-    */
-    function setPenaltyRate(uint256 _feeRate) external onlyRole(DEFAULT_ADMIN_ROLE) {
+     * @dev set fee for each token
+     * @param _feeRate is percentage of tokens to pay for the penalty
+     */
+    function setPenaltyRate(uint256 _feeRate)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         penaltyRate = _feeRate;
     }
 
     /**
-    * @dev set fee for each token
-    * @param _threshold is number of time allowed for late repayment
-    */
-    function setLateThreshold(uint256 _threshold) external onlyRole(DEFAULT_ADMIN_ROLE) {
+     * @dev set fee for each token
+     * @param _threshold is number of time allowed for late repayment
+     */
+    function setLateThreshold(uint256 _threshold)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         lateThreshold = _threshold;
     }
 
-    function setPrepaidFeeRate(uint256 _feeRate) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setPrepaidFeeRate(uint256 _feeRate)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         prepaidFeeRate = _feeRate;
     }
 
-    function setWhitelistCollateral(address _token, uint256 _status) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setWhitelistCollateral(address _token, uint256 _status)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         whitelistCollateral[_token] = _status;
     }
 
@@ -144,7 +164,7 @@ abstract contract PawnModel is
     }
 
     /** ==================== Reputation ==================== */
-    
+
     function setReputationContract(address _reputationAddress)
         external
         onlyRole(DEFAULT_ADMIN_ROLE)
@@ -155,8 +175,8 @@ abstract contract PawnModel is
     /** ==================== Exchange functions & states ==================== */
     Exchange public exchange;
 
-    function setExchangeContract(address _exchangeAddress) 
-        external 
+    function setExchangeContract(address _exchangeAddress)
+        external
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
         exchange = Exchange(_exchangeAddress);
@@ -164,11 +184,16 @@ abstract contract PawnModel is
 
     /** ==================== Standard interface function implementations ==================== */
 
-    function _authorizeUpgrade(address) internal override onlyRole(DEFAULT_ADMIN_ROLE) {}
+    function _authorizeUpgrade(address)
+        internal
+        override
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {}
 
-    function supportsInterface(bytes4 interfaceId) 
-        public view 
-        override(AccessControlUpgradeable) 
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(AccessControlUpgradeable)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);

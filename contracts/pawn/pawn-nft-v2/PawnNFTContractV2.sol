@@ -586,11 +586,11 @@ contract PawnNFTContractV2 is PawnNFTModel, ILoanNFT {
         require(
             msg.sender == getLoanContractNFT() ||
                 IAccessControlUpgradeable(hubContract).hasRole(
-                    HubRoleLib.OPERATOR_ROLE,
+                    HubRoles.OPERATOR_ROLE,
                     msg.sender
                 ) ||
                 IAccessControlUpgradeable(hubContract).hasRole(
-                    HubRoleLib.DEFAULT_ADMIN_ROLE,
+                    HubRoles.DEFAULT_ADMIN_ROLE,
                     msg.sender
                 ),
             "0"
@@ -616,16 +616,15 @@ contract PawnNFTContractV2 is PawnNFTModel, ILoanNFT {
         return type(ILoanNFT).interfaceId;
     }
 
-    function RegistrywithHubContract() external {
-        HubInterface(hubContract).registerContract(signature(), address(this));
-    }
-
     /**============get Loan Contract ================ */
 
-    function getLoanContractNFT() internal view returns (address) {
-        return
-            HubInterface(hubContract).getContractAddress(
-                type(IPawnNFT).interfaceId
-            );
+    function getLoanContractNFT()
+        internal
+        view
+        returns (address _LoanContractAddress)
+    {
+        (_LoanContractAddress, ) = HubInterface(hubContract).getContractAddress(
+            type(IPawnNFT).interfaceId
+        );
     }
 }

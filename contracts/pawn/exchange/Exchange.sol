@@ -40,7 +40,7 @@ contract Exchange is
         // require(_admin == msg.sender, "is not admin");
         require(
             IAccessControlUpgradeable(hubContract).hasRole(
-                HubRoleLib.DEFAULT_ADMIN_ROLE,
+                HubRoles.DEFAULT_ADMIN_ROLE,
                 msg.sender
             )
         );
@@ -795,9 +795,5 @@ contract Exchange is
 
     function signature() public view override returns (bytes4) {
         return type(IExchange).interfaceId;
-    }
-
-    function RegistrywithHubContract() external {
-        HubInterface(hubContract).registerContract(signature(), address(this));
     }
 }
