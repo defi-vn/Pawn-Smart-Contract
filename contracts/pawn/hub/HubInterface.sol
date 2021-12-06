@@ -3,11 +3,15 @@
 pragma solidity ^0.8.4;
 
 interface HubInterface {
+    /** Data Types */
+    struct Registry {
+        address contractAddress;
+        string contractName;
+    }
+
     struct SystemConfig {
         address systemFeeWallet;
         address systemFeeToken;
-        // address Admin;
-        // address Operator;
     }
 
     struct PawnConfig {
@@ -43,32 +47,33 @@ interface HubInterface {
     /** Functions */
     /** ROLES */
     function AdminRole() external pure returns (bytes32);
+
     function OperatorRole() external pure returns (bytes32);
+
     function PauserRole() external pure returns (bytes32);
+
     function EvaluatorRole() external pure returns (bytes32);
 
-    function registerContract(bytes4 nameContract, address contractAddress)
-        external;
+    function registerContract(
+        bytes4 signature,
+        address contractAddress,
+        string calldata contractName
+    ) external;
 
     function getContractAddress(bytes4 signature)
         external
         view
-        returns (address contractAddres);
+        returns (address contractAddress, string memory contractName);
 
     function getSystemConfig()
         external
         view
         returns (address feeWallet, address feeToken);
 
-    function getEvaluationContract(address _evaluationContractAddress)
+    function getWhitelistCollateral_NFT(address collectionAddress)
         external
         view
-        returns (uint256 _status);
-
-    function getWhitelistCollateral_NFT(address _token)
-        external
-        view
-        returns (uint256 _status);
+        returns (uint256 status);
 
     function getPawnNFTConfig()
         external
@@ -81,20 +86,20 @@ interface HubInterface {
             uint256 _lateThreshold
         );
 
-    function getWhitelistCollateral(address _token)
+    function getWhitelistCollateral(address cryptoTokenAddress)
         external
         view
-        returns (uint256 _status);
+        returns (uint256 status);
 
     function getPawnConfig()
         external
         view
         returns (
-            uint256 _zoom,
-            uint256 _FeeRate,
-            uint256 _penaltyRate,
-            uint256 _prepaidFeeRate,
-            uint256 _lateThreshold
+            uint256 zoom,
+            uint256 feeRate,
+            uint256 penaltyRate,
+            uint256 prepaidFeeRate,
+            uint256 lateThreshold
         );
 
     function getNFTCollectionConfig()
