@@ -2,8 +2,8 @@
 
 pragma solidity ^0.8.4;
 import "../../base/BaseInterface.sol";
-import "../pawn-nft-v2/PawnNFTLib.sol";
 import "../pawn-p2p-v2/PawnLib.sol";
+import "../pawn-nft-v2/PawnNFTLib.sol";
 
 interface IExchange is BaseInterface {
     // lay gia cua dong BNB

@@ -1,33 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-// Will be replaced by DFY-AccessControl when it's merged or later phases.
-import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeCastUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "../../base/BaseContract.sol";
 import "./IReputation.sol";
-import "../hub/HubInterface.sol";
 
-contract Reputation is
-    IReputation,
-    UUPSUpgradeable,
-    PausableUpgradeable,
-    AccessControlUpgradeable
-{
+contract Reputation is BaseContract, IReputation {
     using SafeMathUpgradeable for uint256;
     using SafeCastUpgradeable for uint256;
     using AddressUpgradeable for address;
-
-    /**
-     * @dev PAUSER_ROLE: those who can pause the contract
-     * by default this role is assigned _to the contract creator.
-     */
-    bytes32 public constant PAUSER_ROLE = keccak256("1"); //PAUSER_ROLE
 
     // mapping of user address's reputation score
     mapping(address => uint32) private _reputationScore;
@@ -36,26 +21,31 @@ contract Reputation is
 
     mapping(address => bool) whitelistedContractCaller;
 
-    event ReputationPointRewarded(
-        address _user,
-        uint256 _points,
-        ReasonType _reasonType
-    );
-    event ReputationPointReduced(
-        address _user,
-        uint256 _points,
-        ReasonType _reasonType
-    );
-
-    function initialize() public initializer {
-        __AccessControl_init();
-
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _setupRole(PAUSER_ROLE, msg.sender);
+    function initialize(address _hub) public initializer {
+        __BaseContract_init(_hub);
 
         //initialize Reward by Reason mapping values.
         _initializeRewardByReason();
     }
+
+    /** ==================== Standard interface function implementations ==================== */
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC165Upgradeable, IERC165Upgradeable)
+        returns (bool)
+    {
+        return
+            interfaceId == type(IReputation).interfaceId ||
+            super.supportsInterface(interfaceId);
+    }
+
+    function signature() external pure override returns (bytes4) {
+        return type(IReputation).interfaceId;
+    }
+
+    /** ==================== Reputation functions ==================== */
 
     // Reason for Reputation point adjustment
     /**
@@ -115,15 +105,9 @@ contract Reputation is
         _rewardByReason[ReasonType.BR_REVIEWED_BY_LENDER_5] = 5; // index: 24
     }
 
-    function initializeRewardByReason() external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function initializeRewardByReason() external onlyAdmin {
         _initializeRewardByReason();
     }
-
-    function _authorizeUpgrade(address)
-        internal
-        override
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {}
 
     function version() public pure virtual returns (string memory) {
         return "1.0.2";
@@ -161,10 +145,7 @@ contract Reputation is
      * @dev Add a contract address that use Reputation to whitelist
      * @param _caller is the contract address being whitelisted=
      */
-    function addWhitelistedContractCaller(address _caller)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function addWhitelistedContractCaller(address _caller) external onlyAdmin {
         // require(_caller.isContract(), "DFY: Setting reputation contract caller to a non-contract address");
         whitelistedContractCaller[_caller] = true;
     }
@@ -175,7 +156,7 @@ contract Reputation is
      */
     function removeWhitelistedContractCaller(address _caller)
         external
-        onlyRole(DEFAULT_ADMIN_ROLE)
+        onlyAdmin
     {
         delete whitelistedContractCaller[_caller];
     }
@@ -277,15 +258,5 @@ contract Reputation is
         _reputationScore[_from] = success == true ? result.toUint32() : 0;
 
         emit ReputationPointReduced(_from, _points, _reasonType);
-    }
-
-    function signature() public pure override returns (bytes4) {
-        return type(IReputation).interfaceId;
-    }
-
-    address hubContract;
-
-    function setContractHub(address _contractHubAddress) external {
-        hubContract = _contractHubAddress;
     }
 }

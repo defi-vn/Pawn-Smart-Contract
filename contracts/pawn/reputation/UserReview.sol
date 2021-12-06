@@ -2,21 +2,17 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
+import "../../base/BaseContract.sol";
 import "../reputation/IReputation.sol";
+import "../pawn-base/IPawnNFTBase.sol";
+import "../pawn-base/IEnums.sol";
 import "../pawn-p2p/IPawn.sol";
 import "../pawn-p2p-v2/ILoan.sol";
-import "../pawn-p2p-v2/PawnLib.sol";
-import "../pawn-nft/IPawnNFT.sol";
+import "../pawn-nft-v2/ILoanNFT.sol";
+import "./IUserReview.sol";
 
-contract UserReview is
-    Initializable,
-    UUPSUpgradeable,
-    AccessControlUpgradeable
-{
+contract UserReview is BaseContract, IUserReview {
     IReputation public reputation;
 
     address public pawnContract;
@@ -33,78 +29,72 @@ contract UserReview is
 
     address public pawnNFTContract;
 
-    struct Review {
-        address reviewee;
-        uint256 contractId;
-        uint256 points;
-        address contractOrigin;
-    }
-
-    event UserReviewSubmitted(
-        address reviewer,
-        address reviewee,
-        uint256 points,
-        uint256 contractId,
-        address contractOrigin,
-        IReputation.ReasonType reason
-    );
-
     /** ==================== Initialization ==================== */
 
     /**
      * @dev initialize function
      */
-    function initialize(
-        address _pawnContractAddress,
-        address _loanContractAddress,
-        address _pawnNFTContractAddress,
-        address _reputationContractAddress
-    ) public initializer {
-        __AccessControl_init();
-        __UUPSUpgradeable_init();
-
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-
-        pawnContract = _pawnContractAddress;
-        loanContract = _loanContractAddress;
-        pawnNFTContract = _pawnNFTContractAddress;
-        reputation = IReputation(_reputationContractAddress);
+    function initialize(address _hub) public initializer {
+        __BaseContract_init(_hub);
 
         _initializePointToRewardReason();
     }
 
+    // function initialize(
+    //     address _pawnContractAddress,
+    //     address _loanContractAddress,
+    //     address _pawnNFTContractAddress,
+    //     address _reputationContractAddress
+    // ) public initializer {
+    //     pawnContract    = _pawnContractAddress;
+    //     loanContract    = _loanContractAddress;
+    //     pawnNFTContract = _pawnNFTContractAddress;
+    //     reputation      = IReputation(_reputationContractAddress);
+
+    //     _initializePointToRewardReason();
+    // }
+
+    /** ==================== Standard interface function implementations ==================== */
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC165Upgradeable, IERC165Upgradeable)
+        returns (bool)
+    {
+        return
+            interfaceId == type(IUserReview).interfaceId ||
+            super.supportsInterface(interfaceId);
+    }
+
+    function signature() external pure override returns (bytes4) {
+        return type(IUserReview).interfaceId;
+    }
+
+    /** ==================== UserReview functions ==================== */
     function setReputationContract(address _reputationContractAddress)
         external
-        onlyRole(DEFAULT_ADMIN_ROLE)
+        onlyAdmin
     {
         reputation = IReputation(_reputationContractAddress);
     }
 
-    function setPawnContract(address _pawnContractAddress)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function setPawnContract(address _pawnContractAddress) external onlyAdmin {
         pawnContract = _pawnContractAddress;
     }
 
-    function setLoanContract(address _loanContractAddress)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function setLoanContract(address _loanContractAddress) external onlyAdmin {
         loanContract = _loanContractAddress;
     }
 
     function setPawnNFTContract(address _pawnNFTContractAddress)
         external
-        onlyRole(DEFAULT_ADMIN_ROLE)
+        onlyAdmin
     {
         pawnNFTContract = _pawnNFTContractAddress;
     }
 
-    function initializePointToRewardReason()
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function initializePointToRewardReason() external onlyAdmin {
         _initializePointToRewardReason();
     }
 
@@ -197,13 +187,13 @@ contract UserReview is
         (
             address borrower,
             address lender,
-            IPawnNFT.ContractStatus status
-        ) = IPawnNFT(pawnNFTContract).getContractInfoForReview(_contractId);
+            IEnums.ContractStatus status
+        ) = ILoanNFT(pawnNFTContract).getContractInfoForReview(_contractId);
 
         // Check contract status, must be Completed or Default
         require(
-            (status == IPawnNFT.ContractStatus.COMPLETED ||
-                status == IPawnNFT.ContractStatus.DEFAULT),
+            (status == IEnums.ContractStatus.COMPLETED ||
+                status == IEnums.ContractStatus.DEFAULT),
             "DFY: NFT loan contract is active"
         ); // Loan contract must not active
 
@@ -305,22 +295,5 @@ contract UserReview is
         address sender = _user != address(0) ? _user : _msgSender();
 
         return _listOfReviewByUser[sender][key];
-    }
-
-    /** ==================== Standard interface function implementations ==================== */
-
-    function _authorizeUpgrade(address)
-        internal
-        override
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {}
-
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(AccessControlUpgradeable)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
     }
 }

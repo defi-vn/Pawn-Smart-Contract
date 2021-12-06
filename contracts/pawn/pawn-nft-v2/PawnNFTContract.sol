@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.4;
+
 import "./PawnNFTModel.sol";
 import "./PawnNFTLib.sol";
 import "./IPawnNFT.sol";
@@ -10,7 +11,8 @@ import "./ILoanNFT.sol";
 // import "./IPawnNFT.sol";
 // import "../exchange/Exchange_NFT.sol";
 
-contract PawnNFTContractV2 is PawnNFTModel, ILoanNFT {
+contract PawnNFTContract is PawnNFTModel, IPawnNFT {
+    
     using AddressUpgradeable for address;
     using SafeMathUpgradeable for uint256;
     using CountersUpgradeable for CountersUpgradeable.Counter;

@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.4;
+
 import "../../base/BaseInterface.sol";
 
 interface IReputation is BaseInterface {
+    
     // Reason for Reputation point adjustment
     /**
      * @dev Reputation points in correspondence with ReasonType
@@ -35,6 +37,7 @@ interface IReputation is BaseInterface {
      * BR_KYC                    : +5    (25)
      */
 
+    /** Enums */
     enum ReasonType {
         LD_CREATE_PACKAGE,
         LD_CANCEL_PACKAGE,
@@ -63,6 +66,19 @@ interface IReputation is BaseInterface {
         BR_REVIEWED_BY_LENDER_5,
         BR_KYC
     }
+
+    /** Events */
+    event ReputationPointRewarded(
+        address _user,
+        uint256 _points,
+        ReasonType _reasonType
+    );
+    
+    event ReputationPointReduced(
+        address _user,
+        uint256 _points,
+        ReasonType _reasonType
+    );
 
     /**
      * @dev Get the reputation score of an account
