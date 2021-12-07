@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "../interface/IDFY_Hard_721.sol";
-import "../interface/IDFY_Hard_Collection.sol";
+import "../interface/IDFY_Hard_Factory.sol";
 
 contract DFY_Hard_721 is
     AccessControl,
