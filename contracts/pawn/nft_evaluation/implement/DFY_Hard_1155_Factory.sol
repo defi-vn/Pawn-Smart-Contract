@@ -9,21 +9,21 @@ import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeabl
 import "@openzeppelin/contracts-upgradeable/access/IAccessControlUpgradeable.sol";
 import "../../../hub/HubLib.sol";
 import "../../../base/BaseContract.sol";
-import "../interface/IDFY_Hard_Factory.sol";
+import "../interface/IDFY_1155_Hard_Factory.sol";
 import "../implement/DFY_Hard_1155.sol";
 
-contract DFY_Hard_1155_Factory is
+contract DFYHard1155Factory is
     Initializable,
     UUPSUpgradeable,
     PausableUpgradeable,
     ERC165Upgradeable,
-    IDFY_Hard_Factory,
+    IDFYHard1155Factory,
     BaseContract
 {
     address hubContract;
 
     // Mapping collection 1155 of owner
-    mapping(address => DFY_Hard_1155[]) public collections1155ByOwner;
+    mapping(address => DFYHard1155[]) public collections1155ByOwner;
 
     function initialize(address _hubContract) public initializer {
         __Pausable_init();
@@ -33,7 +33,7 @@ contract DFY_Hard_1155_Factory is
     }
 
     function signature() external pure override returns (bytes4) {
-        return type(IDFY_Hard_Factory).interfaceId;
+        return type(IDFYHard1155Factory).interfaceId;
     }
 
     function supportsInterface(bytes4 interfaceId)
@@ -43,7 +43,7 @@ contract DFY_Hard_1155_Factory is
         returns (bool)
     {
         return
-            interfaceId == type(IDFY_Hard_Factory).interfaceId ||
+            interfaceId == type(IDFYHard1155Factory).interfaceId ||
             super.supportsInterface(interfaceId);
     }
 
@@ -60,7 +60,7 @@ contract DFY_Hard_1155_Factory is
                 bytes(_collectionCID).length > 0,
             "Invalid collection"
         );
-        DFY_Hard_1155 _newCollection = new DFY_Hard_1155(
+        DFYHard1155 _newCollection = new DFYHard1155(
             _name,
             _symbol,
             _collectionCID,

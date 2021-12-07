@@ -86,7 +86,7 @@ abstract contract PawnNFTModel is
 
     function getEvaluation() internal view returns (address _Evaluation) {
         (_Evaluation, ) = HubInterface(contractHub).getContractAddress(
-            (type(IDFY_Hard_Evaluation).interfaceId)
+            (type(IDFYHardEvaluation).interfaceId)
         );
     }
 
@@ -96,7 +96,7 @@ abstract contract PawnNFTModel is
         returns (address _ReputationAddress)
     {
         (_ReputationAddress, ) = HubInterface(contractHub).getContractAddress(
-            (type(IDFY_Hard_Evaluation).interfaceId)
+            (type(IDFYHardEvaluation).interfaceId)
         );
     }
 

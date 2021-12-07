@@ -33,7 +33,6 @@ contract Hub is
     NFTMarketConfig public nftMarketConfig;
 
     // TODO: New state variables must go below this line -----------------------------
-    CountersUpgradeable.Counter public numberOfContract;
 
     /** ==================== Contract initializing & configuration ==================== */
     function initialize(
@@ -117,6 +116,12 @@ contract Hub is
         return HubRoles.EVALUATOR_ROLE;
     }
 
+    event NewContractAdded(
+        bytes4 signature,
+        address contractAddress,
+        string contractName
+    );
+
     /** ==================== Hub operation functions ==================== */
     function registerContract(
         bytes4 signature,
@@ -124,7 +129,8 @@ contract Hub is
         string calldata contractName
     ) external override onlyRole(HubRoles.REGISTRANT) {
         ContractRegistry[signature] = Registry(contractAddress, contractName);
-        numberOfContract.increment();
+
+        emit NewContractAdded(signature, contractAddress, contractName);
     }
 
     function getContractAddress(bytes4 signature)

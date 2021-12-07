@@ -9,12 +9,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 
 import "../interface/IDFY_Hard_1155.sol";
 
-contract DFY_Hard_1155 is
-    AccessControl,
-    IDFY_Hard_1155,
-    ERC1155,
-    ERC1155Burnable
-{
+contract DFYHard1155 is AccessControl, IDFYHard1155, ERC1155, ERC1155Burnable {
     using Counters for Counters.Counter;
     using Address for address;
 
@@ -85,7 +80,7 @@ contract DFY_Hard_1155 is
         returns (bool)
     {
         return
-            interfaceId == type(IDFY_Hard_1155).interfaceId ||
+            interfaceId == type(IDFYHard1155).interfaceId ||
             super.supportsInterface(interfaceId);
     }
 

@@ -3,7 +3,7 @@ pragma solidity ^0.8.4;
 
 import "../../../base/BaseInterface.sol";
 
-interface IDFY_Hard_Factory is BaseInterface {
+interface IDFYHard1155Factory is BaseInterface {
     /* ===== Enum ===== */
     enum CollectionStatus {
         OPEN

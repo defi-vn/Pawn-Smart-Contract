@@ -433,7 +433,7 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
             // (, , , , address token, , ) = AssetEvaluation(_evaluationContract)
             //     .tokenIdByEvaluation(_collateral.nftTokenId);
 
-            (address token, , , ) = IDFY_Hard_Evaluation(getEvaluation())
+            (address token, , , ) = IDFYHardEvaluation(getEvaluation())
                 .getEvaluationWithTokenId(
                     _collateral.nftContract,
                     _collateral.nftTokenId
@@ -471,8 +471,8 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
             ,
             ,
             ,
-            IDFY_Hard_Evaluation.CollectionStandard _collectionStandard
-        ) = IDFY_Hard_Evaluation(getEvaluation()).getEvaluationWithTokenId(
+            IDFYHardEvaluation.CollectionStandard _collectionStandard
+        ) = IDFYHardEvaluation(getEvaluation()).getEvaluationWithTokenId(
                 _collateral.nftContract,
                 _collateral.nftTokenId
             );
@@ -550,8 +550,8 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
             ,
             ,
             ,
-            IDFY_Hard_Evaluation.CollectionStandard _collectionStandard
-        ) = IDFY_Hard_Evaluation(getEvaluation()).getEvaluationWithTokenId(
+            IDFYHardEvaluation.CollectionStandard _collectionStandard
+        ) = IDFYHardEvaluation(getEvaluation()).getEvaluationWithTokenId(
                 _collateral.nftContract,
                 _collateral.nftTokenId
             );
@@ -758,9 +758,8 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
         //     _evaluationContract
         // ).tokenIdByEvaluation(_collateral.nftTokenId);
 
-        (address token, uint256 price, , ) = IDFY_Hard_Evaluation(
-            getEvaluation()
-        ).getEvaluationWithTokenId(
+        (address token, uint256 price, , ) = IDFYHardEvaluation(getEvaluation())
+            .getEvaluationWithTokenId(
                 _collateral.nftContract,
                 _collateral.nftTokenId
             );

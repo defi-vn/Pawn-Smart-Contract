@@ -160,8 +160,8 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
             ,
             ,
             ,
-            IDFY_Hard_Evaluation.CollectionStandard _collectionStandard
-        ) = IDFY_Hard_Evaluation(getEvaluation()).getEvaluationWithTokenId(
+            IDFYHardEvaluation.CollectionStandard _collectionStandard
+        ) = IDFYHardEvaluation(getEvaluation()).getEvaluationWithTokenId(
                 _nftContract,
                 _nftTokenId
             );
@@ -225,8 +225,8 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
             ,
             ,
             ,
-            IDFY_Hard_Evaluation.CollectionStandard _collectionStandard
-        ) = IDFY_Hard_Evaluation(getEvaluation()).getEvaluationWithTokenId(
+            IDFYHardEvaluation.CollectionStandard _collectionStandard
+        ) = IDFYHardEvaluation(getEvaluation()).getEvaluationWithTokenId(
                 _collateral.nftContract,
                 _collateral.nftTokenId
             );
@@ -534,8 +534,8 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
             ,
             ,
             ,
-            IDFY_Hard_Evaluation.CollectionStandard _collectionStandard
-        ) = IDFY_Hard_Evaluation(getEvaluation()).getEvaluationWithTokenId(
+            IDFYHardEvaluation.CollectionStandard _collectionStandard
+        ) = IDFYHardEvaluation(getEvaluation()).getEvaluationWithTokenId(
                 collateral.nftContract,
                 collateral.nftTokenId
             );

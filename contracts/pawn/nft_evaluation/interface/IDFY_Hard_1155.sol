@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-interface IDFY_Hard_1155 {
+interface IDFYHard1155 {
     /* ===== Event ===== */
     event CollectionRoyaltyRateChanged(
         uint256 currentRoyaltyRate,

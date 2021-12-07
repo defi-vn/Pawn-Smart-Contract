@@ -17,7 +17,7 @@ library PawnNFTLib {
         address _to,
         uint256 _id,
         uint256 _amount,
-        IDFY_Hard_Evaluation.CollectionStandard collectionStandard
+        IDFYHardEvaluation.CollectionStandard collectionStandard
     ) internal {
         // check address token
         require(
@@ -36,7 +36,7 @@ library PawnNFTLib {
 
         if (
             collectionStandard ==
-            IDFY_Hard_Evaluation.CollectionStandard.NFT_HARD_721
+            IDFYHardEvaluation.CollectionStandard.NFT_HARD_721
         ) {
             // Check balance of from,
             require(
@@ -117,11 +117,9 @@ library PawnNFTLib {
         }
     }
 
-    function calculatedueDateTimestampPenalty(IEnums.LoanDurationType durationType)
-        internal
-        pure
-        returns (uint256 duedateTimestampInterest)
-    {
+    function calculatedueDateTimestampPenalty(
+        IEnums.LoanDurationType durationType
+    ) internal pure returns (uint256 duedateTimestampInterest) {
         if (durationType == IEnums.LoanDurationType.WEEK) {
             duedateTimestampInterest = 600 - 180;
         } else {
