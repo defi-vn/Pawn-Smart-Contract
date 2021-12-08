@@ -3,11 +3,11 @@ pragma solidity ^0.8.4;
 
 import "../../../base/BaseInterface.sol";
 
-interface IDFY_Hard_Evaluation is BaseInterface {
+interface IDFYHardEvaluation is BaseInterface {
     /* ===== Enum ===== */
     enum AssetStatus {
         OPEN,
-        APPOINTMENTED,
+        APPOINTED,
         EVALUATED,
         NFT_CREATED
     }
@@ -78,7 +78,8 @@ interface IDFY_Hard_Evaluation is BaseInterface {
         uint256 appoimentId,
         Asset asset,
         Appointment appointment,
-        string reason
+        string reason,
+        uint256 appointmentTime
     );
 
     event EvaluationEvent(
@@ -114,10 +115,14 @@ interface IDFY_Hard_Evaluation is BaseInterface {
     function createAppointment(
         uint256 _assetId,
         address _evaluator,
-        address _evaluationFeeAddress
+        address _evaluationFeeAddress,
+        uint256 _appointmentTime
     ) external;
 
-    function acceptAppointment(uint256 _appointmentId) external;
+    function acceptAppointment(
+        uint256 _appointmentId,
+        uint256 _acceptAppointment
+    ) external;
 
     function rejectAppointment(uint256 _appointmentId, string memory reason)
         external;

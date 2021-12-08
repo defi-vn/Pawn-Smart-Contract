@@ -880,6 +880,21 @@
       "address": "0xB17cbc8967715aE90507E3E231Af741a29361114",
       "txHash": "0x16fbed5dde403529b488790e3a296fe91c07eb115415ec77ef8879a63c56edbf",
       "kind": "uups"
+    },
+    {
+      "address": "0x107BaEE99F33bFbeA13aE9e97e036D8A95f12F09",
+      "txHash": "0x5d5e1dcf4c203d65990c7a7689e6868128580c35629202880ad55b83dc5bdec6",
+      "kind": "uups"
+    },
+    {
+      "address": "0xc584DC18ec1054b587AD026cF17a725BC71Da19f",
+      "txHash": "0xc6f1205ca3b40a8d12c509b61960e6bbbb782d223829b2a844f3959949986a5d",
+      "kind": "uups"
+    },
+    {
+      "address": "0xa97be7d4A5026c90A1Af5c84BFEd857fF3E6ee88",
+      "txHash": "0x52c599c79bcc864039bf536ad927920df412ded6a39a03833c3686a3703743e3",
+      "kind": "uups"
     }
   ],
   "impls": {
@@ -42001,6 +42016,355 @@
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "0f664d885fbd6961f09200a39983189835fed1ee16109796bffb39f7915fac55": {
+      "address": "0x83d2AD49bA2DE072491932538195851fa1EF19Dd",
+      "txHash": "0x2f0d54a698763f7a4bd8fbd5c3ae05922b65bd0baa4d24ff3fca0772ee54e5ae",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "_status",
+            "type": "t_uint256",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:37"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:67"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "BaseContract",
+            "label": "contractHub",
+            "type": "t_address",
+            "src": "contracts\\base\\BaseContract.sol:26"
+          },
+          {
+            "contract": "HardEvaluation",
+            "label": "hubContract",
+            "type": "t_address",
+            "src": "contracts\\pawn\\nft_evaluation\\implement\\Hard_Evaluation.sol:24"
+          },
+          {
+            "contract": "HardEvaluation",
+            "label": "_totalAssets",
+            "type": "t_struct(Counter)2993_storage",
+            "src": "contracts\\pawn\\nft_evaluation\\implement\\Hard_Evaluation.sol:27"
+          },
+          {
+            "contract": "HardEvaluation",
+            "label": "_totalAppointment",
+            "type": "t_struct(Counter)2993_storage",
+            "src": "contracts\\pawn\\nft_evaluation\\implement\\Hard_Evaluation.sol:30"
+          },
+          {
+            "contract": "HardEvaluation",
+            "label": "_totalEvaluation",
+            "type": "t_struct(Counter)2993_storage",
+            "src": "contracts\\pawn\\nft_evaluation\\implement\\Hard_Evaluation.sol:33"
+          },
+          {
+            "contract": "HardEvaluation",
+            "label": "WhiteListFees",
+            "type": "t_mapping(t_address,t_struct(WhiteListFee)15393_storage)",
+            "src": "contracts\\pawn\\nft_evaluation\\implement\\Hard_Evaluation.sol:36"
+          },
+          {
+            "contract": "HardEvaluation",
+            "label": "assetList",
+            "type": "t_mapping(t_uint256,t_struct(Asset)15345_storage)",
+            "src": "contracts\\pawn\\nft_evaluation\\implement\\Hard_Evaluation.sol:40"
+          },
+          {
+            "contract": "HardEvaluation",
+            "label": "appointmentList",
+            "type": "t_mapping(t_uint256,t_struct(Appointment)15359_storage)",
+            "src": "contracts\\pawn\\nft_evaluation\\implement\\Hard_Evaluation.sol:44"
+          },
+          {
+            "contract": "HardEvaluation",
+            "label": "appointmentListOfAsset",
+            "type": "t_mapping(t_uint256,t_array(t_uint256)dyn_storage)",
+            "src": "contracts\\pawn\\nft_evaluation\\implement\\Hard_Evaluation.sol:48"
+          },
+          {
+            "contract": "HardEvaluation",
+            "label": "evaluationWithTokenId",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(Evaluation)15388_storage))",
+            "src": "contracts\\pawn\\nft_evaluation\\implement\\Hard_Evaluation.sol:50"
+          },
+          {
+            "contract": "HardEvaluation",
+            "label": "evaluationList",
+            "type": "t_mapping(t_uint256,t_struct(Evaluation)15388_storage)",
+            "src": "contracts\\pawn\\nft_evaluation\\implement\\Hard_Evaluation.sol:55"
+          },
+          {
+            "contract": "HardEvaluation",
+            "label": "evaluationListOfAsset",
+            "type": "t_mapping(t_uint256,t_array(t_uint256)dyn_storage)",
+            "src": "contracts\\pawn\\nft_evaluation\\implement\\Hard_Evaluation.sol:59"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_struct(Counter)2993_storage": {
+            "label": "struct CountersUpgradeable.Counter",
+            "members": [
+              {
+                "label": "_value",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_address,t_struct(WhiteListFee)15393_storage)": {
+            "label": "mapping(address => struct IDFYHardEvaluation.WhiteListFee)"
+          },
+          "t_struct(WhiteListFee)15393_storage": {
+            "label": "struct IDFYHardEvaluation.WhiteListFee",
+            "members": [
+              {
+                "label": "EvaluationFee",
+                "type": "t_uint256"
+              },
+              {
+                "label": "MintingFee",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Asset)15345_storage)": {
+            "label": "mapping(uint256 => struct IDFYHardEvaluation.Asset)"
+          },
+          "t_struct(Asset)15345_storage": {
+            "label": "struct IDFYHardEvaluation.Asset",
+            "members": [
+              {
+                "label": "assetCID",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "collectionAddress",
+                "type": "t_address"
+              },
+              {
+                "label": "collectionStandard",
+                "type": "t_enum(CollectionStandard)15326"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(AssetStatus)15318"
+              }
+            ]
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_enum(CollectionStandard)15326": {
+            "label": "enum IDFYHardEvaluation.CollectionStandard",
+            "members": [
+              "NFT_HARD_721",
+              "NFT_HARD_1155"
+            ]
+          },
+          "t_enum(AssetStatus)15318": {
+            "label": "enum IDFYHardEvaluation.AssetStatus",
+            "members": [
+              "OPEN",
+              "APPOINTED",
+              "EVALUATED",
+              "NFT_CREATED"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Appointment)15359_storage)": {
+            "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
+          },
+          "t_struct(Appointment)15359_storage": {
+            "label": "struct IDFYHardEvaluation.Appointment",
+            "members": [
+              {
+                "label": "assetId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "assetOwner",
+                "type": "t_address"
+              },
+              {
+                "label": "evaluator",
+                "type": "t_address"
+              },
+              {
+                "label": "evaluationFee",
+                "type": "t_uint256"
+              },
+              {
+                "label": "evaluationFeeAddress",
+                "type": "t_address"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(AppointmentStatus)15332"
+              }
+            ]
+          },
+          "t_enum(AppointmentStatus)15332": {
+            "label": "enum IDFYHardEvaluation.AppointmentStatus",
+            "members": [
+              "OPEN",
+              "ACCEPTED",
+              "REJECTED",
+              "CANCELLED",
+              "EVALUATED"
+            ]
+          },
+          "t_mapping(t_uint256,t_array(t_uint256)dyn_storage)": {
+            "label": "mapping(uint256 => uint256[])"
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(Evaluation)15388_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct IDFYHardEvaluation.Evaluation))"
+          },
+          "t_mapping(t_uint256,t_struct(Evaluation)15388_storage)": {
+            "label": "mapping(uint256 => struct IDFYHardEvaluation.Evaluation)"
+          },
+          "t_struct(Evaluation)15388_storage": {
+            "label": "struct IDFYHardEvaluation.Evaluation",
+            "members": [
+              {
+                "label": "assetId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "appointmentId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "evaluationCID",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "depreciationRate",
+                "type": "t_uint256"
+              },
+              {
+                "label": "evaluator",
+                "type": "t_address"
+              },
+              {
+                "label": "currency",
+                "type": "t_address"
+              },
+              {
+                "label": "price",
+                "type": "t_uint256"
+              },
+              {
+                "label": "mintingFee",
+                "type": "t_uint256"
+              },
+              {
+                "label": "mintingFeeAddress",
+                "type": "t_address"
+              },
+              {
+                "label": "collectionAddress",
+                "type": "t_address"
+              },
+              {
+                "label": "timeOfEvaluation",
+                "type": "t_uint256"
+              },
+              {
+                "label": "collectionStandard",
+                "type": "t_enum(CollectionStandard)15326"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(EvaluationStatus)15323"
+              }
+            ]
+          },
+          "t_enum(EvaluationStatus)15323": {
+            "label": "enum IDFYHardEvaluation.EvaluationStatus",
+            "members": [
+              "EVALUATED",
+              "EVALUATION_ACCEPTED",
+              "EVALUATION_REJECTED",
+              "NFT_CREATED"
+            ]
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_bool": {
+            "label": "bool"
           }
         }
       }

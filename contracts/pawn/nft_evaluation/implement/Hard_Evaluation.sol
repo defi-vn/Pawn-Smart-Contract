@@ -13,7 +13,7 @@ import "../interface/IDFY_Hard_1155.sol";
 
 // import "./CommonLib.sol";
 
-contract Hard_Evaluation is IDFY_Hard_Evaluation, BaseContract {
+contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     using CountersUpgradeable for CountersUpgradeable.Counter;
     using AddressUpgradeable for address;
     using SafeMathUpgradeable for uint256;
@@ -82,7 +82,7 @@ contract Hard_Evaluation is IDFY_Hard_Evaluation, BaseContract {
     }
 
     function signature() public pure override returns (bytes4) {
-        return type(IDFY_Hard_Evaluation).interfaceId;
+        return type(IDFYHardEvaluation).interfaceId;
     }
 
     function supportsInterface(bytes4 interfaceId)
@@ -93,7 +93,7 @@ contract Hard_Evaluation is IDFY_Hard_Evaluation, BaseContract {
         returns (bool)
     {
         return
-            interfaceId == type(IDFY_Hard_Evaluation).interfaceId ||
+            interfaceId == type(IDFYHardEvaluation).interfaceId ||
             super.supportsInterface(interfaceId);
     }
 
@@ -158,14 +158,14 @@ contract Hard_Evaluation is IDFY_Hard_Evaluation, BaseContract {
         if (_collectionStandard == CollectionStandard.NFT_HARD_721) {
             require(
                 _collectionAsset.supportsInterface(
-                    type(IDFY_Hard_721).interfaceId
+                    type(IDFYHard721).interfaceId
                 ),
                 ""
             ); // Invalid Collection
         } else {
             require(
                 _collectionAsset.supportsInterface(
-                    type(IDFY_Hard_1155).interfaceId
+                    type(IDFYHard1155).interfaceId
                 ),
                 ""
             ); // Invalid Collection
@@ -192,7 +192,8 @@ contract Hard_Evaluation is IDFY_Hard_Evaluation, BaseContract {
     function createAppointment(
         uint256 _assetId,
         address _evaluator,
-        address _evaluationFeeAddress
+        address _evaluationFeeAddress,
+        uint256 _appointmentTime
     ) external override whenNotPaused {
         // Get asset by asset id
         Asset storage _asset = assetList[_assetId];
@@ -203,6 +204,9 @@ contract Hard_Evaluation is IDFY_Hard_Evaluation, BaseContract {
                 msg.sender == _asset.owner,
             "9"
         ); // Invalid asset
+
+        // appointment time > 0
+        require(_appointmentTime > 0, "Appoint ment time > 0");
 
         require(!_evaluator.isContract() && _evaluator != _asset.owner, "11"); // Invalid evaluator
 
@@ -223,7 +227,7 @@ contract Hard_Evaluation is IDFY_Hard_Evaluation, BaseContract {
         appointmentListOfAsset[_assetId].push(_appointmentId);
 
         // update status asset
-        _asset.status = AssetStatus.APPOINTMENTED;
+        _asset.status = AssetStatus.APPOINTED;
 
         CommonLib.safeTransfer(
             _evaluationFeeAddress,
@@ -240,11 +244,12 @@ contract Hard_Evaluation is IDFY_Hard_Evaluation, BaseContract {
             _appointmentId,
             _asset,
             appointmentList[_appointmentId],
-            ""
+            "",
+            _appointmentTime
         );
     }
 
-    function acceptAppointment(uint256 _appointmentId)
+    function acceptAppointment(uint256 _appointmentId, uint256 _appointmentTime)
         external
         override
         onlyEvaluator
@@ -264,7 +269,8 @@ contract Hard_Evaluation is IDFY_Hard_Evaluation, BaseContract {
             _appointmentId,
             assetList[_appointment.assetId],
             _appointment,
-            ""
+            "",
+            _appointmentTime
         );
     }
 
@@ -299,7 +305,8 @@ contract Hard_Evaluation is IDFY_Hard_Evaluation, BaseContract {
             _appointmentId,
             assetList[_appointment.assetId],
             _appointment,
-            reason
+            reason,
+            0
         );
     }
 
@@ -332,7 +339,8 @@ contract Hard_Evaluation is IDFY_Hard_Evaluation, BaseContract {
             _appointmentId,
             assetList[_appointment.assetId],
             _appointment,
-            reason
+            reason,
+            0
         );
     }
 
@@ -355,7 +363,7 @@ contract Hard_Evaluation is IDFY_Hard_Evaluation, BaseContract {
         Asset storage _asset = assetList[_appointment.assetId];
 
         require(
-            _asset.status == AssetStatus.APPOINTMENTED &&
+            _asset.status == AssetStatus.APPOINTED &&
                 _asset.owner != msg.sender,
             "15"
         ); // Invalid asset
@@ -426,7 +434,7 @@ contract Hard_Evaluation is IDFY_Hard_Evaluation, BaseContract {
 
         require(
             bytes(_asset.assetCID).length > 0 &&
-                _asset.status == AssetStatus.APPOINTMENTED &&
+                _asset.status == AssetStatus.APPOINTED &&
                 _asset.owner == msg.sender,
             "19"
         ); // Invalid asset
@@ -495,7 +503,7 @@ contract Hard_Evaluation is IDFY_Hard_Evaluation, BaseContract {
 
         require(
             bytes(_asset.assetCID).length > 0 &&
-                _asset.status == AssetStatus.APPOINTMENTED &&
+                _asset.status == AssetStatus.APPOINTED &&
                 _asset.owner == msg.sender,
             "21"
         ); // Invalid asset
@@ -535,13 +543,13 @@ contract Hard_Evaluation is IDFY_Hard_Evaluation, BaseContract {
         uint256 tokenId;
 
         if (_asset.collectionStandard == CollectionStandard.NFT_HARD_721) {
-            tokenId = IDFY_Hard_721(_asset.collectionAddress).mint(
+            tokenId = IDFYHard721(_asset.collectionAddress).mint(
                 _asset.owner,
                 _nftCID,
                 _evaluation.depreciationRate
             );
         } else {
-            tokenId = IDFY_Hard_1155(_asset.collectionAddress).mint(
+            tokenId = IDFYHard1155(_asset.collectionAddress).mint(
                 _asset.owner,
                 _amount,
                 _nftCID,
