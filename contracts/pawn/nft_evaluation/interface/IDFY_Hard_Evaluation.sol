@@ -119,10 +119,8 @@ interface IDFYHardEvaluation is BaseInterface {
         uint256 _appointmentTime
     ) external;
 
-    function acceptAppointment(
-        uint256 _appointmentId,
-        uint256 _acceptAppointment
-    ) external;
+    function acceptAppointment(uint256 _appointmentId, uint256 _appointmentTime)
+        external;
 
     function rejectAppointment(uint256 _appointmentId, string memory reason)
         external;
