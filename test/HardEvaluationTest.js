@@ -1,8 +1,8 @@
 const hre = require("hardhat");
-const artifactDFYHard721 = "DFY_Hard_721";
+const artifactDFYHard721 = "DFYHard721";
 const artifactLoanToken = "LoanToken";
 const artifactHub = "Hub";
-const artifactHardEvaluation = "Hard_Evaluation";
+const artifactHardEvaluation = "HardEvaluation";
 const { expect, assert } = require("chai");
 
 
@@ -12,17 +12,19 @@ describe("Deploy DFY Factory", (done) => {
     let _loanTokenContract = null;
     let _hubContract = null;
     let _hardEvaluationContract = null;
-    let _evaluationFeeRate = BigInt(10 * 10 ** 5);
+    let _evaluationFee = BigInt(1 * 10 ** 18);
+    let _mintingFee = BigInt(1 * 10 ** 18);
     let _assetCID = "Example";
     let _tokenName = "DFYHard721NFT";
     let _symbol = "DFY";
     let _collectionCID = "EXAMPLE";
     let _defaultRoyaltyRate = BigInt(10 * 10 ** 5);
+    let appointmentTime = Math.floor(Date.now() / 1000) + 300;
 
     before(async () => {
         [
             _deployer,
-            _borrower,
+            _customer,
             _evaluator,
             _feeWallet,
             _feeToken
@@ -50,96 +52,86 @@ describe("Deploy DFY Factory", (done) => {
             { kind: "uups" }
         );
         _hardEvaluationContract = await hardEvaluationContract.deployed();
+        console.log(_hardEvaluationContract.address, "hard : ");
 
         // DFYHard721 
         const DFYHard721Factory = await hre.ethers.getContractFactory(artifactDFYHard721);
-        const DFYHard721Contract = await hre.upgrades.deployProxy(
-            DFYHard721Factory,
-            [_tokenName, _symbol, _collectionCID, _defaultRoyaltyRate, _hardEvaluationContract.address, _borrower.address],
-            { kind: "uups" }
+        const DFYHard721Contract = await DFYHard721Factory.deploy(
+            _tokenName,
+            _symbol,
+            _collectionCID,
+            _defaultRoyaltyRate,
+            _hardEvaluationContract.address,
+            _deployer.address
         );
         _DFYHard721Contract = await DFYHard721Contract.deployed();
     });
 
     describe("unit PawnNFTContract V2  ", async () => {
 
-        it("borrower create asset request and check it information : ", async () => {
+        it("case 1 : evaluator create NFT for customer ", async () => {
 
-            // addWhiteListEvaluationFee and addWhiteListMintingFee
-            await _hardEvaluationContract.connect(_deployer).addWhiteListEvaluationFee(_loanTokenContract.address, _evaluationFeeRate);
-            await _hardEvaluationContract.addWhiteListMintingFee(_loanTokenContract.address, _evaluationFeeRate);
-
-            // create Asset request 
-            await _hardEvaluationContract.connect(_borrower).createAssetRequest(_assetCID, _DFYHard721Contract.address, 0);
+            // -> customer create asset request
+            await _hardEvaluationContract.connect(_deployer).addWhiteListFee(_loanTokenContract.address, _evaluationFee, _mintingFee); // addWhiteListFee -> add address token to pay for evaluation fee , mint nft fee 
+            await _hardEvaluationContract.connect(_customer).createAssetRequest(_assetCID, _DFYHard721Contract.address, 0); // create Asset request 
             let assetList = await _hardEvaluationContract.assetList(0);
 
             expect(assetList.assetCID).to.equal(_assetCID);
-            expect(assetList.owner).to.equal(_borrower.address);
+            expect(assetList.owner).to.equal(_customer.address);
             expect(assetList.collectionAddress).to.equal(_DFYHard721Contract.address);
             expect(assetList.collectionStandard).to.equal(0);
             expect(assetList.status).to.equal(0);
-        });
 
-        it("borrower create Appointment and check it information : ", async () => {
-
-            // loan token drop and approve
-            await _loanTokenContract.setOperator(_deployer.address, true);
+            // -> customer create Appointment 
+            await _loanTokenContract.setOperator(_deployer.address, true); // loan token transfer for customer and approve
             await _loanTokenContract.mint(_deployer.address, BigInt(1000 * 10 ** 18));
-            await _loanTokenContract.connect(_deployer).transfer(_borrower.address, BigInt(100 * 10 ** 18));
-            await _loanTokenContract.connect(_borrower).approve(_hardEvaluationContract.address, BigInt(100 * 10 ** 18));
+            await _loanTokenContract.connect(_deployer).transfer(_customer.address, BigInt(100 * 10 ** 18));
+            await _loanTokenContract.connect(_customer).approve(_hardEvaluationContract.address, BigInt(100 * 10 ** 18));
 
-            let balanceOfBorrowerBeforeTXT = await _loanTokenContract.balanceOf(_borrower.address);
+            let balanceOfCustomerBeforeTXT = await _loanTokenContract.balanceOf(_customer.address);
             let balanceOfContractHardEvaluationBeforeTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
 
             console.log("before TXT : ");
-            console.log(balanceOfBorrowerBeforeTXT.toString(), "balance of Borrower Before TXT ");
+            console.log(balanceOfCustomerBeforeTXT.toString(), "balance of Borrower Before TXT ");
             console.log(balanceOfContractHardEvaluationBeforeTXT.toString(), "balance of Contract HardEvaluation Before TXT ");
 
-            await _hardEvaluationContract.connect(_borrower).createAppointment(0, _evaluator.address, _loanTokenContract.address);
+            await _hardEvaluationContract.connect(_customer).createAppointment(0, _evaluator.address, _loanTokenContract.address, appointmentTime);
 
-            // check info after create  
-            let appointmentList = await _hardEvaluationContract.appointmentList(0);
+            let appointmentList = await _hardEvaluationContract.appointmentList(0); // check info after create 
             expect(appointmentList.assetId).to.equal(0);
-            expect(appointmentList.assetOwner).to.equal(_borrower.address);
+            expect(appointmentList.assetOwner).to.equal(_customer.address);
             expect(appointmentList.evaluator).to.equal(_evaluator.address);
-            expect(appointmentList.evaluationFee).to.equal(_evaluationFeeRate);
+            expect(appointmentList.evaluationFee).to.equal(_evaluationFee);
             expect(appointmentList.evaluationFeeAddress).to.equal(_loanTokenContract.address);
 
-            // get appointmentId from list asset 
-            let getIdAppointmentListOfAsset = await _hardEvaluationContract.appointmentListOfAsset(0, 0);
-            // query AssetList with appointmentId
-            let assetList = await _hardEvaluationContract.assetList(getIdAppointmentListOfAsset);
-            // check status asset
-            expect(assetList.status).to.equal(1);
+            let getIdAppointmentListOfAsset = await _hardEvaluationContract.appointmentListOfAsset(0, 0); // get appointmentId from list asset 
+            await _hardEvaluationContract.assetList(getIdAppointmentListOfAsset); // query AssetList with appointmentId
+            assetList = await _hardEvaluationContract.assetList(0);
 
-            // check transfer 
-            let balanceOfBorrowerAfterTXT = await _loanTokenContract.balanceOf(_borrower.address);
+            expect(assetList.status).to.equal(1); // check status asset
+
+            let balanceOfCustomerAfterTXT = await _loanTokenContract.balanceOf(_customer.address); // check transfer 
             let balanceOfContractHardEvaluationAfterTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
 
             console.log("After TXT : ");
-            console.log(balanceOfBorrowerAfterTXT.toString(), "balance of Borrower After TXT ");
+            console.log(balanceOfCustomerAfterTXT.toString(), "balance of Borrower After TXT ");
             console.log(balanceOfContractHardEvaluationAfterTXT.toString(), "balance of Contract HardEvaluation After TXT ");
 
-            expect(balanceOfBorrowerBeforeTXT).to.equal(BigInt(balanceOfBorrowerAfterTXT) + BigInt(_evaluationFeeRate));
-            expect(balanceOfContractHardEvaluationBeforeTXT).to.equal(BigInt(balanceOfContractHardEvaluationAfterTXT) - BigInt(_evaluationFeeRate));
+            expect(balanceOfCustomerBeforeTXT).to.equal(BigInt(balanceOfCustomerAfterTXT) + BigInt(_evaluationFee));
+            expect(balanceOfContractHardEvaluationBeforeTXT).to.equal(BigInt(balanceOfContractHardEvaluationAfterTXT) - BigInt(_evaluationFee));
 
-        });
+            // -> Evaluator accept Appoitment
 
-        it("Evaluator accept Appoitment and check it information ", async () => {
+            let getEVALUATOR_ROLE = await _hubContract.EvaluatorRole();  // grant evalutor roll 
+            await _hubContract.connect(_deployer).grantRole(getEVALUATOR_ROLE, _evaluator.address);
+            await _hardEvaluationContract.connect(_evaluator).acceptAppointment(0, appointmentTime);
+            let info = await _hardEvaluationContract.appointmentList(0); // check status turn accept 
 
-            // grant evalutor roll 
-            await _hubContract.connect(_deployer).setEvaluationRole(_evaluator.address);
-            await _hardEvaluationContract.connect(_evaluator).acceptAppointment(0);
+            expect(info.status).to.equal(1); // 1 is ACCEPTED
 
-            // check status turn accept 
-            let info = await _hardEvaluationContract.appointmentList(0);
-            // 1 is ACCEPTED
-            expect(info.status).to.equal(1);
-        });
+            // -> Evaluator evaluated Asset
 
-        it("Evaluator evaluated Asset and check it information ", async () => {
-
-            let balanceOfContractHardEvaluationBeforeTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
+            balanceOfContractHardEvaluationBeforeTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
             let balanceOfEvaluatorBeforeTXT = await _loanTokenContract.balanceOf(_evaluator.address);
 
             console.log("before TXT : ");
@@ -147,44 +139,42 @@ describe("Deploy DFY Factory", (done) => {
             console.log(balanceOfContractHardEvaluationBeforeTXT.toString(), "balance of Contract HardEvaluation Before TXT ");
 
             await _hardEvaluationContract.connect(_evaluator).evaluatedAsset(_DFYHard721Contract.address,
-                0, 10, "_evaluationCID", BigInt(1 * 10 ** 18), _loanTokenContract.address);
+                0, BigInt(10 * 10 ** 18), "_evaluationCID", BigInt(1 * 10 ** 18), _loanTokenContract.address);
 
             let balanceOfEvalutorAfterTXT = await _loanTokenContract.balanceOf(_evaluator.address);
-            let balanceOfContractHardEvaluationAfterTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
+            balanceOfContractHardEvaluationAfterTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
 
             console.log("After TXT : ");
             console.log(balanceOfEvalutorAfterTXT.toString(), "balance of Evaluator After TXT ");
             console.log(balanceOfContractHardEvaluationAfterTXT.toString(), "balance of Contract HardEvaluation After TXT ");
 
-            expect(balanceOfEvaluatorBeforeTXT).to.equal(BigInt(balanceOfEvalutorAfterTXT) - BigInt(_evaluationFeeRate));
-            expect(balanceOfContractHardEvaluationBeforeTXT).to.equal(BigInt(balanceOfContractHardEvaluationAfterTXT) + BigInt(_evaluationFeeRate));
-        });
+            expect(balanceOfEvaluatorBeforeTXT).to.equal(BigInt(balanceOfEvalutorAfterTXT) - BigInt(_evaluationFee));
+            expect(balanceOfContractHardEvaluationBeforeTXT).to.equal(BigInt(balanceOfContractHardEvaluationAfterTXT) + BigInt(_evaluationFee));
 
-        it("borrower accept evaluation check it information ", async () => {
+            // -> customer accept evaluation 
 
-            let balanceOfBorrowerBeforeTXT = await _loanTokenContract.balanceOf(_borrower.address);
-            let balanceOfContractHardEvaluationBeforeTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
+            balanceOfCustomerBeforeTXT = await _loanTokenContract.balanceOf(_customer.address);
+            balanceOfContractHardEvaluationBeforeTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
 
             console.log("before TXT : ");
-            console.log(balanceOfBorrowerBeforeTXT.toString(), "balance of Borrower Before TXT ");
+            console.log(balanceOfCustomerBeforeTXT.toString(), "balance of customer Before TXT ");
             console.log(balanceOfContractHardEvaluationBeforeTXT.toString(), "balance of Contract HardEvaluation Before TXT ");
 
-            await _hardEvaluationContract.connect(_borrower).acceptEvaluation(0);
+            await _hardEvaluationContract.connect(_customer).acceptEvaluation(0);
 
-            let balanceOfBorrowerAfterTXT = await _loanTokenContract.balanceOf(_borrower.address);
-            let balanceOfContractHardEvaluationAfterTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
+            balanceOfCustomerAfterTXT = await _loanTokenContract.balanceOf(_customer.address);
+            balanceOfContractHardEvaluationAfterTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
 
             console.log("After TXT : ");
-            console.log(balanceOfBorrowerAfterTXT.toString(), "balance of Evaluator After TXT ");
+            console.log(balanceOfCustomerAfterTXT.toString(), "balance of customer After TXT ");
             console.log(balanceOfContractHardEvaluationAfterTXT.toString(), "balance of Contract HardEvaluation After TXT ");
 
-            expect(balanceOfBorrowerBeforeTXT).to.equal(BigInt(balanceOfBorrowerAfterTXT) + BigInt(_evaluationFeeRate));
-            expect(balanceOfContractHardEvaluationBeforeTXT).to.equal(BigInt(balanceOfContractHardEvaluationAfterTXT) - BigInt(_evaluationFeeRate));
-        });
+            expect(balanceOfCustomerBeforeTXT).to.equal(BigInt(balanceOfCustomerAfterTXT) + BigInt(_evaluationFee));
+            expect(balanceOfContractHardEvaluationBeforeTXT).to.equal(BigInt(balanceOfContractHardEvaluationAfterTXT) - BigInt(_evaluationFee));
 
-        it("Evaluator create NFT", async () => {
+            // -> Evaluator mint NFT for Customer
 
-            let balanceOfContractHardEvaluationBeforeTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
+            balanceOfContractHardEvaluationBeforeTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
             let balanceOfHubFeeWalletBeforeTXt = await _loanTokenContract.balanceOf(_feeWallet.address);
 
             console.log("before TXT : ");
@@ -194,7 +184,7 @@ describe("Deploy DFY Factory", (done) => {
 
             await _hardEvaluationContract.connect(_evaluator).createNftToken(0, 1, "NFTCID");
 
-            let balanceOfContractHardEvaluationAfterTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
+            balanceOfContractHardEvaluationAfterTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
             let balanceOfHubFeeWalletAfterTXt = await _loanTokenContract.balanceOf(_feeWallet.address);
 
             console.log("After TXT : ");
@@ -203,62 +193,232 @@ describe("Deploy DFY Factory", (done) => {
 
             let owner = await _DFYHard721Contract.ownerOf(0);
 
-            expect(balanceOfHubFeeWalletBeforeTXt).to.equal(BigInt(balanceOfHubFeeWalletAfterTXt) - BigInt(_evaluationFeeRate));
-            expect(owner).to.equal(_borrower.address);
-
+            expect(balanceOfHubFeeWalletBeforeTXt).to.equal(BigInt(balanceOfHubFeeWalletAfterTXt) - BigInt(_evaluationFee));
+            expect(owner).to.equal(_customer.address);
         });
 
-        it("Evaluator reject Appoitment and check it information ", async () => {
 
-            let balanceOfBorrowerBeforeTXT = await _loanTokenContract.balanceOf(_borrower.address);
+        it("case 2 : evalutor evaluated Asset", async () => {
+
+            // -> customer create asset request
+            await _hardEvaluationContract.connect(_customer).createAssetRequest(_assetCID, _DFYHard721Contract.address, 0); // create Asset request 
+            let assetList = await _hardEvaluationContract.assetList(1);
+
+            expect(assetList.assetCID).to.equal(_assetCID);
+            expect(assetList.owner).to.equal(_customer.address);
+            expect(assetList.collectionAddress).to.equal(_DFYHard721Contract.address);
+            expect(assetList.collectionStandard).to.equal(0);
+            expect(assetList.status).to.equal(0);
+
+            // -> customer create Appointment 
+
+            let balanceOfCustomerBeforeTXT = await _loanTokenContract.balanceOf(_customer.address);
             let balanceOfContractHardEvaluationBeforeTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
 
             console.log("before TXT : ");
-            console.log(balanceOfBorrowerBeforeTXT.toString(), "balance of Borrower Before TXT ");
+            console.log(balanceOfCustomerBeforeTXT.toString(), "balance of Borrower Before TXT ");
             console.log(balanceOfContractHardEvaluationBeforeTXT.toString(), "balance of Contract HardEvaluation Before TXT ");
 
-            await _hardEvaluationContract.connect(_borrower).createAssetRequest(_assetCID, _DFYHard721Contract.address, 0);
-            await _hardEvaluationContract.connect(_borrower).createAppointment(1, _evaluator.address, _loanTokenContract.address);
-            await _hardEvaluationContract.connect(_evaluator).rejectAppointment(1, "không thích đấy");
+            await _hardEvaluationContract.connect(_customer).createAppointment(1, _evaluator.address, _loanTokenContract.address, appointmentTime);
 
-            let balanceOfBorrowerAfterTXT = await _loanTokenContract.balanceOf(_borrower.address);
+            let appointmentList = await _hardEvaluationContract.appointmentList(1); // check info after create 
+            expect(appointmentList.assetId).to.equal(1);
+            expect(appointmentList.assetOwner).to.equal(_customer.address);
+            expect(appointmentList.evaluator).to.equal(_evaluator.address);
+            expect(appointmentList.evaluationFee).to.equal(_evaluationFee);
+            expect(appointmentList.evaluationFeeAddress).to.equal(_loanTokenContract.address);
+
+            let getIdAppointmentListOfAsset = await _hardEvaluationContract.appointmentListOfAsset(1, 0); // get appointmentId from list asset 
+            await _hardEvaluationContract.assetList(getIdAppointmentListOfAsset); // query AssetList with appointmentId
+            assetList = await _hardEvaluationContract.assetList(1);
+
+            expect(assetList.status).to.equal(1); // check status asset
+
+            let balanceOfCustomerAfterTXT = await _loanTokenContract.balanceOf(_customer.address); // check transfer 
             let balanceOfContractHardEvaluationAfterTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
 
             console.log("After TXT : ");
-            console.log(balanceOfBorrowerAfterTXT.toString(), "balance of Borrower After TXT ");
+            console.log(balanceOfCustomerAfterTXT.toString(), "balance of Borrower After TXT ");
             console.log(balanceOfContractHardEvaluationAfterTXT.toString(), "balance of Contract HardEvaluation After TXT ");
 
-            let info = await _hardEvaluationContract.appointmentList(1);
-            expect(info.status).to.equal(2);
-            expect(balanceOfBorrowerBeforeTXT).to.equal(BigInt(balanceOfBorrowerAfterTXT));
-            expect(balanceOfContractHardEvaluationBeforeTXT).to.equal(BigInt(balanceOfContractHardEvaluationAfterTXT));
+            expect(balanceOfCustomerBeforeTXT).to.equal(BigInt(balanceOfCustomerAfterTXT) + BigInt(_evaluationFee));
+            expect(balanceOfContractHardEvaluationBeforeTXT).to.equal(BigInt(balanceOfContractHardEvaluationAfterTXT) - BigInt(_evaluationFee));
+
+            // -> Evaluator accept Appoitment
+
+            await _hardEvaluationContract.connect(_evaluator).acceptAppointment(1, appointmentTime);
+            let info = await _hardEvaluationContract.appointmentList(1); // check status turn accept 
+
+            expect(info.status).to.equal(1); // 1 is ACCEPTED
+
+            // -> Evaluator evaluated Asset
+
+            balanceOfContractHardEvaluationBeforeTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
+            let balanceOfEvaluatorBeforeTXT = await _loanTokenContract.balanceOf(_evaluator.address);
+
+            console.log("before TXT : ");
+            console.log(balanceOfEvaluatorBeforeTXT.toString(), "balance of Evaluator Before TXT ");
+            console.log(balanceOfContractHardEvaluationBeforeTXT.toString(), "balance of Contract HardEvaluation Before TXT ");
+
+            await _hardEvaluationContract.connect(_evaluator).evaluatedAsset(_DFYHard721Contract.address,
+                1, BigInt(10 * 10 ** 18), "_evaluationCID", BigInt(1 * 10 ** 18), _loanTokenContract.address);
+
+            let balanceOfEvalutorAfterTXT = await _loanTokenContract.balanceOf(_evaluator.address);
+            balanceOfContractHardEvaluationAfterTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
+
+            console.log("After TXT : ");
+            console.log(balanceOfEvalutorAfterTXT.toString(), "balance of Evaluator After TXT ");
+            console.log(balanceOfContractHardEvaluationAfterTXT.toString(), "balance of Contract HardEvaluation After TXT ");
+
+            expect(balanceOfEvaluatorBeforeTXT).to.equal(BigInt(balanceOfEvalutorAfterTXT) - BigInt(_evaluationFee));
+            expect(balanceOfContractHardEvaluationBeforeTXT).to.equal(BigInt(balanceOfContractHardEvaluationAfterTXT) + BigInt(_evaluationFee));
 
         });
 
-        it("Evaluator reject Appoitment and check it information ", async () => {
+        it("case 3 : customer reject Evaluation  : ", async () => {
 
-            let balanceOfBorrowerBeforeTXT = await _loanTokenContract.balanceOf(_borrower.address);
+            // -> customer create asset request
+            await _hardEvaluationContract.connect(_customer).createAssetRequest(_assetCID, _DFYHard721Contract.address, 0); // create Asset request 
+            let assetList = await _hardEvaluationContract.assetList(2);
+
+            expect(assetList.assetCID).to.equal(_assetCID);
+            expect(assetList.owner).to.equal(_customer.address);
+            expect(assetList.collectionAddress).to.equal(_DFYHard721Contract.address);
+            expect(assetList.collectionStandard).to.equal(0);
+            expect(assetList.status).to.equal(0);
+
+            // -> customer create Appointment 
+
+            let balanceOfCustomerBeforeTXT = await _loanTokenContract.balanceOf(_customer.address);
             let balanceOfContractHardEvaluationBeforeTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
 
             console.log("before TXT : ");
-            console.log(balanceOfBorrowerBeforeTXT.toString(), "balance of Borrower Before TXT ");
+            console.log(balanceOfCustomerBeforeTXT.toString(), "balance of Borrower Before TXT ");
             console.log(balanceOfContractHardEvaluationBeforeTXT.toString(), "balance of Contract HardEvaluation Before TXT ");
 
-            await _hardEvaluationContract.connect(_borrower).createAssetRequest(_assetCID, _DFYHard721Contract.address, 0);
-            await _hardEvaluationContract.connect(_borrower).createAppointment(2, _evaluator.address, _loanTokenContract.address);
-            await _hardEvaluationContract.cancelAppointment(2, "unknow");
+            await _hardEvaluationContract.connect(_customer).createAppointment(2, _evaluator.address, _loanTokenContract.address, appointmentTime);
 
-            let balanceOfBorrowerAfterTXT = await _loanTokenContract.balanceOf(_borrower.address);
+            let appointmentList = await _hardEvaluationContract.appointmentList(2); // check info after create 
+            expect(appointmentList.assetId).to.equal(2);
+            expect(appointmentList.assetOwner).to.equal(_customer.address);
+            expect(appointmentList.evaluator).to.equal(_evaluator.address);
+            expect(appointmentList.evaluationFee).to.equal(_evaluationFee);
+            expect(appointmentList.evaluationFeeAddress).to.equal(_loanTokenContract.address);
+
+            let getIdAppointmentListOfAsset = await _hardEvaluationContract.appointmentListOfAsset(2, 0); // get appointmentId from list asset 
+            await _hardEvaluationContract.assetList(getIdAppointmentListOfAsset); // query AssetList with appointmentId
+            assetList = await _hardEvaluationContract.assetList(2);
+
+            expect(assetList.status).to.equal(1); // check status asset
+
+            let balanceOfCustomerAfterTXT = await _loanTokenContract.balanceOf(_customer.address); // check transfer 
             let balanceOfContractHardEvaluationAfterTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
 
             console.log("After TXT : ");
-            console.log(balanceOfBorrowerAfterTXT.toString(), "balance of Borrower After TXT ");
+            console.log(balanceOfCustomerAfterTXT.toString(), "balance of Borrower After TXT ");
             console.log(balanceOfContractHardEvaluationAfterTXT.toString(), "balance of Contract HardEvaluation After TXT ");
 
-            let info = await _hardEvaluationContract.appointmentList(2);
-            expect(info.status).to.equal(3);
-            expect(balanceOfBorrowerBeforeTXT).to.equal(BigInt(balanceOfBorrowerAfterTXT));
-            expect(balanceOfContractHardEvaluationBeforeTXT).to.equal(BigInt(balanceOfContractHardEvaluationAfterTXT));
+            expect(balanceOfCustomerBeforeTXT).to.equal(BigInt(balanceOfCustomerAfterTXT) + BigInt(_evaluationFee));
+            expect(balanceOfContractHardEvaluationBeforeTXT).to.equal(BigInt(balanceOfContractHardEvaluationAfterTXT) - BigInt(_evaluationFee));
+
+            // -> Evaluator accept Appoitment
+
+            await _hardEvaluationContract.connect(_evaluator).acceptAppointment(2, appointmentTime);
+            let info = await _hardEvaluationContract.appointmentList(2); // check status turn accept 
+
+            expect(info.status).to.equal(1); // 1 is ACCEPTED
+
+            // -> Evaluator evaluated Asset
+
+            balanceOfContractHardEvaluationBeforeTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
+            let balanceOfEvaluatorBeforeTXT = await _loanTokenContract.balanceOf(_evaluator.address);
+
+            console.log("before TXT : ");
+            console.log(balanceOfEvaluatorBeforeTXT.toString(), "balance of Evaluator Before TXT ");
+            console.log(balanceOfContractHardEvaluationBeforeTXT.toString(), "balance of Contract HardEvaluation Before TXT ");
+
+            await _hardEvaluationContract.connect(_evaluator).evaluatedAsset(_DFYHard721Contract.address,
+                2, BigInt(10 * 10 ** 18), "_evaluationCID", BigInt(1 * 10 ** 18), _loanTokenContract.address);
+
+            let balanceOfEvalutorAfterTXT = await _loanTokenContract.balanceOf(_evaluator.address);
+            balanceOfContractHardEvaluationAfterTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
+
+            console.log("After TXT : ");
+            console.log(balanceOfEvalutorAfterTXT.toString(), "balance of Evaluator After TXT ");
+            console.log(balanceOfContractHardEvaluationAfterTXT.toString(), "balance of Contract HardEvaluation After TXT ");
+
+            expect(balanceOfEvaluatorBeforeTXT).to.equal(BigInt(balanceOfEvalutorAfterTXT) - BigInt(_evaluationFee));
+            expect(balanceOfContractHardEvaluationBeforeTXT).to.equal(BigInt(balanceOfContractHardEvaluationAfterTXT) + BigInt(_evaluationFee));
+
+            // -> customer reject Evaluation 
+            await _hardEvaluationContract.connect(_customer).rejectEvaluation(2, "rẻ quá không đồng ý");
+
+            let infoEvaluation = await _hardEvaluationContract.evaluationList(2);
+            let infoAsset = await _hardEvaluationContract.assetList(2);
+            expect(infoEvaluation.status).to.equal(2);
+            expect(infoAsset.status).to.equal(0);
+        });
+
+
+        it("Case 4 :  Evaluator reject Appoitment ", async () => {
+
+
+            // -> customer create asset request
+            await _hardEvaluationContract.connect(_customer).createAssetRequest(_assetCID, _DFYHard721Contract.address, 0); // create Asset request 
+            let assetList = await _hardEvaluationContract.assetList(3);
+
+            expect(assetList.assetCID).to.equal(_assetCID);
+            expect(assetList.owner).to.equal(_customer.address);
+            expect(assetList.collectionAddress).to.equal(_DFYHard721Contract.address);
+            expect(assetList.collectionStandard).to.equal(0);
+            expect(assetList.status).to.equal(0);
+
+            // -> customer create Appointment 
+
+            let balanceOfCustomerBeforeTXT = await _loanTokenContract.balanceOf(_customer.address);
+            let balanceOfContractHardEvaluationBeforeTXT = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
+
+            console.log("before TXT : ");
+            console.log(balanceOfCustomerBeforeTXT.toString(), "balance of customer Before TXT ");
+            console.log(balanceOfContractHardEvaluationBeforeTXT.toString(), "balance of Contract HardEvaluation Before TXT ");
+
+            await _hardEvaluationContract.connect(_customer).createAppointment(3, _evaluator.address, _loanTokenContract.address, appointmentTime);
+
+            let appointmentList = await _hardEvaluationContract.appointmentList(3); // check info after create 
+            expect(appointmentList.assetId).to.equal(3);
+            expect(appointmentList.assetOwner).to.equal(_customer.address);
+            expect(appointmentList.evaluator).to.equal(_evaluator.address);
+            expect(appointmentList.evaluationFee).to.equal(_evaluationFee);
+            expect(appointmentList.evaluationFeeAddress).to.equal(_loanTokenContract.address);
+
+            let getIdAppointmentListOfAsset = await _hardEvaluationContract.appointmentListOfAsset(3, 0); // get appointmentId from list asset 
+            await _hardEvaluationContract.assetList(getIdAppointmentListOfAsset); // query AssetList with appointmentId
+            assetList = await _hardEvaluationContract.assetList(3);
+
+            expect(assetList.status).to.equal(1); // check status asset
+
+            let balanceOfCustomerAfterCreateAppoitment = await _loanTokenContract.balanceOf(_customer.address); // check transfer 
+            let balanceOfContractHardEvaluationAfterCreateAppoitment = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
+
+            console.log("After TXT : ");
+            console.log(balanceOfCustomerAfterCreateAppoitment.toString(), "balance of customer After create Appoitment ");
+            console.log(balanceOfContractHardEvaluationAfterCreateAppoitment.toString(), "balance of Contract HardEvaluation After Appoitment ");
+
+            expect(balanceOfCustomerBeforeTXT).to.equal(BigInt(balanceOfCustomerAfterCreateAppoitment) + BigInt(_evaluationFee));
+            expect(balanceOfContractHardEvaluationBeforeTXT).to.equal(BigInt(balanceOfContractHardEvaluationAfterCreateAppoitment) - BigInt(_evaluationFee));
+
+            // -> Evaluator reject Appoitment
+            _hardEvaluationContract.connect(_evaluator).rejectAppointment(3, "không thích cho mi tạo Appointment đấy");
+
+            let infoAppointment = await _hardEvaluationContract.appointmentList(3);
+            expect(infoAppointment.status).to.equal(0); // 0 is open -> reject -> open 
+
+            balanceOfCustomerAfterRejectAppoitment = await _loanTokenContract.balanceOf(_customer.address);
+            balanceOfContractHardEvaluationAfterRejectAppoitment = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
+
+            expect(balanceOfCustomerAfterCreateAppoitment).to.equal(BigInt(balanceOfCustomerAfterRejectAppoitment) - BigInt(_evaluationFee));
+            expect(balanceOfContractHardEvaluationAfterCreateAppoitment).to.equal(BigInt(balanceOfContractHardEvaluationAfterRejectAppoitment) + BigInt(_evaluationFee));
+
         });
     });
 });
