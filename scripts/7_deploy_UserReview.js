@@ -24,6 +24,7 @@ async function main() {
         [
             proxies.PAWN_CONTRACT_ADDRESS, 
             proxies.PAWN_P2PLOAN_CONTRACT_ADDRESS,
+            proxies.PAWN_NFT_CONTRACT_ADDRESS,
             proxies.REPUTATION_CONTRACT_ADDRESS
         ],
         proxyType
