@@ -300,7 +300,7 @@ library PawnLib {
         returns (uint256 duedateTimestampInterest)
     {
         if (durationType == LoanDurationType.WEEK) {
-            duedateTimestampInterest = 3 * 24 * 3600;
+            duedateTimestampInterest = 2 * 24 * 3600;
             // duedateTimestampInterest = 180; // test
         } else {
             duedateTimestampInterest = 7 * 24 * 3600;
@@ -314,7 +314,7 @@ library PawnLib {
         returns (uint256 duedateTimestampInterest)
     {
         if (durationType == LoanDurationType.WEEK) {
-            duedateTimestampInterest = (7 - 3) * 24 * 3600;
+            duedateTimestampInterest = (7 - 2) * 24 * 3600;
             // duedateTimestampInterest = 600 - 180; // test
         } else {
             duedateTimestampInterest = (30 - 7) * 24 * 3600;
