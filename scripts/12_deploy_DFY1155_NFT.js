@@ -1,11 +1,11 @@
 require('@nomiclabs/hardhat-ethers');
 
 const hre = require('hardhat');
-const { PawnConfig } = require('./.deployment_data.json');
+const { Proxies } = require('./.deployment_data.json');
 
-const DFY1155BuildName = "contracts/pawn/nft_evaluation/implement/DFY_Hard_1155.sol:DFY_Hard_1155";
+const DFY1155BuildName = "DFYHard1155";
 
-const proxyType = { kind: "uups" };
+const Evaluation = Proxies.Dev1.EVALUATION_ADDRESS;
 
 const decimals      = 10**18;
 
@@ -19,14 +19,14 @@ async function main() {
 
     const DFY1155Factory = await hre.ethers.getContractFactory(DFY1155BuildName);
     const DFY1155Artifact = await hre.artifacts.readArtifact(DFY1155BuildName);
-    const DFY1155Contract = await hre.upgrades.deployProxy(DFY1155Factory,["quang","abc","rb",0,"0xF124Ac6EAe6a1CD22a5D4cab44C0D4A428334520","0x3Bf6D45954467a2aC3179b2ee03ca29469f4665d"],proxyType);
+    const DFY1155Contract = await DFY1155Factory.deploy("test1155","test1155","abc",0,Evaluation,"0x10D3c9215E122474782c0892954398f8Eaa099CA");
 
     await DFY1155Contract.deployed();
 
-    console.log(`DFY71155_CONTRACT_ADDRESS: ${DFY1155Contract.address}`);
+    
 
-    implementtationAddress = await hre.upgrades.erc1967.getImplementationAddress(DFY1155Contract.address);
-    console.log(`${DFY1155Artifact.contractName} implementation address: ${implementtationAddress}`);
+   
+    console.log(`${DFY1155Artifact.contractName} implementation address: ${DFY1155Contract.address}`);
 
     console.log("===========================\n\r");
 

@@ -3,7 +3,7 @@ require('@nomiclabs/hardhat-ethers');
 const hre = require('hardhat');
 const { PawnConfig } = require('./.deployment_data.json');
 
-const HubBuildName = "contracts/pawn/hub/Hub.sol:Hub";
+const HubBuildName = "Hub";
 
 const proxyType = { kind: "uups" };
 const feeWallet = PawnConfig.FeeWallet;

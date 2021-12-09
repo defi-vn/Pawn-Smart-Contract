@@ -7,10 +7,10 @@ const ExchangeBuildName = "contracts/pawn/exchange/Exchange.sol:Exchange";
 
 const proxyType = { kind: "uups" };
 
-const proxies = Proxies.Dev1;
+const proxies = Proxies.Dev2;
 
 const HubProxyAddr = proxies.HUB_CONTRACT_ADDRESS;
-
+const HubBuildName     = "Hub";
 const decimals      = 10**18;
 
 async function main() {

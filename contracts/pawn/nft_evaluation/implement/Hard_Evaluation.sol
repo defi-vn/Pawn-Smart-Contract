@@ -63,14 +63,6 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         _;
     }
 
-    function add(uint256 a, uint256 b)
-        external
-        onlyEvaluator
-        returns (uint256)
-    {
-        return a + b;
-    }
-
     function initialize(address _hubContract) public initializer {
         __Pausable_init();
 
@@ -150,6 +142,8 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     function createAssetRequest(
         string memory _assetCID,
         address _collectionAsset,
+        uint256 _expectingPrice,
+        address _expectingPriceAddress,
         CollectionStandard _collectionStandard
     ) external override whenNotPaused {
         // Require asset CID
@@ -179,6 +173,8 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             assetCID: _assetCID,
             owner: msg.sender,
             collectionAddress: _collectionAsset,
+            expectingPrice: _expectingPrice,
+            expectingPriceAddress: _expectingPriceAddress,
             collectionStandard: _collectionStandard,
             status: AssetStatus.OPEN
         });

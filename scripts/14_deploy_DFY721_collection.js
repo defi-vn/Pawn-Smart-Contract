@@ -3,8 +3,8 @@ require('@nomiclabs/hardhat-ethers');
 const hre = require('hardhat');
 const { Proxies } = require('./.deployment_data.json');
 
-const Collection721BuildName = "contracts/pawn/nft_evaluation/implement/DFY_Hard_721_Factory.sol:DFY_Hard_721_Factory";
-const HubProxy = Proxies.Dev1.HUB_CONTRACT_ADDRESS;
+const Collection721BuildName = "DFYHard721Factory";
+const HubProxy = Proxies.Staging.HUB_CONTRACT_ADDRESS;
 const proxyType = { kind: "uups" };
 const HubBuildName = "Hub";
 
@@ -25,7 +25,7 @@ async function main() {
     await Collection721Contract.deployed();
     const signature = await Collection721Contract.signature();
 
-    console.log(`COLLECTION_721_CONTRACT_ADDRESS: ${Collection721Contract.address}`);
+    console.log(`FACTORY_721_CONTRACT_ADDRESS: ${Collection721Contract.address}`);
     console.log(`Signature: \x1b[36m${signature}\x1b[0m`);
 
     implementtationAddress = await hre.upgrades.erc1967.getImplementationAddress(Collection721Contract.address);

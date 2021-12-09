@@ -15,6 +15,43 @@
         "SystemFee": 2000000,
         "ZOOM": 100000
     },
+    "DefaultSettings": {
+        "Name": "DefiForYou_Soft_NFT",
+        "Symbol": "DFY-NFT",
+        "Owner": "0x832dbe8bCB706F6ab0aC1C3d4C13c739FA7B8f6F",
+        "Royalty": 0,
+        "CollectionCID": "QmTgmpjvyvenyYw8MkCQYobaWn1qjaKmmec5EDKnPu6ZLx",
+        "MarketFee": "",
+        "ZOOM": 100000
+    },
+    "HubSettings": {
+        "Operator": "0xA120581F875A201E8f779280332a19C0f7974dDd",
+        "SystemFeeWallet": "0x900929DAa60945aa234F72239a3F75C6E6CAFDB3",
+        "SystemFeeToken": "0x20f1de452e9057fe863b99d33cf82dbee0c45b14"
+    },
+    "PawnSettings": {
+        "ZOOM": 100000,
+        "SystemFee": 2000000,
+        "PenaltyRate": 15000000,
+        "PrepaidFee": 300000,
+        "LateThreshold": 3
+    },
+    "PawnNFTSettings": {
+        "ZOOM": 100000,
+        "SystemFee": 2000000,
+        "PenaltyRate": 15000000,
+        "PrepaidFee": 300000,
+        "LateThreshold": 3
+    },
+    "NFTSettings": {
+        "CollectionCreatingFee": 0,
+        "MintingFee": 10000000000000000000
+    },
+    "MarketSettings": {
+        "ZOOM": 100000,
+        "MarketFeeRate": 250000,
+        "MarketFeeWallet": "0x900929DAa60945aa234F72239a3F75C6E6CAFDB3"
+    },
     "Proxies": {
         "Dev1": {
             "PAWN_NFT_CONTRACT_ADDRESS":    "0x5a8F734169901730c4C19A5Dc5022983A10D3d84",
@@ -23,8 +60,8 @@
             "REPUTATION_CONTRACT_ADDRESS":  "0x14f0714b8CcA57895F29911B5751acbBA2b0b1F9",
             "LOAN_NFT_CONTRACT_ADDRESS":    "0x4638e02E0d7a545e3b3Fde1404ae5Dd8090025Da",
             "EXCHANGE_CONTRACT_ADDRESS":    "0x0f1Bf7F0A0A0Ab443fA7a4a5D89d8f2fB3772b8E",
-            "HUB_CONTRACT_ADDRESS": "0xAbAf73711834FAE3eC40a594400D53E44B9A0018",
-            "EVALUATION_ADDRESS" : "0xfE4b55e82F743fcd042fbe1d264297d2D2422713"
+            "HUB_CONTRACT_ADDRESS": "0xB17cbc8967715aE90507E3E231Af741a29361114",
+            "EVALUATION_ADDRESS" : "0xc584DC18ec1054b587AD026cF17a725BC71Da19f"
         },
         "Dev2": {
             "PAWN_CONTRACT_ADDRESS":            "0x85e63AAA2CE9144bf7E716dF8CfAB1EcaE1E203A",
@@ -35,7 +72,9 @@
             "EXCHANGE_CONTRACT_ADDRESS":        "0x163B5aEc1849BE108BF6B90348c497E80a18753A",
             "PAWN_P2PLOAN_CONTRACT_ADDRESS":    "0x94C09760207A5039C5e6af0eF887A91d81457F74",
             "PAWN_NFPLOAN_CONTRACT_ADDRESS":    "",
-            "USERREVIEW_CONTRACT_ADDRESS":      "0x97A1543CC9266EC7450Eb36AB2dB8834C92Bb63e"
+            "USERREVIEW_CONTRACT_ADDRESS":      "0x97A1543CC9266EC7450Eb36AB2dB8834C92Bb63e",
+            "HUB_CONTRACT_ADDRESS": "0xB17cbc8967715aE90507E3E231Af741a29361114",
+            "EVALUATION_ADDRESS" : "0xc584DC18ec1054b587AD026cF17a725BC71Da19f"
         },
         "Staging": {
             "PAWN_CONTRACT_ADDRESS":            "0x14d64D2BdA4388Ac2055852133F4693ebf741bDA",
@@ -46,7 +85,10 @@
             "EXCHANGE_CONTRACT_ADDRESS":        "0x9EA306dC1D314849Ed0899Eea6CC130eBcce8EF5",
             "PAWN_P2PLOAN_CONTRACT_ADDRESS":    "0x828f4b1dcae29B54934107F69cEa9C69210c9060",
             "PAWN_NFPLOAN_CONTRACT_ADDRESS":    "",
-            "USERREVIEW_CONTRACT_ADDRESS":      "0xE4cbdfbb6852289DE6df7C83020bf9310ce75979"
+            "USERREVIEW_CONTRACT_ADDRESS":      "0xE4cbdfbb6852289DE6df7C83020bf9310ce75979",
+            "HUB_CONTRACT_ADDRESS": "0x957473344B7687A753595c3EdbC705ca472164BD",
+            "EVALUATION_ADDRESS" : "0xA3180FD2896535146A553A3483AB104A25453805",
+            "FACTORY_721_CONTRACT_ADDRESS": "0xa287Dd75Abd175b99341a070A84F2C732420f6df"
         },  
         "Beta": {
             "PAWN_CONTRACT_ADDRESS":            "0x6ff5FE3De90e847Ac30c19894F29225CD85431f2",

@@ -37,6 +37,8 @@ interface IDFYHardEvaluation is BaseInterface {
         string assetCID;
         address owner;
         address collectionAddress;
+        uint256 expectingPrice;
+        address expectingPriceAddress;
         CollectionStandard collectionStandard;
         AssetStatus status;
     }
@@ -109,6 +111,8 @@ interface IDFYHardEvaluation is BaseInterface {
     function createAssetRequest(
         string memory _assetCID,
         address _collectionAsset,
+        uint256 _expectingPrice,
+        address _expectingPriceAddress,
         CollectionStandard _collectionStandard
     ) external;
 

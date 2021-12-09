@@ -3,7 +3,7 @@ require('@nomiclabs/hardhat-ethers');
 const hre = require('hardhat');
 const { Proxies } = require('./.deployment_data.json');
 
-const DFY721BuildName = "contracts/pawn/nft_evaluation/implement/DFY_Hard_721.sol:DFY_Hard_721";
+const DFY721BuildName = "DFYHard721";
 const Evaluation = Proxies.Dev1.EVALUATION_ADDRESS;
 
 const decimals      = 10**18;

@@ -3,10 +3,10 @@ require('@nomiclabs/hardhat-ethers');
 const hre = require('hardhat');
 const { Proxies } = require('./.deployment_data.json');
 
-const EvaluationBuildName = "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:Hard_Evaluation";
+const EvaluationBuildName = "HardEvaluation";
 
 const HubBuildName = "Hub";
-const HubProxy = Proxies.Dev1.HUB_CONTRACT_ADDRESS;
+const HubProxy = Proxies.Staging.HUB_CONTRACT_ADDRESS;
 const proxyType = { kind: "uups" };
 
 const decimals      = 10**18;
