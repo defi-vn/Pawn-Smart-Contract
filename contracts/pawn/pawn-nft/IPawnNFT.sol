@@ -3,46 +3,17 @@
 pragma solidity ^0.8.4;
 
 interface IPawnNFT {
-    /** ========================= Collateral ============================= */
 
-    // Enum
-    enum LoanDurationType {
-        WEEK,
-        MONTH
-    }
-    enum CollateralStatus {
-        OPEN,
-        DOING,
-        COMPLETED,
-        CANCEL
-    }
-    enum OfferStatus {
-        PENDING,
-        ACCEPTED,
-        COMPLETED,
-        CANCEL
-    }
-    enum ContractStatus {
-        ACTIVE,
-        COMPLETED,
-        DEFAULT
-    }
-    enum PaymentRequestStatusEnum {
-        ACTIVE,
-        LATE,
-        COMPLETE,
-        DEFAULT
-    }
-    enum PaymentRequestTypeEnum {
-        INTEREST,
-        OVERDUE,
-        LOAN
-    }
-    enum ContractLiquidedReasonType {
-        LATE,
-        RISK,
-        UNPAID
-    }
+    /** ========================= Collateral ============================= */
+    
+    // Enum 
+    enum LoanDurationType {WEEK, MONTH}
+    enum CollateralStatus {OPEN, DOING, COMPLETED, CANCEL}
+    enum OfferStatus {PENDING, ACCEPTED, COMPLETED, CANCEL}
+    enum ContractStatus {ACTIVE, COMPLETED, DEFAULT}
+    enum PaymentRequestStatusEnum {ACTIVE, LATE, COMPLETE, DEFAULT}
+    enum PaymentRequestTypeEnum {INTEREST, OVERDUE, LOAN}
+    enum ContractLiquidedReasonType { LATE, RISK, UNPAID }
 
     struct Collateral {
         address owner;
@@ -57,16 +28,16 @@ interface IPawnNFT {
     }
 
     /**
-     * @dev create collateral function, collateral will be stored in this contract
-     * @param _nftContract is address NFT token collection
-     * @param _nftTokenId is token id of NFT
-     * @param _loanAmount is amount collateral
-     * @param _loanAsset is address of loan token
-     * @param _nftTokenQuantity is quantity NFT token
-     * @param _expectedDurationQty is expected duration
-     * @param _durationType is expected duration type
-     * @param _UID is UID pass create collateral to event collateral
-     */
+    * @dev create collateral function, collateral will be stored in this contract
+    * @param _nftContract is address NFT token collection
+    * @param _nftTokenId is token id of NFT
+    * @param _loanAmount is amount collateral
+    * @param _loanAsset is address of loan token
+    * @param _nftTokenQuantity is quantity NFT token
+    * @param _expectedDurationQty is expected duration
+    * @param _durationType is expected duration type
+    * @param _UID is UID pass create collateral to event collateral
+    */
     function createCollateral(
         address _nftContract,
         uint256 _nftTokenId,
@@ -76,20 +47,23 @@ interface IPawnNFT {
         uint256 _expectedDurationQty,
         LoanDurationType _durationType,
         uint256 _UID
-    ) external;
+    ) 
+    external;
 
     /**
-     * @dev withdrawCollateral function, collateral will be delete stored in contract
-     * @param _nftCollateralId is id of collateral
-     */
-    function withdrawCollateral(uint256 _nftCollateralId, uint256 _UID)
-        external;
+    * @dev withdrawCollateral function, collateral will be delete stored in contract
+    * @param _nftCollateralId is id of collateral
+    */
+    function withdrawCollateral(
+        uint256 _nftCollateralId,
+        uint256 _UID
+    ) external;
 
     /** ========================= OFFER ============================= */
 
     struct CollateralOfferList {
         //offerId => Offer
-        mapping(uint256 => Offer) offerMapping;
+        mapping (uint256 => Offer) offerMapping;
         uint256[] offerIdList;
         bool isInit;
     }
@@ -108,17 +82,17 @@ interface IPawnNFT {
     }
 
     /**
-     * @dev create offer to collateral
-     * @param _nftCollateralId is id collateral
-     * @param _repaymentAsset is address token repayment
-     * @param _loanToValue is LTV token of loan
-     * @param _loanAmount is amount token of loan
-     * @param _interest is interest of loan
-     * @param _duration is duration of loan
-     * @param _liquidityThreshold is liquidity threshold of loan
-     * @param _loanDurationType is duration type of loan
-     * @param _repaymentCycleType is repayment type of loan
-     */
+    * @dev create offer to collateral
+    * @param _nftCollateralId is id collateral
+    * @param _repaymentAsset is address token repayment
+    * @param _loanToValue is LTV token of loan
+    * @param _loanAmount is amount token of loan
+    * @param _interest is interest of loan
+    * @param _duration is duration of loan
+    * @param _liquidityThreshold is liquidity threshold of loan
+    * @param _loanDurationType is duration type of loan 
+    * @param _repaymentCycleType is repayment type of loan 
+    */
     function createOffer(
         uint256 _nftCollateralId,
         address _repaymentAsset,
@@ -133,10 +107,10 @@ interface IPawnNFT {
     ) external;
 
     /**
-     * @dev cancel offer
-     * @param _offerId is id offer
-     * @param _nftCollateralId is id NFT collateral
-     */
+    * @dev cancel offer
+    * @param _offerId is id offer
+    * @param _nftCollateralId is id NFT collateral
+    */
     function cancelOffer(
         uint256 _offerId,
         uint256 _nftCollateralId,
@@ -144,7 +118,7 @@ interface IPawnNFT {
     ) external;
 
     /** ========================= ACCEPT OFFER ============================= */
-
+    
     struct ContractTerms {
         address borrower;
         address lender;
@@ -164,7 +138,7 @@ interface IPawnNFT {
         uint256 penaltyRate;
         uint256 prepaidFeeRate;
     }
-
+    
     struct Contract {
         uint256 nftCollateralId;
         uint256 offerId;
@@ -174,12 +148,14 @@ interface IPawnNFT {
     }
 
     function acceptOffer(
-        uint256 _nftCollateralId,
+        uint256 _nftCollateralId, 
         uint256 _offerId,
         uint256 _UID
     ) external;
 
+
     /** ========================= REPAYMENT ============================= */
+    
 
     struct PaymentRequest {
         uint256 requestId;
@@ -195,15 +171,15 @@ interface IPawnNFT {
     }
 
     /**
-     * @dev End lend period settlement and generate invoice for next period
-     * @param _contractId is id contract
-     * @param _remainingLoan is remaining Loan of borrower
-     * @param _nextPhrasePenalty is next Phrase Penalty
-     * @param _nextPhraseInterest is token next Phrase Interest
-     * @param _dueDateTimestamp is due DateTimestamp
-     * @param _paymentRequestType is type of payment request
-     * @param _chargePrepaidFee is charge Prepaid Fee
-     */
+    * @dev End lend period settlement and generate invoice for next period
+    * @param _contractId is id contract
+    * @param _remainingLoan is remaining Loan of borrower
+    * @param _nextPhrasePenalty is next Phrase Penalty
+    * @param _nextPhraseInterest is token next Phrase Interest
+    * @param _dueDateTimestamp is due DateTimestamp
+    * @param _paymentRequestType is type of payment request
+    * @param _chargePrepaidFee is charge Prepaid Fee
+    */
     function closePaymentRequestAndStartNew(
         uint256 _contractId,
         uint256 _remainingLoan,
@@ -215,12 +191,12 @@ interface IPawnNFT {
     ) external;
 
     /**
-     * @dev Borrowers make repayments
-     * @param _contractId is id contract
-     * @param _paidPenaltyAmount is paid Penalty Amount
-     * @param _paidInterestAmount is paid Interest Amount
-     * @param _paidLoanAmount is paidLoanAmount
-     */
+    * @dev Borrowers make repayments
+    * @param _contractId is id contract
+    * @param _paidPenaltyAmount is paid Penalty Amount 
+    * @param _paidInterestAmount is paid Interest Amount
+    * @param _paidLoanAmount is paidLoanAmount
+    */
     function repayment(
         uint256 _contractId,
         uint256 _paidPenaltyAmount,
@@ -235,16 +211,11 @@ interface IPawnNFT {
         uint256 _collateralPerLoanAssetExchangeRate
     ) external;
 
-    function lateLiquidationExecution(uint256 _contractId) external;
+    function lateLiquidationExecution(
+        uint256 _contractId
+    ) external;
 
-    function notPaidFullAtEndContractLiquidation(uint256 _contractId) external;
-
-    function getContractInfoForReview(uint256 _contractId) 
-        external
-        view
-        returns (
-            address borrower,
-            address lender,
-            ContractStatus status
-        );
+    function notPaidFullAtEndContractLiquidation(
+        uint256 _contractId
+    ) external;
 }

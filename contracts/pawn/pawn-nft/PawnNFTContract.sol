@@ -20,23 +20,24 @@ import "../evaluation/EvaluationContract.sol";
 import "../evaluation/IBEP20.sol";
 import "../reputation/IReputation.sol";
 
-contract PawnNFTContract is
-    IPawnNFT,
-    Initializable,
+contract PawnNFTContract is 
+    IPawnNFT, 
+    Initializable, 
     UUPSUpgradeable,
-    PausableUpgradeable,
-    ReentrancyGuardUpgradeable,
+    PausableUpgradeable, 
+    ReentrancyGuardUpgradeable, 
     ERC1155HolderUpgradeable,
     DFYAccessControl
 {
+
     using AddressUpgradeable for address;
-    using SafeMathUpgradeable for uint256;
+    using SafeMathUpgradeable for uint;
     using CountersUpgradeable for CountersUpgradeable.Counter;
     using SafeERC20Upgradeable for IERC20Upgradeable;
 
     AssetEvaluation assetEvaluation;
 
-    mapping(address => uint256) public whitelistCollateral;
+    mapping (address => uint256) public whitelistCollateral;
     address public feeWallet;
     uint256 public penaltyRate;
     uint256 public systemFeeRate;
@@ -56,102 +57,71 @@ contract PawnNFTContract is
         ZOOM = _zoom;
     }
 
-    function _authorizeUpgrade(address)
-        internal
-        override
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {}
+    function _authorizeUpgrade(address) internal override onlyRole(DEFAULT_ADMIN_ROLE) {}
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC1155ReceiverUpgradeable, AccessControlUpgradeable)
+    function supportsInterface(bytes4 interfaceId) 
+        public view 
+        override(ERC1155ReceiverUpgradeable, AccessControlUpgradeable) 
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
     }
 
-    function setOperator(address _newOperator)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function setOperator(address _newOperator) onlyRole(DEFAULT_ADMIN_ROLE) external {
         // operator = _newOperator;
         grantRole(OPERATOR_ROLE, _newOperator);
     }
 
-    function setFeeWallet(address _newFeeWallet)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function setFeeWallet(address _newFeeWallet) onlyRole(DEFAULT_ADMIN_ROLE) external {
         feeWallet = _newFeeWallet;
     }
 
-    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function pause() onlyRole(DEFAULT_ADMIN_ROLE) external {
         _pause();
     }
 
-    function unPause() external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function unPause() onlyRole(DEFAULT_ADMIN_ROLE) external {
         _unpause();
     }
 
     /**
-     * @dev set fee for each token
-     * @param _feeRate is percentage of tokens to pay for the transaction
-     */
-    function setSystemFeeRate(uint256 _feeRate)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    * @dev set fee for each token
+    * @param _feeRate is percentage of tokens to pay for the transaction
+    */
+    function setSystemFeeRate(uint256 _feeRate) external onlyRole(DEFAULT_ADMIN_ROLE) {
         systemFeeRate = _feeRate;
     }
 
     /**
-     * @dev set fee for each token
-     * @param _feeRate is percentage of tokens to pay for the penalty
-     */
-    function setPenaltyRate(uint256 _feeRate)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    * @dev set fee for each token
+    * @param _feeRate is percentage of tokens to pay for the penalty
+    */
+    function setPenaltyRate(uint256 _feeRate) external onlyRole(DEFAULT_ADMIN_ROLE) {
         penaltyRate = _feeRate;
     }
 
     /**
-     * @dev set fee for each token
-     * @param _threshold is number of time allowed for late repayment
-     */
-    function setLateThreshold(uint256 _threshold)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    * @dev set fee for each token
+    * @param _threshold is number of time allowed for late repayment
+    */
+    function setLateThreshold(uint256 _threshold) external onlyRole(DEFAULT_ADMIN_ROLE) {
         lateThreshold = _threshold;
     }
 
-    function setPrepaidFeeRate(uint256 _feeRate)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function setPrepaidFeeRate(uint256 _feeRate) external onlyRole(DEFAULT_ADMIN_ROLE) {
         prepaidFeeRate = _feeRate;
     }
 
-    function setWhitelistCollateral(address _token, uint256 _status)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function setWhitelistCollateral(address _token, uint256 _status) external onlyRole(DEFAULT_ADMIN_ROLE) {
         whitelistCollateral[_token] = _status;
     }
 
     function emergencyWithdraw(address _token)
-        external
-        whenPaused
+        external 
+        whenPaused 
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
-        PawnNFTLib.safeTransfer(
-            _token,
-            address(this),
-            msg.sender,
-            PawnNFTLib.calculateAmount(_token, address(this))
-        );
+        PawnNFTLib.safeTransfer(_token, address(this), msg.sender, PawnNFTLib.calculateAmount(_token, address(this)));
     }
 
     /** ========================= EVENT ============================= */
@@ -161,7 +131,7 @@ contract PawnNFTContract is
         Collateral data,
         uint256 UID
     );
-
+    
     //create offer & cancel
     event OfferEvent(
         uint256 offerId,
@@ -173,15 +143,18 @@ contract PawnNFTContract is
     //accept offer
     event LoanContractCreatedEvent(
         address fromAddress,
-        uint256 contractId,
+        uint256 contractId,   
         Contract data,
         uint256 UID
     );
 
     //repayment
-    event PaymentRequestEvent(uint256 contractId, PaymentRequest data);
+    event PaymentRequestEvent (
+        uint256 contractId,
+        PaymentRequest data
+    );
 
-    event RepaymentEvent(
+    event RepaymentEvent (
         uint256 contractId,
         uint256 paidPenaltyAmount,
         uint256 paidInterestAmount,
@@ -193,14 +166,16 @@ contract PawnNFTContract is
     );
 
     //liquidity & defaul
-    event ContractLiquidedEvent(
+     event ContractLiquidedEvent(
         uint256 contractId,
         uint256 liquidedAmount,
         uint256 feeAmount,
         ContractLiquidedReasonType reasonType
     );
 
-    event LoanContractCompletedEvent(uint256 contractId);
+    event LoanContractCompletedEvent(
+        uint256 contractId
+    );
 
     event CancelOfferEvent(
         uint256 offerId,
@@ -213,34 +188,34 @@ contract PawnNFTContract is
     CountersUpgradeable.Counter public numberCollaterals;
 
     // Mapping collateralId => Collateral
-    mapping(uint256 => Collateral) public collaterals;
+    mapping (uint256 => Collateral) public collaterals;
 
     // Total offer
     CountersUpgradeable.Counter public numberOffers;
-
+    
     // Mapping collateralId => list offer of collateral
-    mapping(uint256 => CollateralOfferList) public collateralOffersMapping;
+    mapping (uint256 => CollateralOfferList) public collateralOffersMapping;
 
     // Total contract
     uint256 public numberContracts;
 
     // Mapping contractId => Contract
-    mapping(uint256 => Contract) public contracts;
+    mapping (uint256 => Contract) public contracts;
 
     // Mapping contract Id => array payment request
-    mapping(uint256 => PaymentRequest[]) public contractPaymentRequestMapping;
+    mapping (uint256 => PaymentRequest[]) public contractPaymentRequestMapping;
 
     /**
-     * @dev create collateral function, collateral will be stored in this contract
-     * @param _nftContract is address NFT token collection
-     * @param _nftTokenId is token id of NFT
-     * @param _loanAmount is amount collateral
-     * @param _loanAsset is address of loan token
-     * @param _nftTokenQuantity is quantity NFT token
-     * @param _expectedDurationQty is expected duration
-     * @param _durationType is expected duration type
-     * @param _UID is UID pass create collateral to event collateral
-     */
+    * @dev create collateral function, collateral will be stored in this contract
+    * @param _nftContract is address NFT token collection
+    * @param _nftTokenId is token id of NFT
+    * @param _loanAmount is amount collateral
+    * @param _loanAsset is address of loan token
+    * @param _nftTokenQuantity is quantity NFT token
+    * @param _expectedDurationQty is expected duration
+    * @param _durationType is expected duration type
+    * @param _UID is UID pass create collateral to event collateral
+    */
     function createCollateral(
         address _nftContract,
         uint256 _nftTokenId,
@@ -271,81 +246,50 @@ contract PawnNFTContract is
         uint256 collateralId = numberCollaterals.current();
 
         // Transfer token
-        PawnNFTLib.safeTranferNFTToken(
-            _nftContract,
-            msg.sender,
-            address(this),
-            _nftTokenId,
-            _nftTokenQuantity
-        );
+        PawnNFTLib.safeTranferNFTToken(_nftContract, msg.sender, address(this), _nftTokenId, _nftTokenQuantity);
 
         // Create collateral
         collaterals[collateralId] = Collateral({
-            owner: msg.sender,
-            nftContract: _nftContract,
-            nftTokenId: _nftTokenId,
-            loanAmount: _loanAmount,
-            loanAsset: _loanAsset,
-            nftTokenQuantity: _nftTokenQuantity,
-            expectedDurationQty: _expectedDurationQty,
-            durationType: _durationType,
-            status: CollateralStatus.OPEN
-        });
-
+                                                owner: msg.sender,
+                                                nftContract: _nftContract,
+                                                nftTokenId: _nftTokenId,
+                                                loanAmount: _loanAmount,
+                                                loanAsset: _loanAsset,
+                                                nftTokenQuantity: _nftTokenQuantity,
+                                                expectedDurationQty: _expectedDurationQty,
+                                                durationType: _durationType,
+                                                status: CollateralStatus.OPEN
+                                                });
+        
         // Update number colaterals
         numberCollaterals.increment();
 
-        emit CollateralEvent(collateralId, collaterals[collateralId], _UID);
-
-        // Adjust reputation score
-        reputation.adjustReputationScore(
-            msg.sender,
-            IReputation.ReasonType.BR_CREATE_COLLATERAL
-        );
+        emit CollateralEvent(collateralId, collaterals[collateralId],_UID);
+        
+         // Adjust reputation score
+        reputation.adjustReputationScore(msg.sender, IReputation.ReasonType.BR_CREATE_COLLATERAL);
     }
 
-    function withdrawCollateral(uint256 _nftCollateralId, uint256 _UID)
-        external
-        override
-        whenNotPaused
+    function withdrawCollateral(
+        uint256 _nftCollateralId,
+        uint256 _UID
+    ) external override whenNotPaused
     {
         Collateral storage _collateral = collaterals[_nftCollateralId];
 
         // Check owner collateral
-        require(
-            _collateral.owner == msg.sender &&
-                _collateral.status == CollateralStatus.OPEN,
-            "0"
-        );
+        require(_collateral.owner == msg.sender && _collateral.status == CollateralStatus.OPEN, "0");
 
         // Return NFT token to owner
-        PawnNFTLib.safeTranferNFTToken(
-            _collateral.nftContract,
-            address(this),
-            _collateral.owner,
-            _collateral.nftTokenId,
-            _collateral.nftTokenQuantity
-        );
+        PawnNFTLib.safeTranferNFTToken(_collateral.nftContract, address(this), _collateral.owner, _collateral.nftTokenId, _collateral.nftTokenQuantity);
 
         // Remove relation of collateral and offers
-        CollateralOfferList
-            storage collateralOfferList = collateralOffersMapping[
-                _nftCollateralId
-            ];
+        CollateralOfferList storage collateralOfferList = collateralOffersMapping[_nftCollateralId];
         if (collateralOfferList.isInit == true) {
-            for (
-                uint256 i = 0;
-                i < collateralOfferList.offerIdList.length;
-                i++
-            ) {
+            for (uint i = 0; i < collateralOfferList.offerIdList.length; i ++) {
                 uint256 offerId = collateralOfferList.offerIdList[i];
                 Offer storage offer = collateralOfferList.offerMapping[offerId];
-                emit CancelOfferEvent(
-                    offerId,
-                    _nftCollateralId,
-                    offer.owner,
-                    _UID
-                );
+                emit CancelOfferEvent(offerId, _nftCollateralId, offer.owner, _UID);
             }
             delete collateralOffersMapping[_nftCollateralId];
         }
@@ -355,27 +299,27 @@ contract PawnNFTContract is
 
         emit CollateralEvent(_nftCollateralId, _collateral, _UID);
 
+
         delete collaterals[_nftCollateralId];
 
         // Adjust reputation score
-        reputation.adjustReputationScore(
-            msg.sender,
-            IReputation.ReasonType.BR_CANCEL_COLLATERAL
-        );
+        reputation.adjustReputationScore(msg.sender, IReputation.ReasonType.BR_CANCEL_COLLATERAL);
+    
+
     }
 
     /**
-     * @dev create offer to collateral
-     * @param _nftCollateralId is id collateral
-     * @param _repaymentAsset is address token repayment
-     * @param _loanToValue is LTV token of loan
-     * @param _loanAmount is amount token of loan
-     * @param _interest is interest of loan
-     * @param _duration is duration of loan
-     * @param _liquidityThreshold is liquidity threshold of loan
-     * @param _loanDurationType is duration type of loan
-     * @param _repaymentCycleType is repayment type of loan
-     */
+    * @dev create offer to collateral
+    * @param _nftCollateralId is id collateral
+    * @param _repaymentAsset is address token repayment
+    * @param _loanToValue is LTV token of loan
+    * @param _loanAmount is amount token of loan
+    * @param _interest is interest of loan
+    * @param _duration is duration of loan
+    * @param _liquidityThreshold is liquidity threshold of loan
+    * @param _loanDurationType is duration type of loan 
+    * @param _repaymentCycleType is repayment type of loan 
+    */
     function createOffer(
         uint256 _nftCollateralId,
         address _repaymentAsset,
@@ -387,46 +331,29 @@ contract PawnNFTContract is
         LoanDurationType _loanDurationType,
         LoanDurationType _repaymentCycleType,
         uint256 _UID
-    ) external override whenNotPaused {
+    ) external override whenNotPaused
+    {
         // Get collateral
         Collateral storage _collateral = collaterals[_nftCollateralId];
 
         // Check owner collateral
-        require(
-            _collateral.owner != msg.sender &&
-                _collateral.status == CollateralStatus.OPEN,
-            "0"
-        ); // You can not offer.
+        require(_collateral.owner != msg.sender && _collateral.status == CollateralStatus.OPEN, "0"); // You can not offer.
 
-        // Check approve
-        require(
-            IERC20Upgradeable(_collateral.loanAsset).allowance(
-                msg.sender,
-                address(this)
-            ) >= _loanAmount,
-            "1"
-        ); // You not approve.
+        // Check approve 
+        require(IERC20Upgradeable(_collateral.loanAsset).allowance(msg.sender, address(this)) >= _loanAmount, "1"); // You not approve.
 
         // Check repayment asset
         require(_repaymentAsset != address(0), "2"); // Address repayment asset must be different address(0).
 
         // Check loan amount
-        require(
-            _loanToValue > 0 &&
-                _loanAmount > 0 &&
-                _interest > 0 &&
-                _liquidityThreshold > _loanToValue,
-            "3"
-        ); // Loan to value must be grean that 0.
+        require(_loanToValue > 0 && _loanAmount > 0 && _interest > 0 && _liquidityThreshold > _loanToValue, "3"); // Loan to value must be grean that 0.
 
+        
         // Gennerate Offer Id
         uint256 offerId = numberOffers.current();
 
         // Get offers of collateral
-        CollateralOfferList
-            storage _collateralOfferList = collateralOffersMapping[
-                _nftCollateralId
-            ];
+        CollateralOfferList storage _collateralOfferList = collateralOffersMapping[_nftCollateralId];
 
         if (!_collateralOfferList.isInit) {
             _collateralOfferList.isInit = true;
@@ -451,102 +378,71 @@ contract PawnNFTContract is
         // Update number offer
         numberOffers.increment();
 
-        emit OfferEvent(
-            offerId,
-            _nftCollateralId,
-            _collateralOfferList.offerMapping[offerId],
-            _UID
-        );
+        emit OfferEvent(offerId, _nftCollateralId, _collateralOfferList.offerMapping[offerId], _UID);
 
         // Adjust reputation score
-        reputation.adjustReputationScore(
-            msg.sender,
-            IReputation.ReasonType.LD_CREATE_OFFER
-        );
+        reputation.adjustReputationScore(msg.sender, IReputation.ReasonType.LD_CREATE_OFFER);
     }
 
-    function cancelOffer(
-        uint256 _offerId,
-        uint256 _nftCollateralId,
-        uint256 _UID
-    ) external override whenNotPaused {
+    function cancelOffer(uint256 _offerId, uint256 _nftCollateralId, uint256 _UID) external override whenNotPaused {
+        
         // Get offer
-        CollateralOfferList
-            storage _collateralOfferList = collateralOffersMapping[
-                _nftCollateralId
-            ];
+        CollateralOfferList storage _collateralOfferList = collateralOffersMapping[_nftCollateralId];
 
         // Check Offer Collater isnit
-        require(_collateralOfferList.isInit == true, "0");
+        require(_collateralOfferList.isInit == true, '0');
 
         // Get offer
         Offer storage _offer = _collateralOfferList.offerMapping[_offerId];
 
         // Check owner offer
-        require(
-            _offer.owner == msg.sender && _offer.status == OfferStatus.PENDING,
-            "1"
-        );
+        require(_offer.owner == msg.sender && _offer.status == OfferStatus.PENDING, '1');
 
         delete _collateralOfferList.offerMapping[_offerId];
-        for (uint256 i = 0; i < _collateralOfferList.offerIdList.length; i++) {
+        for (uint i = 0; i < _collateralOfferList.offerIdList.length; i ++) {
             if (_collateralOfferList.offerIdList[i] == _offerId) {
-                _collateralOfferList.offerIdList[i] = _collateralOfferList
-                    .offerIdList[_collateralOfferList.offerIdList.length - 1];
+                _collateralOfferList.offerIdList[i] = _collateralOfferList.offerIdList[_collateralOfferList.offerIdList.length - 1];
                 break;
             }
         }
 
-        delete _collateralOfferList.offerIdList[
-            _collateralOfferList.offerIdList.length - 1
-        ];
-        emit CancelOfferEvent(_offerId, _nftCollateralId, msg.sender, _UID);
-
+        delete _collateralOfferList.offerIdList[_collateralOfferList.offerIdList.length - 1];
+        emit CancelOfferEvent(_offerId, _nftCollateralId, msg.sender,_UID);
+        
         // Adjust reputation score
-        reputation.adjustReputationScore(
-            msg.sender,
-            IReputation.ReasonType.LD_CANCEL_OFFER
-        );
+        reputation.adjustReputationScore(msg.sender, IReputation.ReasonType.LD_CANCEL_OFFER);
     }
 
     /** ================================ ACCEPT OFFER ============================= */
     /**
-     * @dev accept offer and create contract between collateral and offer
-     * @param  _nftCollateralId is id of collateral NFT
-     * @param  _offerId is id of offer
-     */
+    * @dev accept offer and create contract between collateral and offer
+    * @param  _nftCollateralId is id of collateral NFT
+    * @param  _offerId is id of offer
+    */
     function acceptOffer(
-        uint256 _nftCollateralId,
+        uint256 _nftCollateralId, 
         uint256 _offerId,
         uint256 _UID
-    ) external override whenNotPaused {
+    ) 
+        external 
+        override 
+        whenNotPaused 
+    {
+
         Collateral storage collateral = collaterals[_nftCollateralId];
         // Check owner of collateral
-        require(msg.sender == collateral.owner, "0");
+        require(msg.sender == collateral.owner, '0');
         // Check for collateralNFT status is OPEN
-        require(collateral.status == CollateralStatus.OPEN, "1");
+        require(collateral.status == CollateralStatus.OPEN, '1');
 
-        CollateralOfferList
-            storage collateralOfferList = collateralOffersMapping[
-                _nftCollateralId
-            ];
-        require(collateralOfferList.isInit == true, "2");
+        CollateralOfferList storage collateralOfferList = collateralOffersMapping[_nftCollateralId];
+        require(collateralOfferList.isInit == true, '2');
         // Check for offer status is PENDING
         Offer storage offer = collateralOfferList.offerMapping[_offerId];
 
-        require(offer.status == OfferStatus.PENDING, "3");
+        require(offer.status == OfferStatus.PENDING, '3');
 
-        uint256 contractId = createContract(
-            _nftCollateralId,
-            collateral,
-            _offerId,
-            offer.loanAmount,
-            offer.owner,
-            offer.repaymentAsset,
-            offer.interest,
-            offer.loanDurationType,
-            offer.liquidityThreshold
-        );
+        uint256 contractId = createContract(_nftCollateralId, collateral, _offerId, offer.loanAmount, offer.owner, offer.repaymentAsset, offer.interest, offer.loanDurationType, offer.liquidityThreshold);
         Contract storage newContract = contracts[contractId];
         // Change status of offer and collateral
         offer.status = OfferStatus.ACCEPTED;
@@ -557,57 +453,36 @@ contract PawnNFTContract is
             uint256 thisOfferId = collateralOfferList.offerIdList[i];
             if (thisOfferId != _offerId) {
                 //Offer storage thisOffer = collateralOfferList.offerMapping[thisOfferId];
-                emit CancelOfferEvent(
-                    thisOfferId,
-                    _nftCollateralId,
-                    offer.owner,
-                    _UID
-                );
+                emit CancelOfferEvent(thisOfferId, _nftCollateralId,offer.owner,_UID);
                 delete collateralOfferList.offerMapping[thisOfferId];
             }
         }
         delete collateralOfferList.offerIdList;
         collateralOfferList.offerIdList.push(_offerId);
 
-        emit LoanContractCreatedEvent(
-            msg.sender,
-            contractId,
-            newContract,
-            _UID
-        );
+        emit LoanContractCreatedEvent(msg.sender, contractId, newContract, _UID);
 
         // Transfer loan asset to collateral owner
-        PawnNFTLib.safeTransfer(
-            newContract.terms.loanAsset,
-            newContract.terms.lender,
-            newContract.terms.borrower,
-            newContract.terms.loanAmount
-        );
-
+        PawnNFTLib.safeTransfer(newContract.terms.loanAsset, newContract.terms.lender, newContract.terms.borrower, newContract.terms.loanAmount);
+    
         // Adjust reputation score
-        reputation.adjustReputationScore(
-            msg.sender,
-            IReputation.ReasonType.BR_ACCEPT_OFFER
-        );
-        reputation.adjustReputationScore(
-            offer.owner,
-            IReputation.ReasonType.LD_ACCEPT_OFFER
-        );
+        reputation.adjustReputationScore(msg.sender, IReputation.ReasonType.BR_ACCEPT_OFFER);
+        reputation.adjustReputationScore(offer.owner, IReputation.ReasonType.LD_ACCEPT_OFFER);
     }
 
     /**
-     * @dev create contract between offer and collateral
-     * @param  _nftCollateralId is id of Collateral
-     * @param  _collateral is Collateral
-     * @param  _offerId is id of offer
-     * @param  _loanAmount is loan amount
-     * @param  _lender is address of lender
-     * @param  _repaymentAsset is address of pay token
-     * @param  _interest is interest rate payable
-     * @param  _repaymentCycleType is repayment cycle type (WEEK/MONTH)
-     * @param  _liquidityThreshold is rate will liquidate the contract
-     */
-    function createContract(
+    * @dev create contract between offer and collateral
+    * @param  _nftCollateralId is id of Collateral
+    * @param  _collateral is Collateral
+    * @param  _offerId is id of offer
+    * @param  _loanAmount is loan amount 
+    * @param  _lender is address of lender
+    * @param  _repaymentAsset is address of pay token
+    * @param  _interest is interest rate payable
+    * @param  _repaymentCycleType is repayment cycle type (WEEK/MONTH)
+    * @param  _liquidityThreshold is rate will liquidate the contract
+    */
+    function createContract (
         uint256 _nftCollateralId,
         Collateral storage _collateral,
         uint256 _offerId,
@@ -617,14 +492,14 @@ contract PawnNFTContract is
         uint256 _interest,
         LoanDurationType _repaymentCycleType,
         uint256 _liquidityThreshold
-    ) internal returns (uint256 _idx) {
-        // Get Offer
-        CollateralOfferList
-            storage collateralOfferList = collateralOffersMapping[
-                _nftCollateralId
-            ];
+    ) 
+        internal 
+        returns (uint256 _idx) 
+    {
+        // Get Offer                                                                                                                                                                                                                             
+        CollateralOfferList storage collateralOfferList = collateralOffersMapping[_nftCollateralId];
         Offer storage _offer = collateralOfferList.offerMapping[_offerId];
-
+        
         _idx = numberContracts;
         Contract storage newContract = contracts[_idx];
         newContract.nftCollateralId = _nftCollateralId;
@@ -643,12 +518,7 @@ contract PawnNFTContract is
         newContract.terms.interest = _interest;
         newContract.terms.liquidityThreshold = _liquidityThreshold;
         newContract.terms.contractStartDate = block.timestamp;
-        newContract.terms.contractEndDate =
-            block.timestamp +
-            PawnNFTLib.calculateContractDuration(
-                _offer.loanDurationType,
-                _offer.duration
-            );
+        newContract.terms.contractEndDate = block.timestamp + PawnNFTLib.calculateContractDuration(_offer.loanDurationType, _offer.duration);
         newContract.terms.lateThreshold = lateThreshold;
         newContract.terms.systemFeeRate = systemFeeRate;
         newContract.terms.penaltyRate = penaltyRate;
@@ -657,15 +527,15 @@ contract PawnNFTContract is
     }
 
     /**
-     * @dev Close old Payment Request and Start New Payment Request
-     * @param  _contractId is id of contract
-     * @param  _remainingLoan is remaining loan of contract
-     * @param  _nextPhrasePenalty is fines for the next period
-     * @param  _nextPhraseInterest is interest for the next period
-     * @param  _dueDateTimestamp is due date timestamp of payment request
-     * @param  _paymentRequestType is payment request type
-     * @param  _chargePrepaidFee is prepaid fee payment request
-     */
+    * @dev Close old Payment Request and Start New Payment Request
+    * @param  _contractId is id of contract
+    * @param  _remainingLoan is remaining loan of contract
+    * @param  _nextPhrasePenalty is fines for the next period
+    * @param  _nextPhraseInterest is interest for the next period
+    * @param  _dueDateTimestamp is due date timestamp of payment request
+    * @param  _paymentRequestType is payment request type 
+    * @param  _chargePrepaidFee is prepaid fee payment request
+    */
     function closePaymentRequestAndStartNew(
         uint256 _contractId,
         uint256 _remainingLoan,
@@ -674,88 +544,61 @@ contract PawnNFTContract is
         uint256 _dueDateTimestamp,
         PaymentRequestTypeEnum _paymentRequestType,
         bool _chargePrepaidFee
-    ) external override whenNotPaused onlyRole(OPERATOR_ROLE) {
+    ) 
+        external 
+        override 
+        whenNotPaused 
+        onlyRole(OPERATOR_ROLE) 
+    {
         //Get contract
         Contract storage currentContract = contractMustActive(_contractId);
 
         // Check if number of requests is 0 => create new requests, if not then update current request as LATE or COMPLETE and create new requests
-        PaymentRequest[] storage requests = contractPaymentRequestMapping[
-            _contractId
-        ];
+        PaymentRequest[] storage requests = contractPaymentRequestMapping[_contractId];
         if (requests.length > 0) {
             // not first phrase, get previous request
-            PaymentRequest storage previousRequest = requests[
-                requests.length - 1
-            ];
-
+            PaymentRequest storage previousRequest = requests[requests.length - 1];
+            
             // Validate: time must over due date of current payment
-            require(block.timestamp >= previousRequest.dueDateTimestamp, "0");
+            require(block.timestamp >= previousRequest.dueDateTimestamp, '0');
 
             // Validate: remaining loan must valid
-            require(previousRequest.remainingLoan == _remainingLoan, "1");
+            require(previousRequest.remainingLoan == _remainingLoan, '1');
 
             // Validate: Due date timestamp of next payment request must not over contract due date
-            require(
-                _dueDateTimestamp <= currentContract.terms.contractEndDate,
-                "2"
-            );
-            require(
-                _dueDateTimestamp > previousRequest.dueDateTimestamp ||
-                    _dueDateTimestamp == 0,
-                "3"
-            );
+            require(_dueDateTimestamp <= currentContract.terms.contractEndDate, '2');
+            require(_dueDateTimestamp > previousRequest.dueDateTimestamp || _dueDateTimestamp == 0, '3');
 
             // update previous
             // check for remaining penalty and interest, if greater than zero then is Lated, otherwise is completed
-            if (
-                previousRequest.remainingInterest > 0 ||
-                previousRequest.remainingPenalty > 0
-            ) {
+            if (previousRequest.remainingInterest > 0 || previousRequest.remainingPenalty > 0) {
                 previousRequest.status = PaymentRequestStatusEnum.LATE;
                 // Update late counter of contract
                 currentContract.lateCount += 1;
 
                 // Adjust reputation score
-                reputation.adjustReputationScore(
-                    currentContract.terms.borrower,
-                    IReputation.ReasonType.BR_LATE_PAYMENT
-                );
+                reputation.adjustReputationScore(currentContract.terms.borrower, IReputation.ReasonType.BR_LATE_PAYMENT);
+
 
                 // Check for late threshold reach
-                if (
-                    currentContract.terms.lateThreshold <=
-                    currentContract.lateCount
-                ) {
+                if (currentContract.terms.lateThreshold <= currentContract.lateCount) {
                     // Execute liquid
-                    _liquidationExecution(
-                        _contractId,
-                        ContractLiquidedReasonType.LATE
-                    );
+                    _liquidationExecution(_contractId, ContractLiquidedReasonType.LATE);
                     return;
                 }
             } else {
                 previousRequest.status = PaymentRequestStatusEnum.COMPLETE;
 
                 // Adjust reputation score
-                reputation.adjustReputationScore(
-                    currentContract.terms.borrower,
-                    IReputation.ReasonType.BR_ONTIME_PAYMENT
-                );
+                reputation.adjustReputationScore(currentContract.terms.borrower, IReputation.ReasonType.BR_ONTIME_PAYMENT);
+            
             }
 
             // Check for last repayment, if last repayment, all paid
             if (block.timestamp > currentContract.terms.contractEndDate) {
-                if (
-                    previousRequest.remainingInterest +
-                        previousRequest.remainingPenalty +
-                        previousRequest.remainingLoan >
-                    0
-                ) {
+                if (previousRequest.remainingInterest + previousRequest.remainingPenalty + previousRequest.remainingLoan > 0) {
                     // unpaid => liquid
-                    _liquidationExecution(
-                        _contractId,
-                        ContractLiquidedReasonType.UNPAID
-                    );
+                    _liquidationExecution(_contractId, ContractLiquidedReasonType.UNPAID);
                     return;
                 } else {
                     // paid full => release collateral
@@ -767,22 +610,12 @@ contract PawnNFTContract is
             emit PaymentRequestEvent(_contractId, previousRequest);
         } else {
             // Validate: remaining loan must valid
-            require(currentContract.terms.loanAmount == _remainingLoan, "4");
+            require(currentContract.terms.loanAmount == _remainingLoan, '4');
 
             // Validate: Due date timestamp of next payment request must not over contract due date
-            require(
-                _dueDateTimestamp <= currentContract.terms.contractEndDate,
-                "5"
-            );
-            require(
-                _dueDateTimestamp > currentContract.terms.contractStartDate ||
-                    _dueDateTimestamp == 0,
-                "6"
-            );
-            require(
-                block.timestamp < _dueDateTimestamp || _dueDateTimestamp == 0,
-                "7"
-            );
+            require(_dueDateTimestamp <= currentContract.terms.contractEndDate, '5');
+            require(_dueDateTimestamp > currentContract.terms.contractStartDate || _dueDateTimestamp == 0, '6');
+            require(block.timestamp < _dueDateTimestamp || _dueDateTimestamp == 0, '7');
 
             // Check for last repayment, if last repayment, all paid
             if (block.timestamp > currentContract.terms.contractEndDate) {
@@ -809,25 +642,22 @@ contract PawnNFTContract is
         emit PaymentRequestEvent(_contractId, newRequest);
     }
 
+
     /**
-     * @dev get Contract must active
-     * @param  _contractId is id of contract
-     */
-    function contractMustActive(uint256 _contractId)
-        internal
-        view
-        returns (Contract storage _contract)
-    {
+    * @dev get Contract must active
+    * @param  _contractId is id of contract
+    */
+    function contractMustActive(uint256 _contractId) internal view returns (Contract storage _contract) {
         // Validate: Contract must active
         _contract = contracts[_contractId];
-        require(_contract.status == ContractStatus.ACTIVE, "0");
+        require(_contract.status == ContractStatus.ACTIVE, '0');
     }
 
     /**
-     * @dev Perform contract liquidation
-     * @param  _contractId is id of contract
-     * @param  _reasonType is type of reason for liquidation of the contract
-     */
+    * @dev Perform contract liquidation
+    * @param  _contractId is id of contract
+    * @param  _reasonType is type of reason for liquidation of the contract
+    */
     function _liquidationExecution(
         uint256 _contractId,
         ContractLiquidedReasonType _reasonType
@@ -836,58 +666,42 @@ contract PawnNFTContract is
 
         // Execute: update status of contract to DEFAULT, collateral to COMPLETE
         _contract.status = ContractStatus.DEFAULT;
-        PaymentRequest[]
-            storage _paymentRequests = contractPaymentRequestMapping[
-                _contractId
-            ];
-        PaymentRequest storage _lastPaymentRequest = _paymentRequests[
-            _paymentRequests.length - 1
-        ];
+        PaymentRequest[] storage _paymentRequests = contractPaymentRequestMapping[_contractId];
+        PaymentRequest storage _lastPaymentRequest = _paymentRequests[_paymentRequests.length - 1];
         _lastPaymentRequest.status = PaymentRequestStatusEnum.DEFAULT;
         Collateral storage _collateral = collaterals[_contract.nftCollateralId];
-        _collateral.status = CollateralStatus.COMPLETED;
+        _collateral.status = CollateralStatus.COMPLETED;           
 
         // Emit Event ContractLiquidedEvent
-        emit ContractLiquidedEvent(_contractId, 0, 0, _reasonType);
-        // Transfer to lender collateral
-        PawnNFTLib.safeTranferNFTToken(
-            _contract.terms.nftCollateralAsset,
-            address(this),
-            _contract.terms.lender,
-            _contract.terms.nftTokenId,
-            _contract.terms.nftCollateralAmount
+        emit ContractLiquidedEvent(
+            _contractId,
+            0,
+            0,
+            _reasonType
         );
+        // Transfer to lender collateral
+        PawnNFTLib.safeTranferNFTToken(_contract.terms.nftCollateralAsset, address(this), _contract.terms.lender,_contract.terms.nftTokenId, _contract.terms.nftCollateralAmount );
 
         // Adjust reputation score
-        reputation.adjustReputationScore(
-            _contract.terms.borrower,
-            IReputation.ReasonType.BR_LATE_PAYMENT
-        );
-        reputation.adjustReputationScore(
-            _contract.terms.borrower,
-            IReputation.ReasonType.BR_CONTRACT_DEFAULTED
-        );
+        reputation.adjustReputationScore(_contract.terms.borrower, IReputation.ReasonType.BR_LATE_PAYMENT);
+        reputation.adjustReputationScore(_contract.terms.borrower, IReputation.ReasonType.BR_CONTRACT_DEFAULTED);
     }
 
     /**
-     * @dev return collateral to borrower and close contract
-     * @param  _contractId is id of contract
-     */
-    function _returnCollateralToBorrowerAndCloseContract(uint256 _contractId)
-        internal
+    * @dev return collateral to borrower and close contract
+    * @param  _contractId is id of contract
+    */
+    function _returnCollateralToBorrowerAndCloseContract(
+        uint256 _contractId
+    ) internal 
     {
         Contract storage _contract = contracts[_contractId];
         Collateral storage _collateral = collaterals[_contract.nftCollateralId];
 
         // Execute: Update status of contract to COMPLETE, collateral to COMPLETE
         _contract.status = ContractStatus.COMPLETED;
-        PaymentRequest[]
-            storage _paymentRequests = contractPaymentRequestMapping[
-                _contractId
-            ];
-        PaymentRequest storage _lastPaymentRequest = _paymentRequests[
-            _paymentRequests.length - 1
-        ];
+        PaymentRequest[] storage _paymentRequests = contractPaymentRequestMapping[_contractId];
+        PaymentRequest storage _lastPaymentRequest = _paymentRequests[_paymentRequests.length - 1];
         _lastPaymentRequest.status = PaymentRequestStatusEnum.COMPLETE;
         _collateral.status = CollateralStatus.COMPLETED;
 
@@ -895,54 +709,41 @@ contract PawnNFTContract is
         emit LoanContractCompletedEvent(_contractId);
 
         // Execute: Transfer collateral to borrower
-        PawnNFTLib.safeTranferNFTToken(
-            _contract.terms.nftCollateralAsset,
-            address(this),
-            _contract.terms.borrower,
-            _contract.terms.nftTokenId,
-            _contract.terms.nftCollateralAmount
-        );
+        PawnNFTLib.safeTranferNFTToken(_contract.terms.nftCollateralAsset,  address(this), _contract.terms.borrower, _contract.terms.nftTokenId,  _contract.terms.nftCollateralAmount );
 
         // Adjust reputation score
-        reputation.adjustReputationScore(
-            _contract.terms.borrower,
-            IReputation.ReasonType.BR_ONTIME_PAYMENT
-        );
-        reputation.adjustReputationScore(
-            _contract.terms.borrower,
-            IReputation.ReasonType.BR_CONTRACT_COMPLETE
-        );
+        reputation.adjustReputationScore(_contract.terms.borrower, IReputation.ReasonType.BR_ONTIME_PAYMENT);
+        reputation.adjustReputationScore(_contract.terms.borrower, IReputation.ReasonType.BR_CONTRACT_COMPLETE);
     }
 
     /**
-     * @dev the borrower repays the debt
-     * @param  _contractId is id of contract
-     * @param  _paidPenaltyAmount is paid penalty amount
-     * @param  _paidInterestAmount is paid interest amount
-     * @param  _paidLoanAmount is paid loan amount
-     */
+    * @dev the borrower repays the debt
+    * @param  _contractId is id of contract
+    * @param  _paidPenaltyAmount is paid penalty amount
+    * @param  _paidInterestAmount is paid interest amount
+    * @param  _paidLoanAmount is paid loan amount
+    */
     function repayment(
         uint256 _contractId,
         uint256 _paidPenaltyAmount,
         uint256 _paidInterestAmount,
         uint256 _paidLoanAmount,
         uint256 _UID
-    ) external override whenNotPaused {
+    ) external override whenNotPaused 
+    {
         // Get contract & payment request
         Contract storage _contract = contractMustActive(_contractId);
-        PaymentRequest[] storage requests = contractPaymentRequestMapping[
-            _contractId
-        ];
-        require(requests.length > 0, "0");
+        PaymentRequest[] storage requests = contractPaymentRequestMapping[_contractId];
+        require(requests.length > 0, '0');
         PaymentRequest storage _paymentRequest = requests[requests.length - 1];
-
+        
         // Validation: Contract must not overdue
-        require(block.timestamp <= _contract.terms.contractEndDate, "1");
+        require(block.timestamp <= _contract.terms.contractEndDate, '1');
 
         // Validation: current payment request must active and not over due
-        require(_paymentRequest.status == PaymentRequestStatusEnum.ACTIVE, "2");
+        require(_paymentRequest.status == PaymentRequestStatusEnum.ACTIVE, '2');
         if (_paidPenaltyAmount + _paidInterestAmount > 0) {
-            require(block.timestamp <= _paymentRequest.dueDateTimestamp, "3");
+            require(block.timestamp <= _paymentRequest.dueDateTimestamp, '3');
         }
 
         // Calculate paid amount / remaining amount, if greater => get paid amount
@@ -959,24 +760,12 @@ contract PawnNFTContract is
         }
 
         // Calculate fee amount based on paid amount
-        uint256 _feePenalty = PawnNFTLib.calculateSystemFee(
-            _paidPenaltyAmount,
-            _contract.terms.systemFeeRate,
-            ZOOM
-        );
-        uint256 _feeInterest = PawnNFTLib.calculateSystemFee(
-            _paidInterestAmount,
-            _contract.terms.systemFeeRate,
-            ZOOM
-        );
+        uint256 _feePenalty = PawnNFTLib.calculateSystemFee(_paidPenaltyAmount, _contract.terms.systemFeeRate, ZOOM);
+        uint256 _feeInterest = PawnNFTLib.calculateSystemFee(_paidInterestAmount, _contract.terms.systemFeeRate, ZOOM);
 
         uint256 _prepaidFee = 0;
         if (_paymentRequest.chargePrepaidFee) {
-            _prepaidFee = PawnNFTLib.calculateSystemFee(
-                _paidLoanAmount,
-                _contract.terms.prepaidFeeRate,
-                ZOOM
-            );
+            _prepaidFee = PawnNFTLib.calculateSystemFee(_paidLoanAmount, _contract.terms.prepaidFeeRate, ZOOM);
         }
 
         // Update paid amount on payment request
@@ -986,22 +775,19 @@ contract PawnNFTContract is
 
         // emit event repayment
         emit RepaymentEvent(
-            _contractId,
-            _paidPenaltyAmount,
-            _paidInterestAmount,
-            _paidLoanAmount,
-            _feePenalty,
-            _feeInterest,
+            _contractId, 
+            _paidPenaltyAmount, 
+            _paidInterestAmount, 
+            _paidLoanAmount, 
+            _feePenalty, 
+            _feeInterest, 
             _prepaidFee,
             _UID
         );
 
         // If remaining loan = 0 => paidoff => execute release collateral
-        if (
-            _paymentRequest.remainingLoan == 0 &&
-            _paymentRequest.remainingPenalty == 0 &&
-            _paymentRequest.remainingInterest == 0
-        ) _returnCollateralToBorrowerAndCloseContract(_contractId);
+        if (_paymentRequest.remainingLoan == 0 && _paymentRequest.remainingPenalty == 0 && _paymentRequest.remainingInterest == 0)
+            _returnCollateralToBorrowerAndCloseContract(_contractId);
 
         uint256 _totalFee;
         uint256 _totalTransferAmount;
@@ -1009,124 +795,85 @@ contract PawnNFTContract is
         if (_paidPenaltyAmount + _paidInterestAmount > 0) {
             // Transfer fee to fee wallet
             _totalFee = _feePenalty + _feeInterest;
-            PawnNFTLib.safeTransfer(
-                _contract.terms.repaymentAsset,
-                msg.sender,
-                feeWallet,
-                _totalFee
-            );
+            PawnNFTLib.safeTransfer(_contract.terms.repaymentAsset, msg.sender, feeWallet, _totalFee);
 
             // Transfer penalty and interest to lender except fee amount
-            _totalTransferAmount =
-                _paidPenaltyAmount +
-                _paidInterestAmount -
-                _feePenalty -
-                _feeInterest;
-            PawnNFTLib.safeTransfer(
-                _contract.terms.repaymentAsset,
-                msg.sender,
-                _contract.terms.lender,
-                _totalTransferAmount
-            );
+            _totalTransferAmount = _paidPenaltyAmount + _paidInterestAmount - _feePenalty - _feeInterest;
+            PawnNFTLib.safeTransfer(_contract.terms.repaymentAsset, msg.sender, _contract.terms.lender, _totalTransferAmount);   
         }
 
         if (_paidLoanAmount > 0) {
             // Transfer loan amount and prepaid fee to lender
             _totalTransferAmount = _paidLoanAmount + _prepaidFee;
-            PawnNFTLib.safeTransfer(
-                _contract.terms.loanAsset,
-                msg.sender,
-                _contract.terms.lender,
-                _totalTransferAmount
-            );
+            PawnNFTLib.safeTransfer(_contract.terms.loanAsset, msg.sender, _contract.terms.lender, _totalTransferAmount);
         }
     }
-
+    
     function collateralRiskLiquidationExecution(
         uint256 _contractId,
         uint256 _collateralPerRepaymentTokenExchangeRate,
         uint256 _collateralPerLoanAssetExchangeRate
-    ) external override whenNotPaused onlyRole(OPERATOR_ROLE) {
+    ) 
+        external 
+        override 
+        whenNotPaused
+        onlyRole(OPERATOR_ROLE)
+    {
         // Validate: Contract must active
         Contract storage _contract = contractMustActive(_contractId);
         Collateral storage _collateral = collaterals[_contract.nftCollateralId];
 
-        //get Address of EvaluationContract
-        (address _evaluationContract, ) = IDFY_Physical_NFTs(
-            _collateral.nftContract
-        ).getEvaluationOfToken(_collateral.nftTokenId);
+        //get Address of EvaluationContract 
+        (address _evaluationContract, ) = IDFY_Physical_NFTs(_collateral.nftContract).getEvaluationOfToken(_collateral.nftTokenId);
 
         // get Evaluation from address of EvaluationContract
-        (, , , , , uint256 price, ) = AssetEvaluation(_evaluationContract)
-            .tokenIdByEvaluation(_collateral.nftTokenId);
+        (, , , , , uint256 price, ) = AssetEvaluation(_evaluationContract).tokenIdByEvaluation(_collateral.nftTokenId);
 
-        (
-            uint256 remainingRepayment,
-            uint256 remainingLoan
-        ) = calculateRemainingLoanAndRepaymentFromContract(
-                _contractId,
-                _contract
-            );
-        uint256 valueOfRemainingRepayment = (_collateralPerRepaymentTokenExchangeRate *
-                remainingRepayment) / ZOOM;
-        uint256 valueOfRemainingLoan = (_collateralPerLoanAssetExchangeRate *
-            remainingLoan) / ZOOM;
-        uint256 valueOfCollateralLiquidationThreshold = (price *
-            _contract.terms.liquidityThreshold) / (100 * ZOOM);
+        (uint256 remainingRepayment, uint256 remainingLoan) = calculateRemainingLoanAndRepaymentFromContract(_contractId, _contract);
+        uint256 valueOfRemainingRepayment = (_collateralPerRepaymentTokenExchangeRate * remainingRepayment) / ZOOM;
+        uint256 valueOfRemainingLoan = (_collateralPerLoanAssetExchangeRate * remainingLoan) / ZOOM;
+        uint256 valueOfCollateralLiquidationThreshold = price * _contract.terms.liquidityThreshold / (100 * ZOOM);
 
-        require(
-            valueOfRemainingLoan + valueOfRemainingRepayment >=
-                valueOfCollateralLiquidationThreshold,
-            "0"
-        );
+        require(valueOfRemainingLoan + valueOfRemainingRepayment >= valueOfCollateralLiquidationThreshold, '0');
 
         // Execute: call internal liquidation
         _liquidationExecution(_contractId, ContractLiquidedReasonType.RISK);
     }
 
     /**
-     * @dev liquidate the contract if the borrower has not paid in full at the end of the contract
-     * @param _contractId is id of contract
-     */
-    function lateLiquidationExecution(uint256 _contractId)
-        external
-        override
-        whenNotPaused
-    {
+    * @dev liquidate the contract if the borrower has not paid in full at the end of the contract
+    * @param _contractId is id of contract
+    */
+    function lateLiquidationExecution(uint256 _contractId) external override whenNotPaused {
+
         // Validate: Contract must active
         Contract storage _contract = contractMustActive(_contractId);
 
         // validate: contract have lateCount == lateThreshold
-        require(_contract.lateCount >= _contract.terms.lateThreshold, "0");
+        require(_contract.lateCount >= _contract.terms.lateThreshold, '0');
 
         // Execute: call internal liquidation
         _liquidationExecution(_contractId, ContractLiquidedReasonType.LATE);
     }
 
     /**
-     * @dev liquidate the contract if the borrower has not paid in full at the end of the contract
-     * @param _contractId is id of contract
-     */
-    function notPaidFullAtEndContractLiquidation(uint256 _contractId)
-        external
-        override
-        whenNotPaused
-    {
+    * @dev liquidate the contract if the borrower has not paid in full at the end of the contract
+    * @param _contractId is id of contract
+    */
+    function notPaidFullAtEndContractLiquidation(uint256 _contractId) external override whenNotPaused{
+
         Contract storage _contract = contractMustActive(_contractId);
         // validate: current is over contract end date
-        require(block.timestamp >= _contract.terms.contractEndDate, "0");
+        require(block.timestamp >= _contract.terms.contractEndDate, '0');
 
         // validate: remaining loan, interest, penalty haven't paid in full
         (
-            uint256 remainingRepayment,
+            uint256 remainingRepayment, 
             uint256 remainingLoan
-        ) = calculateRemainingLoanAndRepaymentFromContract(
-                _contractId,
-                _contract
-            );
-
-        require(remainingRepayment + remainingLoan > 0, "1");
-
+        ) = calculateRemainingLoanAndRepaymentFromContract(_contractId, _contract);
+        
+        require(remainingRepayment + remainingLoan > 0, '1');
+        
         // Execute: call internal liquidation
         _liquidationExecution(_contractId, ContractLiquidedReasonType.UNPAID);
     }
@@ -1134,23 +881,20 @@ contract PawnNFTContract is
     function calculateRemainingLoanAndRepaymentFromContract(
         uint256 _contractId,
         Contract storage _contract
-    )
-        internal
-        view
-        returns (uint256 remainingRepayment, uint256 remainingLoan)
+    ) 
+        internal 
+        view 
+        returns (
+            uint256 remainingRepayment, 
+            uint256 remainingLoan
+        )
     {
         // Validate: sum of unpaid interest, penalty and remaining loan in value must reach liquidation threshold of collateral value
-        PaymentRequest[] storage requests = contractPaymentRequestMapping[
-            _contractId
-        ];
+        PaymentRequest[] storage requests = contractPaymentRequestMapping[_contractId];
         if (requests.length > 0) {
             // Have payment request
-            PaymentRequest storage _paymentRequest = requests[
-                requests.length - 1
-            ];
-            remainingRepayment =
-                _paymentRequest.remainingInterest +
-                _paymentRequest.remainingPenalty;
+            PaymentRequest storage _paymentRequest = requests[requests.length - 1];
+            remainingRepayment = _paymentRequest.remainingInterest + _paymentRequest.remainingPenalty;
             remainingLoan = _paymentRequest.remainingLoan;
         } else {
             // Haven't had payment request
@@ -1162,28 +906,8 @@ contract PawnNFTContract is
     /** ===================================== REPUTATION FUNCTIONS & STATES ===================================== */
 
     IReputation public reputation;
-
-    function setReputationContract(address _reputationAddress)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    
+    function setReputationContract(address _reputationAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
         reputation = IReputation(_reputationAddress);
-    }
-
-    /** ==================== User-reviews related functions ==================== */
-    function getContractInfoForReview(uint256 _contractId)
-        external
-        view
-        override
-        returns (
-            address borrower,
-            address lender,
-            ContractStatus status
-        )
-    {
-        Contract storage _contract = contracts[_contractId];
-        borrower = _contract.terms.borrower;
-        lender = _contract.terms.lender;
-        status = _contract.status;
     }
 }
