@@ -2,10 +2,19 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+// import "./IPawn.sol";
 
-enum LoanDurationType {WEEK, MONTH}
-enum CollateralStatus {OPEN, DOING, COMPLETED, CANCEL}
+enum LoanDurationType {
+    WEEK,
+    MONTH
+}
+enum CollateralStatus {
+    OPEN,
+    DOING,
+    COMPLETED,
+    CANCEL
+}
 struct Collateral {
     address owner;
     uint256 amount;
@@ -16,9 +25,14 @@ struct Collateral {
     CollateralStatus status;
 }
 
-enum OfferStatus {PENDING, ACCEPTED, COMPLETED, CANCEL}
+enum OfferStatus {
+    PENDING,
+    ACCEPTED,
+    COMPLETED,
+    CANCEL
+}
 struct CollateralOfferList {
-    mapping (uint256 => Offer) offerMapping;
+    mapping(uint256 => Offer) offerMapping;
     uint256[] offerIdList;
     bool isInit;
 }
@@ -36,8 +50,14 @@ struct Offer {
     bool isInit;
 }
 
-enum PawnShopPackageStatus {ACTIVE, INACTIVE}
-enum PawnShopPackageType {AUTO, SEMI_AUTO}
+enum PawnShopPackageStatus {
+    ACTIVE,
+    INACTIVE
+}
+enum PawnShopPackageType {
+    AUTO,
+    SEMI_AUTO
+}
 struct Range {
     uint256 lowerBound;
     uint256 upperBound;
@@ -59,18 +79,28 @@ struct PawnShopPackage {
     uint256 loanToValueLiquidationThreshold;
 }
 
-enum LoanRequestStatus {PENDING, ACCEPTED, REJECTED, CONTRACTED, CANCEL}
+enum LoanRequestStatus {
+    PENDING,
+    ACCEPTED,
+    REJECTED,
+    CONTRACTED,
+    CANCEL
+}
 struct LoanRequestStatusStruct {
     bool isInit;
     LoanRequestStatus status;
 }
 struct CollateralAsLoanRequestListStruct {
-    mapping (uint256 => LoanRequestStatusStruct) loanRequestToPawnShopPackageMapping; // Mapping from package to status
+    mapping(uint256 => LoanRequestStatusStruct) loanRequestToPawnShopPackageMapping; // Mapping from package to status
     uint256[] pawnShopPackageIdList;
     bool isInit;
 }
 
-enum ContractStatus {ACTIVE, COMPLETED, DEFAULT}
+enum ContractStatus {
+    ACTIVE,
+    COMPLETED,
+    DEFAULT
+}
 struct ContractTerms {
     address borrower;
     address lender;
@@ -98,8 +128,17 @@ struct Contract {
     uint8 lateCount;
 }
 
-enum PaymentRequestStatusEnum {ACTIVE, LATE, COMPLETE, DEFAULT}
-enum PaymentRequestTypeEnum {INTEREST, OVERDUE, LOAN}
+enum PaymentRequestStatusEnum {
+    ACTIVE,
+    LATE,
+    COMPLETE,
+    DEFAULT
+}
+enum PaymentRequestTypeEnum {
+    INTEREST,
+    OVERDUE,
+    LOAN
+}
 struct PaymentRequest {
     uint256 requestId;
     PaymentRequestTypeEnum paymentRequestType;
@@ -113,11 +152,43 @@ struct PaymentRequest {
     PaymentRequestStatusEnum status;
 }
 
-enum ContractLiquidedReasonType { LATE, RISK, UNPAID }
+enum ContractLiquidedReasonType {
+    LATE,
+    RISK,
+    UNPAID
+}
 
+struct ContractRawData {
+    uint256 collateralId;
+    address borrower;
+    address loanAsset;
+    address collateralAsset;
+    uint256 collateralAmount;
+    int256 packageId;
+    int256 offerId;
+    uint256 exchangeRate;
+    uint256 loanAmount;
+    address lender;
+    address repaymentAsset;
+    uint256 interest;
+    LoanDurationType repaymentCycleType;
+    uint256 liquidityThreshold;
+    uint256 loanDurationQty;
+}
+
+struct ContractLiquidationData {
+    uint256 contractId;
+    uint256 liquidAmount;
+    uint256 systemFeeAmount;
+    uint256 collateralExchangeRate;
+    uint256 loanExchangeRate;
+    uint256 repaymentExchangeRate;
+    uint256 rateUpdateTime;
+    ContractLiquidedReasonType reasonType;
+}
 
 library PawnLib {
-    using SafeERC20 for IERC20;
+    using SafeERC20Upgradeable for IERC20Upgradeable;
 
     function safeTransfer(
         address asset,
@@ -126,30 +197,40 @@ library PawnLib {
         uint256 amount
     ) internal {
         if (asset == address(0)) {
-            require(from.balance >= amount, "balance");
+            require(from.balance >= amount, "0"); // balance
             // Handle BNB
             if (to == address(this)) {
                 // Send to this contract
             } else if (from == address(this)) {
                 // Send from this contract
                 (bool success, ) = to.call{value: amount}("");
-                require(success, "fail-trans-bnb");
+                require(success, "1"); //fail-trans-bnb
             } else {
                 // Send from other address to another address
-                require(false, "not-allow-transfer");
+                require(false, "2"); //not-allow-transfer
             }
         } else {
             // Handle ERC20
-            uint256 prebalance = IERC20(asset).balanceOf(to);
-            require(IERC20(asset).balanceOf(from) >= amount, "not-enough-balance");
+            uint256 prebalance = IERC20Upgradeable(asset).balanceOf(to);
+            require(
+                IERC20Upgradeable(asset).balanceOf(from) >= amount,
+                "3" //not-enough-balance
+            );
             if (from == address(this)) {
                 // transfer direct to to
-                IERC20(asset).safeTransfer(to, amount);
+                IERC20Upgradeable(asset).safeTransfer(to, amount);
             } else {
-                require(IERC20(asset).allowance(from, address(this)) >= amount, "not-allowance");
-                IERC20(asset).safeTransferFrom(from, to, amount);
+                require(
+                    IERC20Upgradeable(asset).allowance(from, address(this)) >=
+                        amount,
+                    "4" //not-allowance
+                );
+                IERC20Upgradeable(asset).safeTransferFrom(from, to, amount);
             }
-            require(IERC20(asset).balanceOf(to) - amount == prebalance, "not-trans-enough");
+            require(
+                IERC20Upgradeable(asset).balanceOf(to) - amount == prebalance,
+                "5" //not-trans-enough
+            );
         }
     }
 
@@ -163,7 +244,7 @@ library PawnLib {
             _amount = from.balance;
         } else {
             // ERC20
-            _amount = IERC20(_token).balanceOf(from);
+            _amount = IERC20Upgradeable(_token).balanceOf(from);
         }
     }
 
@@ -180,45 +261,97 @@ library PawnLib {
         uint256 duration
     ) internal pure returns (uint256 inSeconds) {
         if (durationType == LoanDurationType.WEEK) {
-            // inSeconds = 7 * 24 * 3600 * duration;
-            inSeconds = 600 * duration; // test
+            inSeconds = 7 * 24 * 3600 * duration;
         } else {
-            // inSeconds = 30 * 24 * 3600 * duration;
-            inSeconds = 900 * duration; // test
+            inSeconds = 30 * 24 * 3600 * duration;
         }
+    }
+
+    function isPrepaidChargeRequired(
+        LoanDurationType durationType,
+        uint256 startDate,
+        uint256 endDate
+    ) internal pure returns (bool) {
+        // uint256 week = 600; // define week duration
+        // uint256 month = 900; // define month duration
+        uint256 week = 7 * 24 * 3600;
+        uint256 month = 30 * 24 * 3600;
+
+        if (durationType == LoanDurationType.WEEK) {
+            // if loan contract only lasts one week
+            if ((endDate - startDate) <= week) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            // if loan contract only lasts one month
+            if ((endDate - startDate) <= month) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
+    function calculatedueDateTimestampInterest(LoanDurationType durationType)
+        internal
+        pure
+        returns (uint256 duedateTimestampInterest)
+    {
+        if (durationType == LoanDurationType.WEEK) {
+            duedateTimestampInterest = 2 * 24 * 3600;
+            // duedateTimestampInterest = 180; // test
+        } else {
+            duedateTimestampInterest = 7 * 24 * 3600;
+            // duedateTimestampInterest = 300; // test
+        }
+    }
+
+    function calculatedueDateTimestampPenalty(LoanDurationType durationType)
+        internal
+        pure
+        returns (uint256 duedateTimestampInterest)
+    {
+        if (durationType == LoanDurationType.WEEK) {
+            duedateTimestampInterest = (7 - 2) * 24 * 3600;
+            // duedateTimestampInterest = 600 - 180; // test
+        } else {
+            duedateTimestampInterest = (30 - 7) * 24 * 3600;
+            // duedateTimestampInterest = 900 - 300; // test
+        }
+    }
+
+    function checkLenderAccount(
+        uint256 loanAmount,
+        address loanToken,
+        address owner,
+        address spender
+    ) internal view {
+        // Check if lender has enough balance and allowance for lending
+        uint256 lenderCurrentBalance = IERC20Upgradeable(loanToken).balanceOf(
+            owner
+        );
+        require(lenderCurrentBalance >= loanAmount, "4"); // insufficient balance
+
+        uint256 lenderCurrentAllowance = IERC20Upgradeable(loanToken).allowance(
+            owner,
+            spender
+        );
+        require(lenderCurrentAllowance >= loanAmount, "5"); // allowance not enough
+    }
+
+    /**
+     * @dev Return the absolute value of a signed integer
+     * @param _input is any signed integer
+     * @return an unsigned integer that is the absolute value of _input
+     */
+    function abs(int256 _input) internal pure returns (uint256) {
+        return _input >= 0 ? uint256(_input) : uint256(_input * -1);
     }
 }
 
-library PawnEventLib {
-    event SubmitPawnShopPackage(
-        uint256 packageId,
-        uint256 collateralId,
-        LoanRequestStatus status
-    );
-
-    event ChangeStatusPawnShopPackage(
-        uint256 packageId,
-        PawnShopPackageStatus status
-    );
-
-    event CreateCollateralEvent(uint256 collateralId, Collateral data);
-
-    event WithdrawCollateralEvent(
-        uint256 collateralId,
-        address collateralOwner
-    );
-
-    event CreateOfferEvent(uint256 offerId, uint256 collateralId, Offer data);
-
-    event CancelOfferEvent(
-        uint256 offerId,
-        uint256 collateralId,
-        address offerOwner
-    );
-}
-
 library CollateralLib {
-    
     function create(
         Collateral storage self,
         address _collateralAddress,
@@ -236,22 +369,6 @@ library CollateralLib {
         self.expectedDurationType = _expectedDurationType;
     }
 
-    function withdraw(
-        Collateral storage self,
-        uint256 _collateralId,
-        CollateralOfferList storage _collateralOfferList
-    ) internal {
-        for (uint256 i = 0; i < _collateralOfferList.offerIdList.length; i++) {
-            uint256 offerId = _collateralOfferList.offerIdList[i];
-            Offer storage offer = _collateralOfferList.offerMapping[offerId];
-            emit PawnEventLib.CancelOfferEvent(
-                offerId,
-                _collateralId,
-                offer.owner
-            );
-        }
-    }
-
     function submitToLoanPackage(
         Collateral storage self,
         uint256 _packageId,
@@ -261,7 +378,8 @@ library CollateralLib {
             _loanRequestListStruct.isInit = true;
         }
 
-        LoanRequestStatusStruct storage statusStruct = _loanRequestListStruct.loanRequestToPawnShopPackageMapping[_packageId];
+        LoanRequestStatusStruct storage statusStruct = _loanRequestListStruct
+            .loanRequestToPawnShopPackageMapping[_packageId];
         require(statusStruct.isInit == false);
         statusStruct.isInit = true;
         statusStruct.status = LoanRequestStatus.PENDING;
@@ -274,13 +392,19 @@ library CollateralLib {
         uint256 _packageId,
         CollateralAsLoanRequestListStruct storage _loanRequestListStruct
     ) internal {
-        delete _loanRequestListStruct.loanRequestToPawnShopPackageMapping[_packageId];
+        delete _loanRequestListStruct.loanRequestToPawnShopPackageMapping[
+            _packageId
+        ];
 
-        uint256 lastIndex = _loanRequestListStruct.pawnShopPackageIdList.length - 1;
+        uint256 lastIndex = _loanRequestListStruct
+            .pawnShopPackageIdList
+            .length - 1;
 
         for (uint256 i = 0; i <= lastIndex; i++) {
             if (_loanRequestListStruct.pawnShopPackageIdList[i] == _packageId) {
-                _loanRequestListStruct.pawnShopPackageIdList[i] = _loanRequestListStruct.pawnShopPackageIdList[lastIndex];
+                _loanRequestListStruct.pawnShopPackageIdList[
+                        i
+                    ] = _loanRequestListStruct.pawnShopPackageIdList[lastIndex];
                 break;
             }
         }
@@ -293,11 +417,7 @@ library CollateralLib {
         CollateralAsLoanRequestListStruct storage _loanRequestListStruct,
         CollateralStatus _requiredCollateralStatus,
         LoanRequestStatus _requiredLoanRequestStatus
-    ) 
-        internal 
-        view 
-        returns (LoanRequestStatusStruct storage _statusStruct) 
-    {
+    ) internal view returns (LoanRequestStatusStruct storage _statusStruct) {
         // Check for owner of packageId
         // _pawnShopPackage = pawnShopPackages[_packageId];
         require(_pawnShopPackage.status == PawnShopPackageStatus.ACTIVE, "0"); // pack
@@ -323,8 +443,8 @@ library OfferLib {
         uint256 _loanAmount,
         uint256 _duration,
         uint256 _interest,
-        uint256 _loanDurationType,
-        uint256 _repaymentCycleType,
+        uint8 _loanDurationType,
+        uint8 _repaymentCycleType,
         uint256 _liquidityThreshold
     ) internal {
         self.isInit = true;
@@ -342,17 +462,22 @@ library OfferLib {
     function cancel(
         Offer storage self,
         uint256 _id,
+        address _collateralOwner,
         CollateralOfferList storage _collateralOfferList
     ) internal {
         require(self.isInit == true, "1"); // offer-col
-        require(self.owner == msg.sender, "2"); // owner
+        require(
+            self.owner == msg.sender || _collateralOwner == msg.sender,
+            "2"
+        ); // owner
         require(self.status == OfferStatus.PENDING, "3"); // offer
 
         delete _collateralOfferList.offerMapping[_id];
         uint256 lastIndex = _collateralOfferList.offerIdList.length - 1;
         for (uint256 i = 0; i <= lastIndex; i++) {
             if (_collateralOfferList.offerIdList[i] == _id) {
-                _collateralOfferList.offerIdList[i] = _collateralOfferList.offerIdList[lastIndex];
+                _collateralOfferList.offerIdList[i] = _collateralOfferList
+                    .offerIdList[lastIndex];
                 break;
             }
         }
@@ -389,116 +514,5 @@ library PawnPackageLib {
         self.repaymentCycleType = _repaymentCycleType;
         self.loanToValue = _loanToValue;
         self.loanToValueLiquidationThreshold = _loanToValueLiquidationThreshold;
-    }
-
-    // function activate(
-    //     PawnShopPackage storage self,
-    //     uint256 _packageId
-    // ) internal {
-    //     require(self.owner == msg.sender, "0"); // owner
-    //     require(self.status == PawnShopPackageStatus.INACTIVE, "1"); // pack
-
-    //     self.status = PawnShopPackageStatus.ACTIVE;
-    //     emit PawnEventLib.ChangeStatusPawnShopPackage(
-    //         _packageId,
-    //         PawnShopPackageStatus.ACTIVE
-    //     );
-    // }
-
-    // function deactivate(
-    //     PawnShopPackage storage self,
-    //     uint256 _packageId
-    // ) internal {
-    //     require(self.owner == msg.sender, "0"); // owner
-    //     require(self.status == PawnShopPackageStatus.ACTIVE, "1"); // pack
-
-    //     self.status = PawnShopPackageStatus.INACTIVE;
-    //     emit PawnEventLib.ChangeStatusPawnShopPackage(
-    //         _packageId,
-    //         PawnShopPackageStatus.INACTIVE
-    //     );
-    // }
-}
-
-library LoanContractLib {
-    function create(
-        Contract storage self,
-        uint256 _collateralId,
-        int256 _packageId,
-        int256 _offerId
-    )
-        internal
-    {
-        self.collateralId = _collateralId;
-        self.offerId = _offerId;
-        self.pawnShopPackageId = int256(_packageId);
-        self.status = ContractStatus.ACTIVE;
-        self.lateCount = 0;
-    }
-
-    function calculateRemainingLoanAndRepayment (
-        Contract storage self,
-        PaymentRequest[] storage _requests
-    )
-        internal 
-        view
-        returns (
-            uint256 remainingRepayment, 
-            uint256 remainingLoan
-        )
-    {
-        if (_requests.length > 0) {
-            // Have payment request
-            uint256 lastIndexOfRequest = _requests.length - 1;
-            PaymentRequest memory paymentRequest = _requests[lastIndexOfRequest];
-            remainingRepayment = paymentRequest.remainingInterest + paymentRequest.remainingPenalty;
-            remainingLoan = paymentRequest.remainingLoan;
-        } else {
-            // Haven't had payment request
-            remainingRepayment = 0;
-            remainingLoan = self.terms.loanAmount;
-        }
-    }
-}
-
-library ContractTermsLib {
-    function createContractTerms(
-        ContractTerms storage self,
-        Collateral storage _collateral,
-        address _lender,
-        uint256 _loanAmount,
-        uint256 _interest,
-        uint256 _liquidityThreshold,
-        uint256 _loanDurationQty,        
-        address _repaymentAsset,
-        LoanDurationType _repaymentCycleType,
-        uint256 _lateThreshold,
-        uint256 _systemFeeRate,
-        uint256 _penaltyRate,
-        uint256 _prepaidFeeRate
-    )
-        internal
-    {
-        self.borrower             = _collateral.owner;
-        self.lender               = _lender;
-        self.collateralAsset      = _collateral.collateralAddress;
-        self.collateralAmount     = _collateral.amount;
-        self.loanAsset            = _collateral.loanAsset;
-        self.loanAmount           = _loanAmount;
-        self.repaymentCycleType   = _repaymentCycleType;
-        self.repaymentAsset       = _repaymentAsset;
-        self.interest             = _interest;
-        self.liquidityThreshold   = _liquidityThreshold;
-        self.contractStartDate    = block.timestamp;
-        self.contractEndDate      =
-            block.timestamp +
-            PawnLib.calculateContractDuration(
-                _repaymentCycleType,
-                _loanDurationQty
-            );
-        self.lateThreshold        = _lateThreshold;
-        self.systemFeeRate        = _systemFeeRate;
-        self.penaltyRate          = _penaltyRate;
-        self.prepaidFeeRate       = _prepaidFeeRate;
     }
 }

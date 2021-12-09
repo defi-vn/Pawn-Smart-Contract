@@ -5,7 +5,7 @@ require("@nomiclabs/hardhat-web3");
 require("@openzeppelin/hardhat-upgrades");
 require("hardhat-contract-sizer");
 
-const { InfuraKey, mnemonic, Wallet, BscScanApiKey, EtherscanApiKey } = require('./.secret.json');
+const { InfuraKey, mnemonic, Wallet, BscScanApiKey, EtherscanApiKey, PrivateKey } = require('./.secret.json');
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -61,14 +61,14 @@ task("balance", "Prints an account's balance")
       url: "https://bsc-dataseed.binance.org/",
       chainId: 56,
       gasPrice: 20000000000,
-      accounts: {mnemonic: mnemonic}
+      accounts: PrivateKey
     }
   },
   etherscan: {
     apiKey: BscScanApiKey
   },
   solidity: {
-    version: "0.8.7",
+    version: "0.8.9",
     settings: {
       optimizer: {
         enabled: true,
@@ -86,10 +86,10 @@ task("balance", "Prints an account's balance")
   contractSizer: {
     alphaSort: true,
     disambiguatePaths: true,
-    runOnCompile: true,
+    runOnCompile: false,
     strict: false,
+  },
+  mocha: {
+    timeout: 600000
   }
-  // mocha: {
-  //   timeout: 20000
-  // }
 };
