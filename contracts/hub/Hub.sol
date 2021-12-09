@@ -47,7 +47,7 @@ contract Hub is
         _setupRole(HubRoles.DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(HubRoles.OPERATOR_ROLE, operator);
         _setupRole(HubRoles.PAUSER_ROLE, msg.sender);
-        _setupRole(HubRoles.EVALUATOR_ROLE, msg.sender);
+        // _setupRole(HubRoles.EVALUATOR_ROLE, msg.sender);
         _setupRole(HubRoles.REGISTRANT, msg.sender);
 
         // Set OPERATOR_ROLE as EVALUATOR_ROLE's Admin Role
