@@ -2,6 +2,7 @@
 pragma solidity ^0.8.4;
 
 import "../../../hub/HubLib.sol";
+import "../../../hub/HubInterface.sol";
 import "../../../base/BaseContract.sol";
 import "../interface/IDFY_721_Hard_Factory.sol";
 import "../implement/DFY_Hard_721.sol";
@@ -73,6 +74,10 @@ contract DFYHard721Factory is IDFYHard721Factory, BaseContract {
         );
 
         collections721ByOwner[msg.sender].push(_newCollection);
+
+        // add new collection to whitelisted collateral
+        HubInterface(contractHub).setWhitelistCollateral_NFT(address(_newCollection), 1);
+
         emit CollectionEvent(
             address(_newCollection),
             msg.sender,
