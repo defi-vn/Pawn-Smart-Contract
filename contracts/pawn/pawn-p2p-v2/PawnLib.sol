@@ -261,11 +261,9 @@ library PawnLib {
         uint256 duration
     ) internal pure returns (uint256 inSeconds) {
         if (durationType == LoanDurationType.WEEK) {
-            //  inSeconds = 7 * 24 * 3600 * duration;
-            inSeconds = 600 * duration;
+            inSeconds = 7 * 24 * 3600 * duration;
         } else {
-            // inSeconds = 30 * 24 * 3600 * duration;
-            inSeconds = 900 * duration;
+            inSeconds = 30 * 24 * 3600 * duration;
         }
     }
 
@@ -274,10 +272,8 @@ library PawnLib {
         uint256 startDate,
         uint256 endDate
     ) internal pure returns (bool) {
-        uint256 week = 600; // define week duration
-        uint256 month = 900; // define month duration
-        // uint256 week = 7 * 24 * 3600;
-        // uint256 month = 30 * 24 * 3600;
+        uint256 week = 7 * 24 * 3600;
+        uint256 month = 30 * 24 * 3600;
 
         if (durationType == LoanDurationType.WEEK) {
             // if loan contract only lasts one week
@@ -303,10 +299,8 @@ library PawnLib {
     {
         if (durationType == LoanDurationType.WEEK) {
             duedateTimestampInterest = 2 * 24 * 3600;
-            // duedateTimestampInterest = 180; // test
         } else {
             duedateTimestampInterest = 7 * 24 * 3600;
-            // duedateTimestampInterest = 300; // test
         }
     }
 
@@ -317,10 +311,8 @@ library PawnLib {
     {
         if (durationType == LoanDurationType.WEEK) {
             duedateTimestampInterest = (7 - 2) * 24 * 3600;
-            // duedateTimestampInterest = 600 - 180; // test
         } else {
             duedateTimestampInterest = (30 - 7) * 24 * 3600;
-            // duedateTimestampInterest = 900 - 300; // test
         }
     }
 
