@@ -19,8 +19,8 @@ abstract contract BaseContract is
     Initializable,
     UUPSUpgradeable,
     PausableUpgradeable,
-    ReentrancyGuardUpgradeable,
     ERC165Upgradeable,
+    ReentrancyGuardUpgradeable,
     BaseInterface
 {
     address public contractHub;
