@@ -48,7 +48,9 @@ interface IERC20 {
      *
      * Emits a {Transfer} event.
      */
-    function transfer(address recipient, uint256 amount) external returns (bool);
+    function transfer(address recipient, uint256 amount)
+        external
+        returns (bool);
 
     /**
      * @dev Returns the remaining number of tokens that `spender` will be
@@ -57,7 +59,10 @@ interface IERC20 {
      *
      * This value changes when {approve} or {transferFrom} are called.
      */
-    function allowance(address owner, address spender) external view returns (uint256);
+    function allowance(address owner, address spender)
+        external
+        view
+        returns (uint256);
 
     /**
      * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.
@@ -84,7 +89,11 @@ interface IERC20 {
      *
      * Emits a {Transfer} event.
      */
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external returns (bool);
 
     /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
@@ -98,7 +107,11 @@ interface IERC20 {
      * @dev Emitted when the allowance of a `spender` for an `owner` is set by
      * a call to {approve}. `value` is the new allowance.
      */
-    event Approval(address indexed owner, address indexed spender, uint256 value);
+    event Approval(
+        address indexed owner,
+        address indexed spender,
+        uint256 value
+    );
 }
 
 // File: node_modules\@openzeppelin\contracts\math\SafeMath.sol
@@ -160,7 +173,11 @@ library SafeMath {
      *
      * - Subtraction cannot overflow.
      */
-    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+    function sub(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
         require(b <= a, errorMessage);
         uint256 c = a - b;
 
@@ -219,7 +236,11 @@ library SafeMath {
      *
      * - The divisor cannot be zero.
      */
-    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+    function div(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
         require(b > 0, errorMessage);
         uint256 c = a / b;
         // assert(a == b * c + a % b); // There is no case in which this doesn't hold
@@ -255,7 +276,11 @@ library SafeMath {
      *
      * - The divisor cannot be zero.
      */
-    function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+    function mod(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
         require(b != 0, errorMessage);
         return a % b;
     }
@@ -293,7 +318,9 @@ library Address {
         bytes32 codehash;
         bytes32 accountHash = 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470;
         // solhint-disable-next-line no-inline-assembly
-        assembly { codehash := extcodehash(account) }
+        assembly {
+            codehash := extcodehash(account)
+        }
         return (codehash != accountHash && codehash != 0x0);
     }
 
@@ -314,11 +341,17 @@ library Address {
      * https://solidity.readthedocs.io/en/v0.5.11/security-considerations.html#use-the-checks-effects-interactions-pattern[checks-effects-interactions pattern].
      */
     function sendValue(address payable recipient, uint256 amount) internal {
-        require(address(this).balance >= amount, "Address: insufficient balance");
+        require(
+            address(this).balance >= amount,
+            "Address: insufficient balance"
+        );
 
         // solhint-disable-next-line avoid-low-level-calls, avoid-call-value
-        (bool success, ) = recipient.call{ value: amount }("");
-        require(success, "Address: unable to send value, recipient may have reverted");
+        (bool success, ) = recipient.call{value: amount}("");
+        require(
+            success,
+            "Address: unable to send value, recipient may have reverted"
+        );
     }
 
     /**
@@ -339,8 +372,11 @@ library Address {
      *
      * _Available since v3.1._
      */
-    function functionCall(address target, bytes memory data) internal returns (bytes memory) {
-      return functionCall(target, data, "Address: low-level call failed");
+    function functionCall(address target, bytes memory data)
+        internal
+        returns (bytes memory)
+    {
+        return functionCall(target, data, "Address: low-level call failed");
     }
 
     /**
@@ -349,7 +385,11 @@ library Address {
      *
      * _Available since v3.1._
      */
-    function functionCall(address target, bytes memory data, string memory errorMessage) internal returns (bytes memory) {
+    function functionCall(
+        address target,
+        bytes memory data,
+        string memory errorMessage
+    ) internal returns (bytes memory) {
         return _functionCallWithValue(target, data, 0, errorMessage);
     }
 
@@ -364,8 +404,18 @@ library Address {
      *
      * _Available since v3.1._
      */
-    function functionCallWithValue(address target, bytes memory data, uint256 value) internal returns (bytes memory) {
-        return functionCallWithValue(target, data, value, "Address: low-level call with value failed");
+    function functionCallWithValue(
+        address target,
+        bytes memory data,
+        uint256 value
+    ) internal returns (bytes memory) {
+        return
+            functionCallWithValue(
+                target,
+                data,
+                value,
+                "Address: low-level call with value failed"
+            );
     }
 
     /**
@@ -374,16 +424,31 @@ library Address {
      *
      * _Available since v3.1._
      */
-    function functionCallWithValue(address target, bytes memory data, uint256 value, string memory errorMessage) internal returns (bytes memory) {
-        require(address(this).balance >= value, "Address: insufficient balance for call");
+    function functionCallWithValue(
+        address target,
+        bytes memory data,
+        uint256 value,
+        string memory errorMessage
+    ) internal returns (bytes memory) {
+        require(
+            address(this).balance >= value,
+            "Address: insufficient balance for call"
+        );
         return _functionCallWithValue(target, data, value, errorMessage);
     }
 
-    function _functionCallWithValue(address target, bytes memory data, uint256 weiValue, string memory errorMessage) private returns (bytes memory) {
+    function _functionCallWithValue(
+        address target,
+        bytes memory data,
+        uint256 weiValue,
+        string memory errorMessage
+    ) private returns (bytes memory) {
         require(isContract(target), "Address: call to non-contract");
 
         // solhint-disable-next-line avoid-low-level-calls
-        (bool success, bytes memory returndata) = target.call{ value: weiValue }(data);
+        (bool success, bytes memory returndata) = target.call{value: weiValue}(
+            data
+        );
         if (success) {
             return returndata;
         } else {
@@ -406,10 +471,6 @@ library Address {
 // File: node_modules\@openzeppelin\contracts\token\ERC20\ERC20.sol
 
 pragma solidity ^0.8.4;
-
-
-
-
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -439,9 +500,9 @@ contract ERC20 is Context, IERC20 {
     using SafeMath for uint256;
     using Address for address;
 
-    mapping (address => uint256) private _balances;
+    mapping(address => uint256) private _balances;
 
-    mapping (address => mapping (address => uint256)) private _allowances;
+    mapping(address => mapping(address => uint256)) private _allowances;
 
     uint256 private _totalSupply;
 
@@ -458,7 +519,7 @@ contract ERC20 is Context, IERC20 {
      * All three of these values are immutable: they can only be set once during
      * construction.
      */
-    constructor (string memory name_, string memory symbol_) {
+    constructor(string memory name_, string memory symbol_) {
         _name = name_;
         _symbol = symbol_;
         _decimals = 18;
@@ -518,7 +579,12 @@ contract ERC20 is Context, IERC20 {
      * - `recipient` cannot be the zero address.
      * - the caller must have a balance of at least `amount`.
      */
-    function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
+    function transfer(address recipient, uint256 amount)
+        public
+        virtual
+        override
+        returns (bool)
+    {
         _transfer(_msgSender(), recipient, amount);
         return true;
     }
@@ -526,7 +592,13 @@ contract ERC20 is Context, IERC20 {
     /**
      * @dev See {IERC20-allowance}.
      */
-    function allowance(address owner, address spender) public view virtual override returns (uint256) {
+    function allowance(address owner, address spender)
+        public
+        view
+        virtual
+        override
+        returns (uint256)
+    {
         return _allowances[owner][spender];
     }
 
@@ -537,7 +609,12 @@ contract ERC20 is Context, IERC20 {
      *
      * - `spender` cannot be the zero address.
      */
-    function approve(address spender, uint256 amount) public virtual override returns (bool) {
+    function approve(address spender, uint256 amount)
+        public
+        virtual
+        override
+        returns (bool)
+    {
         _approve(_msgSender(), spender, amount);
         return true;
     }
@@ -554,9 +631,20 @@ contract ERC20 is Context, IERC20 {
      * - the caller must have allowance for ``sender``'s tokens of at least
      * `amount`.
      */
-    function transferFrom(address sender, address recipient, uint256 amount) public virtual override returns (bool) {
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) public virtual override returns (bool) {
         _transfer(sender, recipient, amount);
-        _approve(sender, _msgSender(), _allowances[sender][_msgSender()].sub(amount, "ERC20: transfer amount exceeds allowance"));
+        _approve(
+            sender,
+            _msgSender(),
+            _allowances[sender][_msgSender()].sub(
+                amount,
+                "ERC20: transfer amount exceeds allowance"
+            )
+        );
         return true;
     }
 
@@ -572,8 +660,16 @@ contract ERC20 is Context, IERC20 {
      *
      * - `spender` cannot be the zero address.
      */
-    function increaseAllowance(address spender, uint256 addedValue) public virtual returns (bool) {
-        _approve(_msgSender(), spender, _allowances[_msgSender()][spender].add(addedValue));
+    function increaseAllowance(address spender, uint256 addedValue)
+        public
+        virtual
+        returns (bool)
+    {
+        _approve(
+            _msgSender(),
+            spender,
+            _allowances[_msgSender()][spender].add(addedValue)
+        );
         return true;
     }
 
@@ -591,8 +687,19 @@ contract ERC20 is Context, IERC20 {
      * - `spender` must have allowance for the caller of at least
      * `subtractedValue`.
      */
-    function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
-        _approve(_msgSender(), spender, _allowances[_msgSender()][spender].sub(subtractedValue, "ERC20: decreased allowance below zero"));
+    function decreaseAllowance(address spender, uint256 subtractedValue)
+        public
+        virtual
+        returns (bool)
+    {
+        _approve(
+            _msgSender(),
+            spender,
+            _allowances[_msgSender()][spender].sub(
+                subtractedValue,
+                "ERC20: decreased allowance below zero"
+            )
+        );
         return true;
     }
 
@@ -610,13 +717,20 @@ contract ERC20 is Context, IERC20 {
      * - `recipient` cannot be the zero address.
      * - `sender` must have a balance of at least `amount`.
      */
-    function _transfer(address sender, address recipient, uint256 amount) internal virtual {
+    function _transfer(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) internal virtual {
         require(sender != address(0), "ERC20: transfer from the zero address");
         require(recipient != address(0), "ERC20: transfer to the zero address");
 
         _beforeTokenTransfer(sender, recipient, amount);
 
-        _balances[sender] = _balances[sender].sub(amount, "ERC20: transfer amount exceeds balance");
+        _balances[sender] = _balances[sender].sub(
+            amount,
+            "ERC20: transfer amount exceeds balance"
+        );
         _balances[recipient] = _balances[recipient].add(amount);
         emit Transfer(sender, recipient, amount);
     }
@@ -656,7 +770,10 @@ contract ERC20 is Context, IERC20 {
 
         _beforeTokenTransfer(account, address(0), amount);
 
-        _balances[account] = _balances[account].sub(amount, "ERC20: burn amount exceeds balance");
+        _balances[account] = _balances[account].sub(
+            amount,
+            "ERC20: burn amount exceeds balance"
+        );
         _totalSupply = _totalSupply.sub(amount);
         emit Transfer(account, address(0), amount);
     }
@@ -674,7 +791,11 @@ contract ERC20 is Context, IERC20 {
      * - `owner` cannot be the zero address.
      * - `spender` cannot be the zero address.
      */
-    function _approve(address owner, address spender, uint256 amount) internal virtual {
+    function _approve(
+        address owner,
+        address spender,
+        uint256 amount
+    ) internal virtual {
         require(owner != address(0), "ERC20: approve from the zero address");
         require(spender != address(0), "ERC20: approve to the zero address");
 
@@ -707,13 +828,16 @@ contract ERC20 is Context, IERC20 {
      *
      * To learn more about hooks, head to xref:ROOT:extending-contracts.adoc#using-hooks[Using Hooks].
      */
-    function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 amount
+    ) internal virtual {}
 }
 
 // File: @openzeppelin\contracts\token\ERC20\ERC20Capped.sol
 
 pragma solidity ^0.8.4;
-
 
 /**
  * @dev Extension of {ERC20} that adds a cap to the supply of tokens.
@@ -727,7 +851,7 @@ abstract contract ERC20Capped is ERC20 {
      * @dev Sets the value of the `cap`. This value is immutable, it can only be
      * set once during construction.
      */
-    constructor (uint256 cap_) {
+    constructor(uint256 cap_) {
         require(cap_ > 0, "ERC20Capped: cap is 0");
         _cap = cap_;
     }
@@ -746,11 +870,19 @@ abstract contract ERC20Capped is ERC20 {
      *
      * - minted tokens must not cause the total supply to go over the cap.
      */
-    function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override {
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 amount
+    ) internal virtual override {
         super._beforeTokenTransfer(from, to, amount);
 
-        if (from == address(0)) { // When minting tokens
-            require(totalSupply().add(amount) <= _cap, "ERC20Capped: cap exceeded");
+        if (from == address(0)) {
+            // When minting tokens
+            require(
+                totalSupply().add(amount) <= _cap,
+                "ERC20Capped: cap exceeded"
+            );
         }
     }
 }
@@ -758,8 +890,6 @@ abstract contract ERC20Capped is ERC20 {
 // File: @openzeppelin\contracts\token\ERC20\ERC20Burnable.sol
 
 pragma solidity ^0.8.4;
-
-
 
 /**
  * @dev Extension of {ERC20} that allows token holders to destroy both their own
@@ -790,7 +920,10 @@ abstract contract ERC20Burnable is Context, ERC20 {
      * `amount`.
      */
     function burnFrom(address account, uint256 amount) public virtual {
-        uint256 decreasedAllowance = allowance(account, _msgSender()).sub(amount, "ERC20: burn amount exceeds allowance");
+        uint256 decreasedAllowance = allowance(account, _msgSender()).sub(
+            amount,
+            "ERC20: burn amount exceeds allowance"
+        );
 
         _approve(account, _msgSender(), decreasedAllowance);
         _burn(account, amount);
@@ -825,8 +958,6 @@ interface IERC165 {
 // File: node_modules\erc-payable-token\contracts\token\ERC1363\IERC1363.sol
 
 pragma solidity ^0.8.4;
-
-
 
 /**
  * @title IERC1363 Interface
@@ -866,7 +997,11 @@ interface IERC1363 is IERC20, IERC165 {
      * @param data bytes Additional data with no specified format, sent in call to `to`
      * @return true unless throwing
      */
-    function transferAndCall(address to, uint256 value, bytes calldata data) external returns (bool);
+    function transferAndCall(
+        address to,
+        uint256 value,
+        bytes calldata data
+    ) external returns (bool);
 
     /**
      * @notice Transfer tokens from one address to another and then call `onTransferReceived` on receiver
@@ -875,7 +1010,11 @@ interface IERC1363 is IERC20, IERC165 {
      * @param value uint256 The amount of tokens to be transferred
      * @return true unless throwing
      */
-    function transferFromAndCall(address from, address to, uint256 value) external returns (bool);
+    function transferFromAndCall(
+        address from,
+        address to,
+        uint256 value
+    ) external returns (bool);
 
     /**
      * @notice Transfer tokens from one address to another and then call `onTransferReceived` on receiver
@@ -885,7 +1024,12 @@ interface IERC1363 is IERC20, IERC165 {
      * @param data bytes Additional data with no specified format, sent in call to `to`
      * @return true unless throwing
      */
-    function transferFromAndCall(address from, address to, uint256 value, bytes calldata data) external returns (bool);
+    function transferFromAndCall(
+        address from,
+        address to,
+        uint256 value,
+        bytes calldata data
+    ) external returns (bool);
 
     /**
      * @notice Approve the passed address to spend the specified amount of tokens on behalf of msg.sender
@@ -897,7 +1041,9 @@ interface IERC1363 is IERC20, IERC165 {
      * @param spender address The address which will spend the funds
      * @param value uint256 The amount of tokens to be spent
      */
-    function approveAndCall(address spender, uint256 value) external returns (bool);
+    function approveAndCall(address spender, uint256 value)
+        external
+        returns (bool);
 
     /**
      * @notice Approve the passed address to spend the specified amount of tokens on behalf of msg.sender
@@ -910,7 +1056,11 @@ interface IERC1363 is IERC20, IERC165 {
      * @param value uint256 The amount of tokens to be spent
      * @param data bytes Additional data with no specified format, sent in call to `spender`
      */
-    function approveAndCall(address spender, uint256 value, bytes calldata data) external returns (bool);
+    function approveAndCall(
+        address spender,
+        uint256 value,
+        bytes calldata data
+    ) external returns (bool);
 }
 
 // File: node_modules\erc-payable-token\contracts\token\ERC1363\IERC1363Receiver.sol
@@ -944,7 +1094,12 @@ interface IERC1363Receiver {
      * @return `bytes4(keccak256("onTransferReceived(address,address,uint256,bytes)"))`
      *  unless throwing
      */
-    function onTransferReceived(address operator, address from, uint256 value, bytes calldata data) external returns (bytes4); // solhint-disable-line  max-line-length
+    function onTransferReceived(
+        address operator,
+        address from,
+        uint256 value,
+        bytes calldata data
+    ) external returns (bytes4); // solhint-disable-line  max-line-length
 }
 
 // File: node_modules\erc-payable-token\contracts\token\ERC1363\IERC1363Spender.sol
@@ -977,7 +1132,11 @@ interface IERC1363Spender {
      * @return `bytes4(keccak256("onApprovalReceived(address,uint256,bytes)"))`
      *  unless throwing
      */
-    function onApprovalReceived(address owner, uint256 value, bytes calldata data) external returns (bytes4);
+    function onApprovalReceived(
+        address owner,
+        uint256 value,
+        bytes calldata data
+    ) external returns (bytes4);
 }
 
 // File: @openzeppelin\contracts\introspection\ERC165Checker.sol
@@ -1006,7 +1165,8 @@ library ERC165Checker {
     function supportsERC165(address account) internal view returns (bool) {
         // Any contract that implements ERC165 must explicitly indicate support of
         // InterfaceId_ERC165 and explicitly indicate non-support of InterfaceId_Invalid
-        return _supportsERC165Interface(account, _INTERFACE_ID_ERC165) &&
+        return
+            _supportsERC165Interface(account, _INTERFACE_ID_ERC165) &&
             !_supportsERC165Interface(account, _INTERFACE_ID_INVALID);
     }
 
@@ -1016,9 +1176,14 @@ library ERC165Checker {
      *
      * See {IERC165-supportsInterface}.
      */
-    function supportsInterface(address account, bytes4 interfaceId) internal view returns (bool) {
+    function supportsInterface(address account, bytes4 interfaceId)
+        internal
+        view
+        returns (bool)
+    {
         // query support of both ERC165 as per the spec and support of _interfaceId
-        return supportsERC165(account) &&
+        return
+            supportsERC165(account) &&
             _supportsERC165Interface(account, interfaceId);
     }
 
@@ -1031,7 +1196,10 @@ library ERC165Checker {
      *
      * See {IERC165-supportsInterface}.
      */
-    function supportsAllInterfaces(address account, bytes4[] memory interfaceIds) internal view returns (bool) {
+    function supportsAllInterfaces(
+        address account,
+        bytes4[] memory interfaceIds
+    ) internal view returns (bool) {
         // query support of ERC165 itself
         if (!supportsERC165(account)) {
             return false;
@@ -1059,10 +1227,17 @@ library ERC165Checker {
      * with {supportsERC165}.
      * Interface identification is specified in ERC-165.
      */
-    function _supportsERC165Interface(address account, bytes4 interfaceId) private view returns (bool) {
+    function _supportsERC165Interface(address account, bytes4 interfaceId)
+        private
+        view
+        returns (bool)
+    {
         // success determines whether the staticcall succeeded and result determines
         // whether the contract at account indicates support of _interfaceId
-        (bool success, bool result) = _callERC165SupportsInterface(account, interfaceId);
+        (bool success, bool result) = _callERC165SupportsInterface(
+            account,
+            interfaceId
+        );
 
         return (success && result);
     }
@@ -1080,8 +1255,13 @@ library ERC165Checker {
         view
         returns (bool, bool)
     {
-        bytes memory encodedParams = abi.encodeWithSelector(_INTERFACE_ID_ERC165, interfaceId);
-        (bool success, bytes memory result) = account.staticcall{ gas: 30000 }(encodedParams);
+        bytes memory encodedParams = abi.encodeWithSelector(
+            _INTERFACE_ID_ERC165,
+            interfaceId
+        );
+        (bool success, bytes memory result) = account.staticcall{gas: 30000}(
+            encodedParams
+        );
         if (result.length < 32) return (false, false);
         return (success, abi.decode(result, (bool)));
     }
@@ -1090,7 +1270,6 @@ library ERC165Checker {
 // File: @openzeppelin\contracts\introspection\ERC165.sol
 
 pragma solidity ^0.8.4;
-
 
 /**
  * @dev Implementation of the {IERC165} interface.
@@ -1109,7 +1288,7 @@ contract ERC165 is IERC165 {
      */
     mapping(bytes4 => bool) private _supportedInterfaces;
 
-    constructor () {
+    constructor() {
         // Derived contracts need only register support for their own interfaces,
         // we register support for ERC165 itself here
         _registerInterface(_INTERFACE_ID_ERC165);
@@ -1120,7 +1299,12 @@ contract ERC165 is IERC165 {
      *
      * Time complexity O(1), guaranteed to always use less than 30 000 gas.
      */
-    function supportsInterface(bytes4 interfaceId) public view override returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override
+        returns (bool)
+    {
         return _supportedInterfaces[interfaceId];
     }
 
@@ -1144,13 +1328,6 @@ contract ERC165 is IERC165 {
 // File: erc-payable-token\contracts\token\ERC1363\ERC1363.sol
 
 pragma solidity ^0.8.4;
-
-
-
-
-
-
-
 
 /**
  * @title ERC1363
@@ -1190,7 +1367,7 @@ contract ERC1363 is ERC20, IERC1363, ERC165 {
      * @param name Name of the token
      * @param symbol A symbol to be used as ticker
      */
-    constructor (string memory name, string memory symbol) ERC20(name, symbol) {
+    constructor(string memory name, string memory symbol) ERC20(name, symbol) {
         // register the supported interfaces to conform to ERC1363 via ERC165
         _registerInterface(_INTERFACE_ID_ERC1363_TRANSFER);
         _registerInterface(_INTERFACE_ID_ERC1363_APPROVE);
@@ -1202,7 +1379,11 @@ contract ERC1363 is ERC20, IERC1363, ERC165 {
      * @param value The amount to be transferred.
      * @return A boolean that indicates if the operation was successful.
      */
-    function transferAndCall(address to, uint256 value) public override returns (bool) {
+    function transferAndCall(address to, uint256 value)
+        public
+        override
+        returns (bool)
+    {
         return transferAndCall(to, value, "");
     }
 
@@ -1213,9 +1394,16 @@ contract ERC1363 is ERC20, IERC1363, ERC165 {
      * @param data Additional data with no specified format
      * @return A boolean that indicates if the operation was successful.
      */
-    function transferAndCall(address to, uint256 value, bytes memory data) public override returns (bool) {
+    function transferAndCall(
+        address to,
+        uint256 value,
+        bytes memory data
+    ) public override returns (bool) {
         transfer(to, value);
-        require(_checkAndCallTransfer(_msgSender(), to, value, data), "ERC1363: _checkAndCallTransfer reverts");
+        require(
+            _checkAndCallTransfer(_msgSender(), to, value, data),
+            "ERC1363: _checkAndCallTransfer reverts"
+        );
         return true;
     }
 
@@ -1226,7 +1414,11 @@ contract ERC1363 is ERC20, IERC1363, ERC165 {
      * @param value The amount of tokens to be transferred
      * @return A boolean that indicates if the operation was successful.
      */
-    function transferFromAndCall(address from, address to, uint256 value) public override returns (bool) {
+    function transferFromAndCall(
+        address from,
+        address to,
+        uint256 value
+    ) public override returns (bool) {
         return transferFromAndCall(from, to, value, "");
     }
 
@@ -1238,9 +1430,17 @@ contract ERC1363 is ERC20, IERC1363, ERC165 {
      * @param data Additional data with no specified format
      * @return A boolean that indicates if the operation was successful.
      */
-    function transferFromAndCall(address from, address to, uint256 value, bytes memory data) public override returns (bool) {
+    function transferFromAndCall(
+        address from,
+        address to,
+        uint256 value,
+        bytes memory data
+    ) public override returns (bool) {
         transferFrom(from, to, value);
-        require(_checkAndCallTransfer(from, to, value, data), "ERC1363: _checkAndCallTransfer reverts");
+        require(
+            _checkAndCallTransfer(from, to, value, data),
+            "ERC1363: _checkAndCallTransfer reverts"
+        );
         return true;
     }
 
@@ -1250,7 +1450,11 @@ contract ERC1363 is ERC20, IERC1363, ERC165 {
      * @param value The amount allowed to be transferred
      * @return A boolean that indicates if the operation was successful.
      */
-    function approveAndCall(address spender, uint256 value) public override returns (bool) {
+    function approveAndCall(address spender, uint256 value)
+        public
+        override
+        returns (bool)
+    {
         return approveAndCall(spender, value, "");
     }
 
@@ -1261,9 +1465,16 @@ contract ERC1363 is ERC20, IERC1363, ERC165 {
      * @param data Additional data with no specified format.
      * @return A boolean that indicates if the operation was successful.
      */
-    function approveAndCall(address spender, uint256 value, bytes memory data) public override returns (bool) {
+    function approveAndCall(
+        address spender,
+        uint256 value,
+        bytes memory data
+    ) public override returns (bool) {
         approve(spender, value);
-        require(_checkAndCallApprove(spender, value, data), "ERC1363: _checkAndCallApprove reverts");
+        require(
+            _checkAndCallApprove(spender, value, data),
+            "ERC1363: _checkAndCallApprove reverts"
+        );
         return true;
     }
 
@@ -1276,12 +1487,20 @@ contract ERC1363 is ERC20, IERC1363, ERC165 {
      * @param data bytes Optional data to send along with the call
      * @return whether the call correctly returned the expected magic value
      */
-    function _checkAndCallTransfer(address from, address to, uint256 value, bytes memory data) internal returns (bool) {
+    function _checkAndCallTransfer(
+        address from,
+        address to,
+        uint256 value,
+        bytes memory data
+    ) internal returns (bool) {
         if (!to.isContract()) {
             return false;
         }
         bytes4 retval = IERC1363Receiver(to).onTransferReceived(
-            _msgSender(), from, value, data
+            _msgSender(),
+            from,
+            value,
+            data
         );
         return (retval == _ERC1363_RECEIVED);
     }
@@ -1294,12 +1513,18 @@ contract ERC1363 is ERC20, IERC1363, ERC165 {
      * @param data bytes Optional data to send along with the call
      * @return whether the call correctly returned the expected magic value
      */
-    function _checkAndCallApprove(address spender, uint256 value, bytes memory data) internal returns (bool) {
+    function _checkAndCallApprove(
+        address spender,
+        uint256 value,
+        bytes memory data
+    ) internal returns (bool) {
         if (!spender.isContract()) {
             return false;
         }
         bytes4 retval = IERC1363Spender(spender).onApprovalReceived(
-            _msgSender(), value, data
+            _msgSender(),
+            value,
+            data
         );
         return (retval == _ERC1363_APPROVED);
     }
@@ -1324,12 +1549,15 @@ pragma solidity ^0.8.4;
 contract Ownable is Context {
     address private _owner;
 
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event OwnershipTransferred(
+        address indexed previousOwner,
+        address indexed newOwner
+    );
 
     /**
      * @dev Initializes the contract setting the deployer as the initial owner.
      */
-    constructor () {
+    constructor() {
         address msgSender = _msgSender();
         _owner = msgSender;
         emit OwnershipTransferred(address(0), msgSender);
@@ -1367,7 +1595,10 @@ contract Ownable is Context {
      * Can only be called by the current owner.
      */
     function transferOwnership(address newOwner) public virtual onlyOwner {
-        require(newOwner != address(0), "Ownable: new owner is the zero address");
+        require(
+            newOwner != address(0),
+            "Ownable: new owner is the zero address"
+        );
         emit OwnershipTransferred(_owner, newOwner);
         _owner = newOwner;
     }
@@ -1377,21 +1608,21 @@ contract Ownable is Context {
 
 pragma solidity ^0.8.4;
 
-
-
 /**
  * @title TokenRecover
  * @author Vittorio Minacori (https://github.com/vittominacori)
  * @dev Allow to recover any ERC20 sent into the contract for error
  */
 contract TokenRecover is Ownable {
-
     /**
      * @dev Remember that only owner can call so be careful when use on contracts generated from other contracts.
      * @param tokenAddress The token contract address
      * @param tokenAmount Number of tokens to be sent
      */
-    function recoverERC20(address tokenAddress, uint256 tokenAmount) public onlyOwner {
+    function recoverERC20(address tokenAddress, uint256 tokenAmount)
+        public
+        onlyOwner
+    {
         IERC20(tokenAddress).transfer(owner(), tokenAmount);
     }
 }
@@ -1503,7 +1734,11 @@ library EnumerableSet {
     /**
      * @dev Returns true if the value is in the set. O(1).
      */
-    function _contains(Set storage set, bytes32 value) private view returns (bool) {
+    function _contains(Set storage set, bytes32 value)
+        private
+        view
+        returns (bool)
+    {
         return set._indexes[value] != 0;
     }
 
@@ -1524,7 +1759,11 @@ library EnumerableSet {
      *
      * - `index` must be strictly less than {length}.
      */
-    function _at(Set storage set, uint256 index) private view returns (bytes32) {
+    function _at(Set storage set, uint256 index)
+        private
+        view
+        returns (bytes32)
+    {
         return set._values[index];
     }
 
@@ -1552,7 +1791,10 @@ library EnumerableSet {
      * Returns true if the value was added to the set, that is if it was not
      * already present.
      */
-    function add(Bytes32Set storage set, bytes32 value) internal returns (bool) {
+    function add(Bytes32Set storage set, bytes32 value)
+        internal
+        returns (bool)
+    {
         return _add(set._inner, value);
     }
 
@@ -1562,14 +1804,21 @@ library EnumerableSet {
      * Returns true if the value was removed from the set, that is if it was
      * present.
      */
-    function remove(Bytes32Set storage set, bytes32 value) internal returns (bool) {
+    function remove(Bytes32Set storage set, bytes32 value)
+        internal
+        returns (bool)
+    {
         return _remove(set._inner, value);
     }
 
     /**
      * @dev Returns true if the value is in the set. O(1).
      */
-    function contains(Bytes32Set storage set, bytes32 value) internal view returns (bool) {
+    function contains(Bytes32Set storage set, bytes32 value)
+        internal
+        view
+        returns (bool)
+    {
         return _contains(set._inner, value);
     }
 
@@ -1590,7 +1839,11 @@ library EnumerableSet {
      *
      * - `index` must be strictly less than {length}.
      */
-    function at(Bytes32Set storage set, uint256 index) internal view returns (bytes32) {
+    function at(Bytes32Set storage set, uint256 index)
+        internal
+        view
+        returns (bytes32)
+    {
         return _at(set._inner, index);
     }
 
@@ -1602,7 +1855,11 @@ library EnumerableSet {
      * this function has an unbounded cost, and using it as part of a state-changing function may render the function
      * uncallable if the set grows to a point where copying to memory consumes too much gas to fit in a block.
      */
-    function values(Bytes32Set storage set) internal view returns (bytes32[] memory) {
+    function values(Bytes32Set storage set)
+        internal
+        view
+        returns (bytes32[] memory)
+    {
         return _values(set._inner);
     }
 
@@ -1618,7 +1875,10 @@ library EnumerableSet {
      * Returns true if the value was added to the set, that is if it was not
      * already present.
      */
-    function add(AddressSet storage set, address value) internal returns (bool) {
+    function add(AddressSet storage set, address value)
+        internal
+        returns (bool)
+    {
         return _add(set._inner, bytes32(uint256(uint160(value))));
     }
 
@@ -1628,14 +1888,21 @@ library EnumerableSet {
      * Returns true if the value was removed from the set, that is if it was
      * present.
      */
-    function remove(AddressSet storage set, address value) internal returns (bool) {
+    function remove(AddressSet storage set, address value)
+        internal
+        returns (bool)
+    {
         return _remove(set._inner, bytes32(uint256(uint160(value))));
     }
 
     /**
      * @dev Returns true if the value is in the set. O(1).
      */
-    function contains(AddressSet storage set, address value) internal view returns (bool) {
+    function contains(AddressSet storage set, address value)
+        internal
+        view
+        returns (bool)
+    {
         return _contains(set._inner, bytes32(uint256(uint160(value))));
     }
 
@@ -1656,7 +1923,11 @@ library EnumerableSet {
      *
      * - `index` must be strictly less than {length}.
      */
-    function at(AddressSet storage set, uint256 index) internal view returns (address) {
+    function at(AddressSet storage set, uint256 index)
+        internal
+        view
+        returns (address)
+    {
         return address(uint160(uint256(_at(set._inner, index))));
     }
 
@@ -1668,7 +1939,11 @@ library EnumerableSet {
      * this function has an unbounded cost, and using it as part of a state-changing function may render the function
      * uncallable if the set grows to a point where copying to memory consumes too much gas to fit in a block.
      */
-    function values(AddressSet storage set) internal view returns (address[] memory) {
+    function values(AddressSet storage set)
+        internal
+        view
+        returns (address[] memory)
+    {
         bytes32[] memory store = _values(set._inner);
         address[] memory result;
 
@@ -1701,14 +1976,21 @@ library EnumerableSet {
      * Returns true if the value was removed from the set, that is if it was
      * present.
      */
-    function remove(UintSet storage set, uint256 value) internal returns (bool) {
+    function remove(UintSet storage set, uint256 value)
+        internal
+        returns (bool)
+    {
         return _remove(set._inner, bytes32(value));
     }
 
     /**
      * @dev Returns true if the value is in the set. O(1).
      */
-    function contains(UintSet storage set, uint256 value) internal view returns (bool) {
+    function contains(UintSet storage set, uint256 value)
+        internal
+        view
+        returns (bool)
+    {
         return _contains(set._inner, bytes32(value));
     }
 
@@ -1729,7 +2011,11 @@ library EnumerableSet {
      *
      * - `index` must be strictly less than {length}.
      */
-    function at(UintSet storage set, uint256 index) internal view returns (uint256) {
+    function at(UintSet storage set, uint256 index)
+        internal
+        view
+        returns (uint256)
+    {
         return uint256(_at(set._inner, index));
     }
 
@@ -1741,7 +2027,11 @@ library EnumerableSet {
      * this function has an unbounded cost, and using it as part of a state-changing function may render the function
      * uncallable if the set grows to a point where copying to memory consumes too much gas to fit in a block.
      */
-    function values(UintSet storage set) internal view returns (uint256[] memory) {
+    function values(UintSet storage set)
+        internal
+        view
+        returns (uint256[] memory)
+    {
         bytes32[] memory store = _values(set._inner);
         uint256[] memory result;
 
@@ -1756,9 +2046,6 @@ library EnumerableSet {
 // File: @openzeppelin\contracts\access\AccessControl.sol
 
 pragma solidity ^0.8.4;
-
-
-
 
 /**
  * @dev Contract module that allows children to implement role-based access
@@ -1804,7 +2091,7 @@ abstract contract AccessControl is Context {
         bytes32 adminRole;
     }
 
-    mapping (bytes32 => RoleData) private _roles;
+    mapping(bytes32 => RoleData) private _roles;
 
     bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;
 
@@ -1816,7 +2103,11 @@ abstract contract AccessControl is Context {
      *
      * _Available since v3.1._
      */
-    event RoleAdminChanged(bytes32 indexed role, bytes32 indexed previousAdminRole, bytes32 indexed newAdminRole);
+    event RoleAdminChanged(
+        bytes32 indexed role,
+        bytes32 indexed previousAdminRole,
+        bytes32 indexed newAdminRole
+    );
 
     /**
      * @dev Emitted when `account` is granted `role`.
@@ -1824,7 +2115,11 @@ abstract contract AccessControl is Context {
      * `sender` is the account that originated the contract call, an admin role
      * bearer except when using {_setupRole}.
      */
-    event RoleGranted(bytes32 indexed role, address indexed account, address indexed sender);
+    event RoleGranted(
+        bytes32 indexed role,
+        address indexed account,
+        address indexed sender
+    );
 
     /**
      * @dev Emitted when `account` is revoked `role`.
@@ -1833,7 +2128,11 @@ abstract contract AccessControl is Context {
      *   - if using `revokeRole`, it is the admin role bearer
      *   - if using `renounceRole`, it is the role bearer (i.e. `account`)
      */
-    event RoleRevoked(bytes32 indexed role, address indexed account, address indexed sender);
+    event RoleRevoked(
+        bytes32 indexed role,
+        address indexed account,
+        address indexed sender
+    );
 
     /**
      * @dev Returns `true` if `account` has been granted `role`.
@@ -1862,7 +2161,11 @@ abstract contract AccessControl is Context {
      * https://forum.openzeppelin.com/t/iterating-over-elements-on-enumerableset-in-openzeppelin-contracts/2296[forum post]
      * for more information.
      */
-    function getRoleMember(bytes32 role, uint256 index) public view returns (address) {
+    function getRoleMember(bytes32 role, uint256 index)
+        public
+        view
+        returns (address)
+    {
         return _roles[role].members.at(index);
     }
 
@@ -1887,7 +2190,10 @@ abstract contract AccessControl is Context {
      * - the caller must have ``role``'s admin role.
      */
     function grantRole(bytes32 role, address account) public virtual {
-        require(hasRole(_roles[role].adminRole, _msgSender()), "AccessControl: sender must be an admin to grant");
+        require(
+            hasRole(_roles[role].adminRole, _msgSender()),
+            "AccessControl: sender must be an admin to grant"
+        );
 
         _grantRole(role, account);
     }
@@ -1902,7 +2208,10 @@ abstract contract AccessControl is Context {
      * - the caller must have ``role``'s admin role.
      */
     function revokeRole(bytes32 role, address account) public virtual {
-        require(hasRole(_roles[role].adminRole, _msgSender()), "AccessControl: sender must be an admin to revoke");
+        require(
+            hasRole(_roles[role].adminRole, _msgSender()),
+            "AccessControl: sender must be an admin to revoke"
+        );
 
         _revokeRole(role, account);
     }
@@ -1922,7 +2231,10 @@ abstract contract AccessControl is Context {
      * - the caller must be `account`.
      */
     function renounceRole(bytes32 role, address account) public virtual {
-        require(account == _msgSender(), "AccessControl: can only renounce roles for self");
+        require(
+            account == _msgSender(),
+            "AccessControl: can only renounce roles for self"
+        );
 
         _revokeRole(role, account);
     }
@@ -1974,25 +2286,29 @@ abstract contract AccessControl is Context {
 
 pragma solidity ^0.8.4;
 
-
 contract Roles is AccessControl {
-
     bytes32 public constant MINTER_ROLE = keccak256("MINTER");
     bytes32 public constant OPERATOR_ROLE = keccak256("OPERATOR");
 
-    constructor () {
+    constructor() {
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
         _setupRole(MINTER_ROLE, _msgSender());
         _setupRole(OPERATOR_ROLE, _msgSender());
     }
 
     modifier onlyMinter() {
-        require(hasRole(MINTER_ROLE, _msgSender()), "Roles: caller does not have the MINTER role");
+        require(
+            hasRole(MINTER_ROLE, _msgSender()),
+            "Roles: caller does not have the MINTER role"
+        );
         _;
     }
 
     modifier onlyOperator() {
-        require(hasRole(OPERATOR_ROLE, _msgSender()), "Roles: caller does not have the OPERATOR role");
+        require(
+            hasRole(OPERATOR_ROLE, _msgSender()),
+            "Roles: caller does not have the OPERATOR role"
+        );
         _;
     }
 }
@@ -2001,18 +2317,12 @@ contract Roles is AccessControl {
 
 pragma solidity ^0.8.4;
 
-
-
-
-
-
 /**
  * @title ERC20Base
  * @author Vittorio Minacori (https://github.com/vittominacori)
  * @dev Implementation of the ERC20Base
  */
 contract ERC20Base is ERC20Capped, ERC20Burnable, ERC1363, Roles, TokenRecover {
-
     // indicates if minting is finished
     bool private _mintingFinished = false;
 
@@ -2063,10 +2373,7 @@ contract ERC20Base is ERC20Capped, ERC20Burnable, ERC1363, Roles, TokenRecover {
         uint256 cap,
         uint256 initialSupply,
         bool transferEnabled_
-    )
-        ERC20Capped(cap)
-        ERC1363(name, symbol)
-    {
+    ) ERC20Capped(cap) ERC1363(name, symbol) {
         _setupDecimals(decimals);
 
         if (initialSupply > 0) {
@@ -2107,7 +2414,13 @@ contract ERC20Base is ERC20Capped, ERC20Burnable, ERC1363, Roles, TokenRecover {
      * @param value The amount to be transferred
      * @return A boolean that indicates if the operation was successful.
      */
-    function transfer(address to, uint256 value) public virtual override(ERC20) canTransfer(_msgSender()) returns (bool) {
+    function transfer(address to, uint256 value)
+        public
+        virtual
+        override(ERC20)
+        canTransfer(_msgSender())
+        returns (bool)
+    {
         return super.transfer(to, value);
     }
 
@@ -2118,7 +2431,11 @@ contract ERC20Base is ERC20Capped, ERC20Burnable, ERC1363, Roles, TokenRecover {
      * @param value the amount of tokens to be transferred
      * @return A boolean that indicates if the operation was successful.
      */
-    function transferFrom(address from, address to, uint256 value) public virtual override(ERC20) canTransfer(from) returns (bool) {
+    function transferFrom(
+        address from,
+        address to,
+        uint256 value
+    ) public virtual override(ERC20) canTransfer(from) returns (bool) {
         return super.transferFrom(from, to, value);
     }
 
@@ -2143,7 +2460,11 @@ contract ERC20Base is ERC20Capped, ERC20Burnable, ERC1363, Roles, TokenRecover {
     /**
      * @dev See {ERC20-_beforeTokenTransfer}.
      */
-    function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override(ERC20, ERC20Capped) {
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 amount
+    ) internal virtual override(ERC20, ERC20Capped) {
         super._beforeTokenTransfer(from, to, amount);
     }
 }
@@ -2151,7 +2472,6 @@ contract ERC20Base is ERC20Capped, ERC20Burnable, ERC1363, Roles, TokenRecover {
 // File: @openzeppelin\contracts\utils\Pausable.sol
 
 pragma solidity ^0.8.4;
-
 
 /**
  * @dev Contract module which allows children to implement an emergency stop
@@ -2178,7 +2498,7 @@ contract Pausable is Context {
     /**
      * @dev Initializes the contract in unpaused state.
      */
-    constructor () {
+    constructor() {
         _paused = false;
     }
 
@@ -2243,28 +2563,29 @@ contract Pausable is Context {
 pragma solidity ^0.8.4;
 
 contract DFY is ERC20Base, Pausable {
-
-    constructor () ERC20Base(
-        "DeFi For You.", 
-        "DFY", 
-        18, 
-        1e27, 
-        1e27, 
-        false
-    ) {}
+    constructor() ERC20Base("DeFi For You.", "DFY", 18, 1e27, 1e27, false) {}
 
     function getOwner() external view returns (address) {
         return owner();
     }
 
-    function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override(ERC20Base) {
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 amount
+    ) internal virtual override(ERC20Base) {
         super._beforeTokenTransfer(from, to, amount);
 
         require(!paused(), "ERC20Pausable: token transfer while paused");
     }
 
     // Override transferOwnership to grant role
-    function transferOwnership(address newOwner) public virtual onlyOwner override(Ownable) {
+    function transferOwnership(address newOwner)
+        public
+        virtual
+        override(Ownable)
+        onlyOwner
+    {
         super.transferOwnership(newOwner);
         grantRole(DEFAULT_ADMIN_ROLE, newOwner);
         grantRole(MINTER_ROLE, newOwner);
@@ -2278,13 +2599,13 @@ contract DFY is ERC20Base, Pausable {
     using SafeMath for uint256;
     using Address for address;
 
-    mapping (address => uint256) private _pawnReputationScore;
+    mapping(address => uint256) private _pawnReputationScore;
     bool private _rewardPawnReputationEnabled = true;
 
     event RewardPawnReputationEnabled();
     event RewardPawnReputationDisabled();
     event PawnReputationRewarded(address indexed to, uint256 score);
-    event PawnReputationReduced(address indexed to, uint256 score);    
+    event PawnReputationReduced(address indexed to, uint256 score);
 
     function rewardPawnReputationEnabled() public view returns (bool) {
         return _rewardPawnReputationEnabled;
@@ -2292,8 +2613,10 @@ contract DFY is ERC20Base, Pausable {
 
     modifier canRewardPawnReputation() {
         require(
-            _rewardPawnReputationEnabled && hasRole(OPERATOR_ROLE, _msgSender())
-            , "DFY: Reward Pawn Reputation is disabled or caller doesn't have permission to do this");
+            _rewardPawnReputationEnabled &&
+                hasRole(OPERATOR_ROLE, _msgSender()),
+            "DFY: Reward Pawn Reputation is disabled or caller doesn't have permission to do this"
+        );
         _;
     }
 
@@ -2313,27 +2636,46 @@ contract DFY is ERC20Base, Pausable {
         return _pawnReputationScore[account];
     }
 
-    function rewardPawnReputation(address to, uint256 score) public canRewardPawnReputation whenNotPaused returns (uint256) {
+    function rewardPawnReputation(address to, uint256 score)
+        public
+        canRewardPawnReputation
+        whenNotPaused
+        returns (uint256)
+    {
         _rewardPawnReputation(to, score);
         return _pawnReputationScore[to];
     }
 
-    function reducePawnReputation(address to, uint256 score) public canRewardPawnReputation whenNotPaused returns (uint256) {
+    function reducePawnReputation(address to, uint256 score)
+        public
+        canRewardPawnReputation
+        whenNotPaused
+        returns (uint256)
+    {
         _reducePawnReputation(to, score);
         return _pawnReputationScore[to];
     }
 
     function _rewardPawnReputation(address to, uint256 score) internal virtual {
-        require(to != address(0), "DFY: Reward pawn reputation to the zero address");
+        require(
+            to != address(0),
+            "DFY: Reward pawn reputation to the zero address"
+        );
 
         _pawnReputationScore[to] = _pawnReputationScore[to].add(score);
         emit PawnReputationRewarded(to, score);
     }
 
     function _reducePawnReputation(address to, uint256 score) internal virtual {
-        require(to != address(0), "DFY: Reward pawn reputation to the zero address");
+        require(
+            to != address(0),
+            "DFY: Reward pawn reputation to the zero address"
+        );
 
-        _pawnReputationScore[to] = _pawnReputationScore[to].sub(score, "ERC20: reduce amount exceeds balance");
+        _pawnReputationScore[to] = _pawnReputationScore[to].sub(
+            score,
+            "ERC20: reduce amount exceeds balance"
+        );
         emit PawnReputationReduced(to, score);
     }
 }
