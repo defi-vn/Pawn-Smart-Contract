@@ -130,6 +130,8 @@ contract Hub is
     ) external override onlyRole(HubRoles.REGISTRANT) {
         ContractRegistry[signature] = Registry(contractAddress, contractName);
 
+        grantRole(HubRoles.INTERNAL_CONTRACT, contractAddress);
+
         emit NewContractAdded(signature, contractAddress, contractName);
     }
 
@@ -167,41 +169,25 @@ contract Hub is
         feeToken = systemConfig.systemFeeToken;
     }
 
-    /** ================= Config PAWN NFT ============== */
-    // function setEvaluationContract(address evaluationContract, uint256 status)
-    //     external
-    //     onlyRole(DEFAULT_ADMIN_ROLE)
-    // {
-    //     pawnNFTConfig.whitelistedEvaluationContract[
-    //         evaluationContract
-    //     ] = status;
-    // }
-
-    // function getEvaluationContract(address evaluationContract)
-    //     external
-    //     view
-    //     override
-    //     returns (uint256 status)
-    // {
-    //     status = pawnNFTConfig.whitelistedEvaluationContract[
-    //         evaluationContract
-    //     ];
-    // }
-
-    function setWhitelistCollateral_NFT(address cryptoAddress, uint256 status)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
-        pawnNFTConfig.whitelistedCollateral[cryptoAddress] = status;
+    function setWhitelistCollateral_NFT(
+        address collectionAddress,
+        uint256 status
+    ) external override {
+        require(
+            hasRole(HubRoles.OPERATOR_ROLE, _msgSender()) ||
+                hasRole(HubRoles.INTERNAL_CONTRACT, _msgSender()),
+            "Operator or Internal contract"
+        );
+        pawnNFTConfig.whitelistedCollateral[collectionAddress] = status;
     }
 
-    function getWhitelistCollateral_NFT(address cryptoAddress)
+    function getWhitelistCollateral_NFT(address collectionAddress)
         external
         view
         override
         returns (uint256 status)
     {
-        status = pawnNFTConfig.whitelistedCollateral[cryptoAddress];
+        status = pawnNFTConfig.whitelistedCollateral[collectionAddress];
     }
 
     function setPawnNFTConfig(
@@ -210,7 +196,7 @@ contract Hub is
         int256 penaltyRate,
         int256 prepaidFeeRate,
         int256 lateThreshold
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    ) external onlyRole(HubRoles.DEFAULT_ADMIN_ROLE) {
         if (zoom >= 0) {
             pawnNFTConfig.ZOOM = CommonLib.abs(zoom);
         }
@@ -275,7 +261,7 @@ contract Hub is
         int256 penaltyRate,
         int256 prepaidFeeRate,
         int256 lateThreshold
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    ) external onlyRole(HubRoles.DEFAULT_ADMIN_ROLE) {
         if (zoom >= 0) {
             pawnNFTConfig.ZOOM = CommonLib.abs(zoom);
         }
