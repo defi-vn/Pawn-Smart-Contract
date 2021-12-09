@@ -464,7 +464,11 @@ contract PawnContract is IPawn, Ownable, Pausable, ReentrancyGuard {
 
         address offerOwner = offer.owner;
 
-        offer.cancel(_offerId, collaterals[_collateralId].owner, collateralOfferList);
+        offer.cancel(
+            _offerId,
+            collaterals[_collateralId].owner,
+            collateralOfferList
+        );
 
         // kiểm tra người gọi hàm -> rẽ nhánh event
         // neu nguoi goi la owner cua collateral  => reject offer.
