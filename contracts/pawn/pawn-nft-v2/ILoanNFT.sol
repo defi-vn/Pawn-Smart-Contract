@@ -5,7 +5,6 @@ pragma solidity ^0.8.4;
 import "../pawn-base/IPawnNFTBase.sol";
 
 interface ILoanNFT is IPawnNFTBase {
-
     /** Events */
     event CollateralEvent_NFT(
         uint256 nftCollateralId,
@@ -52,7 +51,7 @@ interface ILoanNFT is IPawnNFTBase {
     );
 
     event CountLateCount(uint256 LateThreshold, uint256 lateCount);
-    
+
     /** Functions */
     function createContract(
         IPawnNFTBase.NFTContractRawData memory contractData,

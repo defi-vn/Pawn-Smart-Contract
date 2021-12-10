@@ -126,38 +126,6 @@ library PawnNFTLib {
             duedateTimestampInterest = 900 - 300;
         }
     }
-
-    /**
-     * @dev Calculate balance of wallet address
-     * @param  _token is address of token
-     * @param  from is address wallet
-     */
-    function calculateAmount(address _token, address from)
-        internal
-        view
-        returns (uint256 _amount)
-    {
-        if (_token == address(0)) {
-            // BNB
-            _amount = from.balance;
-        } else {
-            // ERC20
-            _amount = IERC20Upgradeable(_token).balanceOf(from);
-        }
-    }
-
-    /**
-     * @dev Calculate fee of system
-     * @param  amount amount charged to the system
-     * @param  feeRate is system fee rate
-     */
-    function calculateSystemFee(
-        uint256 amount,
-        uint256 feeRate,
-        uint256 zoom
-    ) internal pure returns (uint256 feeAmount) {
-        feeAmount = (amount * feeRate) / (zoom * 100);
-    }
 }
 
 library CollateralLib_NFT {

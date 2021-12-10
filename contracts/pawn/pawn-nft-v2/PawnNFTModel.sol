@@ -2,20 +2,19 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/utils/ERC1155HolderUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/utils/ERC721HolderUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/IAccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
-import "../../hub/Hub.sol";
+import "../../base/BaseContract.sol";
 import "../../hub/HubLib.sol";
 import "../../hub/HubInterface.sol";
 import "../reputation/IReputation.sol";
 import "../exchange/IExchange.sol";
 import "../nft_evaluation/interface/IDFY_Hard_Evaluation.sol";
-import "../../base/BaseContract.sol";
 
 abstract contract PawnNFTModel is
     ERC1155HolderUpgradeable,
@@ -41,12 +40,12 @@ abstract contract PawnNFTModel is
 
     function initialize(address _hub) public initializer {
         __BaseContract_init(_hub);
-        // admin = address(msg.sender);
-        // ZOOM = _zoom;
     }
 
+    /** ==================== Standard interface function implementations ==================== */
     function supportsInterface(bytes4 interfaceId)
         public
+        virtual
         view
         override(ERC165Upgradeable, ERC1155ReceiverUpgradeable)
         returns (bool)
@@ -54,6 +53,9 @@ abstract contract PawnNFTModel is
         return super.supportsInterface(interfaceId);
     }
 
+    /**
+     * @dev Emergency widthdraw
+     */
     function emergencyWithdraw(address _token) external whenPaused onlyAdmin {
         CommonLib.safeTransfer(
             _token,
@@ -63,26 +65,7 @@ abstract contract PawnNFTModel is
         );
     }
 
-    // /** ===================================== REPUTATION FUNCTIONS & STATES ===================================== */
-
-    // IReputation public reputation;
-
-    // function setReputationContract(address _reputationAddress)
-    //     external
-    //     onlyRole(DEFAULT_ADMIN_ROLE)
-    // {
-    //     reputation = IReputation(_reputationAddress);
-    // }
-
-    // /**==========================   ExchangeRate   ========================= */
-    // Exchange public exchange;
-
-    // function setExchangeRate(address _exchange)
-    //     external
-    //     onlyRole(DEFAULT_ADMIN_ROLE)
-    // {
-    //     exchange = Exchange(_exchange);
-    // }
+    /** ===================================== Evaluation, Reputation, Exchange ===================================== */
 
     function getEvaluation() internal view returns (address _Evaluation) {
         (_Evaluation, ) = HubInterface(contractHub).getContractAddress(
@@ -100,7 +83,6 @@ abstract contract PawnNFTModel is
         );
     }
 
-    /**================== Exchange======= */
     function getExchange() internal view returns (address _exchangeAddress) {
         (_exchangeAddress, ) = HubInterface(contractHub).getContractAddress(
             type(IExchange).interfaceId

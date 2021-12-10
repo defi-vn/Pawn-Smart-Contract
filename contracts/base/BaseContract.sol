@@ -98,5 +98,9 @@ abstract contract BaseContract is
         contractHub = _hub;
     }
 
-    function _authorizeUpgrade(address) internal override onlyAdmin {}
+    function _authorizeUpgrade(address)
+        internal
+        override
+        onlyAdmin
+    {}
 }
