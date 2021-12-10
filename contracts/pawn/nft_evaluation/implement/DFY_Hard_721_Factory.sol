@@ -8,38 +8,15 @@ import "../interface/IDFY_721_Hard_Factory.sol";
 import "../implement/DFY_Hard_721.sol";
 
 contract DFYHard721Factory is IDFYHard721Factory, BaseContract {
-    /* ===== Enum ===== */
-    enum CollectionStatus {
-        OPEN
-    }
-
-    enum CollectionStandard {
-        Collection_Hard_721,
-        Collection_Hard_1155
-    }
-
-    /* ===== Event ===== */
-    event CollectionEvent(
-        address collection,
-        address owner,
-        string name,
-        string symbol,
-        string collectionCID,
-        uint256 royaltyRate,
-        CollectionStandard collectionStandard,
-        CollectionStatus collectionStatus
-    );
+    
     // Mapping collection 721 of owner
     mapping(address => DFYHard721[]) public collections721ByOwner;
 
-    function initialize(address _hubContract) public initializer {
-        __BaseContract_init(_hubContract);
+    function initialize(address _hub) public initializer {
+        __BaseContract_init(_hub);
     }
 
-    function signature() external pure override returns (bytes4) {
-        return type(IDFYHard721Factory).interfaceId;
-    }
-
+    /** ==================== Standard interface function implementations ==================== */
     function supportsInterface(bytes4 interfaceId)
         public
         view
@@ -51,25 +28,30 @@ contract DFYHard721Factory is IDFYHard721Factory, BaseContract {
             super.supportsInterface(interfaceId);
     }
 
+    function signature() external pure override returns (bytes4) {
+        return type(IDFYHard721Factory).interfaceId;
+    }
+
+    /** ==================== Create Hard NFT 721 collection ==================== */
     function createCollection(
-        string memory _name,
-        string memory _symbol,
-        string memory _collectionCID,
-        uint256 _royaltyRate,
-        address _evaluationAddress
+        string memory name,
+        string memory symbol,
+        string memory collectionCID,
+        uint256 royaltyRate,
+        address evaluationAddress
     ) external override returns (address) {
         require(
-            bytes(_name).length > 0 &&
-                bytes(_symbol).length > 0 &&
-                bytes(_collectionCID).length > 0,
+            bytes(name).length > 0 &&
+                bytes(symbol).length > 0 &&
+                bytes(collectionCID).length > 0,
             "Invalid collection"
         );
         DFYHard721 _newCollection = new DFYHard721(
-            _name,
-            _symbol,
-            _collectionCID,
-            _royaltyRate,
-            _evaluationAddress,
+            name,
+            symbol,
+            collectionCID,
+            royaltyRate,
+            evaluationAddress,
             payable(msg.sender)
         );
 
@@ -81,10 +63,10 @@ contract DFYHard721Factory is IDFYHard721Factory, BaseContract {
         emit CollectionEvent(
             address(_newCollection),
             msg.sender,
-            _name,
-            _symbol,
-            _collectionCID,
-            _royaltyRate,
+            name,
+            symbol,
+            collectionCID,
+            royaltyRate,
             CollectionStandard.Collection_Hard_721,
             CollectionStatus.OPEN
         );
