@@ -73,7 +73,7 @@ describe("Deploy DFY Factory", (done) => {
 
             // -> customer create asset request
             await _hardEvaluationContract.connect(_deployer).addWhiteListFee(_loanTokenContract.address, _evaluationFee, _mintingFee); // addWhiteListFee -> add address token to pay for evaluation fee , mint nft fee 
-            await _hardEvaluationContract.connect(_customer).createAssetRequest(_assetCID, _DFYHard721Contract.address, 0); // create Asset request 
+            await _hardEvaluationContract.connect(_customer).createAssetRequest(_assetCID, _DFYHard721Contract.address, BigInt(10000 * 10 ** 18), _loanTokenContract, 0); // create Asset request 
             let assetList = await _hardEvaluationContract.assetList(0);
 
             expect(assetList.assetCID).to.equal(_assetCID);

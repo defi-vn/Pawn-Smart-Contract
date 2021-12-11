@@ -125,7 +125,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             address _currency,
             uint256 _price,
             uint256 _depreciationRate,
-            CollectionStandard _collectionStandard
+            CollectionStandard collectionStandard
         )
     {
         _currency = evaluationWithTokenId[addressCollection][tokenId].currency;
@@ -135,30 +135,30 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         _depreciationRate = evaluationWithTokenId[addressCollection][tokenId]
             .depreciationRate;
 
-        _collectionStandard = evaluationWithTokenId[addressCollection][tokenId]
+        collectionStandard = evaluationWithTokenId[addressCollection][tokenId]
             .collectionStandard;
     }
 
     function createAssetRequest(
-        string memory _assetCID,
-        address _collectionAsset,
-        uint256 _expectingPrice,
-        address _expectingPriceAddress,
-        CollectionStandard _collectionStandard
+        string memory assetCID,
+        address collectionAsset,
+        uint256 expectingPrice,
+        address expectingPriceAddress,
+        CollectionStandard collectionStandard
     ) external override whenNotPaused {
         // Require asset CID
-        require(bytes(_assetCID).length > 0, "7"); // Asset CID is Blank
+        require(bytes(assetCID).length > 0, "7"); // Asset CID is Blank
 
-        if (_collectionStandard == CollectionStandard.NFT_HARD_721) {
+        if (collectionStandard == CollectionStandard.NFT_HARD_721) {
             require(
-                _collectionAsset.supportsInterface(
+                collectionAsset.supportsInterface(
                     type(IDFYHard721).interfaceId
                 ),
                 ""
             ); // Invalid Collection
         } else {
             require(
-                _collectionAsset.supportsInterface(
+                collectionAsset.supportsInterface(
                     type(IDFYHard1155).interfaceId
                 ),
                 ""
@@ -170,12 +170,12 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
         // Add asset from asset list
         assetList[_assetId] = Asset({
-            assetCID: _assetCID,
+            assetCID: assetCID,
             owner: msg.sender,
-            collectionAddress: _collectionAsset,
-            expectingPrice: _expectingPrice,
-            expectingPriceAddress: _expectingPriceAddress,
-            collectionStandard: _collectionStandard,
+            collectionAddress: collectionAsset,
+            expectingPrice: expectingPrice,
+            expectingPriceAddress: expectingPriceAddress,
+            collectionStandard: collectionStandard,
             status: AssetStatus.OPEN
         });
 
