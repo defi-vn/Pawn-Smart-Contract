@@ -43,7 +43,7 @@
     },
     {
       "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
-      "txHash": "0xf2c8e82ed352948b31105ffe7692ce71e9428c640f9f0434cbbf2b11ed61a03c",
+      "txHash": "0x2e2d2d9e056a232877f3a2333c14b022d2061d3267fd390af7ead52aeb329b17",
       "kind": "uups"
     }
   ],
@@ -2290,9 +2290,9 @@
         }
       }
     },
-    "6a2cd41f53ddd873838fc7aaa7aaa910df29c2722638abbe51a6d9b5c10b7b49": {
+    "2425a61f422ff883a988c1b531efda1e64d629cf957ea674ffb7e6637c318717": {
       "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
-      "txHash": "0x0c9aa03122ea68ca0815696f5d5c37cc6731489097e6b7d08d35d90b4f8d8fac",
+      "txHash": "0x9fca05b9af6ed51c4b6647c1d78f85f0f7121bd6131edc134401e0b71bb5677c",
       "layout": {
         "storage": [
           {
@@ -2363,75 +2363,66 @@
           },
           {
             "contract": "HardEvaluation",
-            "label": "hubContract",
-            "type": "t_address",
-            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:24"
-          },
-          {
-            "contract": "HardEvaluation",
             "label": "_totalAssets",
             "type": "t_struct(Counter)2996_storage",
-            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:27"
+            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:23"
           },
           {
             "contract": "HardEvaluation",
             "label": "_totalAppointment",
             "type": "t_struct(Counter)2996_storage",
-            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:30"
+            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:26"
           },
           {
             "contract": "HardEvaluation",
             "label": "_totalEvaluation",
             "type": "t_struct(Counter)2996_storage",
-            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:33"
+            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:29"
           },
           {
             "contract": "HardEvaluation",
             "label": "WhiteListFees",
-            "type": "t_mapping(t_address,t_struct(WhiteListFee)15462_storage)",
-            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:36"
+            "type": "t_mapping(t_address,t_struct(WhiteListFee)15470_storage)",
+            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:32"
           },
           {
             "contract": "HardEvaluation",
             "label": "assetList",
-            "type": "t_mapping(t_uint256,t_struct(Asset)15414_storage)",
-            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:40"
+            "type": "t_mapping(t_uint256,t_struct(Asset)15422_storage)",
+            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:36"
           },
           {
             "contract": "HardEvaluation",
             "label": "appointmentList",
-            "type": "t_mapping(t_uint256,t_struct(Appointment)15428_storage)",
-            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:44"
+            "type": "t_mapping(t_uint256,t_struct(Appointment)15436_storage)",
+            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:40"
           },
           {
             "contract": "HardEvaluation",
             "label": "appointmentListOfAsset",
             "type": "t_mapping(t_uint256,t_array(t_uint256)dyn_storage)",
-            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:48"
+            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:44"
           },
           {
             "contract": "HardEvaluation",
             "label": "evaluationWithTokenId",
-            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(Evaluation)15457_storage))",
-            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:50"
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(Evaluation)15465_storage))",
+            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:46"
           },
           {
             "contract": "HardEvaluation",
             "label": "evaluationList",
-            "type": "t_mapping(t_uint256,t_struct(Evaluation)15457_storage)",
-            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:55"
+            "type": "t_mapping(t_uint256,t_struct(Evaluation)15465_storage)",
+            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:51"
           },
           {
             "contract": "HardEvaluation",
             "label": "evaluationListOfAsset",
             "type": "t_mapping(t_uint256,t_array(t_uint256)dyn_storage)",
-            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:59"
+            "src": "contracts/pawn/nft_evaluation/implement/Hard_Evaluation.sol:55"
           }
         ],
         "types": {
-          "t_address": {
-            "label": "address"
-          },
           "t_struct(Counter)2996_storage": {
             "label": "struct CountersUpgradeable.Counter",
             "members": [
@@ -2444,10 +2435,13 @@
           "t_uint256": {
             "label": "uint256"
           },
-          "t_mapping(t_address,t_struct(WhiteListFee)15462_storage)": {
+          "t_mapping(t_address,t_struct(WhiteListFee)15470_storage)": {
             "label": "mapping(address => struct IDFYHardEvaluation.WhiteListFee)"
           },
-          "t_struct(WhiteListFee)15462_storage": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_struct(WhiteListFee)15470_storage": {
             "label": "struct IDFYHardEvaluation.WhiteListFee",
             "members": [
               {
@@ -2460,10 +2454,10 @@
               }
             ]
           },
-          "t_mapping(t_uint256,t_struct(Asset)15414_storage)": {
+          "t_mapping(t_uint256,t_struct(Asset)15422_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Asset)"
           },
-          "t_struct(Asset)15414_storage": {
+          "t_struct(Asset)15422_storage": {
             "label": "struct IDFYHardEvaluation.Asset",
             "members": [
               {
@@ -2488,25 +2482,25 @@
               },
               {
                 "label": "collectionStandard",
-                "type": "t_enum(CollectionStandard)15391"
+                "type": "t_enum(CollectionStandard)15399"
               },
               {
                 "label": "status",
-                "type": "t_enum(AssetStatus)15383"
+                "type": "t_enum(AssetStatus)15391"
               }
             ]
           },
           "t_string_storage": {
             "label": "string"
           },
-          "t_enum(CollectionStandard)15391": {
+          "t_enum(CollectionStandard)15399": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
             "members": [
               "NFT_HARD_721",
               "NFT_HARD_1155"
             ]
           },
-          "t_enum(AssetStatus)15383": {
+          "t_enum(AssetStatus)15391": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
             "members": [
               "OPEN",
@@ -2515,10 +2509,10 @@
               "NFT_CREATED"
             ]
           },
-          "t_mapping(t_uint256,t_struct(Appointment)15428_storage)": {
+          "t_mapping(t_uint256,t_struct(Appointment)15436_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
           },
-          "t_struct(Appointment)15428_storage": {
+          "t_struct(Appointment)15436_storage": {
             "label": "struct IDFYHardEvaluation.Appointment",
             "members": [
               {
@@ -2543,11 +2537,11 @@
               },
               {
                 "label": "status",
-                "type": "t_enum(AppointmentStatus)15397"
+                "type": "t_enum(AppointmentStatus)15405"
               }
             ]
           },
-          "t_enum(AppointmentStatus)15397": {
+          "t_enum(AppointmentStatus)15405": {
             "label": "enum IDFYHardEvaluation.AppointmentStatus",
             "members": [
               "OPEN",
@@ -2563,13 +2557,13 @@
           "t_array(t_uint256)dyn_storage": {
             "label": "uint256[]"
           },
-          "t_mapping(t_address,t_mapping(t_uint256,t_struct(Evaluation)15457_storage))": {
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(Evaluation)15465_storage))": {
             "label": "mapping(address => mapping(uint256 => struct IDFYHardEvaluation.Evaluation))"
           },
-          "t_mapping(t_uint256,t_struct(Evaluation)15457_storage)": {
+          "t_mapping(t_uint256,t_struct(Evaluation)15465_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Evaluation)"
           },
-          "t_struct(Evaluation)15457_storage": {
+          "t_struct(Evaluation)15465_storage": {
             "label": "struct IDFYHardEvaluation.Evaluation",
             "members": [
               {
@@ -2618,15 +2612,15 @@
               },
               {
                 "label": "collectionStandard",
-                "type": "t_enum(CollectionStandard)15391"
+                "type": "t_enum(CollectionStandard)15399"
               },
               {
                 "label": "status",
-                "type": "t_enum(EvaluationStatus)15388"
+                "type": "t_enum(EvaluationStatus)15396"
               }
             ]
           },
-          "t_enum(EvaluationStatus)15388": {
+          "t_enum(EvaluationStatus)15396": {
             "label": "enum IDFYHardEvaluation.EvaluationStatus",
             "members": [
               "EVALUATED",
