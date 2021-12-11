@@ -183,13 +183,13 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     }
 
     function createAppointment(
-        uint256 _assetId,
-        address _evaluator,
-        address _evaluationFeeAddress,
-        uint256 _appointmentTime
+        uint256 assetId,
+        address evaluator,
+        address evaluationFeeAddress,
+        uint256 appointmentTime
     ) external override whenNotPaused {
         // Get asset by asset id
-        Asset storage _asset = assetList[_assetId];
+        Asset storage _asset = assetList[assetId];
 
         require(
             bytes(_asset.assetCID).length > 0 &&
@@ -199,35 +199,35 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         ); // Invalid asset
 
         // appointment time > 0
-        require(_appointmentTime > 0, "Appoint ment time > 0");
+        require(appointmentTime > 0, "Appoint ment time > 0");
 
-        require(!_evaluator.isContract() && _evaluator != _asset.owner, "11"); // Invalid evaluator
+        require(!evaluator.isContract() && evaluator != _asset.owner, "11"); // Invalid evaluator
 
         // Gennerate total appointment
         uint256 _appointmentId = _totalAppointment.current();
 
         // Add appointment to list appointment
         appointmentList[_appointmentId] = Appointment({
-            assetId: _assetId,
+            assetId: assetId,
             assetOwner: _asset.owner,
-            evaluator: _evaluator,
-            evaluationFee: WhiteListFees[_evaluationFeeAddress].EvaluationFee,
-            evaluationFeeAddress: _evaluationFeeAddress,
+            evaluator: evaluator,
+            evaluationFee: WhiteListFees[evaluationFeeAddress].EvaluationFee,
+            evaluationFeeAddress: evaluationFeeAddress,
             status: AppointmentStatus.OPEN
         });
 
         // Add appointment id to appointment list of asset
-        appointmentListOfAsset[_assetId].push(_appointmentId);
+        appointmentListOfAsset[assetId].push(_appointmentId);
 
         // update status asset
         _asset.status = AssetStatus.APPOINTED;
 
         // Transfer evaluation fee to smart contract
         CommonLib.safeTransfer(
-            _evaluationFeeAddress,
+            evaluationFeeAddress,
             msg.sender,
             address(this),
-            WhiteListFees[_evaluationFeeAddress].EvaluationFee
+            WhiteListFees[evaluationFeeAddress].EvaluationFee
         );
 
         // Update total appoinment
@@ -239,17 +239,17 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             _asset,
             appointmentList[_appointmentId],
             "",
-            _appointmentTime
+            appointmentTime
         );
     }
 
-    function acceptAppointment(uint256 _appointmentId, uint256 _appointmentTime)
+    function acceptAppointment(uint256 appointmentId, uint256 appointmentTime)
         external
         override
         onlyEvaluator
         whenNotPaused
     {
-        Appointment storage _appointment = appointmentList[_appointmentId];
+        Appointment storage _appointment = appointmentList[appointmentId];
 
         require(
             _appointment.status == AppointmentStatus.OPEN &&
@@ -260,11 +260,11 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         _appointment.status = AppointmentStatus.ACCEPTED;
 
         emit AppointmentEvent(
-            _appointmentId,
+            appointmentId,
             assetList[_appointment.assetId],
             _appointment,
             "",
-            _appointmentTime
+            appointmentTime
         );
     }
 
@@ -304,11 +304,11 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         );
     }
 
-    function cancelAppointment(uint256 _appointmentId, string memory reason)
+    function cancelAppointment(uint256 appointmentId, string memory reason)
         external
         override
     {
-        Appointment storage _appointment = appointmentList[_appointmentId];
+        Appointment storage _appointment = appointmentList[appointmentId];
 
         require(
             _appointment.status != AppointmentStatus.EVALUATED &&
@@ -330,7 +330,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         );
 
         emit AppointmentEvent(
-            _appointmentId,
+            appointmentId,
             assetList[_appointment.assetId],
             _appointment,
             reason,
@@ -340,13 +340,13 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
     function evaluatedAsset(
         address currency,
-        uint256 _appointmentId,
+        uint256 appointmentId,
         uint256 price,
-        string memory _evaluationCID,
+        string memory evaluationCID,
         uint256 depreciationRate,
-        address _mintingFeeAddress
+        address mintingFeeAddress
     ) external override onlyEvaluator whenNotPaused {
-        Appointment storage _appointment = appointmentList[_appointmentId];
+        Appointment storage _appointment = appointmentList[appointmentId];
 
         require(
             _appointment.status == AppointmentStatus.ACCEPTED &&
@@ -367,7 +367,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         }
 
         require(
-            bytes(_evaluationCID).length > 0 &&
+            bytes(evaluationCID).length > 0 &&
                 price > 0 &&
                 depreciationRate > 0,
             "17"
@@ -378,14 +378,14 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
         evaluationList[_evaluationId] = Evaluation({
             assetId: _appointment.assetId,
-            appointmentId: _appointmentId,
-            evaluationCID: _evaluationCID,
+            appointmentId: appointmentId,
+            evaluationCID: evaluationCID,
             depreciationRate: depreciationRate,
             evaluator: msg.sender,
             currency: currency,
             price: price,
-            mintingFee: WhiteListFees[_mintingFeeAddress].MintingFee,
-            mintingFeeAddress: _mintingFeeAddress,
+            mintingFee: WhiteListFees[mintingFeeAddress].MintingFee,
+            mintingFeeAddress: mintingFeeAddress,
             collectionAddress: _asset.collectionAddress,
             timeOfEvaluation: block.timestamp,
             collectionStandard: _asset.collectionStandard,
@@ -411,12 +411,12 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         );
     }
 
-    function acceptEvaluation(uint256 _evaluationId)
+    function acceptEvaluation(uint256 evaluationId)
         external
         override
         whenNotPaused
     {
-        Evaluation storage _evaluation = evaluationList[_evaluationId];
+        Evaluation storage _evaluation = evaluationList[evaluationId];
 
         require(
             bytes(_evaluation.evaluationCID).length > 0 &&
@@ -441,7 +441,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             i++
         ) {
             if (
-                evaluationListOfAsset[_evaluation.assetId][i] != _evaluationId
+                evaluationListOfAsset[_evaluation.assetId][i] != evaluationId
             ) {
                 uint256 _evaluationIdReject = evaluationListOfAsset[
                     _evaluation.assetId
@@ -477,7 +477,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             _evaluation.mintingFee
         );
 
-        emit EvaluationEvent(_evaluationId, _asset, _evaluation, "");
+        emit EvaluationEvent(evaluationId, _asset, _evaluation, "");
     }
 
     function rejectEvaluation(uint256 _evaluationId, string memory reason)
