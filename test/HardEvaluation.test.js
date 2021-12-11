@@ -7,7 +7,7 @@ const { expect, assert } = require("chai");
 const decimal = 10 ** 18;
 
 
-describe("Preset\n\r", (done) => {
+describe("Setting up test parameters:\n\r", (done) => {
 
     let _DFYHard721Contract = null;
     let _loanTokenContract = null;
