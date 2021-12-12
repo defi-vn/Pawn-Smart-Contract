@@ -374,9 +374,9 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         ); // Invalid evaluation
 
         // Gennerate evaluation id
-        uint256 _evaluationId = _totalEvaluation.current();
+        uint256 evaluationId = _totalEvaluation.current();
 
-        evaluationList[_evaluationId] = Evaluation({
+        evaluationList[evaluationId] = Evaluation({
             assetId: _appointment.assetId,
             appointmentId: appointmentId,
             evaluationCID: evaluationCID,
@@ -404,9 +404,9 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         _totalEvaluation.increment();
 
         emit EvaluationEvent(
-            _evaluationId,
+            evaluationId,
             _asset,
-            evaluationList[_evaluationId],
+            evaluationList[evaluationId],
             ""
         );
     }
@@ -480,12 +480,12 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         emit EvaluationEvent(evaluationId, _asset, _evaluation, "");
     }
 
-    function rejectEvaluation(uint256 _evaluationId, string memory reason)
+    function rejectEvaluation(uint256 evaluationId, string memory reason)
         external
         override
         whenNotPaused
     {
-        Evaluation storage _evaluation = evaluationList[_evaluationId];
+        Evaluation storage _evaluation = evaluationList[evaluationId];
 
         require(
             bytes(_evaluation.evaluationCID).length > 0 &&
@@ -507,17 +507,17 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
         _asset.status = AssetStatus.OPEN;
 
-        emit EvaluationEvent(_evaluationId, _asset, _evaluation, reason);
+        emit EvaluationEvent(evaluationId, _asset, _evaluation, reason);
     }
 
     function createNftToken(
-        uint256 _evaluationId,
-        uint256 _amount,
-        string memory _nftCID
+        uint256 evaluationId,
+        uint256 amount,
+        string memory nftCID
     ) external override onlyEvaluator whenNotPaused {
-        require(bytes(_nftCID).length > 0, "22"); // Invalid nftCID
+        require(bytes(nftCID).length > 0, "22"); // Invalid nftCID
 
-        Evaluation storage _evaluation = evaluationList[_evaluationId];
+        Evaluation storage _evaluation = evaluationList[evaluationId];
 
         require(
             bytes(_evaluation.evaluationCID).length > 0 &&
@@ -539,14 +539,14 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         if (_asset.collectionStandard == CollectionStandard.NFT_HARD_721) {
             tokenId = IDFYHard721(_asset.collectionAddress).mint(
                 _asset.owner,
-                _nftCID,
+                nftCID,
                 _evaluation.depreciationRate
             );
         } else {
             tokenId = IDFYHard1155(_asset.collectionAddress).mint(
                 _asset.owner,
-                _amount,
-                _nftCID,
+                amount,
+                nftCID,
                 "",
                 _evaluation.depreciationRate
             );
@@ -569,6 +569,6 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             tokenId
         ] = _evaluation;
 
-        emit NFTEvent(tokenId, _nftCID, _amount, _asset, _evaluation);
+        emit NFTEvent(tokenId, nftCID, amount, _asset, _evaluation);
     }
 }
