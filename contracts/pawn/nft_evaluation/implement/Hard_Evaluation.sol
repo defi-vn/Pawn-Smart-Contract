@@ -63,9 +63,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         __BaseContract_init(_hubContract);
     }
 
-    function signature() public pure override returns (bytes4) {
-        return type(IDFYHardEvaluation).interfaceId;
-    }
+    /** ==================== Standard interface function implementations ==================== */
 
     function supportsInterface(bytes4 interfaceId)
         public
@@ -79,7 +77,11 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             super.supportsInterface(interfaceId);
     }
 
-    function _addWhiteFee(
+    function signature() public pure override returns (bytes4) {
+        return type(IDFYHardEvaluation).interfaceId;
+    }
+
+    function _addWhitelistedFee(
         address newAddressFee,
         uint256 newEvaluationFee,
         uint256 newMintingFee
@@ -101,7 +103,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         uint256 newEvaluationFee,
         uint256 newMintingFee
     ) external override onlyAdmin {
-        _addWhiteFee(newAddressFee, newEvaluationFee, newMintingFee);
+        _addWhitelistedFee(newAddressFee, newEvaluationFee, newMintingFee);
     }
 
     function getEvaluationWithTokenId(

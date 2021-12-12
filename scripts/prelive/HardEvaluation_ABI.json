@@ -1,0 +1,1237 @@
+[
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "previousAdmin",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "newAdmin",
+                "type": "address"
+            }
+        ],
+        "name": "AdminChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "appoimentId",
+                "type": "uint256"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "string",
+                        "name": "assetCID",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "owner",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "collectionAddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "expectingPrice",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "expectingPriceAddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "enum IDFYHardEvaluation.CollectionStandard",
+                        "name": "collectionStandard",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "enum IDFYHardEvaluation.AssetStatus",
+                        "name": "status",
+                        "type": "uint8"
+                    }
+                ],
+                "indexed": false,
+                "internalType": "struct IDFYHardEvaluation.Asset",
+                "name": "asset",
+                "type": "tuple"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "assetId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "assetOwner",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "evaluator",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "evaluationFee",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "evaluationFeeAddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "enum IDFYHardEvaluation.AppointmentStatus",
+                        "name": "status",
+                        "type": "uint8"
+                    }
+                ],
+                "indexed": false,
+                "internalType": "struct IDFYHardEvaluation.Appointment",
+                "name": "appointment",
+                "type": "tuple"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "reason",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "appointmentTime",
+                "type": "uint256"
+            }
+        ],
+        "name": "AppointmentEvent",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "assetId",
+                "type": "uint256"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "string",
+                        "name": "assetCID",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "owner",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "collectionAddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "expectingPrice",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "expectingPriceAddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "enum IDFYHardEvaluation.CollectionStandard",
+                        "name": "collectionStandard",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "enum IDFYHardEvaluation.AssetStatus",
+                        "name": "status",
+                        "type": "uint8"
+                    }
+                ],
+                "indexed": false,
+                "internalType": "struct IDFYHardEvaluation.Asset",
+                "name": "asset",
+                "type": "tuple"
+            }
+        ],
+        "name": "AssetEvent",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "beacon",
+                "type": "address"
+            }
+        ],
+        "name": "BeaconUpgraded",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "evaluationId",
+                "type": "uint256"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "string",
+                        "name": "assetCID",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "owner",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "collectionAddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "expectingPrice",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "expectingPriceAddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "enum IDFYHardEvaluation.CollectionStandard",
+                        "name": "collectionStandard",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "enum IDFYHardEvaluation.AssetStatus",
+                        "name": "status",
+                        "type": "uint8"
+                    }
+                ],
+                "indexed": false,
+                "internalType": "struct IDFYHardEvaluation.Asset",
+                "name": "asset",
+                "type": "tuple"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "assetId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "appointmentId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "evaluationCID",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "depreciationRate",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "evaluator",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "currency",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "price",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "mintingFee",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "mintingFeeAddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "collectionAddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "timeOfEvaluation",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "enum IDFYHardEvaluation.CollectionStandard",
+                        "name": "collectionStandard",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "enum IDFYHardEvaluation.EvaluationStatus",
+                        "name": "status",
+                        "type": "uint8"
+                    }
+                ],
+                "indexed": false,
+                "internalType": "struct IDFYHardEvaluation.Evaluation",
+                "name": "evaluation",
+                "type": "tuple"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "reason",
+                "type": "string"
+            }
+        ],
+        "name": "EvaluationEvent",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "nftCID",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "string",
+                        "name": "assetCID",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "owner",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "collectionAddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "expectingPrice",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "expectingPriceAddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "enum IDFYHardEvaluation.CollectionStandard",
+                        "name": "collectionStandard",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "enum IDFYHardEvaluation.AssetStatus",
+                        "name": "status",
+                        "type": "uint8"
+                    }
+                ],
+                "indexed": false,
+                "internalType": "struct IDFYHardEvaluation.Asset",
+                "name": "asset",
+                "type": "tuple"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "assetId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "appointmentId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "evaluationCID",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "depreciationRate",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "evaluator",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "currency",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "price",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "mintingFee",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "mintingFeeAddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "collectionAddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "timeOfEvaluation",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "enum IDFYHardEvaluation.CollectionStandard",
+                        "name": "collectionStandard",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "enum IDFYHardEvaluation.EvaluationStatus",
+                        "name": "status",
+                        "type": "uint8"
+                    }
+                ],
+                "indexed": false,
+                "internalType": "struct IDFYHardEvaluation.Evaluation",
+                "name": "evaluation",
+                "type": "tuple"
+            }
+        ],
+        "name": "NFTEvent",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "Paused",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "Unpaused",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "implementation",
+                "type": "address"
+            }
+        ],
+        "name": "Upgraded",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "WhiteListFees",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "EvaluationFee",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "MintingFee",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "appointmentId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "appointmentTime",
+                "type": "uint256"
+            }
+        ],
+        "name": "acceptAppointment",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "evaluationId",
+                "type": "uint256"
+            }
+        ],
+        "name": "acceptEvaluation",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newAddressFee",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "newEvaluationFee",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "newMintingFee",
+                "type": "uint256"
+            }
+        ],
+        "name": "addWhiteListFee",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "appointmentList",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "assetId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "assetOwner",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "evaluator",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "evaluationFee",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "evaluationFeeAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "enum IDFYHardEvaluation.AppointmentStatus",
+                "name": "status",
+                "type": "uint8"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "appointmentListOfAsset",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "assetList",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "assetCID",
+                "type": "string"
+            },
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "collectionAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "expectingPrice",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "expectingPriceAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "enum IDFYHardEvaluation.CollectionStandard",
+                "name": "collectionStandard",
+                "type": "uint8"
+            },
+            {
+                "internalType": "enum IDFYHardEvaluation.AssetStatus",
+                "name": "status",
+                "type": "uint8"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "appointmentId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "reason",
+                "type": "string"
+            }
+        ],
+        "name": "cancelAppointment",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "contractHub",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "assetId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "evaluator",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "evaluationFeeAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "appointmentTime",
+                "type": "uint256"
+            }
+        ],
+        "name": "createAppointment",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "assetCID",
+                "type": "string"
+            },
+            {
+                "internalType": "address",
+                "name": "collectionAsset",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "expectingPrice",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "expectingPriceAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "enum IDFYHardEvaluation.CollectionStandard",
+                "name": "collectionStandard",
+                "type": "uint8"
+            }
+        ],
+        "name": "createAssetRequest",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "evaluationId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "nftCID",
+                "type": "string"
+            }
+        ],
+        "name": "createNftToken",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "currency",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "appointmentId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "evaluationCID",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "depreciationRate",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "mintingFeeAddress",
+                "type": "address"
+            }
+        ],
+        "name": "evaluatedAsset",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "evaluationList",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "assetId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "appointmentId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "evaluationCID",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "depreciationRate",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "evaluator",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "currency",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "mintingFee",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "mintingFeeAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "collectionAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timeOfEvaluation",
+                "type": "uint256"
+            },
+            {
+                "internalType": "enum IDFYHardEvaluation.CollectionStandard",
+                "name": "collectionStandard",
+                "type": "uint8"
+            },
+            {
+                "internalType": "enum IDFYHardEvaluation.EvaluationStatus",
+                "name": "status",
+                "type": "uint8"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "evaluationListOfAsset",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "evaluationWithTokenId",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "assetId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "appointmentId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "evaluationCID",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "depreciationRate",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "evaluator",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "currency",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "mintingFee",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "mintingFeeAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "collectionAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timeOfEvaluation",
+                "type": "uint256"
+            },
+            {
+                "internalType": "enum IDFYHardEvaluation.CollectionStandard",
+                "name": "collectionStandard",
+                "type": "uint8"
+            },
+            {
+                "internalType": "enum IDFYHardEvaluation.EvaluationStatus",
+                "name": "status",
+                "type": "uint8"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "addressCollection",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getEvaluationWithTokenId",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "currency",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "depreciationRate",
+                "type": "uint256"
+            },
+            {
+                "internalType": "enum IDFYHardEvaluation.CollectionStandard",
+                "name": "collectionStandard",
+                "type": "uint8"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_hubContract",
+                "type": "address"
+            }
+        ],
+        "name": "initialize",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "pause",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "paused",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_appointmentId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "reason",
+                "type": "string"
+            }
+        ],
+        "name": "rejectAppointment",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "evaluationId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "reason",
+                "type": "string"
+            }
+        ],
+        "name": "rejectEvaluation",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_hub",
+                "type": "address"
+            }
+        ],
+        "name": "setContractHub",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "signature",
+        "outputs": [
+            {
+                "internalType": "bytes4",
+                "name": "",
+                "type": "bytes4"
+            }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes4",
+                "name": "interfaceId",
+                "type": "bytes4"
+            }
+        ],
+        "name": "supportsInterface",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "unPause",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newImplementation",
+                "type": "address"
+            }
+        ],
+        "name": "upgradeTo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newImplementation",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes",
+                "name": "data",
+                "type": "bytes"
+            }
+        ],
+        "name": "upgradeToAndCall",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    }
+]

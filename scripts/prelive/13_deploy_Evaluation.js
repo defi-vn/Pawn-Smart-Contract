@@ -1,12 +1,14 @@
 require('@nomiclabs/hardhat-ethers');
 
 const hre = require('hardhat');
-const { Proxies } = require('./.deployment_data.json');
+const { Proxies } = require('./.deployment_data_prelive.json');
+const proxiesEnv = Proxies.Prelive;
 
 const EvaluationBuildName = "HardEvaluation";
 
 const HubBuildName = "Hub";
-const HubProxy = Proxies.Beta.HUB_CONTRACT_ADDRESS;
+const HubProxy = proxiesEnv.HUB_CONTRACT_ADDRESS;
+
 const proxyType = { kind: "uups" };
 
 const decimals      = 10**18;
@@ -15,18 +17,19 @@ async function main() {
     const[deployer] = await hre.ethers.getSigners();
 
     console.log("==============================================\n\r");
+    console.log("Start time: ", Date(Date.now()));
     console.log("Deploying contracts with the account:", deployer.address);
     console.log("Account balance: ", ((await deployer.getBalance()) / decimals).toString());
     console.log("=================================\n\r");
 
     const EvaluationFactory = await hre.ethers.getContractFactory(EvaluationBuildName);
     const EvaluationArtifact = await hre.artifacts.readArtifact(EvaluationBuildName);
-    const EvaluationContract = await hre.upgrades.deployProxy(EvaluationFactory,[HubProxy],proxyType);
+    const EvaluationContract = await hre.upgrades.deployProxy(EvaluationFactory,[HubProxy], proxyType);
 
     await EvaluationContract.deployed();
     const signature = await EvaluationContract.signature();
 
-    console.log(`EVALUATION_CONTRACT_ADDRESS: ${EvaluationContract.address}`);
+    console.log(`EVALUATION_CONTRACT_ADDRESS: \x1b[36m${EvaluationContract.address}\x1b[0m`);
     console.log(`Signature: \x1b[36m${signature}\x1b[0m`);
 
     implementtationAddress = await hre.upgrades.erc1967.getImplementationAddress(EvaluationContract.address);
@@ -40,6 +43,7 @@ async function main() {
     console.log(`Registering \x1b[36m${EvaluationArtifact.contractName}\x1b[0m to \x1b[31m${HubArtifact.contractName}\x1b[0m...`);
 
     await HubContract.registerContract(signature,EvaluationContract.address,EvaluationArtifact.contractName);
+    console.log(`Completed at ${Date(Date.now())}`);
     
     console.log("===========================\n\r");
 
