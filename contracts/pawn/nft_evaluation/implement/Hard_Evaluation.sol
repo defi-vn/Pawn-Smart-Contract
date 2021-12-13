@@ -19,10 +19,6 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     using SafeMathUpgradeable for uint256;
     using ERC165CheckerUpgradeable for address;
 
-    // Admin address
-    // address public adminAdress;
-    address public hubContract;
-
     // Total asset
     CountersUpgradeable.Counter private _totalAssets;
 
@@ -64,18 +60,10 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     }
 
     function initialize(address _hubContract) public initializer {
-        __Pausable_init();
-
-        //   _setAdminAddress(msg.sender);
-
         __BaseContract_init(_hubContract);
-
-        hubContract = _hubContract;
     }
 
-    function signature() public pure override returns (bytes4) {
-        return type(IDFYHardEvaluation).interfaceId;
-    }
+    /** ==================== Standard interface function implementations ==================== */
 
     function supportsInterface(bytes4 interfaceId)
         public
@@ -89,29 +77,33 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             super.supportsInterface(interfaceId);
     }
 
-    function _addWhiteFee(
-        address _newAddressFee,
-        uint256 _newEvaluationFee,
-        uint256 _newMintingFee
+    function signature() public pure override returns (bytes4) {
+        return type(IDFYHardEvaluation).interfaceId;
+    }
+
+    function _addWhitelistedFee(
+        address newAddressFee,
+        uint256 newEvaluationFee,
+        uint256 newMintingFee
     ) internal {
-        if (_newAddressFee != address(0)) {
-            require(_newAddressFee.isContract(), "5"); // Address minting fee is contract
+        if (newAddressFee != address(0)) {
+            require(newAddressFee.isContract(), "5"); // Address minting fee is contract
         }
 
-        //    require(_newMintingFee > 0, "6"); // Minting fee than more 0
+        //    require(newMintingFee > 0, "6"); // Minting fee than more 0
 
-        WhiteListFees[_newAddressFee] = WhiteListFee(
-            _newEvaluationFee,
-            _newMintingFee
+        WhiteListFees[newAddressFee] = WhiteListFee(
+            newEvaluationFee,
+            newMintingFee
         );
     }
 
     function addWhiteListFee(
-        address _newAddressFee,
-        uint256 _newEvaluationFee,
-        uint256 _newMintingFee
+        address newAddressFee,
+        uint256 newEvaluationFee,
+        uint256 newMintingFee
     ) external override onlyAdmin {
-        _addWhiteFee(_newAddressFee, _newEvaluationFee, _newMintingFee);
+        _addWhitelistedFee(newAddressFee, newEvaluationFee, newMintingFee);
     }
 
     function getEvaluationWithTokenId(
@@ -122,47 +114,54 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         view
         override
         returns (
-            address _currency,
-            uint256 _price,
-            uint256 _depreciationRate,
-            CollectionStandard _collectionStandard
+            address currency,
+            uint256 price,
+            uint256 depreciationRate,
+            CollectionStandard collectionStandard
         )
     {
-        _currency = evaluationWithTokenId[addressCollection][tokenId].currency;
+        currency = evaluationWithTokenId[addressCollection][tokenId].currency;
 
-        _price = evaluationWithTokenId[addressCollection][tokenId].price;
+        price = evaluationWithTokenId[addressCollection][tokenId].price;
 
-        _depreciationRate = evaluationWithTokenId[addressCollection][tokenId]
+        depreciationRate = evaluationWithTokenId[addressCollection][tokenId]
             .depreciationRate;
 
-        _collectionStandard = evaluationWithTokenId[addressCollection][tokenId]
+        collectionStandard = evaluationWithTokenId[addressCollection][tokenId]
             .collectionStandard;
     }
 
     function createAssetRequest(
-        string memory _assetCID,
-        address _collectionAsset,
-        uint256 _expectingPrice,
-        address _expectingPriceAddress,
-        CollectionStandard _collectionStandard
+        string memory assetCID,
+        address collectionAsset,
+        uint256 expectingPrice,
+        address expectingPriceAddress,
+        CollectionStandard collectionStandard
     ) external override whenNotPaused {
         // Require asset CID
-        require(bytes(_assetCID).length > 0, "7"); // Asset CID is Blank
+        require(bytes(assetCID).length > 0, "Asset CID is blank");
 
-        if (_collectionStandard == CollectionStandard.NFT_HARD_721) {
+        if (collectionStandard == CollectionStandard.NFT_HARD_721) {
             require(
-                _collectionAsset.supportsInterface(
+                collectionAsset.supportsInterface(
                     type(IDFYHard721).interfaceId
                 ),
-                ""
+                "Unsupported Hard NFT-721 interface"
             ); // Invalid Collection
-        } else {
-            require(
-                _collectionAsset.supportsInterface(
+        } else if (collectionStandard == CollectionStandard.NFT_HARD_1155) {
+             require(
+                collectionAsset.supportsInterface(
                     type(IDFYHard1155).interfaceId
                 ),
-                ""
-            ); // Invalid Collection
+                "Unsupported Hard NFT-1155 interface"
+            );
+        } else {
+            require(
+                collectionAsset.supportsInterface(
+                    type(IDFYHard1155).interfaceId
+                ),
+                "Invalid collection"
+            );
         }
 
         // Create asset id
@@ -170,12 +169,12 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
         // Add asset from asset list
         assetList[_assetId] = Asset({
-            assetCID: _assetCID,
+            assetCID: assetCID,
             owner: msg.sender,
-            collectionAddress: _collectionAsset,
-            expectingPrice: _expectingPrice,
-            expectingPriceAddress: _expectingPriceAddress,
-            collectionStandard: _collectionStandard,
+            collectionAddress: collectionAsset,
+            expectingPrice: expectingPrice,
+            expectingPriceAddress: expectingPriceAddress,
+            collectionStandard: collectionStandard,
             status: AssetStatus.OPEN
         });
 
@@ -186,13 +185,13 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     }
 
     function createAppointment(
-        uint256 _assetId,
-        address _evaluator,
-        address _evaluationFeeAddress,
-        uint256 _appointmentTime
+        uint256 assetId,
+        address evaluator,
+        address evaluationFeeAddress,
+        uint256 appointmentTime
     ) external override whenNotPaused {
         // Get asset by asset id
-        Asset storage _asset = assetList[_assetId];
+        Asset storage _asset = assetList[assetId];
 
         require(
             bytes(_asset.assetCID).length > 0 &&
@@ -202,34 +201,35 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         ); // Invalid asset
 
         // appointment time > 0
-        require(_appointmentTime > 0, "Appoint ment time > 0");
+        require(appointmentTime > 0, "Appoint ment time > 0");
 
-        require(!_evaluator.isContract() && _evaluator != _asset.owner, "11"); // Invalid evaluator
+        require(!evaluator.isContract() && evaluator != _asset.owner, "11"); // Invalid evaluator
 
         // Gennerate total appointment
         uint256 _appointmentId = _totalAppointment.current();
 
         // Add appointment to list appointment
         appointmentList[_appointmentId] = Appointment({
-            assetId: _assetId,
+            assetId: assetId,
             assetOwner: _asset.owner,
-            evaluator: _evaluator,
-            evaluationFee: WhiteListFees[_evaluationFeeAddress].EvaluationFee,
-            evaluationFeeAddress: _evaluationFeeAddress,
+            evaluator: evaluator,
+            evaluationFee: WhiteListFees[evaluationFeeAddress].EvaluationFee,
+            evaluationFeeAddress: evaluationFeeAddress,
             status: AppointmentStatus.OPEN
         });
 
         // Add appointment id to appointment list of asset
-        appointmentListOfAsset[_assetId].push(_appointmentId);
+        appointmentListOfAsset[assetId].push(_appointmentId);
 
         // update status asset
         _asset.status = AssetStatus.APPOINTED;
 
+        // Transfer evaluation fee to smart contract
         CommonLib.safeTransfer(
-            _evaluationFeeAddress,
+            evaluationFeeAddress,
             msg.sender,
             address(this),
-            WhiteListFees[_evaluationFeeAddress].EvaluationFee
+            WhiteListFees[evaluationFeeAddress].EvaluationFee
         );
 
         // Update total appoinment
@@ -241,17 +241,17 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             _asset,
             appointmentList[_appointmentId],
             "",
-            _appointmentTime
+            appointmentTime
         );
     }
 
-    function acceptAppointment(uint256 _appointmentId, uint256 _appointmentTime)
+    function acceptAppointment(uint256 appointmentId, uint256 appointmentTime)
         external
         override
         onlyEvaluator
         whenNotPaused
     {
-        Appointment storage _appointment = appointmentList[_appointmentId];
+        Appointment storage _appointment = appointmentList[appointmentId];
 
         require(
             _appointment.status == AppointmentStatus.OPEN &&
@@ -262,11 +262,11 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         _appointment.status = AppointmentStatus.ACCEPTED;
 
         emit AppointmentEvent(
-            _appointmentId,
+            appointmentId,
             assetList[_appointment.assetId],
             _appointment,
             "",
-            _appointmentTime
+            appointmentTime
         );
     }
 
@@ -306,11 +306,11 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         );
     }
 
-    function cancelAppointment(uint256 _appointmentId, string memory reason)
+    function cancelAppointment(uint256 appointmentId, string memory reason)
         external
         override
     {
-        Appointment storage _appointment = appointmentList[_appointmentId];
+        Appointment storage _appointment = appointmentList[appointmentId];
 
         require(
             _appointment.status != AppointmentStatus.EVALUATED &&
@@ -332,7 +332,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         );
 
         emit AppointmentEvent(
-            _appointmentId,
+            appointmentId,
             assetList[_appointment.assetId],
             _appointment,
             reason,
@@ -341,14 +341,14 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     }
 
     function evaluatedAsset(
-        address _currency,
-        uint256 _appointmentId,
-        uint256 _price,
-        string memory _evaluationCID,
-        uint256 _depreciationRate,
-        address _mintingFeeAddress
+        address currency,
+        uint256 appointmentId,
+        uint256 price,
+        string memory evaluationCID,
+        uint256 depreciationRate,
+        address mintingFeeAddress
     ) external override onlyEvaluator whenNotPaused {
-        Appointment storage _appointment = appointmentList[_appointmentId];
+        Appointment storage _appointment = appointmentList[appointmentId];
 
         require(
             _appointment.status == AppointmentStatus.ACCEPTED &&
@@ -364,30 +364,30 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             "15"
         ); // Invalid asset
 
-        if (_currency != address(0)) {
-            require(_currency.isContract(), "16"); // Invalid currency
+        if (currency != address(0)) {
+            require(currency.isContract(), "16"); // Invalid currency
         }
 
         require(
-            bytes(_evaluationCID).length > 0 &&
-                _price > 0 &&
-                _depreciationRate > 0,
+            bytes(evaluationCID).length > 0 &&
+                price > 0 &&
+                depreciationRate > 0,
             "17"
         ); // Invalid evaluation
 
         // Gennerate evaluation id
-        uint256 _evaluationId = _totalEvaluation.current();
+        uint256 evaluationId = _totalEvaluation.current();
 
-        evaluationList[_evaluationId] = Evaluation({
+        evaluationList[evaluationId] = Evaluation({
             assetId: _appointment.assetId,
-            appointmentId: _appointmentId,
-            evaluationCID: _evaluationCID,
-            depreciationRate: _depreciationRate,
+            appointmentId: appointmentId,
+            evaluationCID: evaluationCID,
+            depreciationRate: depreciationRate,
             evaluator: msg.sender,
-            currency: _currency,
-            price: _price,
-            mintingFee: WhiteListFees[_mintingFeeAddress].MintingFee,
-            mintingFeeAddress: _mintingFeeAddress,
+            currency: currency,
+            price: price,
+            mintingFee: WhiteListFees[mintingFeeAddress].MintingFee,
+            mintingFeeAddress: mintingFeeAddress,
             collectionAddress: _asset.collectionAddress,
             timeOfEvaluation: block.timestamp,
             collectionStandard: _asset.collectionStandard,
@@ -406,19 +406,19 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         _totalEvaluation.increment();
 
         emit EvaluationEvent(
-            _evaluationId,
+            evaluationId,
             _asset,
-            evaluationList[_evaluationId],
+            evaluationList[evaluationId],
             ""
         );
     }
 
-    function acceptEvaluation(uint256 _evaluationId)
+    function acceptEvaluation(uint256 evaluationId)
         external
         override
         whenNotPaused
     {
-        Evaluation storage _evaluation = evaluationList[_evaluationId];
+        Evaluation storage _evaluation = evaluationList[evaluationId];
 
         require(
             bytes(_evaluation.evaluationCID).length > 0 &&
@@ -443,7 +443,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             i++
         ) {
             if (
-                evaluationListOfAsset[_evaluation.assetId][i] != _evaluationId
+                evaluationListOfAsset[_evaluation.assetId][i] != evaluationId
             ) {
                 uint256 _evaluationIdReject = evaluationListOfAsset[
                     _evaluation.assetId
@@ -479,15 +479,15 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             _evaluation.mintingFee
         );
 
-        emit EvaluationEvent(_evaluationId, _asset, _evaluation, "");
+        emit EvaluationEvent(evaluationId, _asset, _evaluation, "");
     }
 
-    function rejectEvaluation(uint256 _evaluationId, string memory reason)
+    function rejectEvaluation(uint256 evaluationId, string memory reason)
         external
         override
         whenNotPaused
     {
-        Evaluation storage _evaluation = evaluationList[_evaluationId];
+        Evaluation storage _evaluation = evaluationList[evaluationId];
 
         require(
             bytes(_evaluation.evaluationCID).length > 0 &&
@@ -509,17 +509,17 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
         _asset.status = AssetStatus.OPEN;
 
-        emit EvaluationEvent(_evaluationId, _asset, _evaluation, reason);
+        emit EvaluationEvent(evaluationId, _asset, _evaluation, reason);
     }
 
     function createNftToken(
-        uint256 _evaluationId,
-        uint256 _amount,
-        string memory _nftCID
+        uint256 evaluationId,
+        uint256 amount,
+        string memory nftCID
     ) external override onlyEvaluator whenNotPaused {
-        require(bytes(_nftCID).length > 0, "22"); // Invalid nftCID
+        require(bytes(nftCID).length > 0, "22"); // Invalid nftCID
 
-        Evaluation storage _evaluation = evaluationList[_evaluationId];
+        Evaluation storage _evaluation = evaluationList[evaluationId];
 
         require(
             bytes(_evaluation.evaluationCID).length > 0 &&
@@ -541,25 +541,25 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         if (_asset.collectionStandard == CollectionStandard.NFT_HARD_721) {
             tokenId = IDFYHard721(_asset.collectionAddress).mint(
                 _asset.owner,
-                _nftCID,
+                nftCID,
                 _evaluation.depreciationRate
             );
         } else {
             tokenId = IDFYHard1155(_asset.collectionAddress).mint(
                 _asset.owner,
-                _amount,
-                _nftCID,
+                amount,
+                nftCID,
                 "",
                 _evaluation.depreciationRate
             );
         }
 
-        (address adminAdress, ) = HubInterface(hubContract).getSystemConfig();
+        (address feeWallet, ) = HubInterface(contractHub).getSystemConfig();
 
         CommonLib.safeTransfer(
             _evaluation.mintingFeeAddress,
             address(this),
-            adminAdress,
+            feeWallet,
             _evaluation.mintingFee
         );
 
@@ -571,6 +571,6 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             tokenId
         ] = _evaluation;
 
-        emit NFTEvent(tokenId, _nftCID, _amount, _asset, _evaluation);
+        emit NFTEvent(tokenId, nftCID, amount, _asset, _evaluation);
     }
 }

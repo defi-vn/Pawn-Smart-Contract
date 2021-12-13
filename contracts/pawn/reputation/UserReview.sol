@@ -135,13 +135,13 @@ contract UserReview is BaseContract, IUserReview {
     /** ==================== User-reviews function implementations ==================== */
 
     function submitUserReviewCryptoContract(
-        uint8 _points,
-        uint256 _contractId,
-        address _contractAddress
+        uint8 points,
+        uint256 contractId,
+        address contractAddress
     ) external {
         require(
-            _contractAddress == pawnContract ||
-                _contractAddress == loanContract,
+            contractAddress == pawnContract ||
+                contractAddress == loanContract,
             "DFY: Invalid pawn or loan contract"
         ); // invalid pawn or loan contract
 
@@ -150,12 +150,12 @@ contract UserReview is BaseContract, IUserReview {
         ContractStatus status;
 
         // Get contract data for review
-        if (_contractAddress == pawnContract) {
+        if (contractAddress == pawnContract) {
             (borrower, lender, status) = IPawn(pawnContract)
-                .getContractInfoForReview(_contractId);
-        } else if (_contractAddress == loanContract) {
+                .getContractInfoForReview(contractId);
+        } else if (contractAddress == loanContract) {
             (borrower, lender, status) = ILoan(loanContract)
-                .getContractInfoForReview(_contractId);
+                .getContractInfoForReview(contractId);
         }
 
         // Check contract status, must be Completed or Default
@@ -168,19 +168,19 @@ contract UserReview is BaseContract, IUserReview {
         _submitUserReview(
             borrower,
             lender,
-            _contractId,
-            _contractAddress,
-            _points
+            contractId,
+            contractAddress,
+            points
         );
     }
 
     function submitUserReviewNFTContract(
-        uint8 _points,
-        uint256 _contractId,
-        address _contractAddress
+        uint8 points,
+        uint256 contractId,
+        address contractAddress
     ) external {
         require(
-            _contractAddress == pawnNFTContract,
+            contractAddress == pawnNFTContract,
             "DFY: Invalid pawn or loan contract"
         ); // invalid Pawn NFT contract
 
@@ -188,7 +188,7 @@ contract UserReview is BaseContract, IUserReview {
             address borrower,
             address lender,
             IEnums.ContractStatus status
-        ) = ILoanNFT(pawnNFTContract).getContractInfoForReview(_contractId);
+        ) = ILoanNFT(pawnNFTContract).getContractInfoForReview(contractId);
 
         // Check contract status, must be Completed or Default
         require(
@@ -200,34 +200,34 @@ contract UserReview is BaseContract, IUserReview {
         _submitUserReview(
             borrower,
             lender,
-            _contractId,
-            _contractAddress,
-            _points
+            contractId,
+            contractAddress,
+            points
         );
     }
 
     function _submitUserReview(
-        address _borrower,
-        address _lender,
-        uint256 _contractId,
-        address _contractOrigin,
-        uint8 _points
+        address borrower,
+        address lender,
+        uint256 contractId,
+        address contractOrigin,
+        uint8 points
     ) internal {
         // Determine reviewer, reviewee, and reward reason
         address reviewer;
         address reviewee;
         IReputation.ReasonType rewardReason;
-        if (msg.sender == _borrower) {
-            reviewer = _borrower;
-            reviewee = _lender;
+        if (msg.sender == borrower) {
+            reviewer = borrower;
+            reviewee = lender;
             rewardReason = IReputation.ReasonType(
-                _lenderReviewedByBorrower[_points]
+                _lenderReviewedByBorrower[points]
             );
-        } else if (msg.sender == _lender) {
-            reviewer = _lender;
-            reviewee = _borrower;
+        } else if (msg.sender == lender) {
+            reviewer = lender;
+            reviewee = borrower;
             rewardReason = IReputation.ReasonType(
-                _borrowerReviewedByLender[_points]
+                _borrowerReviewedByLender[points]
             );
         }
 
@@ -235,7 +235,7 @@ contract UserReview is BaseContract, IUserReview {
         require(reviewer != address(0), "DFY: Reviewer is not defined"); // Reviewer is undefined
 
         // Check if contract has been reviewed by reviewer
-        bytes32 key = keccak256(abi.encodePacked(_contractOrigin, _contractId));
+        bytes32 key = keccak256(abi.encodePacked(contractOrigin, contractId));
         require(
             _listOfContractReviewedByUser[reviewer][key] == false,
             "DFY: Contract must not be reviewed by this user"
@@ -244,9 +244,9 @@ contract UserReview is BaseContract, IUserReview {
         // Store review information
         _listOfReviewByUser[reviewer][key] = Review(
             reviewee,
-            _contractId,
-            _points,
-            _contractOrigin
+            contractId,
+            points,
+            contractOrigin
         );
         _listOfContractReviewedByUser[reviewer][key] = true;
 
@@ -256,28 +256,28 @@ contract UserReview is BaseContract, IUserReview {
         emit UserReviewSubmitted(
             reviewer,
             reviewee,
-            _points,
-            _contractId,
-            _contractOrigin,
+            points,
+            contractId,
+            contractOrigin,
             rewardReason
         );
     }
 
-    function getReviewKey(uint256 _contractId, address _contractAddress)
+    function getReviewKey(uint256 contractId, address contractAddress)
         public
         pure
         returns (bytes32)
     {
-        return keccak256(abi.encodePacked(_contractAddress, _contractId));
+        return keccak256(abi.encodePacked(contractAddress, contractId));
     }
 
     function getContractReviewStatusByUser(
         address _user,
-        uint256 _contractId,
-        address _contractAddress
+        uint256 contractId,
+        address contractAddress
     ) external view returns (bool) {
         bytes32 key = keccak256(
-            abi.encodePacked(_contractAddress, _contractId)
+            abi.encodePacked(contractAddress, contractId)
         );
         address sender = _user != address(0) ? _user : _msgSender();
 
@@ -286,11 +286,11 @@ contract UserReview is BaseContract, IUserReview {
 
     function getContractReviewInfoByUser(
         address _user,
-        uint256 _contractId,
-        address _contractAddress
+        uint256 contractId,
+        address contractAddress
     ) external view returns (Review memory) {
         bytes32 key = keccak256(
-            abi.encodePacked(_contractAddress, _contractId)
+            abi.encodePacked(contractAddress, contractId)
         );
         address sender = _user != address(0) ? _user : _msgSender();
 

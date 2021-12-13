@@ -1,12 +1,15 @@
 require('@nomiclabs/hardhat-ethers');
 
 const hre = require('hardhat');
-const { Proxies } = require('./.deployment_data.json');
+const { Proxies } = require('./.deployment_data_prelive.json');
+const proxiesEnv = Proxies.Prelive;
 
 const Collection721BuildName = "DFYHard721Factory";
-const HubProxy = Proxies.Beta.HUB_CONTRACT_ADDRESS;
-const proxyType = { kind: "uups" };
+
 const HubBuildName = "Hub";
+const HubProxy = proxiesEnv.HUB_CONTRACT_ADDRESS;
+
+const proxyType = { kind: "uups" };
 
 const decimals      = 10**18;
 
@@ -14,6 +17,7 @@ async function main() {
     const[deployer] = await hre.ethers.getSigners();
 
     console.log("==============================================\n\r");
+    console.log("Start time: ", Date(Date.now()));
     console.log("Deploying contracts with the account:", deployer.address);
     console.log("Account balance: ", ((await deployer.getBalance()) / decimals).toString());
     console.log("=================================\n\r");
@@ -25,7 +29,7 @@ async function main() {
     await Collection721Contract.deployed();
     const signature = await Collection721Contract.signature();
 
-    console.log(`FACTORY_721_CONTRACT_ADDRESS: ${Collection721Contract.address}`);
+    console.log(`FACTORY_721_CONTRACT_ADDRESS: \x1b[36m${Collection721Contract.address}\x1b[0m`);
     console.log(`Signature: \x1b[36m${signature}\x1b[0m`);
 
     implementtationAddress = await hre.upgrades.erc1967.getImplementationAddress(Collection721Contract.address);
@@ -39,6 +43,8 @@ async function main() {
     console.log(`Registering \x1b[36m${Collection721Artifact.contractName}\x1b[0m to \x1b[31m${HubArtifact.contractName}\x1b[0m...`);
 
     await HubContract.registerContract(signature,Collection721Contract.address,Collection721Artifact.contractName);
+    console.log(`Completed at ${Date(Date.now())}`);
+
     console.log("===========================\n\r");
 
 }
