@@ -113,6 +113,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
                 nftContract,
                 nftTokenId
             );
+
         // Transfer token
         PawnNFTLib.safeTranferNFTToken(
             nftContract,
@@ -148,6 +149,8 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
             _msgSender(),
             IReputation.ReasonType.BR_CREATE_COLLATERAL
         );
+
+        require(false, "after reputation");
     }
 
     function withdrawCollateral(uint256 nftCollateralId, uint256 _UID)

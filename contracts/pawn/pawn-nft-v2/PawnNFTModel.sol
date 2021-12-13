@@ -45,8 +45,8 @@ abstract contract PawnNFTModel is
     /** ==================== Standard interface function implementations ==================== */
     function supportsInterface(bytes4 interfaceId)
         public
-        virtual
         view
+        virtual
         override(ERC165Upgradeable, ERC1155ReceiverUpgradeable)
         returns (bool)
     {
@@ -79,7 +79,7 @@ abstract contract PawnNFTModel is
         returns (address _ReputationAddress)
     {
         (_ReputationAddress, ) = HubInterface(contractHub).getContractAddress(
-            (type(IDFYHardEvaluation).interfaceId)
+            (type(IReputation).interfaceId)
         );
     }
 
