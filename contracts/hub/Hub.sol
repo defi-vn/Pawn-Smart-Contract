@@ -35,6 +35,8 @@ contract Hub is
 
     // TODO: New state variables must go below this line -----------------------------
 
+    mapping(address => EvaluationConfig) public EvaluationConfigs;
+
     /** ==================== Contract initializing & configuration ==================== */
     function initialize(
         address feeWallet,
@@ -54,8 +56,18 @@ contract Hub is
         // Set OPERATOR_ROLE as EVALUATOR_ROLE's Admin Role
         _setRoleAdmin(HubRoles.EVALUATOR_ROLE, HubRoles.OPERATOR_ROLE);
 
+        // Set REGISTRANT as INTERNAL_CONTRACT's Admin Role
+        _setRoleAdmin(HubRoles.INTERNAL_CONTRACT, HubRoles.REGISTRANT);
         systemConfig.systemFeeWallet = feeWallet;
         systemConfig.systemFeeToken = feeToken;
+    }
+
+    function setupRoleAdmin() external onlyRole(HubRoles.DEFAULT_ADMIN_ROLE) {
+        // Set OPERATOR_ROLE as EVALUATOR_ROLE's Admin Role
+        _setRoleAdmin(HubRoles.EVALUATOR_ROLE, HubRoles.OPERATOR_ROLE);
+
+        // Set REGISTRANT as INTERNAL_CONTRACT's Admin Role
+        _setRoleAdmin(HubRoles.INTERNAL_CONTRACT, HubRoles.REGISTRANT);
     }
 
     /** ==================== Standard interface function implementations ==================== */
@@ -387,5 +399,31 @@ contract Hub is
         zoom = nftMarketConfig.ZOOM;
         marketFeeRate = nftMarketConfig.marketFeeRate;
         marketFeeWallet = nftMarketConfig.marketFeeWallet;
+    }
+
+    /**=============== config Evaluation */
+
+    function setEvaluationConfig(
+        address newAddressFee,
+        uint256 newEvaluationFee,
+        uint256 newMintingFee
+    ) external onlyRole(HubRoles.DEFAULT_ADMIN_ROLE) {
+        if (newAddressFee != address(0)) {
+            require(newAddressFee.isContract(), "5"); // Address minting fee is contract
+        }
+        EvaluationConfigs[newAddressFee] = EvaluationConfig(
+            newEvaluationFee,
+            newMintingFee
+        );
+    }
+
+    function getEvaluationConfig(address addFee)
+        external
+        view
+        override
+        returns (uint256 evaluationFee, uint256 mintingFee)
+    {
+        evaluationFee = EvaluationConfigs[addFee].evaluationFee;
+        mintingFee = EvaluationConfigs[addFee].mintingFee;
     }
 }

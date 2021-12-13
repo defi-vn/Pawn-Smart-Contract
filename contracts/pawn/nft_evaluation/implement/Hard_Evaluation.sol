@@ -29,7 +29,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     CountersUpgradeable.Counter private _totalEvaluation;
 
     // white list Fee
-    mapping(address => WhiteListFee) public WhiteListFees;
+    // mapping(address => WhiteListFee) public WhiteListFees;
 
     // Mapping asset list
     // Asset id => Asset
@@ -81,30 +81,30 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         return type(IDFYHardEvaluation).interfaceId;
     }
 
-    function _addWhitelistedFee(
-        address newAddressFee,
-        uint256 newEvaluationFee,
-        uint256 newMintingFee
-    ) internal {
-        if (newAddressFee != address(0)) {
-            require(newAddressFee.isContract(), "5"); // Address minting fee is contract
-        }
+    // function _addWhitelistedFee(
+    //     address newAddressFee,
+    //     uint256 newEvaluationFee,
+    //     uint256 newMintingFee
+    // ) internal {
+    //     if (newAddressFee != address(0)) {
+    //         require(newAddressFee.isContract(), "5"); // Address minting fee is contract
+    //     }
 
-        //    require(newMintingFee > 0, "6"); // Minting fee than more 0
+    //     //    require(newMintingFee > 0, "6"); // Minting fee than more 0
 
-        WhiteListFees[newAddressFee] = WhiteListFee(
-            newEvaluationFee,
-            newMintingFee
-        );
-    }
+    //     WhiteListFees[newAddressFee] = WhiteListFee(
+    //         newEvaluationFee,
+    //         newMintingFee
+    //     );
+    // }
 
-    function addWhiteListFee(
-        address newAddressFee,
-        uint256 newEvaluationFee,
-        uint256 newMintingFee
-    ) external override onlyAdmin {
-        _addWhitelistedFee(newAddressFee, newEvaluationFee, newMintingFee);
-    }
+    // function addWhiteListFee(
+    //     address newAddressFee,
+    //     uint256 newEvaluationFee,
+    //     uint256 newMintingFee
+    // ) external override onlyAdmin {
+    //     _addWhitelistedFee(newAddressFee, newEvaluationFee, newMintingFee);
+    // }
 
     function getEvaluationWithTokenId(
         address addressCollection,
@@ -149,7 +149,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
                 "Unsupported Hard NFT-721 interface"
             ); // Invalid Collection
         } else if (collectionStandard == CollectionStandard.NFT_HARD_1155) {
-             require(
+            require(
                 collectionAsset.supportsInterface(
                     type(IDFYHard1155).interfaceId
                 ),
@@ -207,13 +207,15 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
         // Gennerate total appointment
         uint256 _appointmentId = _totalAppointment.current();
+        (uint256 _evaluationFee, ) = HubInterface(contractHub)
+            .getEvaluationConfig(evaluationFeeAddress);
 
         // Add appointment to list appointment
         appointmentList[_appointmentId] = Appointment({
             assetId: assetId,
             assetOwner: _asset.owner,
             evaluator: evaluator,
-            evaluationFee: WhiteListFees[evaluationFeeAddress].EvaluationFee,
+            evaluationFee: _evaluationFee,
             evaluationFeeAddress: evaluationFeeAddress,
             status: AppointmentStatus.OPEN
         });
@@ -229,7 +231,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             evaluationFeeAddress,
             msg.sender,
             address(this),
-            WhiteListFees[evaluationFeeAddress].EvaluationFee
+            _evaluationFee
         );
 
         // Update total appoinment
@@ -377,6 +379,9 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
         // Gennerate evaluation id
         uint256 evaluationId = _totalEvaluation.current();
+        (, uint256 _mintingFee) = HubInterface(contractHub).getEvaluationConfig(
+            mintingFeeAddress
+        );
 
         evaluationList[evaluationId] = Evaluation({
             assetId: _appointment.assetId,
@@ -386,7 +391,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             evaluator: msg.sender,
             currency: currency,
             price: price,
-            mintingFee: WhiteListFees[mintingFeeAddress].MintingFee,
+            mintingFee: _mintingFee,
             mintingFeeAddress: mintingFeeAddress,
             collectionAddress: _asset.collectionAddress,
             timeOfEvaluation: block.timestamp,
@@ -442,9 +447,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             i < evaluationListOfAsset[_evaluation.assetId].length;
             i++
         ) {
-            if (
-                evaluationListOfAsset[_evaluation.assetId][i] != evaluationId
-            ) {
+            if (evaluationListOfAsset[_evaluation.assetId][i] != evaluationId) {
                 uint256 _evaluationIdReject = evaluationListOfAsset[
                     _evaluation.assetId
                 ][i];
@@ -482,7 +485,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         emit EvaluationEvent(evaluationId, _asset, _evaluation, "");
     }
 
-    function rejectEvaluation(uint256 evaluationId, string memory reason)
+    function rejectEvaluation(uint256 evaluationId)
         external
         override
         whenNotPaused
@@ -509,7 +512,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
         _asset.status = AssetStatus.OPEN;
 
-        emit EvaluationEvent(evaluationId, _asset, _evaluation, reason);
+        emit EvaluationEvent(evaluationId, _asset, _evaluation, "");
     }
 
     function createNftToken(
