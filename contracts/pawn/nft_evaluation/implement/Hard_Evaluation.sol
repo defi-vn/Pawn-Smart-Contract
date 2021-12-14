@@ -19,6 +19,10 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     using SafeMathUpgradeable for uint256;
     using ERC165CheckerUpgradeable for address;
 
+    // Admin address
+    // address public adminAdress;
+    // address public hubContract;
+
     // Total asset
     CountersUpgradeable.Counter private _totalAssets;
 
@@ -29,7 +33,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     CountersUpgradeable.Counter private _totalEvaluation;
 
     // white list Fee
-    // mapping(address => WhiteListFee) public WhiteListFees;
+    mapping(address => WhiteListFee) public WhiteListFees;
 
     // Mapping asset list
     // Asset id => Asset
@@ -81,30 +85,73 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         return type(IDFYHardEvaluation).interfaceId;
     }
 
-    // function _addWhitelistedFee(
-    //     address newAddressFee,
-    //     uint256 newEvaluationFee,
-    //     uint256 newMintingFee
-    // ) internal {
-    //     if (newAddressFee != address(0)) {
-    //         require(newAddressFee.isContract(), "5"); // Address minting fee is contract
-    //     }
+    function acceptEvaluator(
+        uint256 evaluatorId,
+        address addressRequestEvaluator
+    ) external onlyOperator {
+        require(
+            IAccessControlUpgradeable(contractHub).hasRole(
+                HubRoles.EVALUATOR_ROLE,
+                addressRequestEvaluator
+            ),
+            "is Evaluator"
+        );
+        IAccessControlUpgradeable(contractHub).grantRole(
+            HubRoles.EVALUATOR_ROLE,
+            addressRequestEvaluator
+        );
 
-    //     //    require(newMintingFee > 0, "6"); // Minting fee than more 0
+        emit EvaluatorEvent(
+            evaluatorId,
+            addressRequestEvaluator,
+            EvaluatorStatus.ACCEPTED
+        );
+    }
 
-    //     WhiteListFees[newAddressFee] = WhiteListFee(
-    //         newEvaluationFee,
-    //         newMintingFee
-    //     );
-    // }
+    function revokeEvaluator(uint256 evaluatorId, address evaluator)
+        external
+        onlyOperator
+    {
+        require(
+            !IAccessControlUpgradeable(contractHub).hasRole(
+                HubRoles.EVALUATOR_ROLE,
+                evaluator
+            ),
+            "is not Evaluator"
+        );
 
-    // function addWhiteListFee(
-    //     address newAddressFee,
-    //     uint256 newEvaluationFee,
-    //     uint256 newMintingFee
-    // ) external override onlyAdmin {
-    //     _addWhitelistedFee(newAddressFee, newEvaluationFee, newMintingFee);
-    // }
+        IAccessControlUpgradeable(contractHub).revokeRole(
+            HubRoles.EVALUATOR_ROLE,
+            evaluator
+        );
+
+        emit EvaluatorEvent(evaluatorId, evaluator, EvaluatorStatus.CANCALLED);
+    }
+
+    function _addWhitelistedFee(
+        address newAddressFee,
+        uint256 newEvaluationFee,
+        uint256 newMintingFee
+    ) internal {
+        if (newAddressFee != address(0)) {
+            require(newAddressFee.isContract(), "5"); // Address minting fee is contract
+        }
+
+        //    require(newMintingFee > 0, "6"); // Minting fee than more 0
+
+        WhiteListFees[newAddressFee] = WhiteListFee(
+            newEvaluationFee,
+            newMintingFee
+        );
+    }
+
+    function addWhiteListFee(
+        address newAddressFee,
+        uint256 newEvaluationFee,
+        uint256 newMintingFee
+    ) external override onlyAdmin {
+        _addWhitelistedFee(newAddressFee, newEvaluationFee, newMintingFee);
+    }
 
     function getEvaluationWithTokenId(
         address addressCollection,
@@ -485,7 +532,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         emit EvaluationEvent(evaluationId, _asset, _evaluation, "");
     }
 
-    function rejectEvaluation(uint256 evaluationId)
+    function rejectEvaluation(uint256 evaluationId, string memory reason)
         external
         override
         whenNotPaused
@@ -574,6 +621,13 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             tokenId
         ] = _evaluation;
 
-        emit NFTEvent(tokenId, nftCID, amount, _asset, _evaluation);
+        emit NFTEvent(
+            tokenId,
+            nftCID,
+            amount,
+            _asset,
+            _evaluation,
+            evaluationId
+        );
     }
 }
