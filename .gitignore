@@ -19,3 +19,5 @@ bin
 
 #Remix compiler
 contracts/.deps
+DFYHard721Factory_ABI.json
+HardEvaluation_ABI.json
