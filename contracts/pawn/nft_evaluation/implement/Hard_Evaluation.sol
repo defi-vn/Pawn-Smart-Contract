@@ -11,13 +11,15 @@ import "../interface/IDFY_Hard_Evaluation.sol";
 import "../interface/IDFY_Hard_721.sol";
 import "../interface/IDFY_Hard_1155.sol";
 
-// import "./CommonLib.sol";
-
 contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     using CountersUpgradeable for CountersUpgradeable.Counter;
     using AddressUpgradeable for address;
     using SafeMathUpgradeable for uint256;
     using ERC165CheckerUpgradeable for address;
+
+    // Admin address
+    // address public adminAdress;
+    // address public hubContract;
 
     // Total asset
     CountersUpgradeable.Counter private _totalAssets;
@@ -29,7 +31,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     CountersUpgradeable.Counter private _totalEvaluation;
 
     // white list Fee
-    // mapping(address => WhiteListFee) public WhiteListFees;
+    //   mapping(address => WhiteListFee) public WhiteListFees;
 
     // Mapping asset list
     // Asset id => Asset
@@ -81,29 +83,62 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         return type(IDFYHardEvaluation).interfaceId;
     }
 
-    // function _addWhitelistedFee(
-    //     address newAddressFee,
-    //     uint256 newEvaluationFee,
-    //     uint256 newMintingFee
-    // ) internal {
-    //     if (newAddressFee != address(0)) {
-    //         require(newAddressFee.isContract(), "5"); // Address minting fee is contract
-    //     }
+    function acceptEvaluator(uint256 evaluatorId, address requestEvaluator)
+        external
+        onlyOperator
+    {
+        // kiem tra xem requestEvaluator da la evaluator hay chua.
+        require(
+            IAccessControlUpgradeable(contractHub).hasRole(
+                HubRoles.EVALUATOR_ROLE,
+                requestEvaluator
+            ),
+            "is Evaluator"
+        );
 
-    //     //    require(newMintingFee > 0, "6"); // Minting fee than more 0
+        // gan quyen evaluator
+        IAccessControlUpgradeable(contractHub).grantRole(
+            HubRoles.EVALUATOR_ROLE,
+            requestEvaluator
+        );
 
-    //     WhiteListFees[newAddressFee] = WhiteListFee(
-    //         newEvaluationFee,
-    //         newMintingFee
-    //     );
-    // }
+        // event khi thuc hien xong gan quyen
+        emit EvaluatorEvent(
+            evaluatorId,
+            requestEvaluator,
+            EvaluatorStatus.ACCEPTED
+        );
+    }
+
+    function removeEvaluator(uint256 evaluatorId, address evaluator)
+        external
+        onlyOperator
+    {
+        // kiem tra xem co quyen evaluator hay khong
+        require(
+            !IAccessControlUpgradeable(contractHub).hasRole(
+                HubRoles.EVALUATOR_ROLE,
+                evaluator
+            ),
+            "is not Evaluator"
+        );
+
+        // thuc hien thu hoi  quyen evaluator
+        IAccessControlUpgradeable(contractHub).revokeRole(
+            HubRoles.EVALUATOR_ROLE,
+            evaluator
+        );
+        // event sau khi thu hoi quyen
+        emit EvaluatorEvent(evaluatorId, evaluator, EvaluatorStatus.CANCELLED);
+    }
 
     // function addWhiteListFee(
     //     address newAddressFee,
     //     uint256 newEvaluationFee,
     //     uint256 newMintingFee
     // ) external override onlyAdmin {
-    //     _addWhitelistedFee(newAddressFee, newEvaluationFee, newMintingFee);
+    //     // khong dung den ham nay
+    //     // _addWhitelistedFee(newAddressFee, newEvaluationFee, newMintingFee);
     // }
 
     function getEvaluationWithTokenId(
@@ -485,7 +520,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         emit EvaluationEvent(evaluationId, _asset, _evaluation, "");
     }
 
-    function rejectEvaluation(uint256 evaluationId)
+    function rejectEvaluation(uint256 evaluationId, string memory reason)
         external
         override
         whenNotPaused
@@ -574,6 +609,13 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             tokenId
         ] = _evaluation;
 
-        emit NFTEvent(tokenId, nftCID, amount, _asset, _evaluation);
+        emit NFTEvent(
+            tokenId,
+            nftCID,
+            amount,
+            _asset,
+            _evaluation,
+            evaluationId
+        );
     }
 }

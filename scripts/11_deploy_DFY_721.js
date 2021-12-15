@@ -4,7 +4,7 @@ const hre = require('hardhat');
 const { Proxies } = require('./.deployment_data.json');
 
 const DFY721BuildName = "DFYHard721";
-const Evaluation = Proxies.Dev2.EVALUATION_ADDRESS;
+const Evaluation = Proxies.Dev1.EVALUATION_ADDRESS;
 
 const decimals      = 10**18;
 

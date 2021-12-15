@@ -32,6 +32,11 @@ interface IDFYHardEvaluation is BaseInterface {
         EVALUATED
     }
 
+    enum EvaluatorStatus {
+        ACCEPTED,
+        CANCELLED
+    }
+
     /* ===== Data type ===== */
     struct Asset {
         string assetCID;
@@ -96,7 +101,14 @@ interface IDFYHardEvaluation is BaseInterface {
         string nftCID,
         uint256 amount,
         Asset asset,
-        Evaluation evaluation
+        Evaluation evaluation,
+        uint256 evaluationId
+    );
+
+    event EvaluatorEvent(
+        uint256 evaluatorId,
+        address evaluator,
+        EvaluatorStatus evaluatorStatus
     );
 
     /* ===== Method ===== */
@@ -143,7 +155,8 @@ interface IDFYHardEvaluation is BaseInterface {
 
     function acceptEvaluation(uint256 _evaluationId) external;
 
-    function rejectEvaluation(uint256 _evaluationId) external;
+    function rejectEvaluation(uint256 _evaluationId, string memory reason)
+        external;
 
     function createNftToken(
         uint256 _evaluationId,
