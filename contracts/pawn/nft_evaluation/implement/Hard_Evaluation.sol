@@ -11,8 +11,6 @@ import "../interface/IDFY_Hard_Evaluation.sol";
 import "../interface/IDFY_Hard_721.sol";
 import "../interface/IDFY_Hard_1155.sol";
 
-// import "./CommonLib.sol";
-
 contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     using CountersUpgradeable for CountersUpgradeable.Counter;
     using AddressUpgradeable for address;
@@ -33,7 +31,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     CountersUpgradeable.Counter private _totalEvaluation;
 
     // white list Fee
-    mapping(address => WhiteListFee) public WhiteListFees;
+    //   mapping(address => WhiteListFee) public WhiteListFees;
 
     // Mapping asset list
     // Asset id => Asset
@@ -85,33 +83,38 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         return type(IDFYHardEvaluation).interfaceId;
     }
 
-    function acceptEvaluator(
-        uint256 evaluatorId,
-        address addressRequestEvaluator
-    ) external onlyOperator {
+    function acceptEvaluator(uint256 evaluatorId, address requestEvaluator)
+        external
+        onlyOperator
+    {
+        // kiem tra xem requestEvaluator da la evaluator hay chua.
         require(
             IAccessControlUpgradeable(contractHub).hasRole(
                 HubRoles.EVALUATOR_ROLE,
-                addressRequestEvaluator
+                requestEvaluator
             ),
             "is Evaluator"
         );
+
+        // gan quyen evaluator
         IAccessControlUpgradeable(contractHub).grantRole(
             HubRoles.EVALUATOR_ROLE,
-            addressRequestEvaluator
+            requestEvaluator
         );
 
+        // event khi thuc hien xong gan quyen
         emit EvaluatorEvent(
             evaluatorId,
-            addressRequestEvaluator,
+            requestEvaluator,
             EvaluatorStatus.ACCEPTED
         );
     }
 
-    function revokeEvaluator(uint256 evaluatorId, address evaluator)
+    function removeEvaluator(uint256 evaluatorId, address evaluator)
         external
         onlyOperator
     {
+        // kiem tra xem co quyen evaluator hay khong
         require(
             !IAccessControlUpgradeable(contractHub).hasRole(
                 HubRoles.EVALUATOR_ROLE,
@@ -120,38 +123,23 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             "is not Evaluator"
         );
 
+        // thuc hien thu hoi  quyen evaluator
         IAccessControlUpgradeable(contractHub).revokeRole(
             HubRoles.EVALUATOR_ROLE,
             evaluator
         );
-
-        emit EvaluatorEvent(evaluatorId, evaluator, EvaluatorStatus.CANCALLED);
+        // event sau khi thu hoi quyen
+        emit EvaluatorEvent(evaluatorId, evaluator, EvaluatorStatus.CANCELLED);
     }
 
-    function _addWhitelistedFee(
-        address newAddressFee,
-        uint256 newEvaluationFee,
-        uint256 newMintingFee
-    ) internal {
-        if (newAddressFee != address(0)) {
-            require(newAddressFee.isContract(), "5"); // Address minting fee is contract
-        }
-
-        //    require(newMintingFee > 0, "6"); // Minting fee than more 0
-
-        WhiteListFees[newAddressFee] = WhiteListFee(
-            newEvaluationFee,
-            newMintingFee
-        );
-    }
-
-    function addWhiteListFee(
-        address newAddressFee,
-        uint256 newEvaluationFee,
-        uint256 newMintingFee
-    ) external override onlyAdmin {
-        _addWhitelistedFee(newAddressFee, newEvaluationFee, newMintingFee);
-    }
+    // function addWhiteListFee(
+    //     address newAddressFee,
+    //     uint256 newEvaluationFee,
+    //     uint256 newMintingFee
+    // ) external override onlyAdmin {
+    //     // khong dung den ham nay
+    //     // _addWhitelistedFee(newAddressFee, newEvaluationFee, newMintingFee);
+    // }
 
     function getEvaluationWithTokenId(
         address addressCollection,

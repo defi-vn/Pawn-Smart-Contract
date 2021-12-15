@@ -34,7 +34,7 @@ interface IDFYHardEvaluation is BaseInterface {
 
     enum EvaluatorStatus {
         ACCEPTED,
-        CANCALLED
+        CANCELLED
     }
 
     /* ===== Data type ===== */
@@ -73,10 +73,10 @@ interface IDFYHardEvaluation is BaseInterface {
         EvaluationStatus status;
     }
 
-    struct WhiteListFee {
-        uint256 EvaluationFee;
-        uint256 MintingFee;
-    }
+    // struct WhiteListFee {
+    //     uint256 EvaluationFee;
+    //     uint256 MintingFee;
+    // }
 
     /* ===== Event ===== */
     event AssetEvent(uint256 assetId, Asset asset);
@@ -114,11 +114,11 @@ interface IDFYHardEvaluation is BaseInterface {
     /* ===== Method ===== */
     // function setAdminAddress() external;
 
-    function addWhiteListFee(
-        address _newAddressFee,
-        uint256 _newEvaluationFee,
-        uint256 _newMintingFee
-    ) external;
+    // function addWhiteListFee(
+    //     address _newAddressFee,
+    //     uint256 _newEvaluationFee,
+    //     uint256 _newMintingFee
+    // ) external;
 
     function createAssetRequest(
         string memory _assetCID,

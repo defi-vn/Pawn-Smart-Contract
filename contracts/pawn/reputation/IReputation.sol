@@ -5,7 +5,6 @@ pragma solidity ^0.8.4;
 import "../../base/BaseInterface.sol";
 
 interface IReputation is BaseInterface {
-    
     // Reason for Reputation point adjustment
     /**
      * @dev Reputation points in correspondence with ReasonType
@@ -73,7 +72,7 @@ interface IReputation is BaseInterface {
         uint256 _points,
         ReasonType _reasonType
     );
-    
+
     event ReputationPointReduced(
         address _user,
         uint256 _points,
