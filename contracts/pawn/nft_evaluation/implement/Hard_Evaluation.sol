@@ -89,7 +89,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     {
         // kiem tra xem requestEvaluator da la evaluator hay chua.
         require(
-            IAccessControlUpgradeable(contractHub).hasRole(
+            !IAccessControlUpgradeable(contractHub).hasRole(
                 HubRoles.EVALUATOR_ROLE,
                 requestEvaluator
             ),
@@ -116,7 +116,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     {
         // kiem tra xem co quyen evaluator hay khong
         require(
-            !IAccessControlUpgradeable(contractHub).hasRole(
+            IAccessControlUpgradeable(contractHub).hasRole(
                 HubRoles.EVALUATOR_ROLE,
                 evaluator
             ),
@@ -448,8 +448,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         emit EvaluationEvent(
             evaluationId,
             _asset,
-            evaluationList[evaluationId],
-            ""
+            evaluationList[evaluationId]
         );
     }
 
@@ -501,8 +500,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
                     emit EvaluationEvent(
                         _evaluationIdReject,
                         _asset,
-                        _evaluationReject,
-                        ""
+                        _evaluationReject
                     );
                 }
             }
@@ -517,10 +515,10 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             _evaluation.mintingFee
         );
 
-        emit EvaluationEvent(evaluationId, _asset, _evaluation, "");
+        emit EvaluationEvent(evaluationId, _asset, _evaluation);
     }
 
-    function rejectEvaluation(uint256 evaluationId, string memory reason)
+    function rejectEvaluation(uint256 evaluationId)
         external
         override
         whenNotPaused
@@ -547,7 +545,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
         _asset.status = AssetStatus.OPEN;
 
-        emit EvaluationEvent(evaluationId, _asset, _evaluation, "");
+        emit EvaluationEvent(evaluationId, _asset, _evaluation);
     }
 
     function createNftToken(

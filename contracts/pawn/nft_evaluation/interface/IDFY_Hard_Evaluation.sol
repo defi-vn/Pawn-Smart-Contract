@@ -92,8 +92,7 @@ interface IDFYHardEvaluation is BaseInterface {
     event EvaluationEvent(
         uint256 evaluationId,
         Asset asset,
-        Evaluation evaluation,
-        string reason
+        Evaluation evaluation
     );
 
     event NFTEvent(
@@ -155,8 +154,7 @@ interface IDFYHardEvaluation is BaseInterface {
 
     function acceptEvaluation(uint256 _evaluationId) external;
 
-    function rejectEvaluation(uint256 _evaluationId, string memory reason)
-        external;
+    function rejectEvaluation(uint256 _evaluationId) external;
 
     function createNftToken(
         uint256 _evaluationId,

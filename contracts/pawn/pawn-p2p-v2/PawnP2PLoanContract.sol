@@ -150,6 +150,8 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
     /** ================================ 3. PAYMENT REQUEST & REPAYMENT WORKLOWS ============================= */
     event TestLateCount(uint256 lateThreshold, uint256 lateCount);
 
+    // event test(uint256 timestampGoi, uint256 duedateTimestamp, bool a);
+
     function closePaymentRequestAndStartNew(
         int256 _paymentRequestId,
         uint256 _contractId,

@@ -59,7 +59,7 @@ contract Hub is
 
         // Set REGISTRANT as INTERNAL_CONTRACT's Admin Role
         _setRoleAdmin(HubRoles.INTERNAL_CONTRACT, HubRoles.REGISTRANT);
-        
+
         systemConfig.systemFeeWallet = feeWallet;
         systemConfig.systemFeeToken = feeToken;
     }
