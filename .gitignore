@@ -19,6 +19,11 @@ bin
 
 #Remix compiler
 contracts/.deps
+
+#ABI files
 DFYHard721Factory_ABI.json
 HardEvaluation_ABI.json
 scripts/prelive/UserReview_ABI.json
+
+#Local upgrade address file
+.openzeppelin/unknown-31337.json
