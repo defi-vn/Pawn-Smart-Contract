@@ -83,7 +83,7 @@ describe("Setting up test parameters:\n\r", (done) => {
         it(`Case 1: Evaluator create NFT for customer\n\r`, async () => {
 
             // -> customer create asset request
-            await _hardEvaluationContract.connect(_deployer).addWhiteListFee(_loanTokenContract.address, _evaluationFee, _mintingFee); // addWhiteListFee -> add address token to pay for evaluation fee , mint nft fee 
+            await _hubContract.connect(_deployer).setEvaluationConfig(_loanTokenContract.address, _evaluationFee, _mintingFee); // addWhiteListFee -> add address token to pay for evaluation fee , mint nft fee 
             await _hardEvaluationContract.connect(_customer).createAssetRequest(_assetCID, _DFYHard721Contract.address, BigInt(10000 * 10 ** 18), _loanTokenContract.address, 0); // create Asset request 
             let assetList = await _hardEvaluationContract.assetList(0);
 
