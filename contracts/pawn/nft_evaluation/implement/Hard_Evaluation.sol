@@ -232,13 +232,13 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             bytes(_asset.assetCID).length > 0 &&
                 _asset.status == AssetStatus.OPEN &&
                 msg.sender == _asset.owner,
-            "9"
+            "0"
         ); // Invalid asset
 
         // appointment time > 0
-        require(appointmentTime > 0, "Appoint ment time > 0");
+        require(appointmentTime > 0, "Appointment time > 0");
 
-        require(!evaluator.isContract() && evaluator != _asset.owner, "11"); // Invalid evaluator
+        require(!evaluator.isContract() && evaluator != _asset.owner, "1"); // Invalid evaluator
 
         // Gennerate total appointment
         uint256 _appointmentId = _totalAppointment.current();
@@ -293,7 +293,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         require(
             _appointment.status == AppointmentStatus.OPEN &&
                 _appointment.evaluator == msg.sender,
-            "12"
+            "0"
         ); // Invalid appoinment
 
         _appointment.status = AppointmentStatus.ACCEPTED;
@@ -318,7 +318,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         require(
             _appointment.status == AppointmentStatus.OPEN &&
                 _appointment.evaluator == msg.sender,
-            "13"
+            "0"
         ); // Invalid appoinment
 
         _appointment.status = AppointmentStatus.REJECTED;
@@ -352,7 +352,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         require(
             _appointment.status != AppointmentStatus.EVALUATED &&
                 _appointment.status != AppointmentStatus.CANCELLED,
-            "13"
+            "0"
         ); // Invalid appoinment
 
         _appointment.status = AppointmentStatus.CANCELLED;
@@ -377,7 +377,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         );
     }
 
-    function evaluatedAsset(
+    function evaluateAsset(
         address currency,
         uint256 appointmentId,
         uint256 price,
@@ -390,7 +390,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         require(
             _appointment.status == AppointmentStatus.ACCEPTED &&
                 _appointment.evaluator == msg.sender,
-            "14"
+            "0"
         ); // Invalid appoinment
 
         Asset storage _asset = assetList[_appointment.assetId];
@@ -398,18 +398,18 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         require(
             _asset.status == AssetStatus.APPOINTED &&
                 _asset.owner != msg.sender,
-            "15"
+            "1"
         ); // Invalid asset
 
         if (currency != address(0)) {
-            require(currency.isContract(), "16"); // Invalid currency
+            require(currency.isContract(), "2"); // Invalid currency
         }
 
         require(
             bytes(evaluationCID).length > 0 &&
                 price > 0 &&
                 depreciationRate > 0,
-            "17"
+            "3"
         ); // Invalid evaluation
 
         // Gennerate evaluation id
@@ -462,7 +462,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         require(
             bytes(_evaluation.evaluationCID).length > 0 &&
                 _evaluation.status == EvaluationStatus.EVALUATED,
-            "18"
+            "0"
         ); // Invalid evaluation
 
         Asset storage _asset = assetList[_evaluation.assetId];
@@ -471,7 +471,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             bytes(_asset.assetCID).length > 0 &&
                 _asset.status == AssetStatus.APPOINTED &&
                 _asset.owner == msg.sender,
-            "19"
+            "1"
         ); // Invalid asset
 
         _evaluation.status = EvaluationStatus.EVALUATION_ACCEPTED;
@@ -528,7 +528,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         require(
             bytes(_evaluation.evaluationCID).length > 0 &&
                 _evaluation.status == EvaluationStatus.EVALUATED,
-            "20"
+            "0"
         ); // Invalid evaluation
 
         Asset storage _asset = assetList[_evaluation.assetId];
@@ -537,7 +537,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             bytes(_asset.assetCID).length > 0 &&
                 _asset.status == AssetStatus.APPOINTED &&
                 _asset.owner == msg.sender,
-            "21"
+            "1"
         ); // Invalid asset
 
         // Update status evaluation
@@ -553,7 +553,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         uint256 amount,
         string memory nftCID
     ) external override onlyEvaluator whenNotPaused {
-        require(bytes(nftCID).length > 0, "22"); // Invalid nftCID
+        require(bytes(nftCID).length > 0, "0"); // Invalid nftCID
 
         Evaluation storage _evaluation = evaluationList[evaluationId];
 
@@ -561,7 +561,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             bytes(_evaluation.evaluationCID).length > 0 &&
                 _evaluation.status == EvaluationStatus.EVALUATION_ACCEPTED &&
                 _evaluation.evaluator == msg.sender,
-            "23"
+            "1"
         ); // Invalid evaluation
 
         Asset storage _asset = assetList[_evaluation.assetId];
@@ -569,7 +569,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         require(
             bytes(_asset.assetCID).length > 0 &&
                 _asset.status == AssetStatus.EVALUATED,
-            "21"
+            "2"
         ); // Invalid asset
 
         uint256 tokenId;

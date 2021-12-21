@@ -150,7 +150,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
             IReputation.ReasonType.BR_CREATE_COLLATERAL
         );
 
-        require(false, "after reputation");
+        //  require(false, "after reputation");
     }
 
     function withdrawCollateral(uint256 nftCollateralId, uint256 _UID)
@@ -426,7 +426,8 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
                 offer.interest,
                 offer.loanDurationType,
                 offer.liquidityThreshold,
-                exchangeRate
+                exchangeRate,
+                offer.duration
             );
 
         ILoanNFT(getLoanNFTContract()).createContract(contractData, _UID);

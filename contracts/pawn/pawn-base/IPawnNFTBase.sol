@@ -91,6 +91,7 @@ interface IPawnNFTBase is BaseInterface {
         IEnums.LoanDurationType repaymentCycleType;
         uint256 liquidityThreshold;
         uint256 exchangeRate;
+        uint256 loanDurationQty;
     }
 
     struct NFTContractLiquidationData {

@@ -106,8 +106,8 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
         newContract.terms.contractEndDate =
             block.timestamp +
             PawnNFTLib.calculateContractDuration(
-                _offer.loanDurationType,
-                _offer.duration
+                contractData.repaymentCycleType,
+                contractData.loanDurationQty
             );
         newContract.terms.lateThreshold = lateThreshold;
         newContract.terms.systemFeeRate = systemFeeRate;
@@ -299,11 +299,13 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
                     currentContract.terms.repaymentCycleType
                 )
             );
+
             _chargePrepaidFee = PawnNFTLib.isPrepaidChargeRequired(
                 currentContract.terms.repaymentCycleType,
                 currentContract.terms.contractStartDate,
                 currentContract.terms.contractEndDate
             );
+
             require(
                 _dueDateTimestamp <= currentContract.terms.contractEndDate,
                 "5"
@@ -367,7 +369,9 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
         uint256 contractId,
         IEnums.ContractLiquidedReasonType reasonType
     ) internal {
-        IPawnNFTBase.NFTLoanContract storage loanContract = contracts[contractId];
+        IPawnNFTBase.NFTLoanContract storage loanContract = contracts[
+            contractId
+        ];
 
         // Execute: update status of contract to DEFAULT, collateral to COMPLETE
         loanContract.status = IEnums.ContractStatus.DEFAULT;
@@ -409,7 +413,10 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
                 uint256 _loanExchangeRate,
                 uint256 _repaymentExchangeRate,
                 uint256 _rateUpdateTime
-            ) = IExchange(getExchange()).RateAndTimestamp_NFT(loanContract, token);
+            ) = IExchange(getExchange()).RateAndTimestamp_NFT(
+                    loanContract,
+                    token
+                );
 
             // Emit Event ContractLiquidedEvent
             liquidationData = IPawnNFTBase.NFTContractLiquidationData(
@@ -461,7 +468,9 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
     function _returnCollateralToBorrowerAndCloseContract(uint256 contractId)
         internal
     {
-        IPawnNFTBase.NFTLoanContract storage loanContract = contracts[contractId];
+        IPawnNFTBase.NFTLoanContract storage loanContract = contracts[
+            contractId
+        ];
 
         // Execute: Update status of contract to COMPLETE, collateral to COMPLETE
         loanContract.status = IEnums.ContractStatus.COMPLETED;
@@ -730,7 +739,10 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
         );
 
         // validate: contract have lateCount == lateThreshold
-        require(loanContract.lateCount >= loanContract.terms.lateThreshold, "0");
+        require(
+            loanContract.lateCount >= loanContract.terms.lateThreshold,
+            "0"
+        );
 
         // Execute: call internal liquidation
         _liquidationExecution(
@@ -817,7 +829,9 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
             IEnums.ContractStatus status
         )
     {
-        IPawnNFTBase.NFTLoanContract storage loanContract = contracts[contractId];
+        IPawnNFTBase.NFTLoanContract storage loanContract = contracts[
+            contractId
+        ];
         borrower = loanContract.terms.borrower;
         lender = loanContract.terms.lender;
         status = loanContract.status;

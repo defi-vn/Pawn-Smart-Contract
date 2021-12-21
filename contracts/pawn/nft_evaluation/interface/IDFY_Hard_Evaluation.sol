@@ -143,7 +143,7 @@ interface IDFYHardEvaluation is BaseInterface {
     function cancelAppointment(uint256 _appointmentId, string memory reason)
         external;
 
-    function evaluatedAsset(
+    function evaluateAsset(
         address _currency,
         uint256 _appointmentId,
         uint256 _price,
