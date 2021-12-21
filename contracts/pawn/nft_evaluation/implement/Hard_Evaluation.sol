@@ -39,7 +39,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
     // Mapping appointment list
     // Appointmenty
-    mapping(uint256 => Appointment) public appointmentList;
+    //  mapping(uint256 => Appointment) public appointmentList;
 
     // Mapping list appointment of asset
     // Asset id => list appointment id
@@ -55,6 +55,9 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     // Mapping list evaluation of asset
     // Asset id => list evaluation id;
     mapping(uint256 => uint256[]) public evaluationListOfAsset;
+
+    // mapping AssetOfAppintment theo id cua Asset
+    mapping(uint256 => AssetOfAppointmentList) AssetOfAppointmentMapping;
 
     modifier onlyEvaluator() {
         _onlyRole(HubRoles.EVALUATOR_ROLE);
@@ -226,7 +229,10 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         uint256 appointmentTime
     ) external override whenNotPaused {
         // Get asset by asset id
+
         Asset storage _asset = assetList[assetId];
+        AssetOfAppointmentList
+            storage assetOfAppointment = AssetOfAppointmentMapping[assetId];
 
         require(
             bytes(_asset.assetCID).length > 0 &&
@@ -245,8 +251,15 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         (uint256 _evaluationFee, ) = HubInterface(contractHub)
             .getEvaluationConfig(evaluationFeeAddress);
 
+        // Appointment storage _appointment = assetOfAppointment
+        //     .AppointmentMapping[_appointmentId];
+
         // Add appointment to list appointment
-        appointmentList[_appointmentId] = Appointment({
+
+        // _appointment.assetId = assetId;
+        // _appointment
+
+        assetOfAppointment.AppointmentMapping[_appointmentId] = Appointment({
             assetId: assetId,
             assetOwner: _asset.owner,
             evaluator: evaluator,
@@ -256,10 +269,12 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         });
 
         // Add appointment id to appointment list of asset
-        appointmentListOfAsset[assetId].push(_appointmentId);
+        // appointmentListOfAsset[assetId].push(_appointmentId);
 
-        // update status asset
-        _asset.status = AssetStatus.APPOINTED;
+        assetOfAppointment.AppointmentIdList.push(_appointmentId);
+
+        // // update status asset
+        // _asset.status = AssetStatus.APPOINTED;
 
         // Transfer evaluation fee to smart contract
         CommonLib.safeTransfer(
@@ -282,13 +297,18 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         );
     }
 
-    function acceptAppointment(uint256 appointmentId, uint256 appointmentTime)
-        external
-        override
-        onlyEvaluator
-        whenNotPaused
-    {
-        Appointment storage _appointment = appointmentList[appointmentId];
+    function acceptAppointment(
+        uint256 appointmentId,
+        uint256 assetId,
+        uint256 appointmentTime
+    ) external override onlyEvaluator whenNotPaused {
+        Asset storage _asset = assetList[assetId];
+        // Appointment storage _appointment = appointmentList[appointmentId];
+        AssetOfAppointmentList
+            storage assetOfAppointmentList = AssetOfAppointmentMapping[assetId];
+
+        Appointment storage _appointment = assetOfAppointmentList
+            .AppointmentMapping[appointmentId];
 
         require(
             _appointment.status == AppointmentStatus.OPEN &&
@@ -296,7 +316,39 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             "0"
         ); // Invalid appoinment
 
+        require(_asset.status == AssetStatus.OPEN, "1");
+
         _appointment.status = AppointmentStatus.ACCEPTED;
+        _asset.status = AssetStatus.APPOINTED;
+
+        for (
+            uint256 i = 0;
+            i < assetOfAppointmentList.AppointmentIdList.length;
+            i++
+        ) {
+            uint256 thisAppointmentId = assetOfAppointmentList
+                .AppointmentIdList[i];
+            if (thisAppointmentId != appointmentId) {
+                Appointment storage thisAppointment = assetOfAppointmentList
+                    .AppointmentMapping[thisAppointmentId];
+                thisAppointment.status = AppointmentStatus.CANCELLED;
+
+                emit AppointmentEvent(
+                    thisAppointmentId,
+                    assetList[_appointment.assetId],
+                    thisAppointment,
+                    "",
+                    appointmentTime
+                );
+
+                delete assetOfAppointmentList.AppointmentMapping[
+                    thisAppointmentId
+                ];
+            }
+        }
+
+        delete assetOfAppointmentList.AppointmentIdList;
+        assetOfAppointmentList.AppointmentIdList.push(appointmentId);
 
         emit AppointmentEvent(
             appointmentId,
@@ -307,13 +359,16 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         );
     }
 
-    function rejectAppointment(uint256 _appointmentId, string memory reason)
-        external
-        override
-        onlyEvaluator
-        whenNotPaused
-    {
-        Appointment storage _appointment = appointmentList[_appointmentId];
+    function rejectAppointment(
+        uint256 appointmentId,
+        uint256 assetId,
+        string memory reason
+    ) external override onlyEvaluator whenNotPaused {
+        // Appointment storage _appointment = appointmentList[_appointmentId];
+        AssetOfAppointmentList
+            storage assetOfAppointmentList = AssetOfAppointmentMapping[assetId];
+        Appointment storage _appointment = assetOfAppointmentList
+            .AppointmentMapping[appointmentId];
 
         require(
             _appointment.status == AppointmentStatus.OPEN &&
@@ -335,7 +390,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         );
 
         emit AppointmentEvent(
-            _appointmentId,
+            appointmentId,
             assetList[_appointment.assetId],
             _appointment,
             reason,
@@ -343,12 +398,16 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         );
     }
 
-    function cancelAppointment(uint256 appointmentId, string memory reason)
-        external
-        override
-    {
-        Appointment storage _appointment = appointmentList[appointmentId];
-
+    function cancelAppointment(
+        uint256 appointmentId,
+        uint256 assetId,
+        string memory reason
+    ) external override {
+        // Appointment storage _appointment = appointmentList[appointmentId];
+        AssetOfAppointmentList
+            storage assetOfAppointmentList = AssetOfAppointmentMapping[assetId];
+        Appointment storage _appointment = assetOfAppointmentList
+            .AppointmentMapping[appointmentId];
         require(
             _appointment.status != AppointmentStatus.EVALUATED &&
                 _appointment.status != AppointmentStatus.CANCELLED,
