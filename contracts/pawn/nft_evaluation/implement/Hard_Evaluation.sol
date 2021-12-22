@@ -39,7 +39,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
     // Mapping appointment list
     // Appointmenty
-    //  mapping(uint256 => Appointment) public appointmentList;
+    mapping(uint256 => Appointment) public appointmentList;
 
     // Mapping list appointment of asset
     // Asset id => list appointment id
@@ -269,7 +269,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         });
 
         // Add appointment id to appointment list of asset
-        // appointmentListOfAsset[assetId].push(_appointmentId);
+        appointmentListOfAsset[assetId].push(_appointmentId);
 
         assetOfAppointment.AppointmentIdList.push(_appointmentId);
 
@@ -291,7 +291,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         emit AppointmentEvent(
             _appointmentId,
             _asset,
-            appointmentList[_appointmentId],
+            assetOfAppointment.AppointmentMapping[_appointmentId],
             "",
             appointmentTime
         );
@@ -339,6 +339,13 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
                     thisAppointment,
                     "",
                     appointmentTime
+                );
+
+                CommonLib.safeTransfer(
+                    _appointment.evaluationFeeAddress,
+                    address(this),
+                    _appointment.assetOwner,
+                    _appointment.evaluationFee
                 );
 
                 delete assetOfAppointmentList.AppointmentMapping[
@@ -444,7 +451,12 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         uint256 depreciationRate,
         address mintingFeeAddress
     ) external override onlyEvaluator whenNotPaused {
-        Appointment storage _appointment = appointmentList[appointmentId];
+        //Appointment storage _appointment = appointmentList[appointmentId];
+
+        // AssetOfAppointmentList
+        //     storage assetOfAppointmentList = AssetOfAppointmentMapping[assetId];
+        // Appointment storage _appointment = assetOfAppointmentList
+        //     .AppointmentMapping[appointmentId];
 
         require(
             _appointment.status == AppointmentStatus.ACCEPTED &&
