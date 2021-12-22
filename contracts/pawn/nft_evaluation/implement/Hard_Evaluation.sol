@@ -171,7 +171,8 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         address collectionAsset,
         uint256 expectingPrice,
         address expectingPriceAddress,
-        CollectionStandard collectionStandard
+        CollectionStandard collectionStandard,
+        string memory beAssetId
     ) external override whenNotPaused {
         // Require asset CID
         require(bytes(assetCID).length > 0, "Asset CID is blank");
@@ -216,7 +217,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         // Update total asset
         _totalAssets.increment();
 
-        emit AssetEvent(_assetId, assetList[_assetId]);
+        emit AssetEvent(_assetId, assetList[_assetId], beAssetId);
     }
 
     function createAppointment(
@@ -282,12 +283,11 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         );
     }
 
-    function acceptAppointment(uint256 appointmentId, uint256 appointmentTime)
-        external
-        override
-        onlyEvaluator
-        whenNotPaused
-    {
+    function acceptAppointment(
+        uint256 appointmentId,
+        uint256 assetId,
+        uint256 appointmentTime
+    ) external override onlyEvaluator whenNotPaused {
         Appointment storage _appointment = appointmentList[appointmentId];
 
         require(
@@ -307,12 +307,11 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         );
     }
 
-    function rejectAppointment(uint256 _appointmentId, string memory reason)
-        external
-        override
-        onlyEvaluator
-        whenNotPaused
-    {
+    function rejectAppointment(
+        uint256 _appointmentId,
+        uint256 assetId,
+        string memory reason
+    ) external override onlyEvaluator whenNotPaused {
         Appointment storage _appointment = appointmentList[_appointmentId];
 
         require(
@@ -343,10 +342,11 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         );
     }
 
-    function cancelAppointment(uint256 appointmentId, string memory reason)
-        external
-        override
-    {
+    function cancelAppointment(
+        uint256 appointmentId,
+        uint256 assetId,
+        string memory reason
+    ) external override {
         Appointment storage _appointment = appointmentList[appointmentId];
 
         require(

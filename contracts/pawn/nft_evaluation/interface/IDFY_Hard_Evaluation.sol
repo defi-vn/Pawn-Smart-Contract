@@ -73,13 +73,18 @@ interface IDFYHardEvaluation is BaseInterface {
         EvaluationStatus status;
     }
 
+    struct AssetOfAppointmentList {
+        mapping(uint256 => Appointment) AppointmentMapping;
+        uint256[] AppointmentIdList;
+    }
+
     // struct WhiteListFee {
     //     uint256 EvaluationFee;
     //     uint256 MintingFee;
     // }
 
     /* ===== Event ===== */
-    event AssetEvent(uint256 assetId, Asset asset);
+    event AssetEvent(uint256 assetId, Asset asset, string beAssetId);
 
     event AppointmentEvent(
         uint256 appoimentId,
@@ -124,7 +129,8 @@ interface IDFYHardEvaluation is BaseInterface {
         address _collectionAsset,
         uint256 _expectingPrice,
         address _expectingPriceAddress,
-        CollectionStandard _collectionStandard
+        CollectionStandard _collectionStandard,
+        string memory _beAssetId
     ) external;
 
     function createAppointment(
@@ -134,14 +140,23 @@ interface IDFYHardEvaluation is BaseInterface {
         uint256 _appointmentTime
     ) external;
 
-    function acceptAppointment(uint256 _appointmentId, uint256 _appointmentTime)
-        external;
+    function acceptAppointment(
+        uint256 _appointmentId,
+        uint256 _assetId,
+        uint256 _appointmentTime
+    ) external;
 
-    function rejectAppointment(uint256 _appointmentId, string memory reason)
-        external;
+    function rejectAppointment(
+        uint256 _appointmentId,
+        uint256 _assetId,
+        string memory reason
+    ) external;
 
-    function cancelAppointment(uint256 _appointmentId, string memory reason)
-        external;
+    function cancelAppointment(
+        uint256 _appointmentId,
+        uint256 _assetId,
+        string memory reason
+    ) external;
 
     function evaluateAsset(
         address _currency,
