@@ -375,10 +375,6 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
                 _appointment.assetId
             ][i];
             if (thisAppointmentId == appointmentId) {
-                delete appointmentListOfAsset[_appointment.assetId][
-                    appointmentId
-                ];
-
                 CommonLib.safeTransfer(
                     _appointment.evaluationFeeAddress,
                     address(this),
@@ -393,6 +389,10 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
                     reason,
                     0
                 );
+
+                delete appointmentListOfAsset[_appointment.assetId][
+                    appointmentId
+                ];
             }
         }
     }
@@ -424,10 +424,6 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
                 _appointment.assetId
             ][i];
             if (thisAppointmentId == appointmentId) {
-                delete appointmentListOfAsset[_appointment.assetId][
-                    appointmentId
-                ];
-
                 CommonLib.safeTransfer(
                     _appointment.evaluationFeeAddress,
                     address(this),
@@ -442,6 +438,9 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
                     reason,
                     0
                 );
+                delete appointmentListOfAsset[_appointment.assetId][
+                    appointmentId
+                ];
             }
         }
     }
