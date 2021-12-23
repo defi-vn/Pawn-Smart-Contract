@@ -26,7 +26,7 @@ contract Reputation is
      * @dev PAUSER_ROLE: those who can pause the contract
      * by default this role is assigned _to the contract creator.
      */
-    bytes32 public constant PAUSER_ROLE = keccak256("1"); //PAUSER_ROLE
+    bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
     // mapping of user address's reputation score
     mapping(address => uint32) private _reputationScore;
@@ -146,7 +146,10 @@ contract Reputation is
 
     modifier onlyWhitelistedContractCaller(address _from) {
         // Caller must be a contract
-        // require(_from.isContract(), "DFY: Calling Reputation adjustment from a non-contract address");
+        // require(
+        //     _from.isContract(),
+        //     "DFY: Calling Reputation adjustment from a non-contract address"
+        // );
 
         // Caller must be whitelisted
         require(
@@ -164,7 +167,10 @@ contract Reputation is
         external
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
-        // require(_caller.isContract(), "DFY: Setting reputation contract caller to a non-contract address");
+        // require(
+        //     _caller.isContract(),
+        //     "DFY: Setting reputation contract caller to a non-contract address"
+        // );
         whitelistedContractCaller[_caller] = true;
     }
 
