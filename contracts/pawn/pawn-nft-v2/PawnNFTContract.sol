@@ -60,9 +60,9 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
      * @param nftTokenQuantity is quantity NFT token
      * @param expectedDurationQty is expected duration
      * @param durationType is expected duration type
-     * @param _UID is UID pass create collateral to event collateral
+     *
      */
-    function createCollateral(
+    function putOnPawn(
         address nftContract,
         uint256 nftTokenId,
         uint256 loanAmount,
@@ -70,7 +70,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         uint256 nftTokenQuantity,
         uint256 expectedDurationQty,
         IEnums.LoanDurationType durationType,
-        uint256 _UID
+        string memory beNFTId
     ) external whenContractNotPaused nonReentrant {
         /**
         TODO: Implementation
@@ -142,7 +142,11 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         // Update number colaterals
         numberCollaterals.increment();
 
-        emit CollateralEvent_NFT(collateralId, collaterals[collateralId], _UID);
+        emit CollateralEvent_NFT(
+            collateralId,
+            collaterals[collateralId],
+            beNFTId
+        );
 
         // Adjust reputation score
         IReputation(getReputation()).adjustReputationScore(
@@ -153,7 +157,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         //  require(false, "after reputation");
     }
 
-    function withdrawCollateral(uint256 nftCollateralId, uint256 _UID)
+    function withdrawCollateral(uint256 nftCollateralId)
         external
         whenContractNotPaused
     {
@@ -205,8 +209,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
                 emit CancelOfferEvent_NFT(
                     offerId,
                     nftCollateralId,
-                    offer.owner,
-                    _UID
+                    offer.owner
                 );
             }
             delete collateralOffersMapping[nftCollateralId];
@@ -215,7 +218,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         // Update collateral status
         _collateral.status = IEnums.CollateralStatus.CANCEL;
 
-        emit CollateralEvent_NFT(nftCollateralId, _collateral, _UID);
+        emit CollateralEvent_NFT(nftCollateralId, _collateral, "");
 
         delete collaterals[nftCollateralId];
 
@@ -247,8 +250,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         uint256 duration,
         uint256 liquidityThreshold,
         IEnums.LoanDurationType loanDurationType,
-        IEnums.LoanDurationType repaymentCycleType,
-        uint256 _UID
+        IEnums.LoanDurationType repaymentCycleType
     ) external whenContractNotPaused {
         // Get collateral
         IPawnNFTBase.NFTCollateral storage _collateral = collaterals[
@@ -320,8 +322,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         emit OfferEvent_NFT(
             offerId,
             nftCollateralId,
-            _collateralOfferList.offerMapping[offerId],
-            _UID
+            _collateralOfferList.offerMapping[offerId]
         );
 
         // Adjust reputation score
@@ -331,11 +332,10 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         );
     }
 
-    function cancelOffer(
-        uint256 offerId,
-        uint256 nftCollateralId,
-        uint256 _UID
-    ) external whenContractNotPaused {
+    function cancelOffer(uint256 offerId, uint256 nftCollateralId)
+        external
+        whenContractNotPaused
+    {
         // Get offer
         IPawnNFTBase.NFTCollateralOfferList
             storage _collateralOfferList = collateralOffersMapping[
@@ -359,22 +359,12 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
 
         //reject Offer
         if (_msgSender() == collaterals[nftCollateralId].owner) {
-            emit CancelOfferEvent_NFT(
-                offerId,
-                nftCollateralId,
-                offerOwner,
-                _UID
-            );
+            emit CancelOfferEvent_NFT(offerId, nftCollateralId, offerOwner);
         }
 
         // cancel offer
         if (_msgSender() == offerOwner) {
-            emit CancelOfferEvent_NFT(
-                offerId,
-                nftCollateralId,
-                _msgSender(),
-                _UID
-            );
+            emit CancelOfferEvent_NFT(offerId, nftCollateralId, _msgSender());
 
             // Adjust reputation score
             IReputation(getReputation()).adjustReputationScore(
@@ -384,11 +374,10 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         }
     }
 
-    function acceptOffer(
-        uint256 nftCollateralId,
-        uint256 offerId,
-        uint256 _UID
-    ) external whenContractNotPaused {
+    function acceptOffer(uint256 nftCollateralId, uint256 offerId)
+        external
+        whenContractNotPaused
+    {
         IPawnNFTBase.NFTCollateral storage collateral = collaterals[
             nftCollateralId
         ];
@@ -430,7 +419,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
                 offer.duration
             );
 
-        ILoanNFT(getLoanNFTContract()).createContract(contractData, _UID);
+        ILoanNFT(getLoanNFTContract()).createContract(contractData);
 
         // Change status of offer and collateral
         offer.status = IEnums.OfferStatus.ACCEPTED;
@@ -444,8 +433,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
                 emit CancelOfferEvent_NFT(
                     thisOfferId,
                     nftCollateralId,
-                    offer.owner,
-                    _UID
+                    offer.owner
                 );
                 delete collateralOfferList.offerMapping[thisOfferId];
             }

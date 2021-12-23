@@ -112,6 +112,5 @@ interface IPawnNFTBase is BaseInterface {
         uint256 paidInterestFeeAmount;
         uint256 prepaidAmount;
         uint256 requestId;
-        uint256 UID;
     }
 }

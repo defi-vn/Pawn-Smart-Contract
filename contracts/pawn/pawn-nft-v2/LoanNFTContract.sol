@@ -50,8 +50,7 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
     /** ==================== NFT Loan contract operations ==================== */
 
     function createContract(
-        IPawnNFTBase.NFTContractRawData calldata contractData,
-        uint256 _UID
+        IPawnNFTBase.NFTContractRawData calldata contractData
     ) external override whenContractNotPaused returns (uint256 _idx) {
         require(
             (_msgSender() == getPawnNFTContract() &&
@@ -119,8 +118,7 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
             contractData.exchangeRate,
             msg.sender,
             _idx,
-            newContract,
-            _UID
+            newContract
         );
 
         // chot ky dau tien khi tao contract
@@ -539,8 +537,7 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
         uint256 contractId,
         uint256 paidPenaltyAmount,
         uint256 paidInterestAmount,
-        uint256 paidLoanAmount,
-        uint256 _UID
+        uint256 paidLoanAmount
     ) external whenNotPaused {
         // Get contract & payment request
         IPawnNFTBase.NFTLoanContract storage loanContract = contractMustActive(
@@ -616,8 +613,7 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
                 _feePenalty,
                 _feeInterest,
                 _prepaidFee,
-                _paymentRequest.requestId,
-                _UID
+                _paymentRequest.requestId
             );
         emit RepaymentEvent_NFT(repaymentData);
 

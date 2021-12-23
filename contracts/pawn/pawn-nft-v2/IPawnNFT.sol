@@ -9,23 +9,21 @@ interface IPawnNFT is IPawnNFTBase {
     event CollateralEvent_NFT(
         uint256 nftCollateralId,
         IPawnNFTBase.NFTCollateral data,
-        uint256 UID
+        string beNFTId
     );
 
     //create offer & cancel
     event OfferEvent_NFT(
         uint256 offerId,
         uint256 nftCollateralId,
-        IPawnNFTBase.NFTOffer data,
-        uint256 UID
+        IPawnNFTBase.NFTOffer data
     );
 
     //accept offer
     event LoanContractCreatedEvent_NFT(
         address fromAddress,
         uint256 contractId,
-        IPawnNFTBase.NFTLoanContract data,
-        uint256 UID
+        IPawnNFTBase.NFTLoanContract data
     );
 
     //repayment
@@ -41,8 +39,7 @@ interface IPawnNFT is IPawnNFTBase {
         uint256 paidLoanAmount,
         uint256 paidPenaltyFeeAmount,
         uint256 paidInterestFeeAmount,
-        uint256 prepaidAmount,
-        uint256 UID
+        uint256 prepaidAmount
     );
 
     //liquidity & defaul
@@ -58,8 +55,7 @@ interface IPawnNFT is IPawnNFTBase {
     event CancelOfferEvent_NFT(
         uint256 offerId,
         uint256 nftCollateralId,
-        address offerOwner,
-        uint256 UID
+        address offerOwner
     );
 
     /** Functions */

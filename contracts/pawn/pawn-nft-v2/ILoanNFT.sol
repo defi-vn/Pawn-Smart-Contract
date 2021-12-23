@@ -9,15 +9,14 @@ interface ILoanNFT is IPawnNFTBase {
     event CollateralEvent_NFT(
         uint256 nftCollateralId,
         NFTCollateral data,
-        uint256 UID
+        string beNFTId
     );
 
     //create offer & cancel
     event OfferEvent_NFT(
         uint256 offerId,
         uint256 nftCollateralId,
-        NFTOffer data,
-        uint256 UID
+        NFTOffer data
     );
 
     //accept offer
@@ -25,8 +24,7 @@ interface ILoanNFT is IPawnNFTBase {
         uint256 exchangeRate,
         address fromAddress,
         uint256 contractId,
-        NFTLoanContract data,
-        uint256 UID
+        NFTLoanContract data
     );
 
     //repayment
@@ -46,17 +44,15 @@ interface ILoanNFT is IPawnNFTBase {
     event CancelOfferEvent_NFT(
         uint256 offerId,
         uint256 nftCollateralId,
-        address offerOwner,
-        uint256 UID
+        address offerOwner
     );
 
     event CountLateCount(uint256 LateThreshold, uint256 lateCount);
 
     /** Functions */
-    function createContract(
-        IPawnNFTBase.NFTContractRawData memory contractData,
-        uint256 _UID
-    ) external returns (uint256 idx);
+    function createContract(IPawnNFTBase.NFTContractRawData memory contractData)
+        external
+        returns (uint256 idx);
 
     function getContractInfoForReview(uint256 _contractId)
         external
