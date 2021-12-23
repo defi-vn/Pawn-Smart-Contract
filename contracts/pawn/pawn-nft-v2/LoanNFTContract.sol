@@ -71,14 +71,6 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
             uint256 prepaidFeeRate,
             uint256 lateThreshold
         ) = HubInterface(contractHub).getPawnNFTConfig();
-        //get Offer
-        IPawnNFTBase.NFTCollateralOfferList
-            storage collateralOfferList = collateralOffersMapping[
-                contractData.nftCollateralId
-            ];
-        IPawnNFTBase.NFTOffer storage _offer = collateralOfferList.offerMapping[
-            contractData.offerId
-        ];
 
         _idx = numberContracts;
         IPawnNFTBase.NFTLoanContract storage newContract = contracts[_idx];

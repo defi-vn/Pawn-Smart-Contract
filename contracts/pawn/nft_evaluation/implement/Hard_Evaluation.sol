@@ -378,22 +378,23 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
                 delete appointmentListOfAsset[_appointment.assetId][
                     appointmentId
                 ];
+
+                CommonLib.safeTransfer(
+                    _appointment.evaluationFeeAddress,
+                    address(this),
+                    _appointment.assetOwner,
+                    _appointment.evaluationFee
+                );
+
+                emit AppointmentEvent(
+                    appointmentId,
+                    assetList[_appointment.assetId],
+                    _appointment,
+                    reason,
+                    0
+                );
             }
         }
-        CommonLib.safeTransfer(
-            _appointment.evaluationFeeAddress,
-            address(this),
-            _appointment.assetOwner,
-            _appointment.evaluationFee
-        );
-
-        emit AppointmentEvent(
-            appointmentId,
-            assetList[_appointment.assetId],
-            _appointment,
-            reason,
-            0
-        );
     }
 
     function cancelAppointment(uint256 appointmentId, string memory reason)
@@ -426,23 +427,23 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
                 delete appointmentListOfAsset[_appointment.assetId][
                     appointmentId
                 ];
+
+                CommonLib.safeTransfer(
+                    _appointment.evaluationFeeAddress,
+                    address(this),
+                    _appointment.assetOwner,
+                    _appointment.evaluationFee
+                );
+
+                emit AppointmentEvent(
+                    appointmentId,
+                    assetList[_appointment.assetId],
+                    _appointment,
+                    reason,
+                    0
+                );
             }
         }
-
-        CommonLib.safeTransfer(
-            _appointment.evaluationFeeAddress,
-            address(this),
-            _appointment.assetOwner,
-            _appointment.evaluationFee
-        );
-
-        emit AppointmentEvent(
-            appointmentId,
-            assetList[_appointment.assetId],
-            _appointment,
-            reason,
-            0
-        );
     }
 
     function evaluateAsset(
