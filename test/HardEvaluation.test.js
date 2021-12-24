@@ -137,12 +137,12 @@ describe("Setting up test parameters:\n\r", (done) => {
             await _loanTokenContract.connect(_deployer).transfer(_customer.address, BigInt(100 * 10 ** 18));
             await _loanTokenContract.connect(_customer).approve(_hardEvaluationContract.address, BigInt(100 * 10 ** 18));
 
-            let balanceOfCustomerBeforeTnx = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
-            let balanceOfContractHardEvaluationBeforeTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfCustomerBeforeCreateAppointment = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
+            let balanceOfContractHardEvaluationBeforeCreateAppoitment = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Create appointment - before transaction: ");
-            console.log(`Customer balance: ${balanceOfCustomerBeforeTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeTnx.toString()}\n\r`);
+            console.log(`\x1b[36m customer balance : ${balanceOfCustomerBeforeCreateAppointment.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeCreateAppoitment.toString()} \x1b[0m`);
 
             let getEventCreateAppointment = await _hardEvaluationContract.connect(_customer).createAppointment(0, _evaluator.address, _loanTokenContract.address, appointmentTime);
             let reciptEventCreateAppointment = await getEventCreateAppointment.wait();
@@ -155,7 +155,6 @@ describe("Setting up test parameters:\n\r", (done) => {
 
             console.log(`\x1b[31m Event transfer token of customer into this contract \x1b[0m`);
             console.log(reciptEventCreateAppointment.events[0]);
-            // console.log(Number(reciptEventCreateAppointment.events[0].data));
 
             let appointmentList = await _hardEvaluationContract.appointmentList(0); // check info after create appointment  
             expect(appointmentList.assetId).to.equal(0);
@@ -166,15 +165,15 @@ describe("Setting up test parameters:\n\r", (done) => {
             expect(reciptEventCreateAppointment.events[2].args[2].status).to.equal(AppointmentStatus.OPEN);
 
 
-            let balanceOfCustomerAfterTnx = (await _loanTokenContract.balanceOf(_customer.address)) / decimal; // check transfer 
-            let balanceOfContractHardEvaluationAfterTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfCustomerAfterCreateAppoitnment = (await _loanTokenContract.balanceOf(_customer.address)) / decimal; // check transfer 
+            let balanceOfContractHardEvaluationAfterCreateAppointment = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Create appointment - after transaction:");
-            console.log(`Customer balance: ${balanceOfCustomerAfterTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterTnx.toString()}\n\r`);
+            console.log(`\x1b[36m customer balance : ${balanceOfCustomerAfterCreateAppoitnment.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterCreateAppointment.toString()} \x1b[0m`);
 
-            expect(balanceOfCustomerBeforeTnx).to.equal(balanceOfCustomerAfterTnx + evaluationFee);
-            expect(balanceOfContractHardEvaluationBeforeTnx).to.equal(balanceOfContractHardEvaluationAfterTnx - evaluationFee);
+            expect(balanceOfCustomerBeforeCreateAppointment).to.equal(balanceOfCustomerAfterCreateAppoitnment + evaluationFee);
+            expect(balanceOfContractHardEvaluationBeforeCreateAppoitment).to.equal(balanceOfContractHardEvaluationAfterCreateAppointment - evaluationFee);
 
             // -> Evaluator accept Appoitment
 
@@ -190,19 +189,17 @@ describe("Setting up test parameters:\n\r", (done) => {
             console.log(`unknow : \x1b[36m ${reciptEventAcceptAppointment.events[0].args[3].toString()} \x1b[0m`);
             console.log(`appointmentTime : \x1b[36m ${reciptEventAcceptAppointment.events[0].args[4].toString()} \x1b[0m`);
 
-
-
             expect(reciptEventAcceptAppointment.events[0].args[1].status).to.equal(AppointmentStatus.ACCEPTED);
             expect(reciptEventAcceptAppointment.events[0].args[2].status).to.equal(AssetStatus.APPOINTED);
 
             // -> Evaluator evaluated Asset
 
-            balanceOfContractHardEvaluationBeforeTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
-            let balanceOfEvaluatorBeforeTnx = (await _loanTokenContract.balanceOf(_evaluator.address)) / decimal;
+            let balanceOfContractHardEvaluationBeforeEvaluatedAsset = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfEvaluatorBeforeEvaluatedAsset = (await _loanTokenContract.balanceOf(_evaluator.address)) / decimal;
 
             console.log("Evaluation - before transaction:");
-            console.log(`Evaluator balance: ${balanceOfEvaluatorBeforeTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeTnx.toString()}\n\r`);
+            console.log(`\x1b[36m Evaluator  balance : ${balanceOfEvaluatorBeforeEvaluatedAsset.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeEvaluatedAsset.toString()} \x1b[0m`);
 
             let getEventEvaluateAsset = await _hardEvaluationContract.connect(_evaluator).evaluateAsset(_DFYHard721Contract.address,
                 0, BigInt(10 * 10 ** 18), "_evaluationCID", BigInt(1 * 10 ** 5), _loanTokenContract.address, _beEvaluationId);
@@ -217,28 +214,28 @@ describe("Setting up test parameters:\n\r", (done) => {
             console.log("evaluationList", reciptEvaluateAsset.events[1].args[2])
             console.log(`beEvaluationId : \x1b[36m ${reciptEvaluateAsset.events[1].args[3].toString()} \x1b[0m`);
 
-            let balanceOfEvaluatorAfterTnx = (await _loanTokenContract.balanceOf(_evaluator.address)) / decimal;
-            balanceOfContractHardEvaluationAfterTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfEvaluatorAfterEvaluatedAsset = (await _loanTokenContract.balanceOf(_evaluator.address)) / decimal;
+            let balanceOfContractHardEvaluationAfterEvaluatedAsset = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Evaluation - after transaction:");
-            console.log(`Evaluator balance: ${balanceOfEvaluatorAfterTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterTnx.toString()}\n\r`);
+            console.log(`\x1b[36m Evaluator  balance : ${balanceOfEvaluatorAfterEvaluatedAsset.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterEvaluatedAsset.toString()} \x1b[0m`);
 
             let appoitmentInfo = await _hardEvaluationContract.appointmentList(0);
 
-            expect(balanceOfEvaluatorBeforeTnx).to.equal(balanceOfEvaluatorAfterTnx - evaluationFee);
-            expect(balanceOfContractHardEvaluationBeforeTnx).to.equal(balanceOfContractHardEvaluationAfterTnx + evaluationFee);
+            expect(balanceOfEvaluatorBeforeEvaluatedAsset).to.equal(balanceOfEvaluatorAfterEvaluatedAsset - evaluationFee);
+            expect(balanceOfContractHardEvaluationBeforeEvaluatedAsset).to.equal(balanceOfContractHardEvaluationAfterEvaluatedAsset + evaluationFee);
             expect(appoitmentInfo.status).to.equal(AppointmentStatus.EVALUATED);
             expect(reciptEvaluateAsset.events[1].args[2].status).to.equal(EvaluationStatus.EVALUATED);
 
             // -> customer accept evaluation 
 
-            balanceOfCustomerBeforeTnx = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
-            balanceOfContractHardEvaluationBeforeTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfCustomerBeforeAcceptEvaluation = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
+            let balanceOfContractHardEvaluationBeforeAcceptEvaluation = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Accept evaluation - before transaction:");
-            console.log(`Customer balance: ${balanceOfCustomerBeforeTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeTnx.toString()}\n\r`);
+            console.log(`\x1b[36m Customer  balance : ${balanceOfCustomerBeforeAcceptEvaluation.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeAcceptEvaluation.toString()} \x1b[0m`);
 
             let getEventAcceptEvaluation = await _hardEvaluationContract.connect(_customer).acceptEvaluation(0);
             let reciptEventAcceptEvaluation = await getEventAcceptEvaluation.wait();
@@ -251,28 +248,28 @@ describe("Setting up test parameters:\n\r", (done) => {
             console.log(`\x1b[31m Event customer transfer token into contract \x1b[0m`);
             console.log(reciptEventAcceptEvaluation.events[0]);
 
-            balanceOfCustomerAfterTnx = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
-            balanceOfContractHardEvaluationAfterTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfCustomerAfterAcceptEvaluation = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
+            let balanceOfContractHardEvaluationAfterAcceptEvaluation = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Accept evaluation - after transaction:");
-            console.log(`Customer balance: ${balanceOfCustomerAfterTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterTnx.toString()}\n\r`);
+            console.log(`\x1b[36m Customer  balance : ${balanceOfCustomerAfterAcceptEvaluation.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterAcceptEvaluation.toString()} \x1b[0m`);
 
             let getEvaluationInfo = await _hardEvaluationContract.evaluationList(0);
 
-            expect(balanceOfCustomerBeforeTnx).to.equal(balanceOfCustomerAfterTnx + mintingFee);
-            expect(balanceOfContractHardEvaluationBeforeTnx).to.equal(balanceOfContractHardEvaluationAfterTnx - mintingFee);
+            expect(balanceOfCustomerBeforeAcceptEvaluation).to.equal(balanceOfCustomerAfterAcceptEvaluation + mintingFee);
+            expect(balanceOfContractHardEvaluationBeforeAcceptEvaluation).to.equal(balanceOfContractHardEvaluationAfterAcceptEvaluation - mintingFee);
             expect(getEvaluationInfo.status).to.equal(EvaluationStatus.EVALUATION_ACCEPTED);
             expect(reciptEventAcceptEvaluation.events[2].args[1].status).to.equal(AssetStatus.EVALUATED);
 
             // -> Evaluator mint NFT for Customer
 
-            let balanceOfHubFeeWalletBeforeTnx = (await _loanTokenContract.balanceOf(_feeWallet.address)) / decimal;
-            balanceOfContractHardEvaluationBeforeTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfHubFeeWalletBeforeMintNFT = (await _loanTokenContract.balanceOf(_feeWallet.address)) / decimal;
+            let balanceOfContractHardEvaluationBeforeMintNFT = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Mint NFT - before transaction:");
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeTnx.toString()}`);
-            console.log(`Fee Wallet balance: ${balanceOfHubFeeWalletBeforeTnx.toString()}\n\r`);
+            console.log(`\x1b[36m Fee Wallet balance : ${balanceOfHubFeeWalletBeforeMintNFT.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeMintNFT.toString()} \x1b[0m`);
 
             let getEventCreateNFT = await _hardEvaluationContract.connect(_evaluator).createNftToken(0, 1, "NFTCID");
             let reciptEventCreateNFT = await getEventCreateNFT.wait();
@@ -288,18 +285,19 @@ describe("Setting up test parameters:\n\r", (done) => {
             console.log(`\x1b[31m Event transfer token to mintNFT \x1b[0m`);
             console.log(reciptEventCreateNFT.events[1]);
 
-            let balanceOfHubFeeWalletAfterTnx = (await _loanTokenContract.balanceOf(_feeWallet.address)) / decimal;
-            balanceOfContractHardEvaluationAfterTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfHubFeeWalletAfterMintNFT = (await _loanTokenContract.balanceOf(_feeWallet.address)) / decimal;
+            let balanceOfContractHardEvaluationAfterMintNFT = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Mint NFT - after transaction:");
-            console.log(`Fee Wallet balance: ${balanceOfHubFeeWalletAfterTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterTnx.toString()}\n\r`);
+            console.log(`\x1b[36m Fee Wallet balance : ${balanceOfHubFeeWalletAfterMintNFT.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterMintNFT.toString()} \x1b[0m`);
 
             let owner = await _DFYHard721Contract.ownerOf(0);
             let assetAfterCreateNFT = await _hardEvaluationContract.assetList(0);
             let evaluationAfterCreateNFT = await _hardEvaluationContract.evaluationList(0);
 
-            expect(balanceOfHubFeeWalletBeforeTnx).to.equal(balanceOfHubFeeWalletAfterTnx - mintingFee);
+            expect(balanceOfHubFeeWalletBeforeMintNFT).to.equal(balanceOfHubFeeWalletAfterMintNFT - mintingFee);
+            expect(balanceOfContractHardEvaluationBeforeMintNFT).to.equal(balanceOfContractHardEvaluationAfterMintNFT + mintingFee);
             expect(owner).to.equal(_customer.address);
             expect(assetAfterCreateNFT.status).to.equal(AssetStatus.NFT_CREATED);
             expect(evaluationAfterCreateNFT.status).to.equal(EvaluationStatus.NFT_CREATED);
@@ -320,24 +318,24 @@ describe("Setting up test parameters:\n\r", (done) => {
             await _loanTokenContract.connect(_deployer).transfer(_customer.address, BigInt(100 * 10 ** 18));
             await _loanTokenContract.connect(_customer).approve(_hardEvaluationContract.address, BigInt(100 * 10 ** 18));
 
-            let balanceOfCustomerBeforeTnx = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
-            let balanceOfContractHardEvaluationBeforeTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfCustomerBeforeCreateAppointment = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
+            let balanceOfContractHardEvaluationBeforeCreateAppoitment = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Create appointment - before transaction: ");
-            console.log(`Customer balance: ${balanceOfCustomerBeforeTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeTnx.toString()}\n\r`);
+            console.log(`\x1b[36m customer balance : ${balanceOfCustomerBeforeCreateAppointment.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeCreateAppoitment.toString()} \x1b[0m`);
 
             await _hardEvaluationContract.connect(_customer).createAppointment(1, _evaluator.address, _loanTokenContract.address, appointmentTime);
 
-            let balanceOfCustomerAfterTnx = (await _loanTokenContract.balanceOf(_customer.address)) / decimal; // check transfer 
-            let balanceOfContractHardEvaluationAfterTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfCustomerAfterCreateAppoitnment = (await _loanTokenContract.balanceOf(_customer.address)) / decimal; // check transfer 
+            let balanceOfContractHardEvaluationAfterCreateAppointment = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Create appointment - after transaction:");
-            console.log(`Customer balance: ${balanceOfCustomerAfterTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterTnx.toString()}\n\r`);
+            console.log(`\x1b[36m customer balance : ${balanceOfCustomerAfterCreateAppoitnment.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterCreateAppointment.toString()} \x1b[0m`);
 
-            expect(balanceOfCustomerBeforeTnx).to.equal(balanceOfCustomerAfterTnx + evaluationFee);
-            expect(balanceOfContractHardEvaluationBeforeTnx).to.equal(balanceOfContractHardEvaluationAfterTnx - evaluationFee);
+            expect(balanceOfCustomerBeforeCreateAppointment).to.equal(balanceOfCustomerAfterCreateAppoitnment + evaluationFee);
+            expect(balanceOfContractHardEvaluationBeforeCreateAppoitment).to.equal(balanceOfContractHardEvaluationAfterCreateAppointment - evaluationFee);
 
             // -> Evaluator accept Appoitment
 
@@ -347,12 +345,12 @@ describe("Setting up test parameters:\n\r", (done) => {
 
             // -> Evaluator evaluated Asset
 
-            balanceOfContractHardEvaluationBeforeTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
-            let balanceOfEvaluatorBeforeTnx = (await _loanTokenContract.balanceOf(_evaluator.address)) / decimal;
+            let balanceOfContractHardEvaluationBeforeEvaluatedAsset = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfEvaluatorBeforeEvaluatedAsset = (await _loanTokenContract.balanceOf(_evaluator.address)) / decimal;
 
             console.log("Evaluation - before transaction:");
-            console.log(`Evaluator balance: ${balanceOfEvaluatorBeforeTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeTnx.toString()}\n\r`);
+            console.log(`\x1b[36m Evaluator  balance : ${balanceOfEvaluatorBeforeEvaluatedAsset.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeEvaluatedAsset.toString()} \x1b[0m`);
 
             let getEventEvaluateAsset = await _hardEvaluationContract.connect(_evaluator).evaluateAsset(_DFYHard721Contract.address,
                 1, BigInt(10 * 10 ** 18), "_evaluationCID", BigInt(1 * 10 ** 5), _loanTokenContract.address, _beEvaluationId);
@@ -367,17 +365,17 @@ describe("Setting up test parameters:\n\r", (done) => {
             console.log("evaluationList", reciptEvaluateAsset.events[1].args[2])
             console.log(`beEvaluationId : \x1b[36m ${reciptEvaluateAsset.events[1].args[3].toString()} \x1b[0m`);
 
-            let balanceOfEvaluatorAfterTnx = (await _loanTokenContract.balanceOf(_evaluator.address)) / decimal;
-            balanceOfContractHardEvaluationAfterTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfEvaluatorAfterEvaluatedAsset = (await _loanTokenContract.balanceOf(_evaluator.address)) / decimal;
+            let balanceOfContractHardEvaluationAfterEvaluatedAsset = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Evaluation - after transaction:");
-            console.log(`Evaluator balance: ${balanceOfEvaluatorAfterTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterTnx.toString()}\n\r`);
+            console.log(`\x1b[36m Evaluator  balance : ${balanceOfEvaluatorAfterEvaluatedAsset.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterEvaluatedAsset.toString()} \x1b[0m`);
 
             let appoitmentInfo = await _hardEvaluationContract.appointmentList(1);
 
-            expect(balanceOfEvaluatorBeforeTnx).to.equal(balanceOfEvaluatorAfterTnx - evaluationFee);
-            expect(balanceOfContractHardEvaluationBeforeTnx).to.equal(balanceOfContractHardEvaluationAfterTnx + evaluationFee);
+            expect(balanceOfEvaluatorBeforeEvaluatedAsset).to.equal(balanceOfEvaluatorAfterEvaluatedAsset - evaluationFee);
+            expect(balanceOfContractHardEvaluationBeforeEvaluatedAsset).to.equal(balanceOfContractHardEvaluationAfterEvaluatedAsset + evaluationFee);
             expect(appoitmentInfo.status).to.equal(AppointmentStatus.EVALUATED);
             expect(reciptEvaluateAsset.events[1].args[2].status).to.equal(EvaluationStatus.EVALUATED);
         });
@@ -396,24 +394,24 @@ describe("Setting up test parameters:\n\r", (done) => {
             await _loanTokenContract.connect(_deployer).transfer(_customer.address, BigInt(100 * 10 ** 18));
             await _loanTokenContract.connect(_customer).approve(_hardEvaluationContract.address, BigInt(100 * 10 ** 18));
 
-            let balanceOfCustomerBeforeTnx = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
-            let balanceOfContractHardEvaluationBeforeTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfCustomerBeforeCreateAppointment = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
+            let balanceOfContractHardEvaluationBeforeCreateAppoitment = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Create appointment - before transaction: ");
-            console.log(`Customer balance: ${balanceOfCustomerBeforeTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeTnx.toString()}\n\r`);
+            console.log(`\x1b[36m customer balance : ${balanceOfCustomerBeforeCreateAppointment.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeCreateAppoitment.toString()} \x1b[0m`);
 
             await _hardEvaluationContract.connect(_customer).createAppointment(2, _evaluator.address, _loanTokenContract.address, appointmentTime);
 
-            let balanceOfCustomerAfterTnx = (await _loanTokenContract.balanceOf(_customer.address)) / decimal; // check transfer 
-            let balanceOfContractHardEvaluationAfterTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfCustomerAfterCreateAppoitnment = (await _loanTokenContract.balanceOf(_customer.address)) / decimal; // check transfer 
+            let balanceOfContractHardEvaluationAfterCreateAppointment = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Create appointment - after transaction:");
-            console.log(`Customer balance: ${balanceOfCustomerAfterTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterTnx.toString()}\n\r`);
+            console.log(`\x1b[36m customer balance : ${balanceOfCustomerAfterCreateAppoitnment.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterCreateAppointment.toString()} \x1b[0m`);
 
-            expect(balanceOfCustomerBeforeTnx).to.equal(balanceOfCustomerAfterTnx + evaluationFee);
-            expect(balanceOfContractHardEvaluationBeforeTnx).to.equal(balanceOfContractHardEvaluationAfterTnx - evaluationFee);
+            expect(balanceOfCustomerBeforeCreateAppointment).to.equal(balanceOfCustomerAfterCreateAppoitnment + evaluationFee);
+            expect(balanceOfContractHardEvaluationBeforeCreateAppoitment).to.equal(balanceOfContractHardEvaluationAfterCreateAppointment - evaluationFee);
 
             // -> Evaluator accept Appoitment
 
@@ -423,25 +421,39 @@ describe("Setting up test parameters:\n\r", (done) => {
 
             // -> Evaluator evaluated Asset
 
-            balanceOfContractHardEvaluationBeforeTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
-            let balanceOfEvaluatorBeforeTnx = (await _loanTokenContract.balanceOf(_evaluator.address)) / decimal;
+            let balanceOfContractHardEvaluationBeforeEvaluatedAsset = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfEvaluatorBeforeEvaluatedAsset = (await _loanTokenContract.balanceOf(_evaluator.address)) / decimal;
 
             console.log("Evaluation - before transaction:");
-            console.log(`Evaluator balance: ${balanceOfEvaluatorBeforeTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeTnx.toString()}\n\r`);
+            console.log(`\x1b[36m Evaluator  balance : ${balanceOfEvaluatorBeforeEvaluatedAsset.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeEvaluatedAsset.toString()} \x1b[0m`);
 
-            await _hardEvaluationContract.connect(_evaluator).evaluateAsset(_DFYHard721Contract.address,
+            let getEventEvaluateAsset = await _hardEvaluationContract.connect(_evaluator).evaluateAsset(_DFYHard721Contract.address,
                 2, BigInt(10 * 10 ** 18), "_evaluationCID", BigInt(1 * 10 ** 5), _loanTokenContract.address, _beEvaluationId);
+            let reciptEvaluateAsset = await getEventEvaluateAsset.wait();
 
-            let balanceOfEvaluatorAfterTnx = (await _loanTokenContract.balanceOf(_evaluator.address)) / decimal;
-            balanceOfContractHardEvaluationAfterTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            console.log(`\x1b[31m Event contract transfer token for evaluator after evaluator evaluate Asset \x1b[0m`);
+            console.log(reciptEvaluateAsset.events[0]);
+
+            console.log(`\x1b[31m Event Evaluator evaluated Asset \x1b[0m`);
+            console.log(`evaluationId : \x1b[36m ${reciptEvaluateAsset.events[1].args[0].toString()} \x1b[0m`);
+            console.log("asset :", reciptEvaluateAsset.events[1].args[1]);
+            console.log("evaluationList", reciptEvaluateAsset.events[1].args[2])
+            console.log(`beEvaluationId : \x1b[36m ${reciptEvaluateAsset.events[1].args[3].toString()} \x1b[0m`);
+
+            let balanceOfEvaluatorAfterEvaluatedAsset = (await _loanTokenContract.balanceOf(_evaluator.address)) / decimal;
+            let balanceOfContractHardEvaluationAfterEvaluatedAsset = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Evaluation - after transaction:");
-            console.log(`Evaluator balance: ${balanceOfEvaluatorAfterTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterTnx.toString()}\n\r`);
+            console.log(`\x1b[36m Evaluator  balance : ${balanceOfEvaluatorAfterEvaluatedAsset.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterEvaluatedAsset.toString()} \x1b[0m`);
 
-            expect(balanceOfEvaluatorBeforeTnx).to.equal(balanceOfEvaluatorAfterTnx - evaluationFee);
-            expect(balanceOfContractHardEvaluationBeforeTnx).to.equal(balanceOfContractHardEvaluationAfterTnx + evaluationFee);
+            let appoitmentInfo = await _hardEvaluationContract.appointmentList(3);
+
+            expect(balanceOfEvaluatorBeforeEvaluatedAsset).to.equal(balanceOfEvaluatorAfterEvaluatedAsset - evaluationFee);
+            expect(balanceOfContractHardEvaluationBeforeEvaluatedAsset).to.equal(balanceOfContractHardEvaluationAfterEvaluatedAsset + evaluationFee);
+            // expect(appoitmentInfo.status).to.equal(AppointmentStatus.EVALUATED);
+            expect(reciptEvaluateAsset.events[1].args[2].status).to.equal(EvaluationStatus.EVALUATED);
 
             // -> customer reject Evaluation 
             let getEventCustomerRejectEvaluation = await _hardEvaluationContract.connect(_customer).rejectEvaluation(2);
@@ -462,22 +474,9 @@ describe("Setting up test parameters:\n\r", (done) => {
 
             // -> customer create asset request
             await _hubContract.connect(_deployer).setEvaluationConfig(_loanTokenContract.address, _evaluationFee, _mintingFee); // addWhiteListFee -> add address token to pay for evaluation fee , mint nft fee 
-            let getEventCreateAssetRequest = await _hardEvaluationContract.connect(_customer).createAssetRequest(
-                _assetCID, _DFYHard721Contract.address, BigInt(10 * 10 ** 18),
+            await _hardEvaluationContract.connect(_customer).createAssetRequest(
+                _assetCID, _DFYHard721Contract.address, BigInt(10000 * 10 ** 18),
                 _loanTokenContract.address, 0, _beAssetId); // create Asset request 
-            let assetList = await _hardEvaluationContract.assetList(3);
-
-            console.log(`\x1b[31m Event customer created AssetRequest \x1b[0m`);
-            let recipt = await getEventCreateAssetRequest.wait();
-            console.log(`assetId : \x1b[36m ${recipt.events[0].args[0].toString()} \x1b[0m`);
-            console.log("asset", recipt.events[0].args[1])
-            console.log(`beAssetId : \x1b[36m ${recipt.events[0].args[2].toString()} \x1b[0m`);
-
-            expect(assetList.assetCID).to.equal(_assetCID);
-            expect(assetList.owner).to.equal(_customer.address);
-            expect(assetList.collectionAddress).to.equal(_DFYHard721Contract.address);
-            expect(assetList.collectionStandard).to.equal(0);
-            expect(assetList.status).to.equal(AssetStatus.OPEN);
 
             // -> customer create Appointment 
             await _loanTokenContract.setOperator(_deployer.address, true); // loan token transfer for customer and approve
@@ -485,42 +484,24 @@ describe("Setting up test parameters:\n\r", (done) => {
             await _loanTokenContract.connect(_deployer).transfer(_customer.address, BigInt(100 * 10 ** 18));
             await _loanTokenContract.connect(_customer).approve(_hardEvaluationContract.address, BigInt(100 * 10 ** 18));
 
-            let balanceOfCustomerBeforeTnx = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
-            let balanceOfContractHardEvaluationBeforeTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfCustomerBeforeCreateAppointment = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
+            let balanceOfContractHardEvaluationBeforeCreateAppoitment = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Create appointment - before transaction: ");
-            console.log(`Customer balance: ${balanceOfCustomerBeforeTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeTnx.toString()}\n\r`);
+            console.log(`\x1b[36m customer balance : ${balanceOfCustomerBeforeCreateAppointment.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeCreateAppoitment.toString()} \x1b[0m`);
 
-            let getEventCreateAppointment = await _hardEvaluationContract.connect(_customer).createAppointment(3, _evaluator.address, _loanTokenContract.address, appointmentTime);
-            let reciptEventCreateAppointment = await getEventCreateAppointment.wait();
-            console.log(`\x1b[31m Event customer create Appointment \x1b[0m`);
-            console.log(`appointmentId : \x1b[36m ${reciptEventCreateAppointment.events[2].args[0].toString()} \x1b[0m`);
-            console.log("asset", reciptEventCreateAppointment.events[2].args[1]);
-            console.log("appointmentList", reciptEventCreateAppointment.events[2].args[2]);
-            console.log(`"" \x1b[36m ${reciptEventCreateAppointment.events[2].args[3].toString()} \x1b[0m`);
-            console.log(`appointmentTime : \x1b[36m ${reciptEventCreateAppointment.events[2].args[4].toString()} \x1b[0m`);
+            await _hardEvaluationContract.connect(_customer).createAppointment(3, _evaluator.address, _loanTokenContract.address, appointmentTime);
 
-            console.log(`\x1b[31m Event transfer token of customer into this contract \x1b[0m`);
-            console.log(reciptEventCreateAppointment.events[0]);
-
-            let appointmentList = await _hardEvaluationContract.appointmentList(3); // check info after create appointment 
-            expect(appointmentList.assetId).to.equal(3);
-            expect(appointmentList.assetOwner).to.equal(_customer.address);
-            expect(appointmentList.evaluator).to.equal(_evaluator.address);
-            expect(appointmentList.evaluationFee).to.equal(_evaluationFee);
-            expect(appointmentList.evaluationFeeAddress).to.equal(_loanTokenContract.address);
-            expect(reciptEventCreateAppointment.events[2].args[2].status).to.equal(AppointmentStatus.OPEN);
-
-            let balanceOfCustomerAfterTnx = (await _loanTokenContract.balanceOf(_customer.address)) / decimal; // check transfer 
-            let balanceOfContractHardEvaluationAfterTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfCustomerAfterCreateAppoitnment = (await _loanTokenContract.balanceOf(_customer.address)) / decimal; // check transfer 
+            let balanceOfContractHardEvaluationAfterCreateAppointment = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Create appointment - after transaction:");
-            console.log(`Customer balance: ${balanceOfCustomerAfterTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterTnx.toString()}\n\r`);
+            console.log(`\x1b[36m customer balance : ${balanceOfCustomerAfterCreateAppoitnment.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterCreateAppointment.toString()} \x1b[0m`);
 
-            expect(balanceOfCustomerBeforeTnx).to.equal(balanceOfCustomerAfterTnx + evaluationFee);
-            expect(balanceOfContractHardEvaluationBeforeTnx).to.equal(balanceOfContractHardEvaluationAfterTnx - evaluationFee);
+            expect(balanceOfCustomerBeforeCreateAppointment).to.equal(balanceOfCustomerAfterCreateAppoitnment + evaluationFee);
+            expect(balanceOfContractHardEvaluationBeforeCreateAppoitment).to.equal(balanceOfContractHardEvaluationAfterCreateAppointment - evaluationFee);
 
             // -> customer cancel Appointment
             let getEventCancelAppointment = await _hardEvaluationContract.cancelAppointment(3, "unknow");
@@ -531,6 +512,16 @@ describe("Setting up test parameters:\n\r", (done) => {
 
             console.log(`\x1b[31m Event contract refund for customer \x1b[0m`);
             console.log(reciptEventCancelAppointment.events[0]);
+
+            let balanceOfCustomerAfterCancelAppointment = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
+            let balanceOfContractHardEvaluationAfterCancelAppoitment = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+
+            console.log("Cancel appointment - after transaction: ");
+            console.log(`\x1b[36m customer balance : ${balanceOfCustomerAfterCancelAppointment.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterCancelAppoitment.toString()} \x1b[0m`);
+
+            expect(balanceOfCustomerAfterCreateAppoitnment).to.equal(balanceOfCustomerAfterCancelAppointment - evaluationFee);
+            expect(balanceOfContractHardEvaluationAfterCreateAppointment).to.equal(balanceOfContractHardEvaluationAfterCancelAppoitment + evaluationFee);
 
         });
 
@@ -548,31 +539,35 @@ describe("Setting up test parameters:\n\r", (done) => {
             await _loanTokenContract.connect(_deployer).transfer(_customer.address, BigInt(100 * 10 ** 18));
             await _loanTokenContract.connect(_customer).approve(_hardEvaluationContract.address, BigInt(100 * 10 ** 18));
 
-            let balanceOfCustomerBeforeTnx = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
-            let balanceOfContractHardEvaluationBeforeTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfCustomerBeforeCreateAppointment = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
+            let balanceOfContractHardEvaluationBeforeCreateAppoitment = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Create appointment - before transaction: ");
-            console.log(`Customer balance: ${balanceOfCustomerBeforeTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeTnx.toString()}\n\r`);
+            console.log(`\x1b[36m customer balance : ${balanceOfCustomerBeforeCreateAppointment.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeCreateAppoitment.toString()} \x1b[0m`);
 
-            await _hardEvaluationContract.connect(_customer).createAppointment(4, _evaluator.address, _loanTokenContract.address, appointmentTime);;
+            await _hardEvaluationContract.connect(_customer).createAppointment(4, _evaluator.address, _loanTokenContract.address, appointmentTime);
 
-
-            let balanceOfCustomerAfterTnx = (await _loanTokenContract.balanceOf(_customer.address)) / decimal; // check transfer 
-            let balanceOfContractHardEvaluationAfterTnx = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
+            let balanceOfCustomerAfterCreateAppoitnment = (await _loanTokenContract.balanceOf(_customer.address)) / decimal; // check transfer 
+            let balanceOfContractHardEvaluationAfterCreateAppointment = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
             console.log("Create appointment - after transaction:");
-            console.log(`Customer balance: ${balanceOfCustomerAfterTnx.toString()}`);
-            console.log(`HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterTnx.toString()}\n\r`);
+            console.log(`\x1b[36m customer balance : ${balanceOfCustomerAfterCreateAppoitnment.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterCreateAppointment.toString()} \x1b[0m`);
 
-            expect(balanceOfCustomerBeforeTnx).to.equal(balanceOfCustomerAfterTnx + evaluationFee);
-            expect(balanceOfContractHardEvaluationBeforeTnx).to.equal(balanceOfContractHardEvaluationAfterTnx - evaluationFee);
+            expect(balanceOfCustomerBeforeCreateAppointment).to.equal(balanceOfCustomerAfterCreateAppoitnment + evaluationFee);
+            expect(balanceOfContractHardEvaluationBeforeCreateAppoitment).to.equal(balanceOfContractHardEvaluationAfterCreateAppointment - evaluationFee);
 
             // -> Evaluator reject Appoitment
             let getEventRejectAppointment = await _hardEvaluationContract.connect(_evaluator).rejectAppointment(4, "11");
 
             let reciptEventRejectAppointment = await getEventRejectAppointment.wait();
-            console.log(reciptEventRejectAppointment.events);
+
+            console.log(`\x1b[31m Event Contract refund evalation fee for customer \x1b[0m`);
+            console.log(reciptEventRejectAppointment.events[0]);
+
+            console.log(`\x1b[31m Event Evaluator reject Appoitment \x1b[0m`);
+            console.log(reciptEventRejectAppointment.events[1]);
 
             let infoAppointment = await _hardEvaluationContract.appointmentList(4);
             expect(infoAppointment.status).to.equal(AppointmentStatus.REJECTED);
@@ -580,8 +575,12 @@ describe("Setting up test parameters:\n\r", (done) => {
             let balanceOfCustomerAfterRejectAppoitment = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
             let balanceOfContractHardEvaluationAfterRejectAppoitment = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
-            expect(balanceOfCustomerAfterTnx).to.equal(balanceOfCustomerAfterRejectAppoitment - evaluationFee);
-            expect(balanceOfContractHardEvaluationAfterTnx).to.equal(balanceOfContractHardEvaluationAfterRejectAppoitment + evaluationFee);
+            console.log("Reject appointment - after transaction:");
+            console.log(`\x1b[36m customer balance : ${balanceOfCustomerAfterRejectAppoitment.toString()} \x1b[0m`);
+            console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterRejectAppoitment.toString()} \x1b[0m`);
+
+            expect(balanceOfCustomerAfterCreateAppoitnment).to.equal(balanceOfCustomerAfterRejectAppoitment - evaluationFee);
+            expect(balanceOfContractHardEvaluationAfterCreateAppointment).to.equal(balanceOfContractHardEvaluationAfterRejectAppoitment + evaluationFee);
 
         });
     });
