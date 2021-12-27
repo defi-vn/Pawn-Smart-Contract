@@ -31,10 +31,10 @@ abstract contract DFY721Base is
 
     Counters.Counter private _tokenIdCounter;
 
-    address payable public originalCreator;
     uint256 public defaultRoyaltyRate;
     string public collectionCID;
-    mapping(uint256 => uint256) public royaltyRateByToken;
+    address payable private _originalCreator;
+    mapping(uint256 => uint256) private _royaltyRateByToken;
 
     address private _contractHub;
 
@@ -50,7 +50,7 @@ abstract contract DFY721Base is
     ) ERC721(_name, _symbol) {
         _setupRole(DEFAULT_ADMIN_ROLE, _owner);
 
-        originalCreator = _owner;
+        _originalCreator = _owner;
         defaultRoyaltyRate = _royaltyRate;
         collectionCID = _collectionCID;
 
@@ -99,7 +99,7 @@ abstract contract DFY721Base is
 
         _setTokenURI(tokenID, tokenCID);
 
-        royaltyRateByToken[tokenID] = royaltyRate;
+        _royaltyRateByToken[tokenID] = royaltyRate;
 
         _tokenIdCounter.increment();
 
@@ -149,12 +149,12 @@ abstract contract DFY721Base is
         emit CollectionRoyaltyRateChanged(currentRoyaltyRate, newRoyaltyRate);
     }
 
-    function getOriginalCreator() external view override returns (address) {
-        return originalCreator;
+    function originalCreator() external view override returns (address) {
+        return _originalCreator;
     }
 
-    function getRoyaltyRateByToken(uint256 tokenId) external view override returns (uint256) {
-        return royaltyRateByToken[tokenId];
+    function royaltyRateByToken(uint256 tokenId) external view override returns (uint256) {
+        return _royaltyRateByToken[tokenId];
     }
 
     function contractURI() public view returns (string memory) {

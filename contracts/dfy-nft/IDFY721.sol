@@ -33,7 +33,7 @@ interface IDFY721 is IERC721 {
     function setCollectionDefaultRoyaltyRate(uint256 newRoyaltyRate)
         external;
 
-    function getOriginalCreator() external view returns (address);
+    function originalCreator() external view returns (address);
 
-    function getRoyaltyRateByToken(uint256 tokenId) external view returns (uint256);
+    function royaltyRateByToken(uint256 tokenId) external view returns (uint256);
 }
