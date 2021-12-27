@@ -54,7 +54,7 @@ task("balance", "Prints an account's balance")
       chainId: 97,
       gas: 8812388,
       // gasPrice: 20000000000,
-      //accounts: PrivateKey,
+     // accounts: PrivateKey,
       accounts: { mnemonic: mnemonic },
       from: Wallet
     },

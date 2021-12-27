@@ -891,4 +891,18 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
         lender = _contract.terms.lender;
         status = _contract.status;
     }
+
+    /**=========== */
+    function updatePaymentRequest(
+        uint256 contractId,
+        uint256 updateDueDateTimestamp
+    ) external {
+        PaymentRequest[] storage requests = contractPaymentRequestMapping[
+            contractId
+        ];
+
+        PaymentRequest storage previousRequest = requests[requests.length - 1];
+
+        previousRequest.dueDateTimestamp = updateDueDateTimestamp;
+    }
 }

@@ -133,7 +133,7 @@ library CollateralLib_NFT {
         IPawnNFTBase.NFTCollateral storage self,
         address _nftContract,
         uint256 _nftTokenId,
-        uint256 loanAmount,
+        uint256 _expectedlLoanAmount,
         address _loanAsset,
         uint256 _nftTokenQuantity,
         uint256 _expectedDurationQty,
@@ -142,7 +142,7 @@ library CollateralLib_NFT {
         self.owner = msg.sender;
         self.nftContract = _nftContract;
         self.nftTokenId = _nftTokenId;
-        self.loanAmount = loanAmount;
+        self.expectedlLoanAmount = _expectedlLoanAmount;
         self.loanAsset = _loanAsset;
         self.nftTokenQuantity = _nftTokenQuantity;
         self.expectedDurationQty = _expectedDurationQty;

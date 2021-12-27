@@ -11,7 +11,7 @@ interface IPawnNFTBase is BaseInterface {
         address owner;
         address nftContract;
         uint256 nftTokenId;
-        uint256 loanAmount;
+        uint256 expectedlLoanAmount;
         address loanAsset;
         uint256 nftTokenQuantity;
         uint256 expectedDurationQty;
@@ -112,5 +112,12 @@ interface IPawnNFTBase is BaseInterface {
         uint256 paidInterestFeeAmount;
         uint256 prepaidAmount;
         uint256 requestId;
+    }
+
+    struct originalInformationNFT {
+        uint256 nftId;
+        address currency;
+        uint256 price;
+        uint256 depreciationRate;
     }
 }

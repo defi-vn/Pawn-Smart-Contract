@@ -55,7 +55,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
      * @dev create collateral function, collateral will be stored in this contract
      * @param nftContract is address NFT token collection
      * @param nftTokenId is token id of NFT
-     * @param loanAmount is amount collateral
+     * @param expectedlLoanAmount is amount collateral
      * @param loanAsset is address of loan token
      * @param nftTokenQuantity is quantity NFT token
      * @param expectedDurationQty is expected duration
@@ -65,7 +65,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
     function putOnPawn(
         address nftContract,
         uint256 nftTokenId,
-        uint256 loanAmount,
+        uint256 expectedlLoanAmount,
         address loanAsset,
         uint256 nftTokenQuantity,
         uint256 expectedDurationQty,
@@ -96,7 +96,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         //   require(whitelistCollateral[nftContract] == 1, "0");
 
         // Check loan amount
-        require(loanAmount > 0 && expectedDurationQty > 0, "1");
+        require(expectedlLoanAmount > 0 && expectedDurationQty > 0, "1");
 
         // Check loan asset
         require(loanAsset != address(0), "2");
@@ -132,7 +132,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         _collateral.create(
             nftContract,
             nftTokenId,
-            loanAmount,
+            expectedlLoanAmount,
             loanAsset,
             nftTokenQuantity,
             expectedDurationQty,

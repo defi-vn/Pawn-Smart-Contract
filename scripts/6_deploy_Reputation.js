@@ -4,7 +4,7 @@ const RepuBuildName = "contracts/pawn/reputation/Reputation.sol:Reputation";
 const proxyType = { kind: "uups" };
 const decimals  = 10**18;
 
-const proxies = Proxies.Dev2;
+const proxies = Proxies.Staging;
 
 const HubProxyAddr = proxies.HUB_CONTRACT_ADDRESS;
 const HubBuildName = "Hub";
