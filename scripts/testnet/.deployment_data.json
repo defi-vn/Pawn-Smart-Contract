@@ -15,19 +15,32 @@
         "SystemFee": 2000000,
         "ZOOM": 100000
     },
-    "DefaultSettings": {
-        "Name": "DefiForYou_Soft_NFT",
-        "Symbol": "DFY-NFT",
-        "Owner": "0x832dbe8bCB706F6ab0aC1C3d4C13c739FA7B8f6F",
-        "Royalty": 0,
-        "CollectionCID": "QmTgmpjvyvenyYw8MkCQYobaWn1qjaKmmec5EDKnPu6ZLx",
-        "MarketFee": "",
-        "ZOOM": 100000
-    },
     "HubSettings": {
-        "Operator": "0xA120581F875A201E8f779280332a19C0f7974dDd",
+        "ADMIN_ROLE": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "OPERATOR_ROLE": "0x97667070c54ef182b0f5858b034beac1b6f3089aa2d3188bb1e8929f4fa9b929",
+        "PAUSER_ROLE": "0x65d7a28e3265b37a6474929f336521b332c1681b933f6cb9f3376673440d862a",
+        "REGISTRANT_ROLE": "0x12090aa55130d5a2442eb84fc286ca6e600db6c50b6c5d9b6d0d929f0e2d8ce8",
+        "INTERNAL_CONTRACT": "0x47e9c2c2d9af7236a890299c55d32cf31abf990b4a1de82ef25f24524e361eb3",
+        "SystemAdmin": "0x7F093C1C75e1638c356543A7d5aCB6F516Cc1c9e",
+        "SystemOperator": "0xA120581F875A201E8f779280332a19C0f7974dDd",
+        "EvaluationOperator": "0x317323F1e0b554fBdfD103a34da91e9f22f61bB0",
+        "Operators": [
+            "0x9F07F7D474f2FC46Bf9D1Ab479Ffa575B7D6DDFE",
+            "0xD08b70DbA72514Cba07852BF043551a5980f52E5",
+            "0x6F3d0ca39ebdFf3d80d4E0A4c4B19330d0d05220",
+            "0x317323F1e0b554fBdfD103a34da91e9f22f61bB0",
+            "0xb11307129842E4222b227bF0C78B03FF990fd17f",
+            "0x90758fD0f72184ffb8e5Eb376470901A59abAac7"
+        ],
         "SystemFeeWallet": "0x900929DAa60945aa234F72239a3F75C6E6CAFDB3",
         "SystemFeeToken": "0x20f1de452e9057fe863b99d33cf82dbee0c45b14"
+    },
+    "DefaultNFTCollectionSettings": {
+        "Name": "Uncategorized DeFiForYou Collection",
+        "Symbol": "DFY-NFT",
+        "Owner": "0xA120581F875A201E8f779280332a19C0f7974dDd",
+        "Royalty": 0,
+        "CollectionCID": "QmUjYLVV7zJrYMAmb7YJ4q35LSXeb7k9Q4oR34ChxPi8KW"
     },
     "PawnSettings": {
         "ZOOM": 100000,
@@ -53,15 +66,11 @@
         "MarketFeeWallet": "0x900929DAa60945aa234F72239a3F75C6E6CAFDB3"
     },
     "Proxies": {
-        "Dev1": {
-            "PAWN_NFT_CONTRACT_ADDRESS":    "0x5a8F734169901730c4C19A5Dc5022983A10D3d84",
-            "EVALUATION_CONTRACT_ADDRESS":  "",
-            "NFT_CONTRACT_ADDRESS":         "",
-            "REPUTATION_CONTRACT_ADDRESS":  "0x14f0714b8CcA57895F29911B5751acbBA2b0b1F9",
-            "LOAN_NFT_CONTRACT_ADDRESS":    "0x4638e02E0d7a545e3b3Fde1404ae5Dd8090025Da",
-            "EXCHANGE_CONTRACT_ADDRESS":    "0x0f1Bf7F0A0A0Ab443fA7a4a5D89d8f2fB3772b8E",
-            "HUB_CONTRACT_ADDRESS": "0xB6492c01482a9941DFaff06C8F9FF22a40d95F2B",
-            "EVALUATION_ADDRESS" : "0x6e6F3430db00b7529b05C3F07105584F0B4b4ee5"
+        "BCTest": {
+            "HUB_ADDRESS":              "0x2B76779a1cEC1ad7bBE5a0100fDc046D25a1502A",
+            "NFT_FACTORY_ADDRESS":      "",
+            "NFT_SALES_ADDRESS":        "0x95A27935bc95a1551FF81D48f54dde24AEcb9bFa",
+            "NFT_AUCTION_ADDRESS":      "0xAfaBAd94f5E2Ef34B66133fc91243099ACE0162e"
         },
         "Dev2": {
             "PAWN_CONTRACT_ADDRESS":            "0x2F9c6854637EdA498d329923F56a77FFee3772B7",
@@ -109,14 +118,6 @@
         }
     },
     "Implementations": {
-        "Test1": {
-            "PAWN_CONTRACT_ADDRESS":        "0x50b9ae41d8315E46B5030f6E4CC6832E18e22fc0",
-            "EVALUATION_CONTRACT_ADDRESS":  "0x38b4eACeBAB24adD3Ba1202e9B1EE4E28307e13A",
-            "NFT_CONTRACT_ADDRESS":         "0xd362cB0f8E20F387310d739e6Dd4592aD64C2960",
-            "REPUTATION_CONTRACT_ADDRESS":  "0x26421289D13B92794a2DD985E0643f768Ce51fFA",
-            "PAWN_NFT_CONTRACT_ADDRESS":    "0x9154D0Beb863C1654bc01c983dc93b98F60FBD1c",
-            "EXCHANGE_CONTRACT_ADDRESS":    "0xd773FD44d550e9050FAd0D87cf5fF6264bBCf010"
-        },
         "Dev2": {
             "PAWN_CONTRACT_ADDRESS":            "0x8FC3467864A7130F1c2DD3a6fE54108571083933",
             "EVALUATION_CONTRACT_ADDRESS":      "0x38b4eACeBAB24adD3Ba1202e9B1EE4E28307e13A",
