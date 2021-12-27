@@ -24,7 +24,6 @@
     "@openzeppelin/contracts": "^4.3.2",
     "@openzeppelin/contracts-upgradeable": "^4.3.1",
     "@openzeppelin/hardhat-upgrades": "^1.10.0",
-    "dotenv": "^8.2.0",
     "web3": "^1.5.3",
     "yargs": "^13.3.2"
   },
@@ -35,6 +34,7 @@
     "@nomiclabs/hardhat-web3": "^2.0.0",
     "@openzeppelin/test-helpers": "^0.5.15",
     "chai": "^4.3.4",
+    "dotenv": "^10.0.0",
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.4.7",
     "hardhat": "^2.7.0",
