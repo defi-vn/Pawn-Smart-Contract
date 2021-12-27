@@ -11,6 +11,12 @@ enum DurationType {
     DAY
 }
 
+enum CollectionStandard {
+    UNDEFINED,
+    ERC721,
+    ERC1155
+}
+
 library CommonLib {
     using SafeERC20Upgradeable for IERC20Upgradeable;
     using SafeMathUpgradeable for uint256;
