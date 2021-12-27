@@ -18,6 +18,7 @@ enum CollectionStandard {
     UNDEFINED,
     ERC721,
     ERC1155
+    // TODO: Add enums for imported collections
 }
 
 library CommonLib {
