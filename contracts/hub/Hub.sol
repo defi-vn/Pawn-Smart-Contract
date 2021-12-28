@@ -36,7 +36,9 @@ contract Hub is
     // TODO: New state variables must go below this line -----------------------------
 
     // CountersUpgradeable.Counter public numberOfContract;
-    mapping(address => EvaluationConfig) public evaluationConfig;
+    mapping(address => EvaluationConfig) public evaluationConfig; // Unused
+
+    EvaluationFeeConfig public evaluationFeeConfig;
 
     /** ==================== Contract initializing & configuration ==================== */
     function initialize(
@@ -406,14 +408,20 @@ contract Hub is
     /* ==================== config Evaluation ==================== */
 
     function setEvaluationConfig(
+        address feeWallet,
         address newFeeTokenAddress,
         uint256 newEvaluationFee,
         uint256 newMintingFee
     ) external onlyRole(HubRoles.DEFAULT_ADMIN_ROLE) {
-        if (newFeeTokenAddress != address(0)) {
-            require(newFeeTokenAddress.isContract(), "5"); // Address minting fee is contract
+        if (feeWallet != address(0) && !feeWallet.isContract()) {
+            evaluationFeeConfig.feeWallet = feeWallet;
         }
-        evaluationConfig[newFeeTokenAddress] = EvaluationConfig(
+
+        if (newFeeTokenAddress != address(0)) {
+            require(newFeeTokenAddress.isContract(), "Must be a token address");
+        }
+
+        evaluationFeeConfig.feeConfig[newFeeTokenAddress] = EvaluationConfig(
             newEvaluationFee,
             newMintingFee
         );

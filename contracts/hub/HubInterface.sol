@@ -48,6 +48,11 @@ interface HubInterface {
         uint256 mintingFee;
     }
 
+    struct EvaluationFeeConfig {
+        address feeWallet;
+        mapping(address => EvaluationConfig) feeConfig;
+    }
+
     /** Functions */
     /** ROLES */
     function AdminRole() external pure returns (bytes32);

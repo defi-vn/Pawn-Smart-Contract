@@ -8,7 +8,7 @@ import "../../../hub/HubLib.sol";
 import "../../../hub/HubInterface.sol";
 import "../../../base/BaseContract.sol";
 import "../interface/IDFY_Hard_Evaluation.sol";
-import "../interface/IDFY_Hard_721.sol";
+import "../interface/IDFYHard721.sol";
 import "../interface/IDFY_Hard_1155.sol";
 
 contract HardEvaluation is IDFYHardEvaluation, BaseContract {
@@ -638,6 +638,10 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             "2"
         ); // Invalid asset
 
+        _asset.status = AssetStatus.NFT_CREATED;
+
+        _evaluation.status = EvaluationStatus.NFT_CREATED;
+
         uint256 tokenId;
 
         if (_asset.collectionStandard == CollectionStandard.NFT_HARD_721) {
@@ -664,10 +668,6 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             feeWallet,
             _evaluation.mintingFee
         );
-
-        _asset.status = AssetStatus.NFT_CREATED;
-
-        _evaluation.status = EvaluationStatus.NFT_CREATED;
 
         evaluationWithTokenId[_evaluation.collectionAddress][
             tokenId
