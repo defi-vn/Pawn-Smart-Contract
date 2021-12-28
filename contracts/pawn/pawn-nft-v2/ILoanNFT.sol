@@ -6,21 +6,17 @@ import "../pawn-base/IPawnNFTBase.sol";
 
 interface ILoanNFT is IPawnNFTBase {
     /** Events */
-    event CollateralEvent_NFT(
+    event CollateralEvent(
         uint256 nftCollateralId,
         NFTCollateral data,
         string beNFTId
     );
 
     //create offer & cancel
-    event OfferEvent_NFT(
-        uint256 offerId,
-        uint256 nftCollateralId,
-        NFTOffer data
-    );
+    event OfferEvent(uint256 offerId, uint256 nftCollateralId, NFTOffer data);
 
     //accept offer
-    event LoanContractCreatedEvent_NFT(
+    event LoanContractCreatedEvent(
         uint256 exchangeRate,
         address fromAddress,
         uint256 contractId,
@@ -28,20 +24,20 @@ interface ILoanNFT is IPawnNFTBase {
     );
 
     //repayment
-    event PaymentRequestEvent_NFT(
+    event PaymentRequestEvent(
         int256 paymentRequestId,
         uint256 contractId,
         NFTPaymentRequest data
     );
 
-    event RepaymentEvent_NFT(NFTRepaymentEventData repaymentData);
+    event RepaymentEvent(NFTRepaymentEventData repaymentData);
 
     //liquidity & defaul
-    event ContractLiquidedEvent_NFT(NFTContractLiquidationData liquidation);
+    event ContractLiquidedEvent(NFTContractLiquidationData liquidation);
 
-    event LoanContractCompletedEvent_NFT(uint256 contractId);
+    event LoanContractCompletedEvent(uint256 contractId);
 
-    event CancelOfferEvent_NFT(
+    event CancelOfferEvent(
         uint256 offerId,
         uint256 nftCollateralId,
         address offerOwner

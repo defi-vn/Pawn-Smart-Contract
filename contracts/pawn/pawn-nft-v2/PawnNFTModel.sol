@@ -15,6 +15,7 @@ import "../../hub/HubInterface.sol";
 import "../reputation/IReputation.sol";
 import "../exchange/IExchange.sol";
 import "../nft_evaluation/interface/IDFY_Hard_Evaluation.sol";
+import "../../libs/CommonLib.sol";
 
 abstract contract PawnNFTModel is
     ERC1155HolderUpgradeable,

@@ -32,6 +32,9 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
     mapping(uint256 => IPawnNFTBase.NFTCollateralOfferList)
         public collateralOffersMapping;
 
+    mapping(address => mapping(uint256 => IPawnNFTBase.NFTOriginalInformation))
+        public informationNFTs;
+
     /** ==================== Standard interface function implementations ==================== */
 
     function supportsInterface(bytes4 interfaceId)
@@ -104,15 +107,21 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         // Create Collateral Id
         uint256 collateralId = numberCollaterals.current();
 
-        (
-            ,
-            ,
-            ,
-            IDFYHardEvaluation.CollectionStandard _collectionStandard
-        ) = IDFYHardEvaluation(getEvaluation()).getEvaluationWithTokenId(
-                nftContract,
-                nftTokenId
-            );
+        // (
+        //     ,
+        //     ,
+        //     ,
+        //     IDFYHardEvaluation.CollectionStandard _collectionStandard
+        // ) = IDFYHardEvaluation(getEvaluation()).getEvaluationWithTokenId(
+        //         nftContract,
+        //         nftTokenId
+        //     );
+        CollectionStandard _collectionStandard = CommonLib.verifyTokenInfo(
+            nftContract,
+            nftTokenId,
+            nftTokenQuantity,
+            msg.sender
+        );
 
         // Transfer token
         PawnNFTLib.safeTranferNFTToken(
@@ -123,6 +132,33 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
             nftTokenQuantity,
             _collectionStandard
         );
+
+        (
+            address _currency,
+            uint256 _price,
+            uint256 _depreciationRate,
+
+        ) = IDFYHardEvaluation(getEvaluation()).getEvaluationWithTokenId(
+                nftContract,
+                nftTokenId
+            );
+        if (_currency == address(0) && _price == 0) {
+            informationNFTs[nftContract][nftTokenId] = IPawnNFTBase
+                .NFTOriginalInformation(
+                    nftTokenId,
+                    loanAsset,
+                    expectedlLoanAmount,
+                    0
+                );
+        } else {
+            informationNFTs[nftContract][nftTokenId] = IPawnNFTBase
+                .NFTOriginalInformation(
+                    nftTokenId,
+                    _currency,
+                    _price,
+                    _depreciationRate
+                );
+        }
 
         // Create collateral
         IPawnNFTBase.NFTCollateral storage _collateral = collaterals[
@@ -142,11 +178,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         // Update number colaterals
         numberCollaterals.increment();
 
-        emit CollateralEvent_NFT(
-            collateralId,
-            collaterals[collateralId],
-            beNFTId
-        );
+        emit CollateralEvent(collateralId, collaterals[collateralId], beNFTId);
 
         // Adjust reputation score
         IReputation(getReputation()).adjustReputationScore(
@@ -172,15 +204,21 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
             "0"
         );
 
-        (
-            ,
-            ,
-            ,
-            IDFYHardEvaluation.CollectionStandard _collectionStandard
-        ) = IDFYHardEvaluation(getEvaluation()).getEvaluationWithTokenId(
-                _collateral.nftContract,
-                _collateral.nftTokenId
-            );
+        // (
+        //     ,
+        //     ,
+        //     ,
+        //     IDFYHardEvaluation.CollectionStandard _collectionStandard
+        // ) = IDFYHardEvaluation(getEvaluation()).getEvaluationWithTokenId(
+        //         _collateral.nftContract,
+        //         _collateral.nftTokenId
+        //     );
+        CollectionStandard _collectionStandard = CommonLib.verifyTokenInfo(
+            _collateral.nftContract,
+            _collateral.nftTokenId,
+            _collateral.nftTokenQuantity,
+            _collateral.owner
+        );
 
         // Return NFT token to owner
         PawnNFTLib.safeTranferNFTToken(
@@ -206,11 +244,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
                 uint256 offerId = collateralOfferList.offerIdList[i];
                 IPawnNFTBase.NFTOffer storage offer = collateralOfferList
                     .offerMapping[offerId];
-                emit CancelOfferEvent_NFT(
-                    offerId,
-                    nftCollateralId,
-                    offer.owner
-                );
+                emit CancelOfferEvent(offerId, nftCollateralId, offer.owner);
             }
             delete collateralOffersMapping[nftCollateralId];
         }
@@ -218,7 +252,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         // Update collateral status
         _collateral.status = IEnums.CollateralStatus.CANCEL;
 
-        emit CollateralEvent_NFT(nftCollateralId, _collateral, "");
+        emit CollateralEvent(nftCollateralId, _collateral, "");
 
         delete collaterals[nftCollateralId];
 
@@ -319,7 +353,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         // Update number offer
         numberOffers.increment();
 
-        emit OfferEvent_NFT(
+        emit OfferEvent(
             offerId,
             nftCollateralId,
             _collateralOfferList.offerMapping[offerId]
@@ -359,12 +393,12 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
 
         //reject Offer
         if (_msgSender() == collaterals[nftCollateralId].owner) {
-            emit CancelOfferEvent_NFT(offerId, nftCollateralId, offerOwner);
+            emit CancelOfferEvent(offerId, nftCollateralId, offerOwner);
         }
 
         // cancel offer
         if (_msgSender() == offerOwner) {
-            emit CancelOfferEvent_NFT(offerId, nftCollateralId, _msgSender());
+            emit CancelOfferEvent(offerId, nftCollateralId, _msgSender());
 
             // Adjust reputation score
             IReputation(getReputation()).adjustReputationScore(
@@ -430,7 +464,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
             uint256 thisOfferId = collateralOfferList.offerIdList[i];
             if (thisOfferId != offerId) {
                 //Offer storage thisOffer = collateralOfferList.offerMapping[thisOfferId];
-                emit CancelOfferEvent_NFT(
+                emit CancelOfferEvent(
                     thisOfferId,
                     nftCollateralId,
                     offer.owner
@@ -449,15 +483,21 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
             offer.loanAmount
         );
 
-        (
-            ,
-            ,
-            ,
-            IDFYHardEvaluation.CollectionStandard _collectionStandard
-        ) = IDFYHardEvaluation(getEvaluation()).getEvaluationWithTokenId(
-                collateral.nftContract,
-                collateral.nftTokenId
-            );
+        // (
+        //     ,
+        //     ,
+        //     ,
+        //     IDFYHardEvaluation.CollectionStandard _collectionStandard
+        // ) = IDFYHardEvaluation(getEvaluation()).getEvaluationWithTokenId(
+        //         collateral.nftContract,
+        //         collateral.nftTokenId
+        //     );
+        CollectionStandard _collectionStandard = CommonLib.verifyTokenInfo(
+            collateral.nftContract,
+            collateral.nftTokenId,
+            collateral.nftTokenQuantity,
+            collateral.owner
+        );
         PawnNFTLib.safeTranferNFTToken(
             collateral.nftContract,
             address(this),
@@ -525,5 +565,20 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         (loanContractAddress, ) = HubInterface(contractHub).getContractAddress(
             type(ILoanNFT).interfaceId
         );
+    }
+
+    function getInformationNFT(address collectionAddress, uint256 nftId)
+        external
+        override
+        returns (
+            address currency,
+            uint256 price,
+            uint256 depreciationRate
+        )
+    {
+        currency = informationNFTs[collectionAddress][nftId].currency;
+        price = informationNFTs[collectionAddress][nftId].price;
+        depreciationRate = informationNFTs[collectionAddress][nftId]
+            .depreciationRate;
     }
 }

@@ -6,33 +6,33 @@ import "../pawn-base/IPawnNFTBase.sol";
 
 interface IPawnNFT is IPawnNFTBase {
     /** Events */
-    event CollateralEvent_NFT(
+    event CollateralEvent(
         uint256 nftCollateralId,
         IPawnNFTBase.NFTCollateral data,
         string beNFTId
     );
 
     //create offer & cancel
-    event OfferEvent_NFT(
+    event OfferEvent(
         uint256 offerId,
         uint256 nftCollateralId,
         IPawnNFTBase.NFTOffer data
     );
 
     //accept offer
-    event LoanContractCreatedEvent_NFT(
+    event LoanContractCreatedEvent(
         address fromAddress,
         uint256 contractId,
         IPawnNFTBase.NFTLoanContract data
     );
 
     //repayment
-    event PaymentRequestEvent_NFT(
+    event PaymentRequestEvent(
         uint256 contractId,
         IPawnNFTBase.NFTPaymentRequest data
     );
 
-    event RepaymentEvent_NFT(
+    event RepaymentEvent(
         uint256 contractId,
         uint256 paidPenaltyAmount,
         uint256 paidInterestAmount,
@@ -43,16 +43,16 @@ interface IPawnNFT is IPawnNFTBase {
     );
 
     //liquidity & defaul
-    event ContractLiquidedEvent_NFT(
+    event ContractLiquidedEvent(
         uint256 contractId,
         uint256 liquidedAmount,
         uint256 feeAmount,
         IEnums.ContractLiquidedReasonType reasonType
     );
 
-    event LoanContractCompletedEvent_NFT(uint256 contractId);
+    event LoanContractCompletedEvent(uint256 contractId);
 
-    event CancelOfferEvent_NFT(
+    event CancelOfferEvent(
         uint256 offerId,
         uint256 nftCollateralId,
         address offerOwner
@@ -63,4 +63,12 @@ interface IPawnNFT is IPawnNFTBase {
         uint256 collateralId,
         IEnums.CollateralStatus status
     ) external;
+
+    function getInformationNFT(address collectionAddress, uint256 nftId)
+        external
+        returns (
+            address currency,
+            uint256 price,
+            uint256 depreciationRate
+        );
 }

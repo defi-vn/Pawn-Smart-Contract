@@ -114,7 +114,7 @@ interface IPawnNFTBase is BaseInterface {
         uint256 requestId;
     }
 
-    struct originalInformationNFT {
+    struct NFTOriginalInformation {
         uint256 nftId;
         address currency;
         uint256 price;

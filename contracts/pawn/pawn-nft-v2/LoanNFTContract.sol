@@ -14,7 +14,7 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
     using SafeMathUpgradeable for uint256;
 
     // Mapping collateralId => Collateral
-    mapping(uint256 => IPawnNFTBase.NFTCollateral) public collaterals;
+    //  mapping(uint256 => IPawnNFTBase.NFTCollateral) public collaterals;
 
     // Mapping collateralId => list offer of collateral
     mapping(uint256 => IPawnNFTBase.NFTCollateralOfferList)
@@ -106,7 +106,7 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
         newContract.terms.prepaidFeeRate = prepaidFeeRate;
         ++numberContracts;
 
-        emit LoanContractCreatedEvent_NFT(
+        emit LoanContractCreatedEvent(
             contractData.exchangeRate,
             msg.sender,
             _idx,
@@ -225,11 +225,7 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
                     currentContract.lateCount
                 ) {
                     // Execute liquid
-                    emit PaymentRequestEvent_NFT(
-                        -1,
-                        contractId,
-                        previousRequest
-                    );
+                    emit PaymentRequestEvent(-1, contractId, previousRequest);
 
                     _liquidationExecution(
                         contractId,
@@ -270,7 +266,7 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
                 }
             }
 
-            emit PaymentRequestEvent_NFT(-1, contractId, previousRequest);
+            emit PaymentRequestEvent(-1, contractId, previousRequest);
         } else {
             // Validate: remaining loan must valid
             // require(currentContract.terms.loanAmount == _remainingLoan, "4");
@@ -333,7 +329,7 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
                 chargePrepaidFee: _chargePrepaidFee
             });
         requests.push(newRequest);
-        emit PaymentRequestEvent_NFT(paymentRequestId, contractId, newRequest);
+        emit PaymentRequestEvent(paymentRequestId, contractId, newRequest);
     }
 
     /**
@@ -380,9 +376,9 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
                 .DEFAULT;
         }
 
-        IPawnNFTBase.NFTCollateral storage _collateral = collaterals[
-            loanContract.nftCollateralId
-        ];
+        // IPawnNFTBase.NFTCollateral storage _collateral = collaterals[
+        //     loanContract.nftCollateralId
+        // ];
 
         IPawnNFT(getPawnNFTContract()).updateCollateralStatus(
             loanContract.nftCollateralId,
@@ -392,10 +388,16 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
         IPawnNFTBase.NFTContractLiquidationData memory liquidationData;
 
         {
-            (address token, , , ) = IDFYHardEvaluation(getEvaluation())
-                .getEvaluationWithTokenId(
-                    _collateral.nftContract,
-                    _collateral.nftTokenId
+            // (address token, , , ) = IDFYHardEvaluation(getEvaluation())
+            //     .getEvaluationWithTokenId(
+            //         _collateral.nftContract,
+            //         _collateral.nftTokenId
+            //     );
+
+            (address token, uint256 price, ) = IPawnNFT(getPawnNFTContract())
+                .getInformationNFT(
+                    loanContract.terms.nftCollateralAsset,
+                    loanContract.terms.nftTokenId
                 );
 
             (
@@ -419,17 +421,23 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
             );
         }
 
-        emit ContractLiquidedEvent_NFT(liquidationData);
+        emit ContractLiquidedEvent(liquidationData);
         // Transfer to lender collateral
-        (
-            ,
-            ,
-            ,
-            IDFYHardEvaluation.CollectionStandard _collectionStandard
-        ) = IDFYHardEvaluation(getEvaluation()).getEvaluationWithTokenId(
-                _collateral.nftContract,
-                _collateral.nftTokenId
-            );
+        // (
+        //     ,
+        //     ,
+        //     ,
+        //     IDFYHardEvaluation.CollectionStandard _collectionStandard
+        // ) = IDFYHardEvaluation(getEvaluation()).getEvaluationWithTokenId(
+        //         _collateral.nftContract,
+        //         _collateral.nftTokenId
+        //     );
+        CollectionStandard _collectionStandard = CommonLib.verifyTokenInfo(
+            loanContract.terms.nftCollateralAsset,
+            loanContract.terms.nftTokenId,
+            loanContract.terms.nftCollateralAmount,
+            loanContract.terms.borrower
+        );
         PawnNFTLib.safeTranferNFTToken(
             loanContract.terms.nftCollateralAsset,
             address(this),
@@ -474,9 +482,9 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
             ];
         _lastPaymentRequest.status = IEnums.PaymentRequestStatusEnum.COMPLETE;
 
-        IPawnNFTBase.NFTCollateral storage _collateral = collaterals[
-            loanContract.nftCollateralId
-        ];
+        // IPawnNFTBase.NFTCollateral storage _collateral = collaterals[
+        //     loanContract.nftCollateralId
+        // ];
 
         IPawnNFT(getPawnNFTContract()).updateCollateralStatus(
             loanContract.nftCollateralId,
@@ -484,19 +492,25 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
         );
 
         // Emit Event ContractLiquidedEvent
-        emit LoanContractCompletedEvent_NFT(contractId);
-        emit PaymentRequestEvent_NFT(-1, contractId, _lastPaymentRequest);
+        emit LoanContractCompletedEvent(contractId);
+        emit PaymentRequestEvent(-1, contractId, _lastPaymentRequest);
 
         // Execute: Transfer collateral to borrower
-        (
-            ,
-            ,
-            ,
-            IDFYHardEvaluation.CollectionStandard _collectionStandard
-        ) = IDFYHardEvaluation(getEvaluation()).getEvaluationWithTokenId(
-                _collateral.nftContract,
-                _collateral.nftTokenId
-            );
+        // (
+        //     ,
+        //     ,
+        //     ,
+        //     IDFYHardEvaluation.CollectionStandard _collectionStandard
+        // ) = IDFYHardEvaluation(getEvaluation()).getEvaluationWithTokenId(
+        //         _collateral.nftContract,
+        //         _collateral.nftTokenId
+        //     );
+        CollectionStandard _collectionStandard = CommonLib.verifyTokenInfo(
+            loanContract.terms.nftCollateralAsset,
+            loanContract.terms.nftTokenId,
+            loanContract.terms.nftCollateralAmount,
+            loanContract.terms.borrower
+        );
         PawnNFTLib.safeTranferNFTToken(
             loanContract.terms.nftCollateralAsset,
             address(this),
@@ -607,7 +621,7 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
                 _prepaidFee,
                 _paymentRequest.requestId
             );
-        emit RepaymentEvent_NFT(repaymentData);
+        emit RepaymentEvent(repaymentData);
 
         // If remaining loan = 0 => paidoff => execute release collateral
         if (
@@ -664,15 +678,21 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
         IPawnNFTBase.NFTLoanContract storage loanContract = contractMustActive(
             contractId
         );
-        IPawnNFTBase.NFTCollateral storage _collateral = collaterals[
-            loanContract.nftCollateralId
-        ];
+        // IPawnNFTBase.NFTCollateral storage _collateral = collaterals[
+        //     loanContract.nftCollateralId
+        // ];
 
         // get Evaluation from address of EvaluationContract
-        (address token, uint256 price, , ) = IDFYHardEvaluation(getEvaluation())
-            .getEvaluationWithTokenId(
-                _collateral.nftContract,
-                _collateral.nftTokenId
+        // (address token, uint256 price, , ) = IDFYHardEvaluation(getEvaluation())
+        //     .getEvaluationWithTokenId(
+        //         _collateral.nftContract,
+        //         _collateral.nftTokenId
+        //     );
+
+        (address token, uint256 price, ) = IPawnNFT(getPawnNFTContract())
+            .getInformationNFT(
+                loanContract.terms.nftCollateralAsset,
+                loanContract.terms.nftTokenId
             );
 
         (

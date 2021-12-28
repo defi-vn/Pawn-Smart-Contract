@@ -7,6 +7,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol"
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol";
 import "../nft_evaluation/interface/IDFY_Hard_Evaluation.sol";
 import "../pawn-base/IPawnNFTBase.sol";
+import "../../libs/CommonLib.sol";
 
 library PawnNFTLib {
     using SafeERC20Upgradeable for IERC20Upgradeable;
@@ -17,7 +18,7 @@ library PawnNFTLib {
         address _to,
         uint256 _id,
         uint256 _amount,
-        IDFYHardEvaluation.CollectionStandard collectionStandard
+        CollectionStandard collectionStandard
     ) internal {
         // check address token
         require(
@@ -34,10 +35,7 @@ library PawnNFTLib {
         // check address from
         require(_to != address(0), "Address to must be different address(0).");
 
-        if (
-            collectionStandard ==
-            IDFYHardEvaluation.CollectionStandard.NFT_HARD_721
-        ) {
+        if (collectionStandard == CollectionStandard.ERC721) {
             // Check balance of from,
             require(
                 IERC721Upgradeable(_nftToken).balanceOf(_from) >= _amount,
