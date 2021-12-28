@@ -5,10 +5,10 @@ import "../../../hub/HubLib.sol";
 import "../../../hub/HubInterface.sol";
 import "../../../base/BaseContract.sol";
 import "../interface/IDFY_721_Hard_Factory.sol";
-import "../implement/DFY_Hard_721.sol";
+import "../implement/DFYHard721.sol";
+import "../interface/IDFY_Hard_Evaluation.sol";
 
 contract DFYHard721Factory is IDFYHard721Factory, BaseContract {
-    
     // Mapping collection 721 of owner
     mapping(address => DFYHard721[]) public collections721ByOwner;
 
@@ -37,9 +37,18 @@ contract DFYHard721Factory is IDFYHard721Factory, BaseContract {
         string memory name,
         string memory symbol,
         string memory collectionCID,
-        uint256 royaltyRate,
-        address evaluationAddress
-    ) external override returns (address) {
+        uint256 royaltyRate
+    )
+        external
+        override
+        returns (
+            // address evaluationAddress
+            address
+        )
+    {
+        (address _evaluation, ) = HubInterface(contractHub).getContractAddress(
+            (type(IDFYHardEvaluation).interfaceId)
+        );
         require(
             bytes(name).length > 0 &&
                 bytes(symbol).length > 0 &&
@@ -49,16 +58,19 @@ contract DFYHard721Factory is IDFYHard721Factory, BaseContract {
         DFYHard721 _newCollection = new DFYHard721(
             name,
             symbol,
+            payable(msg.sender),
             collectionCID,
-            royaltyRate,
-            evaluationAddress,
-            payable(msg.sender)
+            contractHub,
+            _evaluation
         );
 
         collections721ByOwner[msg.sender].push(_newCollection);
 
         // add new collection to whitelisted collateral
-        HubInterface(contractHub).setWhitelistCollateral_NFT(address(_newCollection), 1);
+        HubInterface(contractHub).setWhitelistCollateral_NFT(
+            address(_newCollection),
+            1
+        );
 
         emit CollectionEvent(
             address(_newCollection),

@@ -414,7 +414,10 @@ contract Hub is
         uint256 newMintingFee
     ) external onlyRole(HubRoles.DEFAULT_ADMIN_ROLE) {
         if (feeWallet != address(0)) {
-            require(!feeWallet.isContract(), "Fee wallet must not be a contract");
+            require(
+                !feeWallet.isContract(),
+                "Fee wallet must not be a contract"
+            );
             evaluationFeeConfig.feeWallet = feeWallet;
         }
 
@@ -432,10 +435,16 @@ contract Hub is
         external
         view
         override
-        returns (address feeWallet, uint256 evaluationFee, uint256 mintingFee)
+        returns (
+            address feeWallet,
+            uint256 evaluationFee,
+            uint256 mintingFee
+        )
     {
         feeWallet = evaluationFeeConfig.feeWallet;
-        evaluationFee = evaluationFeeConfig.feeConfig[feeTokenAddress].evaluationFee;
+        evaluationFee = evaluationFeeConfig
+            .feeConfig[feeTokenAddress]
+            .evaluationFee;
         mintingFee = evaluationFeeConfig.feeConfig[feeTokenAddress].mintingFee;
     }
 }

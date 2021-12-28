@@ -243,7 +243,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
         // Gennerate total appointment
         uint256 _appointmentId = _totalAppointment.current();
-        (uint256 _evaluationFee, ) = HubInterface(contractHub)
+        (, uint256 _evaluationFee, ) = HubInterface(contractHub)
             .getEvaluationConfig(evaluationFeeAddress);
 
         // Add appointment to list appointment
@@ -478,9 +478,8 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
         // Gennerate evaluation id
         uint256 evaluationId = _totalEvaluation.current();
-        (, uint256 _mintingFee) = HubInterface(contractHub).getEvaluationConfig(
-            mintingFeeAddress
-        );
+        (, , uint256 _mintingFee) = HubInterface(contractHub)
+            .getEvaluationConfig(mintingFeeAddress);
 
         evaluationList[evaluationId] = Evaluation({
             assetId: _appointment.assetId,
@@ -645,20 +644,20 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         uint256 tokenId;
 
         if (_asset.collectionStandard == CollectionStandard.NFT_HARD_721) {
-            tokenId = IDFYHard721(_asset.collectionAddress).mint(
+            tokenId = IDFYHard721(_asset.collectionAddress).safeMint(
                 _asset.owner,
-                nftCID,
-                _evaluation.depreciationRate
-            );
-        } else {
-            tokenId = IDFYHard1155(_asset.collectionAddress).mint(
-                _asset.owner,
-                amount,
-                nftCID,
-                "",
-                _evaluation.depreciationRate
+                nftCID
             );
         }
+        // else {
+        //     tokenId = IDFYHard1155(_asset.collectionAddress).mint(
+        //         _asset.owner,
+        //         amount,
+        //         nftCID,
+        //         "",
+        //         _evaluation.depreciationRate
+        //     );
+        // }
 
         (address feeWallet, ) = HubInterface(contractHub).getSystemConfig();
 

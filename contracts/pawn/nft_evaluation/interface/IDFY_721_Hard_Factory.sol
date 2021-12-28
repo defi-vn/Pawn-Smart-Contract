@@ -31,7 +31,6 @@ interface IDFYHard721Factory is BaseInterface {
         string memory _name,
         string memory _symbol,
         string memory _collectionCID,
-        uint256 _royaltyRate,
-        address _evaluationAddress
+        uint256 _royaltyRate
     ) external returns (address newColection);
 }
