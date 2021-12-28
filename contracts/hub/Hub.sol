@@ -36,7 +36,7 @@ contract Hub is
     // TODO: New state variables must go below this line -----------------------------
 
     // CountersUpgradeable.Counter public numberOfContract;
-    mapping(address => EvaluationConfig) public evaluationConfig; // Unused
+    mapping(address => EvaluationFee) public evaluationConfig; // Unused
 
     EvaluationFeeConfig public evaluationFeeConfig;
 
@@ -413,7 +413,8 @@ contract Hub is
         uint256 newEvaluationFee,
         uint256 newMintingFee
     ) external onlyRole(HubRoles.DEFAULT_ADMIN_ROLE) {
-        if (feeWallet != address(0) && !feeWallet.isContract()) {
+        if (feeWallet != address(0)) {
+            require(!feeWallet.isContract(), "Fee wallet must not be a contract");
             evaluationFeeConfig.feeWallet = feeWallet;
         }
 
@@ -421,7 +422,7 @@ contract Hub is
             require(newFeeTokenAddress.isContract(), "Must be a token address");
         }
 
-        evaluationFeeConfig.feeConfig[newFeeTokenAddress] = EvaluationConfig(
+        evaluationFeeConfig.feeConfig[newFeeTokenAddress] = EvaluationFee(
             newEvaluationFee,
             newMintingFee
         );
@@ -431,9 +432,10 @@ contract Hub is
         external
         view
         override
-        returns (uint256 evaluationFee, uint256 mintingFee)
+        returns (address feeWallet, uint256 evaluationFee, uint256 mintingFee)
     {
-        evaluationFee = evaluationConfig[feeTokenAddress].evaluationFee;
-        mintingFee = evaluationConfig[feeTokenAddress].mintingFee;
+        feeWallet = evaluationFeeConfig.feeWallet;
+        evaluationFee = evaluationFeeConfig.feeConfig[feeTokenAddress].evaluationFee;
+        mintingFee = evaluationFeeConfig.feeConfig[feeTokenAddress].mintingFee;
     }
 }
