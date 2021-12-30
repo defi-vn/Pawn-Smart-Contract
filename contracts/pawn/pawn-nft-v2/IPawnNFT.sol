@@ -57,6 +57,11 @@ interface IPawnNFT is IPawnNFTBase {
         uint256 nftCollateralId,
         address offerOwner
     );
+    event RejectOfferEvent(
+        uint256 offerId,
+        uint256 nftCollateralId,
+        address offerOwner
+    );
 
     /** Functions */
     function updateCollateralStatus(

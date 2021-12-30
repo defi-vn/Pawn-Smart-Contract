@@ -37,10 +37,13 @@ contract DFYHard721 is DFY721Base, IDFYHard721 {
         }
     }
 
-    function safeMint(
-        address owner,
-        string memory tokenCID
-    ) public virtual override onlyRole(MINTER_ROLE) returns (uint256) {
+    function safeMint(address owner, string memory tokenCID)
+        public
+        virtual
+        override
+        onlyRole(MINTER_ROLE)
+        returns (uint256)
+    {
         uint256 tokenId = _tokenIdCounter.current();
         // Mint token
         _safeMint(owner, tokenId);

@@ -263,26 +263,14 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         );
     }
 
-    /**
-     * @dev create offer to collateral
-     * @param nftCollateralId is id collateral
-     * @param repaymentAsset is address token repayment
-     * @param loanToValue is LTV token of loan
-     * @param loanAmount is amount token of loan
-     * @param interest is interest of loan
-     * @param duration is duration of loan
-     * @param liquidityThreshold is liquidity threshold of loan
-     * @param loanDurationType is duration type of loan
-     * @param repaymentCycleType is repayment type of loan
-     */
     function createOffer(
         uint256 nftCollateralId,
         address repaymentAsset,
-        uint256 loanToValue,
+        // uint256 loanToValue,
         uint256 loanAmount,
         uint256 interest,
         uint256 duration,
-        uint256 liquidityThreshold,
+        //  uint256 liquidityThreshold,
         IEnums.LoanDurationType loanDurationType,
         IEnums.LoanDurationType repaymentCycleType
     ) external whenContractNotPaused {
@@ -312,10 +300,10 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
 
         // Check loan amount
         require(
-            loanToValue > 0 &&
-                loanAmount > 0 &&
-                interest > 0 &&
-                liquidityThreshold > loanToValue,
+            // loanToValue > 0 &&
+            loanAmount > 0 && interest > 0,
+            //  &&
+            // liquidityThreshold > loanToValue,
             "3"
         ); // Loan to value must be grean that 0.
 
@@ -337,11 +325,11 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
 
         _offer.create(
             repaymentAsset,
-            loanToValue,
+            //  loanToValue,
             loanAmount,
             interest,
             duration,
-            liquidityThreshold,
+            // liquidityThreshold,
             loanDurationType,
             repaymentCycleType
         );
@@ -393,7 +381,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
 
         //reject Offer
         if (_msgSender() == collaterals[nftCollateralId].owner) {
-            emit CancelOfferEvent(offerId, nftCollateralId, offerOwner);
+            emit RejectOfferEvent(offerId, nftCollateralId, offerOwner);
         }
 
         // cancel offer
@@ -448,7 +436,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
                 offer.repaymentAsset,
                 offer.interest,
                 offer.loanDurationType,
-                offer.liquidityThreshold,
+                //    offer.liquidityThreshold,
                 exchangeRate,
                 offer.duration
             );
@@ -464,7 +452,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
             uint256 thisOfferId = collateralOfferList.offerIdList[i];
             if (thisOfferId != offerId) {
                 //Offer storage thisOffer = collateralOfferList.offerMapping[thisOfferId];
-                emit CancelOfferEvent(
+                emit RejectOfferEvent(
                     thisOfferId,
                     nftCollateralId,
                     offer.owner

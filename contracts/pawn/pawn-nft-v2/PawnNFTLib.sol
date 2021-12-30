@@ -153,24 +153,24 @@ library OfferLib_NFT {
     function create(
         IPawnNFTBase.NFTOffer storage self,
         address repaymentAsset,
-        uint256 loanToValue,
+        //  uint256 loanToValue,
         uint256 loanAmount,
         uint256 interest,
         uint256 duration,
-        uint256 liquidityThreshold,
+        //   uint256 liquidityThreshold,
         IEnums.LoanDurationType _loanDurationType,
         IEnums.LoanDurationType _repaymentCycleType
     ) internal {
         self.owner = msg.sender;
         self.repaymentAsset = repaymentAsset;
-        self.loanToValue = loanToValue;
+        // self.loanToValue = loanToValue;
         self.loanAmount = loanAmount;
         self.interest = interest;
         self.duration = duration;
         self.status = IEnums.OfferStatus.PENDING;
         self.loanDurationType = IEnums.LoanDurationType(_loanDurationType);
         self.repaymentCycleType = IEnums.LoanDurationType(_repaymentCycleType);
-        self.liquidityThreshold = liquidityThreshold;
+        // self.liquidityThreshold = liquidityThreshold;
     }
 
     function cancel(

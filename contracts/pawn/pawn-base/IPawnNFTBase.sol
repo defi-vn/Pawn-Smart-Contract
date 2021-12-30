@@ -29,14 +29,14 @@ interface IPawnNFTBase is BaseInterface {
     struct NFTOffer {
         address owner;
         address repaymentAsset;
-        uint256 loanToValue;
+        //   uint256 loanToValue;
         uint256 loanAmount;
         uint256 interest;
         uint256 duration;
         IEnums.OfferStatus status;
         IEnums.LoanDurationType loanDurationType;
         IEnums.LoanDurationType repaymentCycleType;
-        uint256 liquidityThreshold;
+        //  uint256 liquidityThreshold;
     }
 
     struct NFTLoanContractTerms {
@@ -50,7 +50,7 @@ interface IPawnNFTBase is BaseInterface {
         address repaymentAsset;
         uint256 interest;
         IEnums.LoanDurationType repaymentCycleType;
-        uint256 liquidityThreshold;
+        //   uint256 liquidityThreshold;
         uint256 contractStartDate;
         uint256 contractEndDate;
         uint256 lateThreshold;
@@ -89,7 +89,7 @@ interface IPawnNFTBase is BaseInterface {
         address repaymentAsset;
         uint256 interest;
         IEnums.LoanDurationType repaymentCycleType;
-        uint256 liquidityThreshold;
+        //   uint256 liquidityThreshold;
         uint256 exchangeRate;
         uint256 loanDurationQty;
     }

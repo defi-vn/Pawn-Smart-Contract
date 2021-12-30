@@ -6,7 +6,7 @@ const { Proxies } = require('./.deployment_data.json');
 const EvaluationBuildName = "HardEvaluation";
 
 const HubBuildName = "Hub";
-const HubProxy = Proxies.Dev1.HUB_CONTRACT_ADDRESS;
+const HubProxy = Proxies.Staging.HUB_CONTRACT_ADDRESS;
 const proxyType = { kind: "uups" };
 
 const decimals      = 10**18;
