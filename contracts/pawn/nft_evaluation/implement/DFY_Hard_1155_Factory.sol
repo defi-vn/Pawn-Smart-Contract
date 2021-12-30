@@ -10,7 +10,7 @@ import "@openzeppelin/contracts-upgradeable/access/IAccessControlUpgradeable.sol
 import "../../../hub/HubLib.sol";
 import "../../../base/BaseContract.sol";
 import "../interface/IDFY_1155_Hard_Factory.sol";
-import "../implement/DFY_Hard_1155.sol";
+import "../implement/DFYHard1155.sol";
 
 contract DFYHard1155Factory is
     Initializable,

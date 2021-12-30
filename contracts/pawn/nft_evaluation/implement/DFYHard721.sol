@@ -37,6 +37,17 @@ contract DFYHard721 is DFY721Base, IDFYHard721 {
         }
     }
 
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(IERC165, DFY721Base)
+        returns (bool)
+    {
+        return
+            interfaceId == type(IDFYHard721).interfaceId ||
+            super.supportsInterface(interfaceId);
+    }
+
     function safeMint(address owner, string memory tokenCID)
         public
         virtual
