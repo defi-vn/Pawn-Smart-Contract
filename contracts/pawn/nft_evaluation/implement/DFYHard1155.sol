@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-import "../interface/IDFY_Hard_1155.sol";
+import "../interface/IDFYHard1155.sol";
 
 contract DFYHard1155 is AccessControl, IDFYHard1155, ERC1155, ERC1155Burnable {
     using Counters for Counters.Counter;

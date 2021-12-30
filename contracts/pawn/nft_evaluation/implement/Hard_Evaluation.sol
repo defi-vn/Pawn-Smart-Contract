@@ -9,7 +9,7 @@ import "../../../hub/HubInterface.sol";
 import "../../../base/BaseContract.sol";
 import "../interface/IDFY_Hard_Evaluation.sol";
 import "../interface/IDFYHard721.sol";
-import "../interface/IDFY_Hard_1155.sol";
+import "../interface/IDFYHard1155.sol";
 
 contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     using CountersUpgradeable for CountersUpgradeable.Counter;
