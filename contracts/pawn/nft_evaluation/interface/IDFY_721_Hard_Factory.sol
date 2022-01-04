@@ -21,7 +21,6 @@ interface IDFYHard721Factory is BaseInterface {
         string name,
         string symbol,
         string collectionCID,
-        uint256 royaltyRate,
         CollectionStandard collectionStandard,
         CollectionStatus collectionStatus
     );
@@ -30,7 +29,6 @@ interface IDFYHard721Factory is BaseInterface {
     function createCollection(
         string memory _name,
         string memory _symbol,
-        string memory _collectionCID,
-        uint256 _royaltyRate
+        string memory _collectionCID
     ) external returns (address newColection);
 }

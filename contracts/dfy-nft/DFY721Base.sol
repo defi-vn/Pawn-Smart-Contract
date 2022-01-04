@@ -153,7 +153,12 @@ abstract contract DFY721Base is
         return _originalCreator;
     }
 
-    function royaltyRateByToken(uint256 tokenId) external view override returns (uint256) {
+    function royaltyRateByToken(uint256 tokenId)
+        external
+        view
+        override
+        returns (uint256)
+    {
         return _royaltyRateByToken[tokenId];
     }
 

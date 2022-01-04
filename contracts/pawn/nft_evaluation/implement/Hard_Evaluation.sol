@@ -10,6 +10,7 @@ import "../../../base/BaseContract.sol";
 import "../interface/IDFY_Hard_Evaluation.sol";
 import "../interface/IDFYHard721.sol";
 import "../interface/IDFYHard1155.sol";
+import "../../../dfy-nft/IDFY721.sol";
 
 contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     using CountersUpgradeable for CountersUpgradeable.Counter;
@@ -179,9 +180,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
         if (collectionStandard == CollectionStandard.NFT_HARD_721) {
             require(
-                collectionAsset.supportsInterface(
-                    type(IDFYHard721).interfaceId
-                ),
+                collectionAsset.supportsInterface(type(IDFY721).interfaceId),
                 "Unsupported Hard NFT-721 interface"
             ); // Invalid Collection
         } else if (collectionStandard == CollectionStandard.NFT_HARD_1155) {
@@ -472,7 +471,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         require(
             bytes(evaluationCID).length > 0 &&
                 price > 0 &&
-                depreciationRate > 0,
+                depreciationRate >= 0,
             "3"
         ); // Invalid evaluation
 

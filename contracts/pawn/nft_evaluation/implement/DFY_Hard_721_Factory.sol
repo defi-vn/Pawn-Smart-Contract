@@ -36,8 +36,7 @@ contract DFYHard721Factory is IDFYHard721Factory, BaseContract {
     function createCollection(
         string memory name,
         string memory symbol,
-        string memory collectionCID,
-        uint256 royaltyRate
+        string memory collectionCID
     )
         external
         override
@@ -78,7 +77,6 @@ contract DFYHard721Factory is IDFYHard721Factory, BaseContract {
             name,
             symbol,
             collectionCID,
-            royaltyRate,
             CollectionStandard.Collection_Hard_721,
             CollectionStatus.OPEN
         );
