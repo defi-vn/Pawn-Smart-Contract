@@ -224,10 +224,10 @@ contract PawnP2PLoanContract is PawnModel, ILoan {
                 currentContract.terms.contractEndDate
             );
             // Validate: Due date timestamp of next payment request must not over contract due date
-            require(
-                _dueDateTimestamp <= currentContract.terms.contractEndDate,
-                "2"
-            );
+            // require(
+            //     _dueDateTimestamp <= currentContract.terms.contractEndDate,
+            //     "2"
+            // );
             // contr-end
             // require(_dueDateTimestamp > previousRequest.dueDateTimestamp || _dueDateTimestamp == 0, '3'); // less-th-prev
 
