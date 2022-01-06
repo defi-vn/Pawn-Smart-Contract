@@ -125,7 +125,19 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
         int256 paymentRequestId,
         uint256 contractId,
         IEnums.PaymentRequestTypeEnum paymentRequestType
-    ) public whenNotPaused onlyOperator {
+    ) public whenNotPaused {
+        require(
+            (_msgSender() == getPawnNFTContract() &&
+                IAccessControlUpgradeable(contractHub).hasRole(
+                    HubRoles.INTERNAL_CONTRACT,
+                    _msgSender()
+                )) ||
+                IAccessControlUpgradeable(contractHub).hasRole(
+                    HubRoles.OPERATOR_ROLE,
+                    _msgSender()
+                ),
+            "Pawn contract (internal) or Operator"
+        );
         // get contract
         IPawnNFTBase.NFTLoanContract
             storage currentContract = contractMustActive(contractId);
