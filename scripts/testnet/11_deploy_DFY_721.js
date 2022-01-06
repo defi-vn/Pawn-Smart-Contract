@@ -4,7 +4,7 @@ const hre = require('hardhat');
 const { Proxies } = require('./.deployment_data.json');
 
 const DFY721BuildName = "DFYHard721";
-const Evaluation = Proxies.Dev2.EVALUATION_ADDRESS;
+const Evaluation = Proxies.Staging.EVALUATION_ADDRESS;
 
 const decimals      = 10**18;
 
@@ -19,7 +19,7 @@ async function main() {
     const DFY721Factory = await hre.ethers.getContractFactory(DFY721BuildName);
     const DFY721Artifact = await hre.artifacts.readArtifact(DFY721BuildName);
     
-    const DFY721Contract = await DFY721Factory.deploy("DF4U","DF4U","0x10D3c9215E122474782c0892954398f8Eaa099CA","aa0","0xB17cbc8967715aE90507E3E231Af741a29361114",Evaluation);
+    const DFY721Contract = await DFY721Factory.deploy("DF4U","DF4U","0x10D3c9215E122474782c0892954398f8Eaa099CA","aa0","0xB17cbc8967715aE90507E3E231Af741a29361114","0xE3059b5143bfB2dd9C12581c841419863b868681");
 
     await DFY721Contract.deployed();
 
