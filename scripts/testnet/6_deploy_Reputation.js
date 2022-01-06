@@ -6,7 +6,7 @@ const decimals  = 10**18;
 
 const proxies = Proxies.Beta;
 
-const HubProxyAddr = proxies.HUB_ADDRESS;
+const HubProxyAddr = proxies.HUB_CONTRACT_ADDRESS;
 const HubBuildName = "Hub";
 
 async function main() {

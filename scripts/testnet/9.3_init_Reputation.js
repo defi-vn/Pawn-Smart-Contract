@@ -2,13 +2,13 @@ require('@nomiclabs/hardhat-ethers');
 const hre = require('hardhat');
 
 const { Proxies, PawnConfig } = require('./.deployment_data.json');
-const proxies = Proxies.Staging;
+const proxies = Proxies.Beta;
 
 const RepuProxyAddr     = proxies.REPUTATION_CONTRACT_ADDRESS;
 const PawnP2PProxyAddr  = proxies.PAWN_NFT_CONTRACT_ADDRESS;
-const LoanP2PProxyAddr  = proxies.PAWN_NFTLOAN_CONTRACT_ADDRESS;
+const LoanP2PProxyAddr  = proxies.PAWN_NFT_CONTRACT_ADDRESS;
 const PawnNFTProxyAddr  = proxies.PAWN_NFTLOAN_CONTRACT_ADDRESS;
-const ReviewProxyAddr   = proxies.EXCHANGE_CONTRACT_ADDRESS;
+const ReviewProxyAddr   = proxies.USERREVIEW_CONTRACT_ADDRESS;
 // const LoanNFTProxyAddr  = proxies.PAWN_NFPLOAN_CONTRACT_ADDRESS;
 
 const RepuBuildName     = "contracts/pawn/reputation/Reputation.sol:Reputation"

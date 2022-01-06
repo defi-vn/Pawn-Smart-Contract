@@ -7,7 +7,7 @@ const ExchangeBuildName = "contracts/pawn/exchange/Exchange.sol:Exchange";
 
 const proxyType = { kind: "uups" };
 
-const proxies = Proxies.Beta;
+const proxies = Proxies.Staging;
 
 const HubProxyAddr = proxies.HUB_CONTRACT_ADDRESS;
 const HubBuildName     = "Hub";

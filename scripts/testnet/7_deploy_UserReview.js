@@ -8,6 +8,9 @@ const ReviewBuildName = "contracts/pawn/reputation/UserReview.sol:UserReview";
 const proxyType = { kind: "uups" };
 const decimals  = 10**18;
 
+const HubProxyAddr = proxies.HUB_CONTRACT_ADDRESS;
+const HubBuildName = "Hub";
+
 async function main() {
     const [deployer] = await hre.ethers.getSigners();
   
@@ -22,20 +25,28 @@ async function main() {
     const ReviewContract  = await hre.upgrades.deployProxy(
         ReviewFactory, 
         [
-            proxies.PAWN_CONTRACT_ADDRESS, 
-            proxies.PAWN_P2PLOAN_CONTRACT_ADDRESS,
-            proxies.PAWN_NFT_CONTRACT_ADDRESS,
-            proxies.REPUTATION_CONTRACT_ADDRESS
+            HubProxyAddr
         ],
         proxyType
     );
     
     await ReviewContract.deployed();
 
+    const signature = await ReviewContract.signature();
     console.log(`USERREVIEW_CONTRACT_ADDRESS: ${ReviewContract.address}`);
+    console.log(`Signature: \x1b[36m${signature}\x1b[0m`);
 
     const implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(ReviewContract.address);
     console.log(`${ReviewArtifact.contractName} implementation address: ${implementationAddress}`);
+
+    const HubFactory = await hre.ethers.getContractFactory(HubBuildName);
+    const HubArtifact = await hre.artifacts.readArtifact(HubBuildName);
+    const HubContract = HubFactory.attach(HubProxyAddr);
+
+    console.log(`HUB_ADDRESS: \x1b[31m${HubContract.address}\x1b[0m`);
+    console.log(`Registering \x1b[36m${ReviewArtifact.contractName}\x1b[0m to \x1b[31m${HubArtifact.contractName}\x1b[0m...`);
+
+    await HubContract.registerContract(signature,ReviewContract.address,ReviewArtifact.contractName);
     
     console.log("============================================================\n\r");
 }

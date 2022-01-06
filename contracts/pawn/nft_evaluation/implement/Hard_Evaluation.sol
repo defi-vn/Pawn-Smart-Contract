@@ -301,39 +301,39 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         _appointment.status = AppointmentStatus.ACCEPTED;
         _asset.status = AssetStatus.APPOINTED;
 
-        for (
-            uint256 i = 0;
-            i < appointmentListOfAsset[_appointment.assetId].length;
-            i++
-        ) {
-            uint256 thisAppointmentId = appointmentListOfAsset[
-                _appointment.assetId
-            ][i];
-            if (appointmentId != thisAppointmentId) {
-                appointmentList[thisAppointmentId].status = AppointmentStatus
-                    .REJECTED;
+        // for (
+        //     uint256 i = 0;
+        //     i < appointmentListOfAsset[_appointment.assetId].length;
+        //     i++
+        // ) {
+        //     uint256 thisAppointmentId = appointmentListOfAsset[
+        //         _appointment.assetId
+        //     ][i];
+        //     if (appointmentId != thisAppointmentId) {
+        //         appointmentList[thisAppointmentId].status = AppointmentStatus
+        //             .REJECTED;
 
-                emit AppointmentEvent(
-                    thisAppointmentId,
-                    assetList[_appointment.assetId],
-                    appointmentList[thisAppointmentId],
-                    "",
-                    appointmentTime
-                );
+        //         emit AppointmentEvent(
+        //             thisAppointmentId,
+        //             assetList[_appointment.assetId],
+        //             appointmentList[thisAppointmentId],
+        //             "",
+        //             appointmentTime
+        //         );
 
-                CommonLib.safeTransfer(
-                    _appointment.evaluationFeeAddress,
-                    address(this),
-                    _appointment.assetOwner,
-                    _appointment.evaluationFee
-                );
+        //         CommonLib.safeTransfer(
+        //             _appointment.evaluationFeeAddress,
+        //             address(this),
+        //             _appointment.assetOwner,
+        //             _appointment.evaluationFee
+        //         );
 
-                //  delete appointmentListOfAsset[_appointment.assetId][i];
-            }
-        }
+        //         //  delete appointmentListOfAsset[_appointment.assetId][i];
+        //     }
+        // }
 
-        delete appointmentListOfAsset[_appointment.assetId];
-        appointmentListOfAsset[_appointment.assetId].push(appointmentId);
+        // delete appointmentListOfAsset[_appointment.assetId];
+        // appointmentListOfAsset[_appointment.assetId].push(appointmentId);
 
         emit AppointmentEvent(
             appointmentId,
@@ -498,6 +498,8 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
         _appointment.status = AppointmentStatus.EVALUATED;
 
+        evaluationListOfAsset[_appointment.assetId].push(evaluationId);
+
         CommonLib.safeTransfer(
             _appointment.evaluationFeeAddress,
             address(this),
@@ -544,11 +546,10 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             i < evaluationListOfAsset[_evaluation.assetId].length;
             i++
         ) {
-            if (evaluationListOfAsset[_evaluation.assetId][i] != evaluationId) {
-                uint256 _evaluationIdReject = evaluationListOfAsset[
-                    _evaluation.assetId
-                ][i];
-
+            uint256 _evaluationIdReject = evaluationListOfAsset[
+                _evaluation.assetId
+            ][i];
+            if (_evaluationIdReject != evaluationId) {
                 Evaluation storage _evaluationReject = evaluationList[
                     _evaluationIdReject
                 ];
@@ -567,6 +568,39 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
                         ""
                     );
                 }
+            }
+        }
+
+        for (
+            uint256 i = 0;
+            i < appointmentListOfAsset[_evaluation.assetId].length;
+            i++
+        ) {
+            uint256 appointmentReject = appointmentListOfAsset[
+                _evaluation.assetId
+            ][i];
+
+            if (_evaluation.appointmentId != appointmentReject) {
+                appointmentList[appointmentReject].status = AppointmentStatus
+                    .REJECTED;
+                Appointment storage _appointment = appointmentList[
+                    appointmentReject
+                ];
+
+                emit AppointmentEvent(
+                    appointmentReject,
+                    assetList[_evaluation.assetId],
+                    appointmentList[appointmentReject],
+                    "",
+                    block.timestamp
+                );
+
+                CommonLib.safeTransfer(
+                    _appointment.evaluationFeeAddress,
+                    address(this),
+                    _appointment.assetOwner,
+                    _appointment.evaluationFee
+                );
             }
         }
 

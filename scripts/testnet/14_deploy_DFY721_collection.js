@@ -4,7 +4,7 @@ const hre = require('hardhat');
 const { Proxies } = require('./.deployment_data.json');
 
 const Collection721BuildName = "DFYHard721Factory";
-const HubProxy = Proxies.Staging.HUB_CONTRACT_ADDRESS;
+const HubProxy = Proxies.Beta.HUB_CONTRACT_ADDRESS;
 const proxyType = { kind: "uups" };
 const HubBuildName = "Hub";
 
