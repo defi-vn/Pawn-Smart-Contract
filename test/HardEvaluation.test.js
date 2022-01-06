@@ -61,6 +61,7 @@ describe("Setting up test parameters:\n\r", (done) => {
             _deployer,
             _customer,
             _evaluator,
+            _evaluatorB,
             _feeWallet,
             _feeToken
         ] = await ethers.getSigners();
@@ -89,16 +90,31 @@ describe("Setting up test parameters:\n\r", (done) => {
         _hardEvaluationContract = await hardEvaluationContract.deployed();
 
         // DFYHard721 
+        // const DFYHard721Factory = await hre.ethers.getContractFactory(artifactDFYHard721);
+        // const DFYHard721Contract = await DFYHard721Factory.deploy(
+        //     _tokenName,
+        //     _symbol,
+        //     _collectionCID,
+        //     _defaultRoyaltyRate,
+        //     _hardEvaluationContract.address,
+        //     _deployer.address
+        // );
+        // _DFYHard721Contract = await DFYHard721Contract.deployed();
+
         const DFYHard721Factory = await hre.ethers.getContractFactory(artifactDFYHard721);
         const DFYHard721Contract = await DFYHard721Factory.deploy(
             _tokenName,
             _symbol,
+            _deployer.address,
             _collectionCID,
-            _defaultRoyaltyRate,
+            _hubContract.address,
             _hardEvaluationContract.address,
-            _deployer.address
         );
         _DFYHard721Contract = await DFYHard721Contract.deployed();
+
+        console.log(`Hub address: \x1b[31m${_hubContract.address}\x1b[0m`);
+        console.log(`DFY Hard NFT-721: \x1b[36m${_DFYHard721Contract.address}\x1b[0m`);
+        console.log(`Loan asset: \x1b[36m${_loanTokenContract.address}\x1b[0m`);
 
         console.log(`Hub address: \x1b[31m${_hubContract.address}\x1b[0m`);
         console.log(`Evaluation contract: \x1b[36m${_hardEvaluationContract.address}\x1b[0m`);
@@ -113,7 +129,7 @@ describe("Setting up test parameters:\n\r", (done) => {
         it(`Case 1: Evaluator create NFT for customer\n\r`, async () => {
 
             // -> customer create asset request
-            await _hubContract.connect(_deployer).setEvaluationConfig(_loanTokenContract.address, _evaluationFee, _mintingFee); // addWhiteListFee -> add address token to pay for evaluation fee , mint nft fee 
+            await _hubContract.connect(_deployer).setEvaluationConfig(_feeWallet.address, _loanTokenContract.address, _evaluationFee, _mintingFee); // addWhiteListFee -> add address token to pay for evaluation fee , mint nft fee 
             let getEventCreateAssetRequest = await _hardEvaluationContract.connect(_customer).createAssetRequest(
                 _assetCID, _DFYHard721Contract.address, BigInt(10000 * 10 ** 18),
                 _loanTokenContract.address, 0, _beAssetId); // create Asset request 
@@ -122,20 +138,20 @@ describe("Setting up test parameters:\n\r", (done) => {
             console.log(`\x1b[31m Event customer created AssetRequest \x1b[0m`);
             let recipt = await getEventCreateAssetRequest.wait();
             console.log(`assetId : \x1b[36m ${recipt.events[0].args[0].toString()} \x1b[0m`);
-            console.log("asset", recipt.events[0].args[1])
+            console.log("assetList :", recipt.events[0].args[1])
             console.log(`beAssetId : \x1b[36m ${recipt.events[0].args[2].toString()} \x1b[0m`);
 
             expect(assetList.assetCID).to.equal(_assetCID);
             expect(assetList.owner).to.equal(_customer.address);
             expect(assetList.collectionAddress).to.equal(_DFYHard721Contract.address);
-            expect(assetList.collectionStandard).to.equal(0);
+            expect(assetList.collectionStandard).to.equal(CollectionStandard.NFT_HARD_721);
             expect(assetList.status).to.equal(AssetStatus.OPEN);
 
             // -> customer create Appointment 
             await _loanTokenContract.setOperator(_deployer.address, true); // loan token transfer for customer and approve
             await _loanTokenContract.mint(_deployer.address, BigInt(1000 * 10 ** 18));
-            await _loanTokenContract.connect(_deployer).transfer(_customer.address, BigInt(100 * 10 ** 18));
-            await _loanTokenContract.connect(_customer).approve(_hardEvaluationContract.address, BigInt(100 * 10 ** 18));
+            await _loanTokenContract.connect(_deployer).transfer(_customer.address, BigInt(1000 * 10 ** 18));
+            await _loanTokenContract.connect(_customer).approve(_hardEvaluationContract.address, BigInt(1000 * 10 ** 18));
 
             let balanceOfCustomerBeforeCreateAppointment = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
             let balanceOfContractHardEvaluationBeforeCreateAppoitment = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
@@ -146,6 +162,7 @@ describe("Setting up test parameters:\n\r", (done) => {
 
             let getEventCreateAppointment = await _hardEvaluationContract.connect(_customer).createAppointment(0, _evaluator.address, _loanTokenContract.address, appointmentTime);
             let reciptEventCreateAppointment = await getEventCreateAppointment.wait();
+
             console.log(`\x1b[31m Event customer create Appointment \x1b[0m`);
             console.log(`appointmentId : \x1b[36m ${reciptEventCreateAppointment.events[2].args[0].toString()} \x1b[0m`);
             console.log("asset", reciptEventCreateAppointment.events[2].args[1]);
@@ -164,7 +181,6 @@ describe("Setting up test parameters:\n\r", (done) => {
             expect(appointmentList.evaluationFeeAddress).to.equal(_loanTokenContract.address);
             expect(reciptEventCreateAppointment.events[2].args[2].status).to.equal(AppointmentStatus.OPEN);
 
-
             let balanceOfCustomerAfterCreateAppoitnment = (await _loanTokenContract.balanceOf(_customer.address)) / decimal; // check transfer 
             let balanceOfContractHardEvaluationAfterCreateAppointment = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
 
@@ -175,7 +191,7 @@ describe("Setting up test parameters:\n\r", (done) => {
             expect(balanceOfCustomerBeforeCreateAppointment).to.equal(balanceOfCustomerAfterCreateAppoitnment + evaluationFee);
             expect(balanceOfContractHardEvaluationBeforeCreateAppoitment).to.equal(balanceOfContractHardEvaluationAfterCreateAppointment - evaluationFee);
 
-            // -> Evaluator accept Appoitment
+            // -> Evaluator accept Appointment
 
             let getEVALUATOR_ROLE = await _hubContract.EvaluatorRole();  // grant evaluator roll 
             await _hubContract.connect(_deployer).grantRole(getEVALUATOR_ROLE, _evaluator.address);
@@ -189,8 +205,15 @@ describe("Setting up test parameters:\n\r", (done) => {
             console.log(`unknow : \x1b[36m ${reciptEventAcceptAppointment.events[0].args[3].toString()} \x1b[0m`);
             console.log(`appointmentTime : \x1b[36m ${reciptEventAcceptAppointment.events[0].args[4].toString()} \x1b[0m`);
 
+            console.log(`\x1b[31m check appointment List Of Asset after evaluator accept an appointment \x1b[0m`);
+            let assetId = await reciptEventAcceptAppointment.events[0].args[2].assetId.toString();
+            let appointmentId = await reciptEventAcceptAppointment.events[0].args[0].toString();
+            let appointmentListOfAsset = await _hardEvaluationContract.appointmentListOfAsset(assetId, appointmentId);
+            console.log(appointmentListOfAsset.toString());
+
             expect(reciptEventAcceptAppointment.events[0].args[1].status).to.equal(AppointmentStatus.ACCEPTED);
             expect(reciptEventAcceptAppointment.events[0].args[2].status).to.equal(AssetStatus.APPOINTED);
+
 
             // -> Evaluator evaluated Asset
 
@@ -202,7 +225,7 @@ describe("Setting up test parameters:\n\r", (done) => {
             console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeEvaluatedAsset.toString()} \x1b[0m`);
 
             let getEventEvaluateAsset = await _hardEvaluationContract.connect(_evaluator).evaluateAsset(_DFYHard721Contract.address,
-                0, BigInt(10 * 10 ** 18), "_evaluationCID", BigInt(1 * 10 ** 5), _loanTokenContract.address, _beEvaluationId);
+                appointmentId, BigInt(10 * 10 ** 18), "_evaluationCID", BigInt(1 * 10 ** 5), _loanTokenContract.address, _beEvaluationId);
             let reciptEvaluateAsset = await getEventEvaluateAsset.wait();
 
             console.log(`\x1b[31m Event contract transfer token for evaluator after evaluator evaluate Asset \x1b[0m`);
@@ -222,6 +245,7 @@ describe("Setting up test parameters:\n\r", (done) => {
             console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationAfterEvaluatedAsset.toString()} \x1b[0m`);
 
             let appoitmentInfo = await _hardEvaluationContract.appointmentList(0);
+
 
             expect(balanceOfEvaluatorBeforeEvaluatedAsset).to.equal(balanceOfEvaluatorAfterEvaluatedAsset - evaluationFee);
             expect(balanceOfContractHardEvaluationBeforeEvaluatedAsset).to.equal(balanceOfContractHardEvaluationAfterEvaluatedAsset + evaluationFee);
@@ -307,7 +331,6 @@ describe("Setting up test parameters:\n\r", (done) => {
         it("Case 2: Evaluator evaluated Asset\n\r", async () => {
 
             // -> customer create asset request
-            await _hubContract.connect(_deployer).setEvaluationConfig(_loanTokenContract.address, _evaluationFee, _mintingFee); // addWhiteListFee -> add address token to pay for evaluation fee , mint nft fee 
             await _hardEvaluationContract.connect(_customer).createAssetRequest(
                 _assetCID, _DFYHard721Contract.address, BigInt(10000 * 10 ** 18),
                 _loanTokenContract.address, 0, _beAssetId); // create Asset request 
@@ -383,7 +406,6 @@ describe("Setting up test parameters:\n\r", (done) => {
         it("Case 3: Customer reject Evaluation\n\r", async () => {
 
             // -> customer create asset request
-            await _hubContract.connect(_deployer).setEvaluationConfig(_loanTokenContract.address, _evaluationFee, _mintingFee); // addWhiteListFee -> add address token to pay for evaluation fee , mint nft fee 
             await _hardEvaluationContract.connect(_customer).createAssetRequest(
                 _assetCID, _DFYHard721Contract.address, BigInt(10000 * 10 ** 18),
                 _loanTokenContract.address, 0, _beAssetId); // create Asset request 
@@ -473,7 +495,6 @@ describe("Setting up test parameters:\n\r", (done) => {
         it("Case 4: customer cancel Appoitment\n\r", async () => {
 
             // -> customer create asset request
-            await _hubContract.connect(_deployer).setEvaluationConfig(_loanTokenContract.address, _evaluationFee, _mintingFee); // addWhiteListFee -> add address token to pay for evaluation fee , mint nft fee 
             await _hardEvaluationContract.connect(_customer).createAssetRequest(
                 _assetCID, _DFYHard721Contract.address, BigInt(10000 * 10 ** 18),
                 _loanTokenContract.address, 0, _beAssetId); // create Asset request 
@@ -527,8 +548,7 @@ describe("Setting up test parameters:\n\r", (done) => {
 
         it("Case 5: Evaluator reject Appoitment\n\r", async () => {
 
-            // -> customer create asset request
-            await _hubContract.connect(_deployer).setEvaluationConfig(_loanTokenContract.address, _evaluationFee, _mintingFee); // addWhiteListFee -> add address token to pay for evaluation fee , mint nft fee 
+            // -> customer create asset request 
             await _hardEvaluationContract.connect(_customer).createAssetRequest(
                 _assetCID, _DFYHard721Contract.address, BigInt(10000 * 10 ** 18),
                 _loanTokenContract.address, 0, _beAssetId); // create Asset request 
@@ -583,5 +603,72 @@ describe("Setting up test parameters:\n\r", (done) => {
             expect(balanceOfContractHardEvaluationAfterCreateAppointment).to.equal(balanceOfContractHardEvaluationAfterRejectAppoitment + evaluationFee);
 
         });
+
+        it(` case 6 : customer create list appointment, evaluator accept an appointment and accept an evaluator \n\r`, async () => {
+
+            // -> customer create asset request
+            await _hardEvaluationContract.connect(_customer).createAssetRequest(
+                _assetCID, _DFYHard721Contract.address, BigInt(10000 * 10 ** 18),
+                _loanTokenContract.address, 0, _beAssetId);
+
+            // -> customer create Appointment For A and For B
+            await _hardEvaluationContract.connect(_customer).createAppointment(5, _evaluator.address, _loanTokenContract.address, appointmentTime);
+            // await _hardEvaluationContract.connect(_customer).createAppointment(5, _evaluatorB.address, _loanTokenContract.address, appointmentTime);
+
+            // let appointmentList = await _hardEvaluationContract.appointmentList(5);
+            // let appointmentList2 = await _hardEvaluationContract.appointmentList(6);
+
+            // expect(appointmentList.status).to.equal(AppointmentStatus.OPEN);
+            // expect(appointmentList2.status).to.equal(AppointmentStatus.OPEN);
+
+            // let getAppointmentByAssetId5 = await _hardEvaluationContract.appointmentList(5);
+            // let getAppointmentByAssetId6 = await _hardEvaluationContract.appointmentList(6);
+
+            // console.log(getAppointmentByAssetId5.toString());
+            // console.log(getAppointmentByAssetId6.toString());
+            // console.log(_evaluatorB.address);
+            // console.log(_evaluator.address);
+
+            // let getAppointment = await _hardEvaluationContract.appointmentListOfAsset(5, 0);
+            // let getAppointment2 = await _hardEvaluationContract.appointmentListOfAsset(5, 1);
+            // console.log(getAppointment.toString());
+            // console.log(getAppointment2.toString());
+
+
+
+            // console.log(`\x1b[36m after evaluator accept appointment : \x1b[0m`);
+            // let getEvent = await _hardEvaluationContract.connect(_evaluator).acceptAppointment(5, appointmentTime);
+            // let reciptEvent = await getEvent.wait();
+
+            // console.log(reciptEvent.events[2].args[2].status);
+            // console.log("Status of Appointment 5", appointmentList.status);
+
+            // case này đang lỗi, sau khi evaluator accept appoitment chưa chuyển status của appoiment sang accepted 
+            todo: "check sau khi accept 1 appointment sẽ push assetId và appointmentId vào appointmentListOfAsset"
+
+            // -> Evaluator accept Appointment
+            await _hardEvaluationContract.connect(_evaluator).acceptAppointment(5, appointmentTime);
+
+            // -> Evaluator evaluated Asset
+            await _hardEvaluationContract.connect(_evaluator).evaluateAsset(_DFYHard721Contract.address,
+                5, BigInt(100 * 10 ** 18), "_evaluationCID", BigInt(1 * 10 ** 5), _loanTokenContract.address, _beEvaluationId);
+
+            // await _hardEvaluationContract.connect(_evaluatorB).evaluateAsset(_DFYHard721Contract.address, 5, BigInt(20 * 10 ** 18),
+            //     "_evaluationCID", BigInt(1 * 10 ** 5), _loanTokenContract.address, _beEvaluationId);
+
+            let listEvaluation = await _hardEvaluationContract.evaluationList(3);
+            console.log(listEvaluation.toString());
+
+            // let getEvaluationListOfAsset = await _hardEvaluationContract.evaluationListOfAsset(5, 1);
+            // -> customer accept evaluation
+            // let getEventAcceptEvaluation = await _hardEvaluationContract.connect(_customer).acceptEvaluation(3);
+            // let reciptEventAcceptEvaluation = await getEventAcceptEvaluation.wait();
+            // console.log(`\x1b[31m Event Customer accept evaluation \x1b[0m`);
+
+            // evaluationListOfAsset[assetId[5], [i]] if assetId != input evaluatioId 
+
+        });
+
+
     });
 });
