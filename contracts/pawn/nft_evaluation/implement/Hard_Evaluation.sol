@@ -296,7 +296,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
                 _appointment.evaluator == msg.sender,
             "0"
         ); // Invalid appoinment
-        require(_asset.status == AssetStatus.OPEN, "1");
+        //   require(_asset.status == AssetStatus.OPEN, "1");
 
         _appointment.status = AppointmentStatus.ACCEPTED;
         _asset.status = AssetStatus.APPOINTED;

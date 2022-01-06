@@ -631,10 +631,12 @@ describe("Setting up test parameters:\n\r", (done) => {
 
             let getEVALUATOR_ROLE = await _hubContract.EvaluatorRole();  // grant evaluator roll 
             await _hubContract.connect(_deployer).grantRole(getEVALUATOR_ROLE, _evaluatorB.address);
-
+            
+            console.log("aaa");
             // -> Evaluator accept Appointment
             await _hardEvaluationContract.connect(_evaluator).acceptAppointment(5, appointmentTime);
-            await _hardEvaluationContract.connect(_evaluatorB).acceptAppointment(5, appointmentTime);
+
+            await _hardEvaluationContract.connect(_evaluatorB).acceptAppointment(6, appointmentTime);
 
             // // -> Evaluator evaluated Asset
             // await _hardEvaluationContract.connect(_evaluator).evaluateAsset(_DFYHard721Contract.address,
