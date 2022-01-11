@@ -581,26 +581,30 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             ][i];
 
             if (_evaluation.appointmentId != appointmentReject) {
-                appointmentList[appointmentReject].status = AppointmentStatus
-                    .REJECTED;
-                Appointment storage _appointment = appointmentList[
-                    appointmentReject
-                ];
+                if (
+                    appointmentList[appointmentReject].status ==
+                    AppointmentStatus.OPEN
+                ) {
+                    appointmentList[appointmentReject]
+                        .status = AppointmentStatus.REJECTED;
+                    Appointment storage _appointment = appointmentList[
+                        appointmentReject
+                    ];
 
-                emit AppointmentEvent(
-                    appointmentReject,
-                    assetList[_evaluation.assetId],
-                    appointmentList[appointmentReject],
-                    "",
-                    block.timestamp
-                );
-
-                CommonLib.safeTransfer(
-                    _appointment.evaluationFeeAddress,
-                    address(this),
-                    _appointment.assetOwner,
-                    _appointment.evaluationFee
-                );
+                    emit AppointmentEvent(
+                        appointmentReject,
+                        assetList[_evaluation.assetId],
+                        appointmentList[appointmentReject],
+                        "",
+                        block.timestamp
+                    );
+                    CommonLib.safeTransfer(
+                        _appointment.evaluationFeeAddress,
+                        address(this),
+                        _appointment.assetOwner,
+                        _appointment.evaluationFee
+                    );
+                }
             }
         }
 

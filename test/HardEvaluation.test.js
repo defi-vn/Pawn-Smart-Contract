@@ -151,7 +151,7 @@ describe("Setting up test parameters:\n\r", (done) => {
             await _loanTokenContract.setOperator(_deployer.address, true); // loan token transfer for customer and approve
             await _loanTokenContract.mint(_deployer.address, BigInt(1000 * 10 ** 18));
             await _loanTokenContract.connect(_deployer).transfer(_customer.address, BigInt(1000 * 10 ** 18));
-            await _loanTokenContract.connect(_customer).approve(_hardEvaluationContract.address, BigInt(1000 * 10 ** 18));
+            await _loanTokenContract.connect(_customer).approve(_hardEvaluationContract.address, BigInt(100000 * 10 ** 18));
 
             let balanceOfCustomerBeforeCreateAppointment = (await _loanTokenContract.balanceOf(_customer.address)) / decimal;
             let balanceOfContractHardEvaluationBeforeCreateAppoitment = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
@@ -211,12 +211,9 @@ describe("Setting up test parameters:\n\r", (done) => {
             let appointmentListOfAsset = await _hardEvaluationContract.appointmentListOfAsset(assetId, appointmentId);
             console.log(appointmentListOfAsset.toString());
 
-            expect(reciptEventAcceptAppointment.events[0].args[1].status).to.equal(AppointmentStatus.ACCEPTED);
-            expect(reciptEventAcceptAppointment.events[0].args[2].status).to.equal(AssetStatus.APPOINTED);
-
+            expect(reciptEventAcceptAppointment.events[0].args[2].status).to.equal(AppointmentStatus.ACCEPTED);
 
             // -> Evaluator evaluated Asset
-
             let balanceOfContractHardEvaluationBeforeEvaluatedAsset = (await _loanTokenContract.balanceOf(_hardEvaluationContract.address)) / decimal;
             let balanceOfEvaluatorBeforeEvaluatedAsset = (await _loanTokenContract.balanceOf(_evaluator.address)) / decimal;
 
@@ -260,6 +257,9 @@ describe("Setting up test parameters:\n\r", (done) => {
             console.log("Accept evaluation - before transaction:");
             console.log(`\x1b[36m Customer  balance : ${balanceOfCustomerBeforeAcceptEvaluation.toString()} \x1b[0m`);
             console.log(`\x1b[36m HardEvaluation contract balance: ${balanceOfContractHardEvaluationBeforeAcceptEvaluation.toString()} \x1b[0m`);
+
+            let listEvaluation = await _hardEvaluationContract.evaluationList(0);
+            console.log(listEvaluation.toString());
 
             let getEventAcceptEvaluation = await _hardEvaluationContract.connect(_customer).acceptEvaluation(0);
             let reciptEventAcceptEvaluation = await getEventAcceptEvaluation.wait();
@@ -604,7 +604,7 @@ describe("Setting up test parameters:\n\r", (done) => {
 
         });
 
-        it(` case 6 : customer create list appointment, evaluator accept an appointment and accept an evaluator \n\r`, async () => {
+        it(` case 6 : customer create an list appointment for evaluators, evaluators evaluate asset and customer accept 1 evaluation of 1 evaluator \n\r`, async () => {
 
             // -> customer create asset request
             await _hardEvaluationContract.connect(_customer).createAssetRequest(
@@ -615,71 +615,77 @@ describe("Setting up test parameters:\n\r", (done) => {
             await _hardEvaluationContract.connect(_customer).createAppointment(5, _evaluator.address, _loanTokenContract.address, appointmentTime);
             await _hardEvaluationContract.connect(_customer).createAppointment(5, _evaluatorB.address, _loanTokenContract.address, appointmentTime);
 
-            let appointmentList = await _hardEvaluationContract.appointmentList(5);
-            let appointmentList2 = await _hardEvaluationContract.appointmentList(6);
 
-            expect(appointmentList.status).to.equal(AppointmentStatus.OPEN);
-            expect(appointmentList2.status).to.equal(AppointmentStatus.OPEN);
 
-            let getAppointmentByAssetId5 = await _hardEvaluationContract.appointmentList(5);
-            let getAppointmentByAssetId6 = await _hardEvaluationContract.appointmentList(6);
+            // console.log(_evaluatorB.address);
+            // console.log(_evaluator.address);
 
-            console.log(getAppointmentByAssetId5.toString());
-            console.log(getAppointmentByAssetId6.toString());
-            console.log(_evaluatorB.address);
+            let appointmentListA = await _hardEvaluationContract.appointmentList(5);
+            let appointmentListB = await _hardEvaluationContract.appointmentList(6);
+            console.log(appointmentListA.toString());
+            console.log(appointmentListB.toString());
             console.log(_evaluator.address);
+            console.log(_evaluatorB.address);
+
+            expect(appointmentListA.status).to.equal(AppointmentStatus.OPEN);
+            expect(appointmentListB.status).to.equal(AppointmentStatus.OPEN);
 
             let getEVALUATOR_ROLE = await _hubContract.EvaluatorRole();  // grant evaluator roll 
             await _hubContract.connect(_deployer).grantRole(getEVALUATOR_ROLE, _evaluatorB.address);
-            
-            console.log("aaa");
-            // -> Evaluator accept Appointment
-            await _hardEvaluationContract.connect(_evaluator).acceptAppointment(5, appointmentTime);
 
-            await _hardEvaluationContract.connect(_evaluatorB).acceptAppointment(6, appointmentTime);
-
-            // // -> Evaluator evaluated Asset
-            // await _hardEvaluationContract.connect(_evaluator).evaluateAsset(_DFYHard721Contract.address,
-            //     5, BigInt(100 * 10 ** 18), "_evaluationCID", BigInt(1 * 10 ** 5), _loanTokenContract.address, _beEvaluationId);
-
-            // //
-
-            // let getAppointment = await _hardEvaluationContract.appointmentListOfAsset(5, 0);
-            // let getAppointment2 = await _hardEvaluationContract.appointmentListOfAsset(5, 1);
-            // console.log(getAppointment.toString());
-            // console.log(getAppointment2.toString());
-
-            // console.log(reciptEvent.events[2].args[2].status);
-            // console.log("Status of Appointment 5", appointmentList.status);
-
-            // case này đang lỗi, sau khi evaluator accept appoitment chưa chuyển status của appoiment sang accepted 
-            todo: "check sau khi accept 1 appointment sẽ push assetId và appointmentId vào appointmentListOfAsset"
+            // -> Evaluator accept Appointment 5 
+            let getEventAcceptAppointment5 = await _hardEvaluationContract.connect(_evaluator).acceptAppointment(5, appointmentTime);
+            let reciptEventAcceptAppointment5 = await getEventAcceptAppointment5.wait();
+            console.log(reciptEventAcceptAppointment5.events[0].args[2]);
+            expect(reciptEventAcceptAppointment5.events[0].args[2].status).to.equal(AppointmentStatus.ACCEPTED);
 
 
 
+            // -> EvaluatorB accept Appointment 6
+            let getEventAcceptAppointment6 = await _hardEvaluationContract.connect(_evaluatorB).acceptAppointment(6, appointmentTime);
+            let reciptEventAcceptAppointment6 = await getEventAcceptAppointment6.wait();
+            expect(reciptEventAcceptAppointment6.events[0].args[2].status).to.equal(AppointmentStatus.ACCEPTED);
+
+            // -> Evaluator evaluated Asset5 with AppointmentId 5
+            await _hardEvaluationContract.connect(_evaluator).evaluateAsset(_DFYHard721Contract.address,
+                5, BigInt(10 * 10 ** 18), "_evaluationCID", BigInt(1 * 10 ** 5), _loanTokenContract.address, _beEvaluationId);
 
 
 
+            // -> EvaluatorB evaluated Asset5 with AppointmentId 6
+            await _hardEvaluationContract.connect(_evaluatorB).evaluateAsset(_DFYHard721Contract.address,
+                6, BigInt(100 * 10 ** 18), "_evaluationCID", BigInt(10 * 10 ** 5), _loanTokenContract.address, _beEvaluationId);
+
+            // -> customer accept 1 trong 2 evaluation
+            // let getEvaluationByAsset = await _hardEvaluationContract.evaluationListOfAsset(5, 0);
+            // console.log(getEvaluationByAsset.toString());
+            // getEvaluationByAsset = await _hardEvaluationContract.evaluationList(getEvaluationByAsset);
+            // console.log(getEvaluationByAsset.toString());
+
+            let evaluation3 = await _hardEvaluationContract.evaluationList(3);
+            let evaluation4 = await _hardEvaluationContract.evaluationList(4);
+            console.log(evaluation3.toString());
+            console.log(evaluation4.toString());
 
 
 
+            // let balanceOfContract = await _loanTokenContract.balanceOf(_hardEvaluationContract.address);
+            // console.log(balanceOfContract.toString());
+            // await _loanTokenContract.connect(_customer).approve(_hardEvaluationContract.address, BigInt(10000000000000000000000000));
+            // let approve = await _loanTokenContract.allowance(_customer.address, _hardEvaluationContract.address);
+            // console.log(approve.toString());
 
-            // await _hardEvaluationContract.connect(_evaluatorB).evaluateAsset(_DFYHard721Contract.address, 5, BigInt(20 * 10 ** 18),
-            //     "_evaluationCID", BigInt(1 * 10 ** 5), _loanTokenContract.address, _beEvaluationId);
-
-            // let listEvaluation = await _hardEvaluationContract.evaluationList(3);
-            // console.log(listEvaluation.toString());
-
-            // let getEvaluationListOfAsset = await _hardEvaluationContract.evaluationListOfAsset(5, 1);
-            // -> customer accept evaluation
+            // acceptEvaluation đang không accept được khi có 2 evaluation trở lên (chưa rõ nguyên nhân)
             // let getEventAcceptEvaluation = await _hardEvaluationContract.connect(_customer).acceptEvaluation(3);
-            // let reciptEventAcceptEvaluation = await getEventAcceptEvaluation.wait();
-            // console.log(`\x1b[31m Event Customer accept evaluation \x1b[0m`);
+            let getEventAcceptEvaluation = await _hardEvaluationContract.connect(_customer).acceptEvaluation(4);
 
-            // evaluationListOfAsset[assetId[5], [i]] if assetId != input evaluatioId 
+
+
+            //     /* 1 asset có nhiều evaluator đánh giá -> có N evaluation -> sau khi borrower accept 1 evaluation của 1 evaluator
+            //     -> chuyển status của evaluation đó sang accepted còn lại đổi trạng thái của các evaluation kia sang reject 
+            //     */
 
         });
-
 
     });
 });
