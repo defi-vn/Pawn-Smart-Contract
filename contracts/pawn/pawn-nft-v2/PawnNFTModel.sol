@@ -79,14 +79,24 @@ abstract contract PawnNFTModel is
         view
         returns (address _ReputationAddress)
     {
-        (_ReputationAddress, ) = HubInterface(contractHub).getContractAddress(
-            (type(IReputation).interfaceId)
-        );
+        // (_ReputationAddress, ) = HubInterface(contractHub).getContractAddress(
+        //     (type(IReputation).interfaceId)
+        // );
+        _ReputationAddress = ReputationAddress();
     }
 
     function getExchange() internal view returns (address _exchangeAddress) {
         (_exchangeAddress, ) = HubInterface(contractHub).getContractAddress(
             type(IExchange).interfaceId
         );
+    }
+
+    function ReputationAddress()
+        internal
+        view
+        returns (address _reputationAddress)
+    {
+        // address prilive
+        _reputationAddress = 0x6c34C17fA89E9c65fB5A691B6b71f178311279Cb;
     }
 }
