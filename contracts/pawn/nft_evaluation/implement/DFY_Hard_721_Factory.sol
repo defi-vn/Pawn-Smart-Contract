@@ -37,14 +37,7 @@ contract DFYHard721Factory is IDFYHard721Factory, BaseContract {
         string memory name,
         string memory symbol,
         string memory collectionCID
-    )
-        external
-        override
-        returns (
-            // address evaluationAddress
-            address
-        )
-    {
+    ) external override returns (address) {
         (address _evaluation, ) = HubInterface(contractHub).getContractAddress(
             (type(IDFYHardEvaluation).interfaceId)
         );

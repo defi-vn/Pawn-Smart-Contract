@@ -7,10 +7,10 @@ import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165CheckerUpg
 import "../../../hub/HubLib.sol";
 import "../../../hub/HubInterface.sol";
 import "../../../base/BaseContract.sol";
+import "../../../dfy-nft/IDFY721.sol";
 import "../interface/IDFY_Hard_Evaluation.sol";
 import "../interface/IDFYHard721.sol";
 import "../interface/IDFYHard1155.sol";
-import "../../../dfy-nft/IDFY721.sol";
 
 contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     using CountersUpgradeable for CountersUpgradeable.Counter;
@@ -32,7 +32,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
     CountersUpgradeable.Counter private _totalEvaluation;
 
     // white list Fee
-    //   mapping(address => WhiteListFee) public WhiteListFees;
+    // mapping(address => WhiteListFee) public WhiteListFees;
 
     // Mapping asset list
     // Asset id => Asset
@@ -133,15 +133,6 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         emit EvaluatorEvent(evaluatorId, evaluator, EvaluatorStatus.CANCELLED);
     }
 
-    // function addWhiteListFee(
-    //     address newAddressFee,
-    //     uint256 newEvaluationFee,
-    //     uint256 newMintingFee
-    // ) external override onlyAdmin {
-    //     // khong dung den ham nay
-    //     // _addWhitelistedFee(newAddressFee, newEvaluationFee, newMintingFee);
-    // }
-
     function getEvaluationWithTokenId(
         address addressCollection,
         uint256 tokenId
@@ -232,13 +223,13 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             bytes(_asset.assetCID).length > 0 &&
                 _asset.status == AssetStatus.OPEN &&
                 msg.sender == _asset.owner,
-            "0"
-        ); // Invalid asset
+            "Invalid asset"
+        );
 
         // appointment time > 0
         require(appointmentTime > 0, "Appointment time > 0");
 
-        require(!evaluator.isContract() && evaluator != _asset.owner, "1"); // Invalid evaluator
+        require(!evaluator.isContract() && evaluator != _asset.owner, "Invalid evaluator");
 
         // Gennerate total appointment
         uint256 _appointmentId = _totalAppointment.current();
@@ -257,9 +248,6 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
         // Add appointment id to appointment list of asset
         appointmentListOfAsset[assetId].push(_appointmentId);
-
-        // update status asset
-        //  _asset.status = AssetStatus.APPOINTED;
 
         // Transfer evaluation fee to smart contract
         CommonLib.safeTransfer(
@@ -296,45 +284,10 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
                 _appointment.evaluator == msg.sender,
             "0"
         ); // Invalid appoinment
-        require(_asset.status == AssetStatus.OPEN, "1");
+        require(_asset.status == AssetStatus.OPEN, "1"); // Asset status must be OPEN
 
         _appointment.status = AppointmentStatus.ACCEPTED;
-        //  _asset.status = AssetStatus.APPOINTED;
-
-        // for (
-        //     uint256 i = 0;
-        //     i < appointmentListOfAsset[_appointment.assetId].length;
-        //     i++
-        // ) {
-        //     uint256 thisAppointmentId = appointmentListOfAsset[
-        //         _appointment.assetId
-        //     ][i];
-        //     if (appointmentId != thisAppointmentId) {
-        //         appointmentList[thisAppointmentId].status = AppointmentStatus
-        //             .REJECTED;
-
-        //         emit AppointmentEvent(
-        //             thisAppointmentId,
-        //             assetList[_appointment.assetId],
-        //             appointmentList[thisAppointmentId],
-        //             "",
-        //             appointmentTime
-        //         );
-
-        //         CommonLib.safeTransfer(
-        //             _appointment.evaluationFeeAddress,
-        //             address(this),
-        //             _appointment.assetOwner,
-        //             _appointment.evaluationFee
-        //         );
-
-        //         //  delete appointmentListOfAsset[_appointment.assetId][i];
-        //     }
-        // }
-
-        // delete appointmentListOfAsset[_appointment.assetId];
-        // appointmentListOfAsset[_appointment.assetId].push(appointmentId);
-
+        
         emit AppointmentEvent(
             appointmentId,
             assetList[_appointment.assetId],
@@ -360,9 +313,6 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
         _appointment.status = AppointmentStatus.REJECTED;
 
-        // Asset storage _asset = assetList[_appointment.assetId];
-
-        //  _asset.status = AssetStatus.OPEN;
         for (
             uint256 i = 0;
             i < appointmentListOfAsset[_appointment.assetId].length;
@@ -459,7 +409,6 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         Asset storage _asset = assetList[_appointment.assetId];
 
         require(
-            //   _asset.status == AssetStatus.APPOINTED &&
             _asset.owner != msg.sender,
             "1"
         ); // Invalid asset
@@ -571,6 +520,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
             }
         }
 
+        // Reject other appointments and refund evaluation fees
         for (
             uint256 i = 0;
             i < appointmentListOfAsset[_evaluation.assetId].length;
@@ -598,6 +548,8 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
                         "",
                         block.timestamp
                     );
+
+                    // TODO: optimize refund process
                     CommonLib.safeTransfer(
                         _appointment.evaluationFeeAddress,
                         address(this),
