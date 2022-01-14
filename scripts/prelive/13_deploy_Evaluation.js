@@ -24,7 +24,7 @@ async function main() {
 
     const EvaluationFactory = await hre.ethers.getContractFactory(EvaluationBuildName);
     const EvaluationArtifact = await hre.artifacts.readArtifact(EvaluationBuildName);
-    const EvaluationContract = await hre.upgrades.deployProxy(EvaluationFactory,[HubProxy], proxyType);
+    const EvaluationContract = await hre.upgrades.deployProxy(EvaluationFactory,[HubProxy],proxyType);
 
     await EvaluationContract.deployed();
     const signature = await EvaluationContract.signature();

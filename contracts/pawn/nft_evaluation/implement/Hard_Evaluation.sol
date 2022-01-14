@@ -229,7 +229,10 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         // appointment time > 0
         require(appointmentTime > 0, "Appointment time > 0");
 
-        require(!evaluator.isContract() && evaluator != _asset.owner, "Invalid evaluator");
+        require(
+            !evaluator.isContract() && evaluator != _asset.owner,
+            "Invalid evaluator"
+        );
 
         // Gennerate total appointment
         uint256 _appointmentId = _totalAppointment.current();
@@ -287,7 +290,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         require(_asset.status == AssetStatus.OPEN, "1"); // Asset status must be OPEN
 
         _appointment.status = AppointmentStatus.ACCEPTED;
-        
+
         emit AppointmentEvent(
             appointmentId,
             assetList[_appointment.assetId],
@@ -408,10 +411,7 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
 
         Asset storage _asset = assetList[_appointment.assetId];
 
-        require(
-            _asset.owner != msg.sender,
-            "1"
-        ); // Invalid asset
+        require(_asset.owner != msg.sender, "1"); // Invalid asset
 
         if (currency != address(0)) {
             require(currency.isContract(), "2"); // Invalid currency
