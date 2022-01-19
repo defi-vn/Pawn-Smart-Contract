@@ -22,23 +22,6 @@ abstract contract PawnNFTModel is
     ERC721HolderUpgradeable,
     BaseContract
 {
-    // AssetEvaluation assetEvaluation;
-
-    // mapping(address => uint256) public whitelistCollateral;
-    // address public feeWallet;
-    // uint256 public penaltyRate;
-    // uint256 public systemFeeRate;
-    // uint256 public lateThreshold;
-    // uint256 public prepaidFeeRate;
-
-    // uint256 public ZOOM;
-
-    // address public admin;
-    // address public operator;
-
-    // DFY_Physical_NFTs dfy_physical_nfts;
-    // AssetEvaluation assetEvaluation;
-
     function initialize(address _hub) public initializer {
         __BaseContract_init(_hub);
     }
