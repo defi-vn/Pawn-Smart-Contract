@@ -27,3 +27,4 @@ scripts/prelive/UserReview_ABI.json
 
 #Local upgrade address file
 .openzeppelin/unknown-31337.json
+scripts/live-4.1/.deployment_data copy.json

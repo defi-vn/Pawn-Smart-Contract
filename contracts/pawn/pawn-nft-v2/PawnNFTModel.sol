@@ -59,7 +59,7 @@ abstract contract PawnNFTModel is
 
     function getReputation()
         internal
-        view
+        pure
         returns (address _ReputationAddress)
     {
         // (_ReputationAddress, ) = HubInterface(contractHub).getContractAddress(
@@ -76,11 +76,11 @@ abstract contract PawnNFTModel is
 
     function ReputationAddress()
         internal
-        view
+        pure
         returns (address _reputationAddress)
     {
         // TODO : bo khi chuyen reputation sang contract Hub
-        // address prilive
-        _reputationAddress = 0x6c34C17fA89E9c65fB5A691B6b71f178311279Cb;
+        // address live
+        _reputationAddress = 0x3174bBbA2BAD72e3e3692d2646D34aa6eE38C191;
     }
 }

@@ -17,9 +17,9 @@ const proxiesEnv = deploymentInfo.Proxies[envKey];
 const HubBuildName = "Hub";
 const HubProxy = proxiesEnv.HUB_ADDRESS;
 
-const ContractBuildName = "HardEvaluation";
-const ContractJsonKey = "EVALUATION_CONTRACT_ADDRESS";
-const ContractSigKey = "EVALUATION";
+const ContractBuildName = "DFYHard721Factory";
+const ContractJsonKey = "FACTORY_721_CONTRACT_ADDRESS";
+const ContractSigKey = "FACTORY_721";
 
 async function main() {
     const[deployer] = await hre.ethers.getSigners();

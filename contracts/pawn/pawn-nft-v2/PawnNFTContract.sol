@@ -557,6 +557,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
 
     function getInformationNFT(address collectionAddress, uint256 nftId)
         external
+        view
         override
         returns (
             address currency,

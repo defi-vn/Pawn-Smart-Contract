@@ -2,8 +2,8 @@ require('@nomiclabs/hardhat-ethers');
 const hre = require('hardhat');
 const fs = require("fs");
 
-const envKey = "BCTest";
-const datafilePath = "./scripts/testnet/";
+const envKey = "Live";
+const datafilePath = "./scripts/live-4.1/";
 
 const datafileName = ".deployment_data.json";
 const deploymentInfo = require('./' + datafileName);
@@ -17,9 +17,9 @@ const proxiesEnv = deploymentInfo.Proxies[envKey];
 const HubBuildName = "Hub";
 const HubProxy = proxiesEnv.HUB_ADDRESS;
 
-const ContractBuildName = "HardEvaluation";
-const ContractJsonKey = "EVALUATION_CONTRACT_ADDRESS";
-const ContractSigKey = "EVALUATION";
+const ContractBuildName = "LoanNFTContract";
+const ContractJsonKey = "LOAN_NFT_CONTRACT_ADDRESS";
+const ContractSigKey = "LOAN_NFT";
 
 async function main() {
     const[deployer] = await hre.ethers.getSigners();
@@ -30,9 +30,9 @@ async function main() {
     console.log("Account balance: ", ((await deployer.getBalance()) / decimals).toString());
     console.log("===================================\n\r");
 
-    const ContractFactory   = await hre.ethers.getContractFactory(ContractBuildName);
-    const ContractArtifact  = await hre.artifacts.readArtifact(ContractBuildName);
-    const DeployedContract  = await hre.upgrades.deployProxy(ContractFactory, [HubProxy], proxyType);
+    const ContractFactory = await hre.ethers.getContractFactory(ContractBuildName);
+    const ContractArtifact = await hre.artifacts.readArtifact(ContractBuildName);
+    const DeployedContract = await hre.upgrades.deployProxy(ContractFactory, [HubProxy], proxyType);
 
     await DeployedContract.deployed();
     const signature = await DeployedContract.signature();

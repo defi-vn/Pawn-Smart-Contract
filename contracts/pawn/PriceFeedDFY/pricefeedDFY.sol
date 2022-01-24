@@ -336,19 +336,19 @@ contract AggregatorProxy is AggregatorV2V3Interface, Owned {
         Phase memory current = currentPhase; // cache storage reads
 
         (
-            uint80 roundId,
-            int256 answer,
-            uint256 startedAt,
-            uint256 updatedAt,
+            uint80 _roundId,
+            int256 _answer,
+            uint256 _startedAt,
+            uint256 _updatedAt,
             uint80 ansIn
         ) = current.aggregator_.latestRoundData();
 
         return
             addPhaseIds(
-                roundId,
-                answer,
-                startedAt,
-                updatedAt,
+                _roundId,
+                _answer,
+                _startedAt,
+                _updatedAt,
                 ansIn,
                 current.id
             );
@@ -426,7 +426,7 @@ contract AggregatorProxy is AggregatorV2V3Interface, Owned {
     /**
      * @notice represents the number of decimals the aggregator_ responses represent.
      */
-    function decimals() external view override returns (uint8) {
+    function decimals() external pure override returns (uint8) {
         // return currentPhase.aggregator_.decimals();
         return 8;
     }
@@ -435,7 +435,7 @@ contract AggregatorProxy is AggregatorV2V3Interface, Owned {
      * @notice the version number representing the type of aggregator_ the proxy
      * points to.
      */
-    function version() external view override returns (uint256) {
+    function version() external pure override returns (uint256) {
         //    return currentPhase.aggregator_.version();
         return 1;
     }
@@ -443,7 +443,7 @@ contract AggregatorProxy is AggregatorV2V3Interface, Owned {
     /**
      * @notice returns the description of the aggregator_ the proxy points to.
      */
-    function description() external view override returns (string memory) {
+    function description() external pure override returns (string memory) {
         // return currentPhase.aggregator_.description();
         return "DFY/USD";
     }
@@ -484,13 +484,13 @@ contract AggregatorProxy is AggregatorV2V3Interface, Owned {
 
     function addPhase(uint16 _phase, uint64 _originalId)
         internal
-        view
+        pure
         returns (uint80)
     {
         return uint80((uint256(_phase) << PHASE_OFFSET) | _originalId);
     }
 
-    function parseIds(uint256 _roundId) internal view returns (uint16, uint64) {
+    function parseIds(uint256 _roundId) internal pure returns (uint16, uint64) {
         uint16 phaseId_ = uint16(_roundId >> PHASE_OFFSET);
         uint64 aggregatorRoundId = uint64(_roundId);
 
@@ -506,7 +506,7 @@ contract AggregatorProxy is AggregatorV2V3Interface, Owned {
         uint16 phaseId_
     )
         internal
-        view
+        pure
         returns (
             uint80,
             int256,
@@ -557,10 +557,7 @@ contract EACAggregatorProxy is AggregatorProxy {
     AccessControllerInterface public accessController;
     address aggregator_;
 
-    constructor()
-        public
-        //address _aggregator
-        // address _accessController
+    constructor()        
         AggregatorProxy(address(0))
     {
         // aggregator_ = aggregator_;
