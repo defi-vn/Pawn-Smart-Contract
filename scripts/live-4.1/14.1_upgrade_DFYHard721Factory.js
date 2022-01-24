@@ -19,7 +19,7 @@ const ContractSigKey = "FACTORY_721";
 const ContractProxy = proxiesEnv[ContractJsonKey];
 
 async function main() {
-    const[deployer] = await hre.ethers.getSigners();
+    const [deployer] = await hre.ethers.getSigners();
 
     console.log("===================================\n\r");
     console.log("Start time: ", Date(Date.now()));

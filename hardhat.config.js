@@ -53,16 +53,14 @@ task("balance", "Prints an account's balance")
       url: "https://data-seed-prebsc-1-s1.binance.org:8545",
       chainId: 97,
       gas: 8812388,
-      // gasPrice: 20000000000,
-     // accounts: PrivateKey,
-      accounts: { mnemonic: mnemonic },
-      from: Wallet
+      gasPrice: 10000000000,
+      accounts: PrivateKey,
     },
     mainnet: {
       url: "https://bsc-dataseed.binance.org/",
       chainId: 56,
       gasPrice: 5000000000,
-      accounts: PrivateKey
+      accounts: PrelivePK
     }
   },
   etherscan: {
