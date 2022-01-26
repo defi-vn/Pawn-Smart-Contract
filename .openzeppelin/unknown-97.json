@@ -1285,6 +1285,31 @@
       "address": "0x78F8727D238fc8FE8310E0501B228c3B7f9237a9",
       "txHash": "0x0bcee362985a3b60ce5de3562b58a7f2821c06cb1fbc67eae6771f1b91e2fe1e",
       "kind": "uups"
+    },
+    {
+      "address": "0xC277e1E8F8666BD090f0da5E2823936cb44F7b7F",
+      "txHash": "0x7164075ad94c9785e2a195725c1c3f34e97c877d0c5c7b9923140faa00d5c8a1",
+      "kind": "uups"
+    },
+    {
+      "address": "0xC12b040FF335eE937e6079b032e78949E5D6EB6c",
+      "txHash": "0x24276f61813a9603b5ab115705bb334114be4e8767c8896322d786da373df6fc",
+      "kind": "uups"
+    },
+    {
+      "address": "0xC81328135B96634c922517c958f4C12068c0B0fB",
+      "txHash": "0xc7b6565a9fe3d6149d4dc86641ab99e28d01719ac04c9c9b6aea11e6bc27a9da",
+      "kind": "uups"
+    },
+    {
+      "address": "0xb7A7d2eE071F267F67514B71D25aAF9DAbcA265a",
+      "txHash": "0x1ebb4d52c23ba2ed7320b2147077e5dbf2e594003d3f3b6f4130616f2ecfd367",
+      "kind": "uups"
+    },
+    {
+      "address": "0x058dF26059A8453e8aa048E44759fc52FbE4bA88",
+      "txHash": "0x0176a392aa26248a77818d4ae1e54e6af557506d22050a63a0c1f7bac9824cd4",
+      "kind": "uups"
     }
   ],
   "impls": {
@@ -65325,6 +65350,986 @@
           },
           "t_bool": {
             "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "940f67b448ab20a2e284d1edea3a2ef8430810bc6d97eecec87ee8e60c58893d": {
+      "address": "0x4BEf3E3a6D8B0E440Aff863d9723adAF76122442",
+      "txHash": "0x1cbb4c61dbf8e221086817e256a29e5b9007377ac0b91ea9e9179fcaf4104d75",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "_status",
+            "type": "t_uint256",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:37"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:67"
+          },
+          {
+            "contract": "BaseContract",
+            "label": "contractHub",
+            "type": "t_address",
+            "src": "contracts\\base\\BaseContract.sol:26"
+          },
+          {
+            "contract": "Vote",
+            "label": "_totalTokenToVote",
+            "type": "t_struct(Counter)1405_storage",
+            "src": "contracts\\pawn\\voting\\voting.sol:14"
+          },
+          {
+            "contract": "Vote",
+            "label": "_totalVoting",
+            "type": "t_struct(Counter)1405_storage",
+            "src": "contracts\\pawn\\voting\\voting.sol:15"
+          },
+          {
+            "contract": "Vote",
+            "label": "ListTokenVote",
+            "type": "t_mapping(t_uint256,t_struct(VotingNewToken)3798_storage)",
+            "src": "contracts\\pawn\\voting\\voting.sol:17"
+          },
+          {
+            "contract": "Vote",
+            "label": "Votes",
+            "type": "t_mapping(t_uint256,t_struct(Voting)3805_storage)",
+            "src": "contracts\\pawn\\voting\\voting.sol:18"
+          }
+        ],
+        "types": {
+          "t_struct(Counter)1405_storage": {
+            "label": "struct CountersUpgradeable.Counter",
+            "members": [
+              {
+                "label": "_value",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(VotingNewToken)3798_storage)": {
+            "label": "mapping(uint256 => struct IVoting.VotingNewToken)"
+          },
+          "t_struct(VotingNewToken)3798_storage": {
+            "label": "struct IVoting.VotingNewToken",
+            "members": [
+              {
+                "label": "votingId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "tokenAddress",
+                "type": "t_address"
+              },
+              {
+                "label": "votingStart",
+                "type": "t_uint256"
+              },
+              {
+                "label": "votingEnd",
+                "type": "t_uint256"
+              },
+              {
+                "label": "targetVoting",
+                "type": "t_uint256"
+              },
+              {
+                "label": "rewardPoll",
+                "type": "t_uint256"
+              },
+              {
+                "label": "totalVotes",
+                "type": "t_uint256"
+              },
+              {
+                "label": "success",
+                "type": "t_bool"
+              },
+              {
+                "label": "votingStatus",
+                "type": "t_enum(VotingStatus)3778"
+              }
+            ]
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_enum(VotingStatus)3778": {
+            "label": "enum IVoting.VotingStatus",
+            "members": [
+              "OPEN",
+              "CANCELLED",
+              "QUEUE",
+              "COMPLETE"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Voting)3805_storage)": {
+            "label": "mapping(uint256 => struct IVoting.Voting)"
+          },
+          "t_struct(Voting)3805_storage": {
+            "label": "struct IVoting.Voting",
+            "members": [
+              {
+                "label": "votes",
+                "type": "t_mapping(t_address,t_uint256)"
+              },
+              {
+                "label": "votingId",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "853a5f33e4ccc025e1753efd47d3b11ec1b4b93d1a091f6e6e339976dcd44cd9": {
+      "address": "0x8092DAB96438eFf82813311C95b7f09F2c925cEf",
+      "txHash": "0x833b31d647293556efc60252a085242e156b6c18e6ea35d19ece3fbd3601d25c",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "_status",
+            "type": "t_uint256",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:37"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:67"
+          },
+          {
+            "contract": "BaseContract",
+            "label": "contractHub",
+            "type": "t_address",
+            "src": "contracts\\base\\BaseContract.sol:26"
+          },
+          {
+            "contract": "Vote",
+            "label": "_totalTokenToVote",
+            "type": "t_struct(Counter)2993_storage",
+            "src": "contracts\\pawn\\voting\\voting.sol:14"
+          },
+          {
+            "contract": "Vote",
+            "label": "_totalVoting",
+            "type": "t_struct(Counter)2993_storage",
+            "src": "contracts\\pawn\\voting\\voting.sol:15"
+          },
+          {
+            "contract": "Vote",
+            "label": "ListTokenVote",
+            "type": "t_mapping(t_uint256,t_struct(VotingNewToken)29924_storage)",
+            "src": "contracts\\pawn\\voting\\voting.sol:17"
+          },
+          {
+            "contract": "Vote",
+            "label": "Votes",
+            "type": "t_mapping(t_uint256,t_struct(Voting)29931_storage)",
+            "src": "contracts\\pawn\\voting\\voting.sol:18"
+          }
+        ],
+        "types": {
+          "t_struct(Counter)2993_storage": {
+            "label": "struct CountersUpgradeable.Counter",
+            "members": [
+              {
+                "label": "_value",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(VotingNewToken)29924_storage)": {
+            "label": "mapping(uint256 => struct IVoting.VotingNewToken)"
+          },
+          "t_struct(VotingNewToken)29924_storage": {
+            "label": "struct IVoting.VotingNewToken",
+            "members": [
+              {
+                "label": "votingId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "tokenAddress",
+                "type": "t_address"
+              },
+              {
+                "label": "votingStart",
+                "type": "t_uint256"
+              },
+              {
+                "label": "votingEnd",
+                "type": "t_uint256"
+              },
+              {
+                "label": "targetVoting",
+                "type": "t_uint256"
+              },
+              {
+                "label": "rewardPoll",
+                "type": "t_uint256"
+              },
+              {
+                "label": "totalVotes",
+                "type": "t_uint256"
+              },
+              {
+                "label": "success",
+                "type": "t_bool"
+              },
+              {
+                "label": "votingStatus",
+                "type": "t_enum(VotingStatus)29904"
+              }
+            ]
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_enum(VotingStatus)29904": {
+            "label": "enum IVoting.VotingStatus",
+            "members": [
+              "OPEN",
+              "CANCELLED",
+              "QUEUE",
+              "COMPLETE"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Voting)29931_storage)": {
+            "label": "mapping(uint256 => struct IVoting.Voting)"
+          },
+          "t_struct(Voting)29931_storage": {
+            "label": "struct IVoting.Voting",
+            "members": [
+              {
+                "label": "votes",
+                "type": "t_mapping(t_address,t_uint256)"
+              },
+              {
+                "label": "votingId",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "f77f2c0c7a32aefb299ce02c566ed4c008a82a1fb616517f022459d1f1b27e30": {
+      "address": "0xC3EEc85E141dBCBB86Eb685E64325F5C88D1ba18",
+      "txHash": "0xe8da2aaa7357c8274d83411c813bb3cbced60058dff450ee9a2dc3d20c806bcf",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "_status",
+            "type": "t_uint256",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:37"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:67"
+          },
+          {
+            "contract": "BaseContract",
+            "label": "contractHub",
+            "type": "t_address",
+            "src": "contracts\\base\\BaseContract.sol:26"
+          },
+          {
+            "contract": "Vote",
+            "label": "_totalTokenToVote",
+            "type": "t_struct(Counter)1405_storage",
+            "src": "contracts\\pawn\\voting\\voting.sol:14"
+          },
+          {
+            "contract": "Vote",
+            "label": "_totalVoting",
+            "type": "t_struct(Counter)1405_storage",
+            "src": "contracts\\pawn\\voting\\voting.sol:15"
+          },
+          {
+            "contract": "Vote",
+            "label": "ListTokenVote",
+            "type": "t_mapping(t_uint256,t_struct(VotingNewToken)3798_storage)",
+            "src": "contracts\\pawn\\voting\\voting.sol:17"
+          },
+          {
+            "contract": "Vote",
+            "label": "Votes",
+            "type": "t_mapping(t_uint256,t_struct(Voting)3805_storage)",
+            "src": "contracts\\pawn\\voting\\voting.sol:18"
+          }
+        ],
+        "types": {
+          "t_struct(Counter)1405_storage": {
+            "label": "struct CountersUpgradeable.Counter",
+            "members": [
+              {
+                "label": "_value",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(VotingNewToken)3798_storage)": {
+            "label": "mapping(uint256 => struct IVoting.VotingNewToken)"
+          },
+          "t_struct(VotingNewToken)3798_storage": {
+            "label": "struct IVoting.VotingNewToken",
+            "members": [
+              {
+                "label": "votingId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "tokenAddress",
+                "type": "t_address"
+              },
+              {
+                "label": "votingStart",
+                "type": "t_uint256"
+              },
+              {
+                "label": "votingEnd",
+                "type": "t_uint256"
+              },
+              {
+                "label": "targetVoting",
+                "type": "t_uint256"
+              },
+              {
+                "label": "rewardPoll",
+                "type": "t_uint256"
+              },
+              {
+                "label": "totalVotes",
+                "type": "t_uint256"
+              },
+              {
+                "label": "success",
+                "type": "t_bool"
+              },
+              {
+                "label": "votingStatus",
+                "type": "t_enum(VotingStatus)3778"
+              }
+            ]
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_enum(VotingStatus)3778": {
+            "label": "enum IVoting.VotingStatus",
+            "members": [
+              "OPEN",
+              "CANCELLED",
+              "QUEUE",
+              "COMPLETE"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Voting)3805_storage)": {
+            "label": "mapping(uint256 => struct IVoting.Voting)"
+          },
+          "t_struct(Voting)3805_storage": {
+            "label": "struct IVoting.Voting",
+            "members": [
+              {
+                "label": "votes",
+                "type": "t_mapping(t_address,t_uint256)"
+              },
+              {
+                "label": "votingId",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "267c5fd54095a8a11c6b1dde6cb6be3bd4384d9b17ce6d1026118d5a011321c9": {
+      "address": "0x46255879aaDA581b4C7bc363d01E55D611A40D5C",
+      "txHash": "0x955459c04486aa2f6c41e3eb8db4899108b5874b60abe4fe12942a59860048d5",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "_status",
+            "type": "t_uint256",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:37"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:67"
+          },
+          {
+            "contract": "BaseContract",
+            "label": "contractHub",
+            "type": "t_address",
+            "src": "contracts\\base\\BaseContract.sol:26"
+          },
+          {
+            "contract": "Vote",
+            "label": "_totalTokenToVote",
+            "type": "t_struct(Counter)2993_storage",
+            "src": "contracts\\pawn\\voting\\voting.sol:14"
+          },
+          {
+            "contract": "Vote",
+            "label": "_totalVoting",
+            "type": "t_struct(Counter)2993_storage",
+            "src": "contracts\\pawn\\voting\\voting.sol:15"
+          },
+          {
+            "contract": "Vote",
+            "label": "ListTokenVote",
+            "type": "t_mapping(t_uint256,t_struct(VotingNewToken)29926_storage)",
+            "src": "contracts\\pawn\\voting\\voting.sol:17"
+          },
+          {
+            "contract": "Vote",
+            "label": "Votes",
+            "type": "t_mapping(t_uint256,t_struct(Voting)29933_storage)",
+            "src": "contracts\\pawn\\voting\\voting.sol:18"
+          }
+        ],
+        "types": {
+          "t_struct(Counter)2993_storage": {
+            "label": "struct CountersUpgradeable.Counter",
+            "members": [
+              {
+                "label": "_value",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(VotingNewToken)29926_storage)": {
+            "label": "mapping(uint256 => struct IVoting.VotingNewToken)"
+          },
+          "t_struct(VotingNewToken)29926_storage": {
+            "label": "struct IVoting.VotingNewToken",
+            "members": [
+              {
+                "label": "votingId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "tokenAddress",
+                "type": "t_address"
+              },
+              {
+                "label": "votingStart",
+                "type": "t_uint256"
+              },
+              {
+                "label": "votingEnd",
+                "type": "t_uint256"
+              },
+              {
+                "label": "targetVoting",
+                "type": "t_uint256"
+              },
+              {
+                "label": "rewardPoll",
+                "type": "t_uint256"
+              },
+              {
+                "label": "totalVotes",
+                "type": "t_uint256"
+              },
+              {
+                "label": "success",
+                "type": "t_bool"
+              },
+              {
+                "label": "votingStatus",
+                "type": "t_enum(VotingStatus)29906"
+              }
+            ]
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_enum(VotingStatus)29906": {
+            "label": "enum IVoting.VotingStatus",
+            "members": [
+              "OPEN",
+              "CANCELLED",
+              "QUEUE",
+              "COMPLETE"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Voting)29933_storage)": {
+            "label": "mapping(uint256 => struct IVoting.Voting)"
+          },
+          "t_struct(Voting)29933_storage": {
+            "label": "struct IVoting.Voting",
+            "members": [
+              {
+                "label": "votes",
+                "type": "t_mapping(t_address,t_uint256)"
+              },
+              {
+                "label": "votingId",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "bacf3dfdc32b160cefbc30eccf8e21698094d9d6c91c634e09316df60fbc5a77": {
+      "address": "0x155f949Fe0dD34a2af0A71D8e0948D7A5DD2bFdf",
+      "txHash": "0x5e1280b5ed27839eee1906d4546da2a941b2975d00e71cbae31d548471c661ef",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:214"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:80"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:28"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol:96"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "_status",
+            "type": "t_uint256",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:37"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:67"
+          },
+          {
+            "contract": "BaseContract",
+            "label": "contractHub",
+            "type": "t_address",
+            "src": "contracts\\base\\BaseContract.sol:26"
+          },
+          {
+            "contract": "Vote",
+            "label": "_totalTokenToVote",
+            "type": "t_struct(Counter)2993_storage",
+            "src": "contracts\\pawn\\voting\\voting.sol:14"
+          },
+          {
+            "contract": "Vote",
+            "label": "_totalVoting",
+            "type": "t_struct(Counter)2993_storage",
+            "src": "contracts\\pawn\\voting\\voting.sol:15"
+          },
+          {
+            "contract": "Vote",
+            "label": "ListTokenVote",
+            "type": "t_mapping(t_uint256,t_struct(VotingNewToken)29926_storage)",
+            "src": "contracts\\pawn\\voting\\voting.sol:17"
+          },
+          {
+            "contract": "Vote",
+            "label": "Votes",
+            "type": "t_mapping(t_uint256,t_struct(Voting)29933_storage)",
+            "src": "contracts\\pawn\\voting\\voting.sol:18"
+          }
+        ],
+        "types": {
+          "t_struct(Counter)2993_storage": {
+            "label": "struct CountersUpgradeable.Counter",
+            "members": [
+              {
+                "label": "_value",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(VotingNewToken)29926_storage)": {
+            "label": "mapping(uint256 => struct IVoting.VotingNewToken)"
+          },
+          "t_struct(VotingNewToken)29926_storage": {
+            "label": "struct IVoting.VotingNewToken",
+            "members": [
+              {
+                "label": "votingId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "tokenAddress",
+                "type": "t_address"
+              },
+              {
+                "label": "votingStart",
+                "type": "t_uint256"
+              },
+              {
+                "label": "votingEnd",
+                "type": "t_uint256"
+              },
+              {
+                "label": "targetVoting",
+                "type": "t_uint256"
+              },
+              {
+                "label": "rewardPoll",
+                "type": "t_uint256"
+              },
+              {
+                "label": "totalVotes",
+                "type": "t_uint256"
+              },
+              {
+                "label": "success",
+                "type": "t_bool"
+              },
+              {
+                "label": "votingStatus",
+                "type": "t_enum(VotingStatus)29906"
+              }
+            ]
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_enum(VotingStatus)29906": {
+            "label": "enum IVoting.VotingStatus",
+            "members": [
+              "OPEN",
+              "CANCELLED",
+              "QUEUE",
+              "COMPLETE"
+            ]
+          },
+          "t_mapping(t_uint256,t_struct(Voting)29933_storage)": {
+            "label": "mapping(uint256 => struct IVoting.Voting)"
+          },
+          "t_struct(Voting)29933_storage": {
+            "label": "struct IVoting.Voting",
+            "members": [
+              {
+                "label": "votes",
+                "type": "t_mapping(t_address,t_uint256)"
+              },
+              {
+                "label": "votingId",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"

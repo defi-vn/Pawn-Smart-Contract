@@ -648,7 +648,11 @@ contract HardEvaluation is IDFYHardEvaluation, BaseContract {
         //     );
         // }
 
-        (address feeWallet, ) = HubInterface(contractHub).getSystemConfig();
+        //  (address feeWallet, ) = HubInterface(contractHub).getSystemConfig();
+
+        (address feeWallet, , ) = HubInterface(contractHub).getEvaluationConfig(
+            _evaluation.mintingFeeAddress
+        );
 
         CommonLib.safeTransfer(
             _evaluation.mintingFeeAddress,

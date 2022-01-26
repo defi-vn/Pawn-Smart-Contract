@@ -31,8 +31,13 @@
             "PAWN_P2PLOAN_CONTRACT_ADDRESS":    "0x899e455358a9d6d6C8674436f12742E21530ac7B",
             "USERREVIEW_CONTRACT_ADDRESS":      "0x23C75f9534193f685Cf99606Ceea3Ee0Fcc69B3a",
             "LOAN_NFT_CONTRACT_ADDRESS":        "0x55b8d79128f45f58BE5bb5E219aD87E8e5D3Bbc4"
-            
+         
+        },
+        "contractgetPrice" : {
+            "BLS/USD":  "0xF26DE04a1d9028C267BEEE141b55094d71c6c8a9",
+            "CAKE":     "0xB6064eD41d4f67e353768aA239cA86f4F73665a1"
         }
+
     },
     "Implementations": {
         "Prelive": {
@@ -188,9 +193,109 @@
         {
             "Symbol": "DOGE",
             "Address": "0xba2ae424d960c26247dd6c32edc70b295c744c43"
+        },
+        {
+            "Symbol": "BLS",
+            "Address": "0x34aa9099d924f3fb2377ff20d81b235311c15346"
+        },
+        {
+            "Symbol": "CAKE",
+            "Address": "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82"
+        },
+        {
+            "Symbol": "AVA",
+            "Address": "0x13616f44ba82d63c8c0dc3ff843d36a8ec1c05a9"
+        },
+        {
+            "Symbol": "TRVL",
+            "Address": "0x6a8Fd46F88dBD7bdC2D536C604f811C63052ce0F"
+        },
+        {
+            "Symbol": "BABY",
+            "Address": "0x53E562b9B7E5E94b81f10e96Ee70Ad06df3D2657"
+        },
+        {
+            "Symbol": "UNO",
+            "Address": "0x474021845C4643113458ea4414bdb7fB74A01A77"
+        },
+        {
+            "Symbol": "NFTD",
+            "Address": "0xac83271abb4ec95386f08ad2b904a46c61777cef"
+        },
+        {
+            "Symbol": "WST",
+            "Address": "0xaAdFf17d56d80312b392Ced903f3E8dBE5c3ece7"
+        },
+        {
+            "Symbol": "BSW",
+            "Address": "0x965f527d9159dce6288a2219db51fc6eef120dd1"
+        },
+        {
+            "Symbol": "EFUN",
+            "Address": "0x6746e37a756da9e34f0bbf1c0495784ba33b79b4"
         }
     ],
     "Exchanges": [
+        {
+            "Symbol": "UNO",
+            "Name": "UNO/USD",
+            "Address": "0x474021845C4643113458ea4414bdb7fB74A01A77",
+            "Exchange": "0x348594B934953149cdCC1b0A35386C81F99FE235"
+        },
+        {
+            "Symbol": "EFUN",
+            "Name": "EFUN/USD",
+            "Address": "0x6746e37a756da9e34f0bbf1c0495784ba33b79b4",
+            "Exchange": "0xBE16cE9e41E118fCa983De95E4d6ee8e93D65f88"
+        },
+        {
+            "Symbol": "WST",
+            "Name": "WST/USD",
+            "Address": "0xaAdFf17d56d80312b392Ced903f3E8dBE5c3ece7",
+            "Exchange": "0x7d10d88Bbf4d890801e5290b1B39DB7A3823868D"
+        },
+        {
+            "Symbol": "BSW",
+            "Name": "BSW/USD",
+            "Address": "0x965f527d9159dce6288a2219db51fc6eef120dd1",
+            "Exchange": "0x609e41116e65b2b8bc77Eb3D0F0885435dAaAa6e"
+        },
+        {
+            "Symbol": "NFTD",
+            "Name": "NFTD/USD",
+            "Address": "0xac83271abb4ec95386f08ad2b904a46c61777cef",
+            "Exchange": "0xb9adaCD7957677c3B2B9601E99d9C034E34d7eE9"
+        },
+        {
+            "Symbol": "BABY",
+            "Name": "BABY/USD",
+            "Address": "0x53E562b9B7E5E94b81f10e96Ee70Ad06df3D2657",
+            "Exchange": "0xD87E98Dc4076C7F36C31cb02FF2c7B7Cb6d5E815"
+        },
+        {
+            "Symbol": "TRVL",
+            "Name": "TRVL/USD",
+            "Address": "0x6a8Fd46F88dBD7bdC2D536C604f811C63052ce0F",
+            "Exchange": "0xE529773145902912fFE630e95aCC2Aa66F828441"
+        },
+        {
+            "Symbol": "AVA",
+            "Name": "AVA/USD",
+            "Address": "0x13616f44ba82d63c8c0dc3ff843d36a8ec1c05a9",
+            "Exchange": "0x412E8125fe155f659bE964b8f158Cd398b212860"
+        },
+        {
+            "Symbol": "CAKE",
+            "Name": "CAKE/USD",
+            "Address": "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+            "Exchange": "0xB6064eD41d4f67e353768aA239cA86f4F73665a1"
+        },
+         {
+            "Symbol": "BLS",
+            "Name": "BLS/USD",
+            "Address": "0x34aa9099d924f3fb2377ff20d81b235311c15346",
+            "Exchange": "0xF26DE04a1d9028C267BEEE141b55094d71c6c8a9"
+        },
         {
             "Symbol": "USDT",
             "Name": "USDT/USD",
@@ -274,6 +379,28 @@
             "Name": "BUSD/USD",
             "Address": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
             "Exchange": "0xcBb98864Ef56E9042e7d2efef76141f15731B82f"
+        },
+        {
+          "Symbol": "ALPACA",
+          "Name": "ALPACA/USD",
+          "Address": "0x8f0528ce5ef7b51152a59745befdd91d97091d2f",
+          "Exchange": "0xe0073b60833249ffd1bb2af809112c2fbf221DF6"
         }
-    ]
+
+    ],
+    "ContractPair": {
+        "Prelive": {
+            "BLSofBUSD":       "0xa41139c85Fe5ae3eA70E257DFd2B6d6eaB68DcbF",
+            "AVAofBUSDT":      "0xFFb20492C6c7E15139617a3c012cd1F4F0dC48a1",
+            "TRVLofBUSD":      "0x4418557F96515387a21e97363776E0818c4d913c",
+            "BABYofUSDT":      "0xe4947E11A85F411ea037188fc5Ed95d8e6915800",
+           
+            "NFTDofBUSD":      "0xC543F1E21311Ca338081fe25332aD6077F64545c",
+            "WSTofBUSD":       "0x7bf33458a7D077ea5Aa67313e329741Dd130A9EF",
+            "BSWofBUSD":       "0x3c5c8b6C641a6D9973598432B7554A1899768A55",
+            "EFUNofWBNB":      "0xC89FFA4e16d90d11be6EfA4Eb9c149B9a8DAeccd",
+            "UNOofWBNB" :      "0xf26E782318B91F4B164229d783146a8Eb9a42DCD"
+            
+        }
+    }
 }

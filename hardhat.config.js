@@ -59,7 +59,7 @@ task("balance", "Prints an account's balance")
       from: Wallet
     },
     mainnet: {
-      url: "https://bsc-dataseed.binance.org/",
+      url: "https://speedy-nodes-nyc.moralis.io/91997e089e13b6fc9afdc40b/bsc/mainnet",
       chainId: 56,
       gasPrice: 5000000000,
       accounts: PrivateKey

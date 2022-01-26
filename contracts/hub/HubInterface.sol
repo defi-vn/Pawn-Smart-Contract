@@ -133,5 +133,9 @@ interface HubInterface {
     function getEvaluationConfig(address feeTokenAddress)
         external
         view
-        returns (address feeWallet, uint256 evaluationFee, uint256 mintingFee);
+        returns (
+            address feeWallet,
+            uint256 evaluationFee,
+            uint256 mintingFee
+        );
 }
