@@ -72,11 +72,11 @@ library PawnNFTLib {
         uint256 duration
     ) internal pure returns (uint256 inSeconds) {
         if (durationType == IEnums.LoanDurationType.WEEK) {
-            // inSeconds = 7 * 24 * 3600 * duration;
-            inSeconds = 600 * duration; //test
+            inSeconds = 7 * 24 * 3600 * duration;
+            // inSeconds = 600 * duration; //test
         } else {
-            // inSeconds = 30 * 24 * 3600 * duration;
-            inSeconds = 900 * duration; // test
+            inSeconds = 30 * 24 * 3600 * duration;
+            // inSeconds = 900 * duration; // test
         }
     }
 
@@ -85,8 +85,10 @@ library PawnNFTLib {
         uint256 startDate,
         uint256 endDate
     ) internal pure returns (bool) {
-        uint256 week = 600;
-        uint256 month = 900;
+        // uint256 week = 600;
+        // uint256 month = 900;
+        uint256 week = 7 * 24 * 3600;
+        uint256 month = 30 * 24 * 3600;
 
         if (durationType == IEnums.LoanDurationType.WEEK) {
             // if loan contract only lasts one week
@@ -105,23 +107,27 @@ library PawnNFTLib {
         }
     }
 
-    function calculatedueDateTimestampInterest(
+    function calculateDueDateTimestampInterest(
         IEnums.LoanDurationType durationType
     ) internal pure returns (uint256 duedateTimestampInterest) {
         if (durationType == IEnums.LoanDurationType.WEEK) {
-            duedateTimestampInterest = 180;
+            duedateTimestampInterest = 2 * 24 * 3600;
+            // duedateTimestampInterest = 180; // test
         } else {
-            duedateTimestampInterest = 300;
+            duedateTimestampInterest = 7 * 24 * 3600;
+            // duedateTimestampInterest = 300; // test
         }
     }
 
-    function calculatedueDateTimestampPenalty(
+    function calculateDueDateTimestampPenalty(
         IEnums.LoanDurationType durationType
     ) internal pure returns (uint256 duedateTimestampInterest) {
         if (durationType == IEnums.LoanDurationType.WEEK) {
-            duedateTimestampInterest = 600 - 180;
+            duedateTimestampInterest = (7 - 2) * 24 * 3600;
+            // duedateTimestampInterest = 600 - 180; // test
         } else {
-            duedateTimestampInterest = 900 - 300;
+            duedateTimestampInterest = (30 - 7) * 24 * 3600;
+            // duedateTimestampInterest = 900 - 300; // test
         }
     }
 }

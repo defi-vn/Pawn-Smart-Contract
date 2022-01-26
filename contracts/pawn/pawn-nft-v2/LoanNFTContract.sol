@@ -174,7 +174,7 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
 
             uint256 _timeStamp;
             if (paymentRequestType == IEnums.PaymentRequestTypeEnum.INTEREST) {
-                _timeStamp = PawnNFTLib.calculatedueDateTimestampInterest(
+                _timeStamp = PawnNFTLib.calculateDueDateTimestampInterest(
                     currentContract.terms.repaymentCycleType
                 );
 
@@ -182,7 +182,7 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
                     .calculateInterest_NFT(_remainingLoan, currentContract);
             }
             if (paymentRequestType == IEnums.PaymentRequestTypeEnum.OVERDUE) {
-                _timeStamp = PawnNFTLib.calculatedueDateTimestampPenalty(
+                _timeStamp = PawnNFTLib.calculateDueDateTimestampPenalty(
                     currentContract.terms.repaymentCycleType
                 );
 
@@ -293,7 +293,7 @@ contract LoanNFTContract is PawnNFTModel, ILoanNFT {
             // Validate: Due date timestamp of next payment request must not over contract due date
             (, _dueDateTimestamp) = SafeMathUpgradeable.tryAdd(
                 block.timestamp,
-                PawnNFTLib.calculatedueDateTimestampInterest(
+                PawnNFTLib.calculateDueDateTimestampInterest(
                     currentContract.terms.repaymentCycleType
                 )
             );

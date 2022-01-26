@@ -131,7 +131,10 @@ contract Reputation is BaseContract, IReputation {
 
     modifier onlyWhitelistedContractCaller(address _from) {
         // Caller must be a contract
-        // require(_from.isContract(), "DFY: Calling Reputation adjustment from a non-contract address");
+        // require(
+        //     _from.isContract(),
+        //     "DFY: Calling Reputation adjustment from a non-contract address"
+        // );
 
         // Caller must be whitelisted
         require(

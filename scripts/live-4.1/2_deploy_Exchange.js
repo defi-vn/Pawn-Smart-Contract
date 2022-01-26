@@ -2,8 +2,8 @@ require('@nomiclabs/hardhat-ethers');
 const hre = require('hardhat');
 const fs = require("fs");
 
-const envKey = "BCTest";
-const datafilePath = "./scripts/testnet/";
+const envKey = "Live";
+const datafilePath = "./scripts/live-4.1/";
 
 const datafileName = ".deployment_data.json";
 const deploymentInfo = require('./' + datafileName);
@@ -17,12 +17,12 @@ const proxiesEnv = deploymentInfo.Proxies[envKey];
 const HubBuildName = "Hub";
 const HubProxy = proxiesEnv.HUB_ADDRESS;
 
-const ContractBuildName = "HardEvaluation";
-const ContractJsonKey = "EVALUATION_CONTRACT_ADDRESS";
-const ContractSigKey = "EVALUATION";
+const ContractBuildName = "Exchange";
+const ContractJsonKey = "EXCHANGE_CONTRACT_ADDRESS";
+const ContractSigKey = "EXCHANGE";
 
 async function main() {
-    const[deployer] = await hre.ethers.getSigners();
+    const [deployer] = await hre.ethers.getSigners();
 
     console.log("===================================\n\r");
     console.log("Start time: ", Date(Date.now()));

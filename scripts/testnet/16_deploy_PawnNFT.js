@@ -17,9 +17,9 @@ const proxiesEnv = deploymentInfo.Proxies[envKey];
 const HubBuildName = "Hub";
 const HubProxy = proxiesEnv.HUB_ADDRESS;
 
-const ContractBuildName = "HardEvaluation";
-const ContractJsonKey = "EVALUATION_CONTRACT_ADDRESS";
-const ContractSigKey = "EVALUATION";
+const ContractBuildName = "PawnNFTContract";
+const ContractJsonKey = "PAWN_NFT_CONTRACT_ADDRESS";
+const ContractSigKey = "PAWN_NFT";
 
 async function main() {
     const[deployer] = await hre.ethers.getSigners();

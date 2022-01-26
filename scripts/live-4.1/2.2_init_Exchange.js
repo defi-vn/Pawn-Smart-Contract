@@ -1,14 +1,14 @@
 require('@nomiclabs/hardhat-ethers');
 const hre = require('hardhat');
 
-const envKey = "Staging";
-const datafilePath = "./scripts/testnet/";
+const envKey = "Live";
+const datafilePath = "./scripts/live-4.1/";
 
 const datafileName = ".deployment_data.json";
 const deploymentInfo = require('./' + datafileName);
 const dataFileRelativePath = datafilePath + datafileName;
 
-// const { PawnConfig, Proxies, Exchanges } = require('./.deployment_data.json');
+// const { PawnConfig, Proxies, Exchanges } = require('./.deployment_data_prelive.json');
 const proxiesEnv = deploymentInfo.Proxies[envKey];
 const Exchanges = deploymentInfo.Exchanges;
 
