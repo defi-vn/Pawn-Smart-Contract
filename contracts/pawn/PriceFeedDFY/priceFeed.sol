@@ -555,7 +555,7 @@ contract AggregatorProxy is AggregatorV2V3Interface, Owned {
      */
     function description() external view override returns (string memory) {
         // return currentPhase.aggregator_.description();
-        return "UNO/USD";
+        return "WST/USD";
     }
 
     /**
@@ -677,9 +677,9 @@ contract EACAggregatorProxy is AggregatorProxy {
     {
         aggregator_ = _aggregator;
         setController(address(0));
-        // BNB / usd
+        // BUSD / usd
         priceFeed = AggregatorV3Interface(
-            0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE
+            0xcBb98864Ef56E9042e7d2efef76141f15731B82f
         );
     }
 
