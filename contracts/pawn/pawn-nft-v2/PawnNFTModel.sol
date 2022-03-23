@@ -81,6 +81,6 @@ abstract contract PawnNFTModel is
     {
         // TODO : bo khi chuyen reputation sang contract Hub
         // address live
-        _reputationAddress = 0x3174bBbA2BAD72e3e3692d2646D34aa6eE38C191;
+        _reputationAddress = 0x71339887916453b7dc067aF70809AF6d17D0A70D;
     }
 }

@@ -74,7 +74,7 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         uint256 expectedDurationQty,
         IEnums.LoanDurationType durationType,
         string memory beNFTId
-    ) external whenContractNotPaused nonReentrant {
+    ) public whenContractNotPaused nonReentrant {
         /**
         TODO: Implementation
 
@@ -569,5 +569,31 @@ contract PawnNFTContract is PawnNFTModel, IPawnNFT {
         price = informationNFTs[collectionAddress][nftId].price;
         depreciationRate = informationNFTs[collectionAddress][nftId]
             .depreciationRate;
+    }
+
+    function putOnPawnWithLoanRequest(
+        address nftContract,
+        uint256 nftTokenId,
+        uint256 expectedlLoanAmount,
+        address loanAsset,
+        uint256 nftTokenQuantity,
+        uint256 expectedDurationQty,
+        IEnums.LoanDurationType durationType,
+        string memory beNFTId,
+        uint256 pawnShopPackageId,
+        string calldata message
+    ) external whenContractNotPaused {
+        putOnPawn(
+            nftContract,
+            nftTokenId,
+            expectedlLoanAmount,
+            loanAsset,
+            nftTokenQuantity,
+            expectedDurationQty,
+            durationType,
+            beNFTId
+        );
+
+        emit putOnPawnWithLoanRequestEvent(pawnShopPackageId, message);
     }
 }

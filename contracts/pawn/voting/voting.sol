@@ -195,6 +195,49 @@ contract Vote is IVoting, BaseContract {
         emit NewTokenEvent(_token, "");
     }
 
+    function calculateTokenClain(uint256 votingId, address claimer)
+        external
+        view
+        returns (uint256 totalTokenVote, uint256 tokenreward)
+    {
+        // totalTokenVote = 0;
+        // tokenreward = 0;
+        VotingNewToken storage _token = ListTokenVote[votingId];
+
+        require(
+            _token.votingStatus == VotingStatus.QUEUE ||
+                _token.votingStatus == VotingStatus.COMPLETE ||
+                _token.votingStatus == VotingStatus.CANCELLED ||
+                _token.votingStatus == VotingStatus.FALSE
+        );
+
+        if (
+            _token.votingStatus == VotingStatus.FALSE ||
+            _token.votingStatus == VotingStatus.CANCELLED ||
+            _token.votingStatus == VotingStatus.QUEUE
+        ) {
+            // require(
+            //     Votes[votingId].votes[msg.sender] > 0,
+            //     "ban da claim roi claim lam the"
+            // );
+            totalTokenVote = Votes[votingId].votes[claimer];
+        }
+
+        if (_token.votingStatus == VotingStatus.QUEUE) {
+            // require(
+            //     Votes[votingId].votes[msg.sender] > 0,
+            //     "ban da claim roi claim lam the"
+            // );
+            // tinh ti le tra thuong
+            uint256 abc = (Votes[votingId].votes[claimer] * 10**5) /
+                _token.totalVotes;
+
+            uint256 tientra = DivRound((_token.rewardPoll * abc) / 10**5);
+
+            tokenreward = tientra;
+        }
+    }
+
     function claim(uint256 votingId) external {
         VotingNewToken storage _token = ListTokenVote[votingId];
 
@@ -264,11 +307,10 @@ contract Vote is IVoting, BaseContract {
         VotingNewToken storage _token = ListTokenVote[votingId];
         require(_token.votingStatus == VotingStatus.QUEUE);
 
-        ListAddNewToken(
+        configNewToken(
             _token.tokenAddress,
             priceFeedAddress,
-            statusWhitelistCollateral,
-            tokenCID
+            statusWhitelistCollateral
         );
 
         emit AddNewTokenEvent(
@@ -285,6 +327,29 @@ contract Vote is IVoting, BaseContract {
         uint256 statusWhitelistCollateral,
         string memory tokenCID
     ) public onlyAdmin {
+        configNewToken(
+            addressToken,
+            priceFeedAddress,
+            statusWhitelistCollateral
+        );
+        emit AddNewTokenEvent(-1, addressToken, priceFeedAddress, tokenCID);
+    }
+
+    function configNewToken(
+        address addressToken,
+        address priceFeedAddress,
+        uint256 statusWhitelistCollateral
+    ) internal {
+        require(
+            HubInterface(contractHub).getWhitelistCollateral(addressToken) != 1,
+            "token already exists in whitelist"
+        );
+
+        require(priceFeedAddress.isContract(), "is not contract");
+        require(addressToken.isContract(), "is not contract");
+
+        require(priceFeedAddress != address(0));
+
         HubInterface(contractHub).setWhitelistCollateral(
             addressToken,
             statusWhitelistCollateral
@@ -297,21 +362,10 @@ contract Vote is IVoting, BaseContract {
             addressToken,
             priceFeedAddress
         );
-
-        emit AddNewTokenEvent(-1, addressToken, priceFeedAddress, tokenCID);
     }
 
     function DivRound(uint256 a) private pure returns (uint256) {
-        // kiem tra so du khi chia 10**13. Neu lon hon 5 *10**12 khi chia xong thi lam tron len(+1) roi nhan lai voi 10**13
-        //con nho hon thi giu nguyen va nhan lai voi 10**13
-
-        //    uint256 tmp = a % 10**13;
         uint256 tm = a / 10**13;
-        // if (tmp < 5 * 10**12) {
-        //     tm = a / 10**13;
-        // } else {
-        //     tm = a / 10**13 + 1;
-        // }
         uint256 rouding = tm * 10**13;
         return rouding;
     }
