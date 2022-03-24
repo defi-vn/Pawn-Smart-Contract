@@ -47,6 +47,13 @@ interface IVoting is BaseInterface {
         string tokenCID
     );
 
+    event TransferEvent(
+        address token,
+        address to,
+        address from,
+        uint256 amount
+    );
+
     /** function */
     function addNewToken(
         address tokenAddress,

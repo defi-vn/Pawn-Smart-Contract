@@ -266,6 +266,13 @@ contract Vote is IVoting, BaseContract {
                 msg.sender,
                 Votes[votingId].votes[msg.sender]
             );
+
+            emit TransferEvent(
+                _addressTokenVotes,
+                address(this),
+                msg.sender,
+                Votes[votingId].votes[msg.sender]
+            );
             Votes[votingId].votes[msg.sender] = 0;
         }
 
@@ -282,6 +289,13 @@ contract Vote is IVoting, BaseContract {
                 Votes[votingId].votes[msg.sender]
             );
 
+            emit TransferEvent(
+                _addressTokenVotes,
+                address(this),
+                msg.sender,
+                Votes[votingId].votes[msg.sender]
+            );
+
             // tinh ti le tra thuong
             uint256 abc = (Votes[votingId].votes[msg.sender] * 10**5) /
                 _token.totalVotes;
@@ -292,6 +306,13 @@ contract Vote is IVoting, BaseContract {
                 address(this),
                 msg.sender,
                 tientra
+            );
+
+            emit TransferEvent(
+                _addressTokenVotes,
+                address(this),
+                msg.sender,
+                Votes[votingId].votes[msg.sender]
             );
 
             Votes[votingId].votes[msg.sender] = 0;
