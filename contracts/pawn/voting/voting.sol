@@ -195,7 +195,7 @@ contract Vote is IVoting, BaseContract {
         emit NewTokenEvent(_token, "");
     }
 
-    function calculateTokenClain(uint256 votingId, address claimer)
+    function calculateTokenClaim(uint256 votingId, address claimer)
         external
         view
         returns (uint256 totalTokenVote, uint256 tokenreward)
@@ -266,13 +266,16 @@ contract Vote is IVoting, BaseContract {
                 msg.sender,
                 Votes[votingId].votes[msg.sender]
             );
-
-            emit TransferEvent(
+            emit ClainEvent(
+                votingId,
                 _addressTokenVotes,
+                _token.tokenAddress,
+                Votes[votingId].votes[msg.sender],
+                0,
                 address(this),
-                msg.sender,
-                Votes[votingId].votes[msg.sender]
+                msg.sender
             );
+
             Votes[votingId].votes[msg.sender] = 0;
         }
 
@@ -283,13 +286,6 @@ contract Vote is IVoting, BaseContract {
             );
 
             CommonLib.safeTransfer(
-                _addressTokenVotes,
-                address(this),
-                msg.sender,
-                Votes[votingId].votes[msg.sender]
-            );
-
-            emit TransferEvent(
                 _addressTokenVotes,
                 address(this),
                 msg.sender,
@@ -308,11 +304,14 @@ contract Vote is IVoting, BaseContract {
                 tientra
             );
 
-            emit TransferEvent(
+            emit ClainEvent(
+                votingId,
                 _addressTokenVotes,
+                _token.tokenAddress,
+                Votes[votingId].votes[msg.sender],
+                tientra,
                 address(this),
-                msg.sender,
-                Votes[votingId].votes[msg.sender]
+                msg.sender
             );
 
             Votes[votingId].votes[msg.sender] = 0;
