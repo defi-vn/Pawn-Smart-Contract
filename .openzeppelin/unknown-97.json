@@ -1370,6 +1370,11 @@
       "address": "0x6BDb3fe00D30486b36Af81681a6232C5D1dc2505",
       "txHash": "0xa0ec5031994c7535cb17650940c6b989224f5b62143e2df220ba006f00190d04",
       "kind": "uups"
+    },
+    {
+      "address": "0xE6Fdc373cD926c2e09Dd6B44128eb79790C76819",
+      "txHash": "0xea9b25f4d521c63eb50fc29543b1c60fc13b5d95ecc80283c385e1ba4c33721b",
+      "kind": "uups"
     }
   ],
   "impls": {

@@ -22,7 +22,7 @@ const ContractJsonKey = "EVALUATION_CONTRACT_ADDRESS";
 const ContractSigKey = "EVALUATION";
 
 async function main() {
-    const[deployer] = await hre.ethers.getSigners();
+    const [deployer] = await hre.ethers.getSigners();
 
     console.log("===================================\n\r");
     console.log("Start time: ", Date(Date.now()));
