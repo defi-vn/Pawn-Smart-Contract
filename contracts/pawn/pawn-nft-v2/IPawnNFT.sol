@@ -63,6 +63,11 @@ interface IPawnNFT is IPawnNFTBase {
         address offerOwner
     );
 
+    event putOnPawnWithLoanRequestEvent(
+        uint256 pawnShopPackageId,
+        string message
+    );
+
     /** Functions */
     function updateCollateralStatus(
         uint256 collateralId,

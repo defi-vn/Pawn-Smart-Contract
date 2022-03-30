@@ -138,4 +138,7 @@ interface HubInterface {
             uint256 evaluationFee,
             uint256 mintingFee
         );
+
+    function setWhitelistCollateral(address cryptoAddress, uint256 status)
+        external;
 }

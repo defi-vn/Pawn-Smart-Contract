@@ -56,7 +56,6 @@ abstract contract PawnModel is
      */
     function __PawnModel_init(uint256 _zoom) internal initializer {
         __PawnModel_init_unchained();
-
         ZOOM = _zoom;
     }
 

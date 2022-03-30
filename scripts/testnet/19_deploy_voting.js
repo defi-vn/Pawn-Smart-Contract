@@ -4,7 +4,7 @@ const hre = require('hardhat');
 const { Proxies } = require('./.deployment_data.json');
 
 const VoteBuildName = "Vote";
-const HubProxy = Proxies.Staging.HUB_CONTRACT_ADDRESS;
+const HubProxy = Proxies.Dev2.HUB_CONTRACT_ADDRESS;
 const proxyType = { kind: "uups" };
 const HubBuildName = "Hub";
 

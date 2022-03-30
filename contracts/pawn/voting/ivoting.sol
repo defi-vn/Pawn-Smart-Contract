@@ -9,7 +9,8 @@ interface IVoting is BaseInterface {
         OPEN,
         CANCELLED,
         QUEUE,
-        COMPLETE
+        COMPLETE,
+        FALSE
     }
 
     /** struct */
@@ -39,6 +40,23 @@ interface IVoting is BaseInterface {
         uint256 totalvotesOfvoter
     );
 
+    event AddNewTokenEvent(
+        int256 votingId,
+        address token,
+        address priceFeed,
+        string tokenCID
+    );
+
+    event ClaimEvent(
+        uint256 votingId,
+        address tokenVote,
+        address tokenReward,
+        uint256 amountVote,
+        uint256 amountReward,
+        address from,
+        address to
+    );
+
     /** function */
     function addNewToken(
         address tokenAddress,
@@ -62,4 +80,15 @@ interface IVoting is BaseInterface {
     ) external;
 
     function voting(uint256 votingId, uint256 votes) external;
+
+    // function closeVote(uint256 votingId) external;
+
+    // function claim(uint256 votingId) external;
+
+    // function ListNewToken(
+    //     uint256 votingId,
+    //     address priceFeedAddress,
+    //     uint256 statusWhitelistCollateral,
+    //     string memory TokenCID
+    // ) external;
 }

@@ -11,7 +11,9 @@ contract LoanToken is ERC20, ERC20Burnable, Ownable {
     event MintTIA(address received, uint256 amount);
     event BurnTia(address account, uint256 amount);
 
-    constructor() ERC20("LoanToken", "LT") {}
+    constructor() ERC20("LoanToken", "LT") {
+        _mint(msg.sender, 1000000 * 10**decimals());
+    }
 
     modifier onlyOperator() {
         require(_operators[_msgSender()]);
