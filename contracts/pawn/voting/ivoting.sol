@@ -47,7 +47,7 @@ interface IVoting is BaseInterface {
         string tokenCID
     );
 
-    event ClainEvent(
+    event ClaimEvent(
         uint256 votingId,
         address tokenVote,
         address tokenReward,

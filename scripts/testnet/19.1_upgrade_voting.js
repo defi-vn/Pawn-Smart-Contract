@@ -2,7 +2,7 @@ require('@nomiclabs/hardhat-ethers');
 
 const hre = require('hardhat');
 const { Proxies } = require('./.deployment_data.json');
-const proxies = Proxies.Dev2;
+const proxies = Proxies.BCTest;
 
 const VoteProxyAddr = proxies.VOTE_CONTRACT_ADDRESS;
 const VoteBuildName = "Vote";
@@ -48,9 +48,7 @@ async function main() {
     console.log(`Registering \x1b[36m${VoteArtifactv2.contractName}\x1b[0m to \x1b[31m${HubArtifact.contractName}\x1b[0m...`);
     const signature = await VoteContractV2.signature();
     console.log(`Signature: \x1b[36m${signature}\x1b[0m`);
-    await HubContract.registerContract(signature,VoteContractV2.address,VoteArtifactv2.contractName);
-
-
+   // await HubContract.registerContract(signature,VoteContractV2.address,VoteArtifactv2.contractName);
 
     console.log("=================================\n\r");
 

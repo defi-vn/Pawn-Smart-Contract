@@ -256,17 +256,14 @@ contract Vote is IVoting, BaseContract {
             _token.votingStatus == VotingStatus.FALSE ||
             _token.votingStatus == VotingStatus.CANCELLED
         ) {
-            require(
-                Votes[votingId].votes[msg.sender] > 0,
-                "ban da claim roi claim lam the"
-            );
+            require(Votes[votingId].votes[msg.sender] > 0, "ban da claim");
             CommonLib.safeTransfer(
                 _addressTokenVotes,
                 address(this),
                 msg.sender,
                 Votes[votingId].votes[msg.sender]
             );
-            emit ClainEvent(
+            emit ClaimEvent(
                 votingId,
                 _addressTokenVotes,
                 _token.tokenAddress,
@@ -304,7 +301,7 @@ contract Vote is IVoting, BaseContract {
                 tientra
             );
 
-            emit ClainEvent(
+            emit ClaimEvent(
                 votingId,
                 _addressTokenVotes,
                 _token.tokenAddress,
