@@ -23,7 +23,7 @@
     "@chainlink/contracts": "^0.2.2",
     "@openzeppelin/contracts": "^4.3.2",
     "@openzeppelin/contracts-upgradeable": "^4.3.1",
-    "@openzeppelin/hardhat-upgrades": "^1.10.0",
+    "@openzeppelin/hardhat-upgrades": "^1.17.0",
     "web3": "^1.5.3",
     "yargs": "^13.3.2"
   },
