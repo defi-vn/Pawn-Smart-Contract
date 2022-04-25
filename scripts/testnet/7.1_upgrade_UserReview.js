@@ -4,7 +4,7 @@ require('@openzeppelin/hardhat-upgrades');
 const hre = require('hardhat');
 
 const { Proxies } = require('./.deployment_data.json');
-const proxies = Proxies.Staging;
+const proxies = Proxies.Beta;
 
 const ReviewProxyAddr     = proxies.USERREVIEW_CONTRACT_ADDRESS;
 const ReviewBuildNameV1   = "contracts/pawn/reputation/old/UserReview.sol:UserReview";

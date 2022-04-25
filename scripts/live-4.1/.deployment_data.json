@@ -1,416 +1,415 @@
 {
-	"PawnConfig": {
-		"DEFAULT_ADMIN_ROLE": "0x0000000000000000000000000000000000000000000000000000000000000000",
-		"OPERATOR_ROLE": "0x97667070c54ef182b0f5858b034beac1b6f3089aa2d3188bb1e8929f4fa9b929",
-		"PAUSER_ROLE": "0x65d7a28e3265b37a6474929f336521b332c1681b933f6cb9f3376673440d862a",
-		"Admin": "0x46627F7DEf8f0E720bAE6D8167619DA2a29685c2",
-		"Operator": "0x552dfe8a526feb98e7891ed8677559d44c9fcbb7",
-		"EvaluationOperator": "0x317323F1e0b554fBdfD103a34da91e9f22f61bB0",
-		"FeeWallet": "0x205f7819486ad8f68a8447a0459da9fb2fa95981",
-		"IpfsUri": "https://defiforyou.mypinata.cloud/ipfs/",
-		"DFYToken": "0xd98560689c6e748dc37bc410b4d3096b1aa3d8c2",
-		"LateThreshold": 3,
-		"PenaltyRate": 15000000,
-		"PrepaidFee": 300000,
-		"SystemFee": 2000000,
-		"ZOOM": 100000
-	},
-	"Proxies": {
-		"Live": {
-			"HUB_ADDRESS": "0x3be5ea712719A986281379023fBAEa99F1e7FcB1",
-			"EVALUATION_CONTRACT_ADDRESS": "0x28620EA3376E226B3cBF23942cBDaAF5bD63CF1e",
-			"FACTORY_721_CONTRACT_ADDRESS": "0xeC8f46cA1B674699a50352328FC377295fB47194",
-			"EXCHANGE_CONTRACT_ADDRESS": "0xaa024d59Bc460EF1c309Ab71226Dba28576B630d",
-			"PAWN_NFT_CONTRACT_ADDRESS": "0xD4cFb911aD4086823cd7D88f13Ab74B08A162fa4",
-			"LOAN_NFT_CONTRACT_ADDRESS": "0x31a11E8f0D4f2F65243FBd9ccF8e78Cc14f0DFA0",
-			"PAWN_CONTRACT_ADDRESS": "0xe42389C5186C30857F793479b82EE177E9E74bA9",
-			"NFT_CONTRACT_ADDRESS": "0xa74284D12eFbFd719d03f5a289C763Bc7317b5bE",
-			"REPUTATION_CONTRACT_ADDRESS": "0x3174bBbA2BAD72e3e3692d2646D34aa6eE38C191",
-			"PAWN_NFT_CONTRACT_ADDRESS_OLD": "0x2CFd86376139B990e7Ff7286498DC25E98F7457E",
-			"EXCHANGE_CONTRACT_ADDRESS_CRYPTO": "0x59B4871f4E41EbDE4D54F028c6faD76ddE47a7bb",
-			"PAWN_P2PLOAN_CONTRACT_ADDRESS": "0x9361DECA56f2A6B9e8C6a4217da61DeF5dB34099",
-			"USERREVIEW_CONTRACT_ADDRESS": "0xfD64c543aEfe2938a74Cd47Ce92a9d0fFA7B21DB"
-		}
-	},
-	"Implementations": {
-		"Live": {
-			"HUB_ADDRESS": "0xf30FBa6F9696Ca8A10F29Ff7ed0270D796383935",
-			"EVALUATION_CONTRACT_ADDRESS": "0xd17c918bac8EaFBB6E29Afa46b0E81971aCA0Bf8",
-			"FACTORY_721_CONTRACT_ADDRESS": "0xe44877B8B24ac825f7C8E8661f0Ef2Bbec00309d",
-			"EXCHANGE_CONTRACT_ADDRESS": "0xA59a5fa79CF94409fDcd0dA880f3E518F6C031aD",
-			"PAWN_NFT_CONTRACT_ADDRESS": "0x3178821D1869F88Bd35276A1E0454FFbFf435443",
-			"LOAN_NFT_CONTRACT_ADDRESS": "0x1A2bC0Ca8bd23e460fC24E4CB2B3aB04Cc2E30E9",
-			"PAWN_CONTRACT_ADDRESS": "0x7dB0C03eb8c75c488cE1A707dCA007682B58d6b1",
-			"NFT_CONTRACT_ADDRESS": "0x031855df3f2653BF50C2683d01876399AA2Df6A6",
-			"REPUTATION_CONTRACT_ADDRESS": "0xa6a41a2ADb8fCa4de0848d61a58634B84B4056Dd",
-			"PAWN_NFT_CONTRACT_ADDRESS_OLD": "0x8070604d487FB5eCD6e5728c0348A2D957e7B7E9",
-			"EXCHANGE_CONTRACT_ADDRESS_CRYPTO": "0x31f81f2D1172Ccb945690AA0883f67d303F8adbE",
-			"PAWN_P2PLOAN_CONTRACT_ADDRESS": "0xdBA9fE5A12712234b8F1f762854e560C102F1F42",
-			"USERREVIEW_CONTRACT_ADDRESS": "0x6CE90C06f224af362282D8236842bAaf982408cA"
-		}
-	},
-	"Signature": {
-		"Live": {
-			"EVALUATION": "0xcb189994",
-			"FACTORY_721": "0xece86c21",
-			"EXCHANGE": "0xc409de28",
-			"PAWN_NFT": "0x42160f7e",
-			"LOAN_NFT": "0x70b78b9e"
-		}
-	},
-	"DefaultCollection": {
-		"Live": {
-			"NFT_DEFAULT_COLLECTION_ADDRESS": "",
-			"HARD_721_DEFAULT_COLLECTION": ""
-		}
-	},
-	"Tokens": [
-		{
-			"Symbol": "BNB",
-			"Address": "0x0000000000000000000000000000000000000000"
-		},
-		{
-			"Symbol": "ETC",
-			"Address": "0x3d6545b08693daE087E957cb1180ee38B9e3c25E"
-		},
-		{
-			"Symbol": "ZEC",
-			"Address": "0x1Ba42e5193dfA8B03D15dd1B86a3113bbBEF8Eeb"
-		},
-		{
-			"Symbol": "XRP",
-			"Address": "0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE"
-		},
-		{
-			"Symbol": "LTC",
-			"Address": "0x4338665CBB7B2485A8855A139b75D5e34AB0DB94"
-		},
-		{
-			"Symbol": "MKR",
-			"Address": "0x5f0Da599BB2ccCfcf6Fdfd7D81743B6020864350"
-		},
-		{
-			"Symbol": "BAT",
-			"Address": "0x101d82428437127bF1608F699CD651e6Abf9766E"
-		},
-		{
-			"Symbol": "BTC",
-			"Address": "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c"
-		},
-		{
-			"Symbol": "ETH",
-			"Address": "0x2170Ed0880ac9A755fd29B2688956BD959F933F8"
-		},
-		{
-			"Symbol": "DFY",
-			"Address": "0xD98560689C6e748DC37bc410B4d3096B1aA3D8C2"
-		},
-		{
-			"Symbol": "USDT",
-			"Address": "0x55d398326f99059fF775485246999027B3197955"
-		},
-		{
-			"Symbol": "FIL",
-			"Address": "0x0D8Ce2A99Bb6e3B7Db580eD848240e4a0F9aE153"
-		},
-		{
-			"Symbol": "IOTX",
-			"Address": "0x9678E42ceBEb63F23197D726B29b1CB20d0064E5"
-		},
-		{
-			"Symbol": "PAX",
-			"Address": "0xb7F8Cd00C5A06c0537E2aBfF0b58033d02e5E094"
-		},
-		{
-			"Symbol": "ONT",
-			"Address": "0xFd7B3A77848f1C2D67E05E54d78d174a0C850335"
-		},
-		{
-			"Symbol": "SNX",
-			"Address": "0x9Ac983826058b8a9C7Aa1C9171441191232E8404"
-		},
-		{
-			"Symbol": "BAND",
-			"Address": "0xAD6cAEb32CD2c308980a548bD0Bc5AA4306c6c18"
-		},
-		{
-			"Symbol": "DOT",
-			"Address": "0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402"
-		},
-		{
-			"Symbol": "BEL",
-			"Address": "0x8443f091997f06a61670B735ED92734F5628692F"
-		},
-		{
-			"Symbol": "ELF",
-			"Address": "0xa3f020a5C92e15be13CAF0Ee5C95cF79585EeCC9"
-		},
-		{
-			"Symbol": "TCT",
-			"Address": "0xCA0a9Df6a8cAD800046C1DDc5755810718b65C44"
-		},
-		{
-			"Symbol": "LINK",
-			"Address": "0xF8A0BF9cF54Bb92F17374d9e9A321E6a111a51bD"
-		},
-		{
-			"Symbol": "ADA",
-			"Address": "0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47"
-		},
-		{
-			"Symbol": "EOS",
-			"Address": "0x56b6fB708fC5732DEC1Afc8D8556423A2EDcCbD6"
-		},
-		{
-			"Symbol": "BCH",
-			"Address": "0x8fF795a6F4D97E7887C79beA79aba5cc76444aDf"
-		},
-		{
-			"Symbol": "INJ",
-			"Address": "0xa2B726B1145A4773F68593CF171187d8EBe4d495"
-		},
-		{
-			"Symbol": "UNI",
-			"Address": "0xBf5140A22578168FD562DCcF235E5D43A02ce9B1"
-		},
-		{
-			"Symbol": "NEAR",
-			"Address": "0x1Fa4a73a3F0133f0025378af00236f3aBDEE5D63"
-		},
-		{
-			"Symbol": "ATOM",
-			"Address": "0x0Eb3a705fc54725037CC9e008bDede697f62F335"
-		},
-		{
-			"Symbol": "COMP",
-			"Address": "0x52CE071Bd9b1C4B00A0b92D298c512478CaD67e8"
-		},
-		{
-			"Symbol": "YFI",
-			"Address": "0x88f1A5ae2A3BF98AEAF342D26B30a79438c9142e"
-		},
-		{
-			"Symbol": "YFII",
-			"Address": "0x7F70642d88cf1C4a3a7abb072B53B929b653edA5"
-		},
-		{
-			"Symbol": "XTZ",
-			"Address": "0x16939ef78684453bfDFb47825F8a5F714f12623a"
-		},
-		{
-			"Symbol": "WBNB",
-			"Address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
-		},
-		{
-			"Symbol": "DOGE",
-			"Address": "0xba2ae424d960c26247dd6c32edc70b295c744c43"
-		}
-	],
-	"Exchanges": [
-		
-        {
-            "Symbol": "UNO",
-            "Name": "UNO/USD",
-            "Address": "0x474021845C4643113458ea4414bdb7fB74A01A77",
-            "Exchange": "0x348594B934953149cdCC1b0A35386C81F99FE235"
-        },
-        {
-            "Symbol": "EFUN",
-            "Name": "EFUN/USD",
-            "Address": "0x6746e37a756da9e34f0bbf1c0495784ba33b79b4",
-            "Exchange": "0xBE16cE9e41E118fCa983De95E4d6ee8e93D65f88"
-        },
-        {
-            "Symbol": "WST",
-            "Name": "WST/USD",
-            "Address": "0xaAdFf17d56d80312b392Ced903f3E8dBE5c3ece7",
-            "Exchange": "0x7d10d88Bbf4d890801e5290b1B39DB7A3823868D"
-        },
-        {
-            "Symbol": "BSW",
-            "Name": "BSW/USD",
-            "Address": "0x965f527d9159dce6288a2219db51fc6eef120dd1",
-            "Exchange": "0x609e41116e65b2b8bc77Eb3D0F0885435dAaAa6e"
-        },
-        {
-            "Symbol": "NFTD",
-            "Name": "NFTD/USD",
-            "Address": "0xac83271abb4ec95386f08ad2b904a46c61777cef",
-            "Exchange": "0xb9adaCD7957677c3B2B9601E99d9C034E34d7eE9"
-        },
-        {
-            "Symbol": "BABY",
-            "Name": "BABY/USD",
-            "Address": "0x53E562b9B7E5E94b81f10e96Ee70Ad06df3D2657",
-            "Exchange": "0xD87E98Dc4076C7F36C31cb02FF2c7B7Cb6d5E815"
-        },
-        {
-            "Symbol": "TRVL",
-            "Name": "TRVL/USD",
-            "Address": "0x6a8Fd46F88dBD7bdC2D536C604f811C63052ce0F",
-            "Exchange": "0xE529773145902912fFE630e95aCC2Aa66F828441"
-        },
-        {
-            "Symbol": "AVA",
-            "Name": "AVA/USD",
-            "Address": "0x13616f44ba82d63c8c0dc3ff843d36a8ec1c05a9",
-            "Exchange": "0x412E8125fe155f659bE964b8f158Cd398b212860"
-        },
-        {
-            "Symbol": "CAKE",
-            "Name": "CAKE/USD",
-            "Address": "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
-            "Exchange": "0xB6064eD41d4f67e353768aA239cA86f4F73665a1"
-        },
-         {
-            "Symbol": "BLS",
-            "Name": "BLS/USD",
-            "Address": "0x34aa9099d924f3fb2377ff20d81b235311c15346",
-            "Exchange": "0xF26DE04a1d9028C267BEEE141b55094d71c6c8a9"
-        },
-        {
-			"Symbol": "USDT",
-			"Name": "USDT/USD",
-			"Address": "0x55d398326f99059fF775485246999027B3197955",
-			"Exchange": "0xB97Ad0E74fa7d920791E90258A6E2085088b4320"
-		},
-		{
-			"Symbol": "ETH",
-			"Name": "ETH/USD",
-			"Address": "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
-			"Exchange": "0x9ef1B8c0E4F7dc8bF5719Ea496883DC6401d5b2e"
-		},
-		{
-			"Symbol": "LTC",
-			"Name": "LTC/USD",
-			"Address": "0x4338665CBB7B2485A8855A139b75D5e34AB0DB94",
-			"Exchange": "0x74E72F37A8c415c8f1a98Ed42E78Ff997435791D"
-		},
-		{
-			"Symbol": "BTC",
-			"Name": "BTC/USD",
-			"Address": "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
-			"Exchange": "0x264990fbd0A4796A3E3d8E37C4d5F87a3aCa5Ebf"
-		},
-		{
-			"Symbol": "DOT",
-			"Name": "DOT/USD",
-			"Address": "0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402",
-			"Exchange": "0xC333eb0086309a16aa7c8308DfD32c8BBA0a2592"
-		},
-		{
-			"Symbol": "ADA",
-			"Name": "ADA/USD",
-			"Address": "0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47",
-			"Exchange": "0xa767f745331D267c7751297D982b050c93985627"
-		},
-		{
-			"Symbol": "XRP",
-			"Name": "XRP/USD",
-			"Address": "0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE",
-			"Exchange": "0x93A67D414896A280bF8FFB3b389fE3686E014fda"
-		},
-		{
-			"Symbol": "FIL",
-			"Name": "FIL/USD",
-			"Address": "0x0D8Ce2A99Bb6e3B7Db580eD848240e4a0F9aE153",
-			"Exchange": "0xE5dbFD9003bFf9dF5feB2f4F445Ca00fb121fb83"
-		},
-		{
-			"Symbol": "SXP",
-			"Name": "SXP/USD",
-			"Address": "0x47BEAd2563dCBf3bF2c9407fEa4dC236fAbA485A",
-			"Exchange": "0xE188A9875af525d25334d75F3327863B2b8cd0F1"
-		},
-		{
-			"Symbol": "LINK",
-			"Name": "LINK/USD",
-			"Address": "0xF8A0BF9cF54Bb92F17374d9e9A321E6a111a51bD",
-			"Exchange": "0xca236E327F629f9Fc2c30A4E95775EbF0B89fac8"
-		},
-		{
-			"Symbol": "BCH",
-			"Name": "BCH/USD",
-			"Address": "0x8fF795a6F4D97E7887C79beA79aba5cc76444aDf",
-			"Exchange": "0x43d80f616DAf0b0B42a928EeD32147dC59027D41"
-		},
-		{
-			"Symbol": "DAI",
-			"Name": "DAI/USD",
-			"Address": "0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3",
-			"Exchange": "0x132d3C0B1D2cEa0BC552588063bdBb210FDeecfA"
-		},
-		{
-			"Symbol": "BUSD",
-			"Name": "BUSD/USD",
-			"Address": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
-			"Exchange": "0xcBb98864Ef56E9042e7d2efef76141f15731B82f"
-		},
-		{
-			"Symbol": "EOS",
-			"Name": "EOS/USD",
-			"Address": "0x56b6fB708fC5732DEC1Afc8D8556423A2EDcCbD6",
-			"Exchange": "0xd5508c8Ffdb8F15cE336e629fD4ca9AdB48f50F0"
-		},
-		{
-			"Symbol": "ATOM",
-			"Name": "ATOM/USD",
-			"Address": "0x0Eb3a705fc54725037CC9e008bDede697f62F335",
-			"Exchange": "0xb056B7C804297279A9a673289264c17E6Dc6055d"
-		},
-		{
-			"Symbol": "ONT",
-			"Name": "ONT/USD",
-			"Address": "0xFd7B3A77848f1C2D67E05E54d78d174a0C850335",
-			"Exchange": "0x887f177CBED2cf555a64e7bF125E1825EB69dB82"
-		},
-		{
-			"Symbol": "COMP",
-			"Name": "COMP/USD",
-			"Address": "0x52CE071Bd9b1C4B00A0b92D298c512478CaD67e8",
-			"Exchange": "0x0Db8945f9aEf5651fa5bd52314C5aAe78DfDe540"
-		},
-		{
-			"Symbol": "UNI",
-			"Name": "UNI/USD",
-			"Address": "0xBf5140A22578168FD562DCcF235E5D43A02ce9B1",
-			"Exchange": "0xb57f259E7C24e56a1dA00F66b55A5640d9f9E7e4"
-		},
-		{
-			"Symbol": "USDC",
-			"Name": "USDC/USD",
-			"Address": "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
-			"Exchange": "0x51597f405303C4377E36123cBc172b13269EA163"
-		},
-		{
-			"Symbol": "XTZ",
-			"Name": "XTZ/USD",
-			"Address": "0x16939ef78684453bfDFb47825F8a5F714f12623a",
-			"Exchange": "0x9A18137ADCF7b05f033ad26968Ed5a9cf0Bf8E6b"
-		},
-		{
-			"Symbol": "YFI",
-			"Name": "YFI/USD",
-			"Address": "0x88f1A5ae2A3BF98AEAF342D26B30a79438c9142e",
-			"Exchange": "0xD7eAa5Bf3013A96e3d515c055Dbd98DbdC8c620D"
-		},
-		{
-			"Symbol": "YFII",
-			"Name": "YFII/USD",
-			"Address": "0x7F70642d88cf1C4a3a7abb072B53B929b653edA5",
-			"Exchange": "0xC94580FAaF145B2FD0ab5215031833c98D3B77E4"
-		},
-		{
-			"Symbol": "DFY",
-			"Name": "DFY/USD",
-			"Address": "0xd98560689c6e748dc37bc410b4d3096b1aa3d8c2",
-			"Exchange": "0xC20e4e681E86339240459Cd86511aB9f1192fbCE"
-		},
-		{
-			"Symbol": "ALPACA",
-			"Name": "ALPACA/USD",
-			"Address": "0x8f0528ce5ef7b51152a59745befdd91d97091d2f",
-			"Exchange": "0xe0073b60833249ffd1bb2af809112c2fbf221DF6"
-		}
-	]
+  "PawnConfig": {
+    "DEFAULT_ADMIN_ROLE": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "OPERATOR_ROLE": "0x97667070c54ef182b0f5858b034beac1b6f3089aa2d3188bb1e8929f4fa9b929",
+    "PAUSER_ROLE": "0x65d7a28e3265b37a6474929f336521b332c1681b933f6cb9f3376673440d862a",
+    "Admin": "0x46627F7DEf8f0E720bAE6D8167619DA2a29685c2",
+    "Operator": "0x552dfe8a526feb98e7891ed8677559d44c9fcbb7",
+    "EvaluationOperator": "0x317323F1e0b554fBdfD103a34da91e9f22f61bB0",
+    "FeeWallet": "0x205f7819486ad8f68a8447a0459da9fb2fa95981",
+    "IpfsUri": "https://defiforyou.mypinata.cloud/ipfs/",
+    "DFYToken": "0xd98560689c6e748dc37bc410b4d3096b1aa3d8c2",
+    "LateThreshold": 3,
+    "PenaltyRate": 15000000,
+    "PrepaidFee": 300000,
+    "SystemFee": 2000000,
+    "ZOOM": 100000
+  },
+  "Proxies": {
+    "Live": {
+      "HUB_ADDRESS": "0x3be5ea712719A986281379023fBAEa99F1e7FcB1",
+      "EVALUATION_CONTRACT_ADDRESS": "0x28620EA3376E226B3cBF23942cBDaAF5bD63CF1e",
+      "FACTORY_721_CONTRACT_ADDRESS": "0xeC8f46cA1B674699a50352328FC377295fB47194",
+      "EXCHANGE_CONTRACT_ADDRESS": "0xaa024d59Bc460EF1c309Ab71226Dba28576B630d",
+      "PAWN_NFT_CONTRACT_ADDRESS": "0xD4cFb911aD4086823cd7D88f13Ab74B08A162fa4",
+      "LOAN_NFT_CONTRACT_ADDRESS": "0x31a11E8f0D4f2F65243FBd9ccF8e78Cc14f0DFA0",
+      "PAWN_CONTRACT_ADDRESS": "0xe42389C5186C30857F793479b82EE177E9E74bA9",
+      "NFT_CONTRACT_ADDRESS": "0xa74284D12eFbFd719d03f5a289C763Bc7317b5bE",
+      "REPUTATION_CONTRACT_ADDRESS": "0x3174bBbA2BAD72e3e3692d2646D34aa6eE38C191",
+      "PAWN_NFT_CONTRACT_ADDRESS_OLD": "0x2CFd86376139B990e7Ff7286498DC25E98F7457E",
+      "EXCHANGE_CONTRACT_ADDRESS_CRYPTO": "0x59B4871f4E41EbDE4D54F028c6faD76ddE47a7bb",
+      "PAWN_P2PLOAN_CONTRACT_ADDRESS": "0x9361DECA56f2A6B9e8C6a4217da61DeF5dB34099",
+      "USERREVIEW_CONTRACT_ADDRESS": "0xfD64c543aEfe2938a74Cd47Ce92a9d0fFA7B21DB"
+    }
+  },
+  "Implementations": {
+    "Live": {
+      "HUB_ADDRESS": "0xf30FBa6F9696Ca8A10F29Ff7ed0270D796383935",
+      "EVALUATION_CONTRACT_ADDRESS": "0xd17c918bac8EaFBB6E29Afa46b0E81971aCA0Bf8",
+      "FACTORY_721_CONTRACT_ADDRESS": "0xe44877B8B24ac825f7C8E8661f0Ef2Bbec00309d",
+      "EXCHANGE_CONTRACT_ADDRESS": "0xA59a5fa79CF94409fDcd0dA880f3E518F6C031aD",
+      "PAWN_NFT_CONTRACT_ADDRESS": "0x3178821D1869F88Bd35276A1E0454FFbFf435443",
+      "LOAN_NFT_CONTRACT_ADDRESS": "0x1A2bC0Ca8bd23e460fC24E4CB2B3aB04Cc2E30E9",
+      "PAWN_CONTRACT_ADDRESS": "0x7dB0C03eb8c75c488cE1A707dCA007682B58d6b1",
+      "NFT_CONTRACT_ADDRESS": "0x031855df3f2653BF50C2683d01876399AA2Df6A6",
+      "REPUTATION_CONTRACT_ADDRESS": "0xa6a41a2ADb8fCa4de0848d61a58634B84B4056Dd",
+      "PAWN_NFT_CONTRACT_ADDRESS_OLD": "0x8070604d487FB5eCD6e5728c0348A2D957e7B7E9",
+      "EXCHANGE_CONTRACT_ADDRESS_CRYPTO": "0x31f81f2D1172Ccb945690AA0883f67d303F8adbE",
+      "PAWN_P2PLOAN_CONTRACT_ADDRESS": "0xdBA9fE5A12712234b8F1f762854e560C102F1F42",
+      "USERREVIEW_CONTRACT_ADDRESS": "0x6CE90C06f224af362282D8236842bAaf982408cA"
+    }
+  },
+  "Signature": {
+    "Live": {
+      "EVALUATION": "0xcb189994",
+      "FACTORY_721": "0xece86c21",
+      "EXCHANGE": "0xc409de28",
+      "PAWN_NFT": "0x42160f7e",
+      "LOAN_NFT": "0x70b78b9e"
+    }
+  },
+  "DefaultCollection": {
+    "Live": {
+      "NFT_DEFAULT_COLLECTION_ADDRESS": "",
+      "HARD_721_DEFAULT_COLLECTION": ""
+    }
+  },
+  "Tokens": [
+    {
+      "Symbol": "BNB",
+      "Address": "0x0000000000000000000000000000000000000000"
+    },
+    {
+      "Symbol": "ETC",
+      "Address": "0x3d6545b08693daE087E957cb1180ee38B9e3c25E"
+    },
+    {
+      "Symbol": "ZEC",
+      "Address": "0x1Ba42e5193dfA8B03D15dd1B86a3113bbBEF8Eeb"
+    },
+    {
+      "Symbol": "XRP",
+      "Address": "0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE"
+    },
+    {
+      "Symbol": "LTC",
+      "Address": "0x4338665CBB7B2485A8855A139b75D5e34AB0DB94"
+    },
+    {
+      "Symbol": "MKR",
+      "Address": "0x5f0Da599BB2ccCfcf6Fdfd7D81743B6020864350"
+    },
+    {
+      "Symbol": "BAT",
+      "Address": "0x101d82428437127bF1608F699CD651e6Abf9766E"
+    },
+    {
+      "Symbol": "BTC",
+      "Address": "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c"
+    },
+    {
+      "Symbol": "ETH",
+      "Address": "0x2170Ed0880ac9A755fd29B2688956BD959F933F8"
+    },
+    {
+      "Symbol": "DFY",
+      "Address": "0xD98560689C6e748DC37bc410B4d3096B1aA3D8C2"
+    },
+    {
+      "Symbol": "USDT",
+      "Address": "0x55d398326f99059fF775485246999027B3197955"
+    },
+    {
+      "Symbol": "FIL",
+      "Address": "0x0D8Ce2A99Bb6e3B7Db580eD848240e4a0F9aE153"
+    },
+    {
+      "Symbol": "IOTX",
+      "Address": "0x9678E42ceBEb63F23197D726B29b1CB20d0064E5"
+    },
+    {
+      "Symbol": "PAX",
+      "Address": "0xb7F8Cd00C5A06c0537E2aBfF0b58033d02e5E094"
+    },
+    {
+      "Symbol": "ONT",
+      "Address": "0xFd7B3A77848f1C2D67E05E54d78d174a0C850335"
+    },
+    {
+      "Symbol": "SNX",
+      "Address": "0x9Ac983826058b8a9C7Aa1C9171441191232E8404"
+    },
+    {
+      "Symbol": "BAND",
+      "Address": "0xAD6cAEb32CD2c308980a548bD0Bc5AA4306c6c18"
+    },
+    {
+      "Symbol": "DOT",
+      "Address": "0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402"
+    },
+    {
+      "Symbol": "BEL",
+      "Address": "0x8443f091997f06a61670B735ED92734F5628692F"
+    },
+    {
+      "Symbol": "ELF",
+      "Address": "0xa3f020a5C92e15be13CAF0Ee5C95cF79585EeCC9"
+    },
+    {
+      "Symbol": "TCT",
+      "Address": "0xCA0a9Df6a8cAD800046C1DDc5755810718b65C44"
+    },
+    {
+      "Symbol": "LINK",
+      "Address": "0xF8A0BF9cF54Bb92F17374d9e9A321E6a111a51bD"
+    },
+    {
+      "Symbol": "ADA",
+      "Address": "0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47"
+    },
+    {
+      "Symbol": "EOS",
+      "Address": "0x56b6fB708fC5732DEC1Afc8D8556423A2EDcCbD6"
+    },
+    {
+      "Symbol": "BCH",
+      "Address": "0x8fF795a6F4D97E7887C79beA79aba5cc76444aDf"
+    },
+    {
+      "Symbol": "INJ",
+      "Address": "0xa2B726B1145A4773F68593CF171187d8EBe4d495"
+    },
+    {
+      "Symbol": "UNI",
+      "Address": "0xBf5140A22578168FD562DCcF235E5D43A02ce9B1"
+    },
+    {
+      "Symbol": "NEAR",
+      "Address": "0x1Fa4a73a3F0133f0025378af00236f3aBDEE5D63"
+    },
+    {
+      "Symbol": "ATOM",
+      "Address": "0x0Eb3a705fc54725037CC9e008bDede697f62F335"
+    },
+    {
+      "Symbol": "COMP",
+      "Address": "0x52CE071Bd9b1C4B00A0b92D298c512478CaD67e8"
+    },
+    {
+      "Symbol": "YFI",
+      "Address": "0x88f1A5ae2A3BF98AEAF342D26B30a79438c9142e"
+    },
+    {
+      "Symbol": "YFII",
+      "Address": "0x7F70642d88cf1C4a3a7abb072B53B929b653edA5"
+    },
+    {
+      "Symbol": "XTZ",
+      "Address": "0x16939ef78684453bfDFb47825F8a5F714f12623a"
+    },
+    {
+      "Symbol": "WBNB",
+      "Address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+    },
+    {
+      "Symbol": "DOGE",
+      "Address": "0xba2ae424d960c26247dd6c32edc70b295c744c43"
+    }
+  ],
+  "Exchanges": [
+    {
+      "Symbol": "UNO",
+      "Name": "UNO/USD",
+      "Address": "0x474021845C4643113458ea4414bdb7fB74A01A77",
+      "Exchange": "0x348594B934953149cdCC1b0A35386C81F99FE235"
+    },
+    {
+      "Symbol": "EFUN",
+      "Name": "EFUN/USD",
+      "Address": "0x6746e37a756da9e34f0bbf1c0495784ba33b79b4",
+      "Exchange": "0xBE16cE9e41E118fCa983De95E4d6ee8e93D65f88"
+    },
+    {
+      "Symbol": "WST",
+      "Name": "WST/USD",
+      "Address": "0xaAdFf17d56d80312b392Ced903f3E8dBE5c3ece7",
+      "Exchange": "0x7d10d88Bbf4d890801e5290b1B39DB7A3823868D"
+    },
+    {
+      "Symbol": "BSW",
+      "Name": "BSW/USD",
+      "Address": "0x965f527d9159dce6288a2219db51fc6eef120dd1",
+      "Exchange": "0x609e41116e65b2b8bc77Eb3D0F0885435dAaAa6e"
+    },
+    {
+      "Symbol": "NFTD",
+      "Name": "NFTD/USD",
+      "Address": "0xac83271abb4ec95386f08ad2b904a46c61777cef",
+      "Exchange": "0xb9adaCD7957677c3B2B9601E99d9C034E34d7eE9"
+    },
+    {
+      "Symbol": "BABY",
+      "Name": "BABY/USD",
+      "Address": "0x53E562b9B7E5E94b81f10e96Ee70Ad06df3D2657",
+      "Exchange": "0xD87E98Dc4076C7F36C31cb02FF2c7B7Cb6d5E815"
+    },
+    {
+      "Symbol": "TRVL",
+      "Name": "TRVL/USD",
+      "Address": "0x6a8Fd46F88dBD7bdC2D536C604f811C63052ce0F",
+      "Exchange": "0xE529773145902912fFE630e95aCC2Aa66F828441"
+    },
+    {
+      "Symbol": "AVA",
+      "Name": "AVA/USD",
+      "Address": "0x13616f44ba82d63c8c0dc3ff843d36a8ec1c05a9",
+      "Exchange": "0x412E8125fe155f659bE964b8f158Cd398b212860"
+    },
+    {
+      "Symbol": "CAKE",
+      "Name": "CAKE/USD",
+      "Address": "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+      "Exchange": "0xB6064eD41d4f67e353768aA239cA86f4F73665a1"
+    },
+    {
+      "Symbol": "BLS",
+      "Name": "BLS/USD",
+      "Address": "0x34aa9099d924f3fb2377ff20d81b235311c15346",
+      "Exchange": "0xF26DE04a1d9028C267BEEE141b55094d71c6c8a9"
+    },
+    {
+      "Symbol": "USDT",
+      "Name": "USDT/USD",
+      "Address": "0x55d398326f99059fF775485246999027B3197955",
+      "Exchange": "0xB97Ad0E74fa7d920791E90258A6E2085088b4320"
+    },
+    {
+      "Symbol": "ETH",
+      "Name": "ETH/USD",
+      "Address": "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
+      "Exchange": "0x9ef1B8c0E4F7dc8bF5719Ea496883DC6401d5b2e"
+    },
+    {
+      "Symbol": "LTC",
+      "Name": "LTC/USD",
+      "Address": "0x4338665CBB7B2485A8855A139b75D5e34AB0DB94",
+      "Exchange": "0x74E72F37A8c415c8f1a98Ed42E78Ff997435791D"
+    },
+    {
+      "Symbol": "BTC",
+      "Name": "BTC/USD",
+      "Address": "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
+      "Exchange": "0x264990fbd0A4796A3E3d8E37C4d5F87a3aCa5Ebf"
+    },
+    {
+      "Symbol": "DOT",
+      "Name": "DOT/USD",
+      "Address": "0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402",
+      "Exchange": "0xC333eb0086309a16aa7c8308DfD32c8BBA0a2592"
+    },
+    {
+      "Symbol": "ADA",
+      "Name": "ADA/USD",
+      "Address": "0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47",
+      "Exchange": "0xa767f745331D267c7751297D982b050c93985627"
+    },
+    {
+      "Symbol": "XRP",
+      "Name": "XRP/USD",
+      "Address": "0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE",
+      "Exchange": "0x93A67D414896A280bF8FFB3b389fE3686E014fda"
+    },
+    {
+      "Symbol": "FIL",
+      "Name": "FIL/USD",
+      "Address": "0x0D8Ce2A99Bb6e3B7Db580eD848240e4a0F9aE153",
+      "Exchange": "0xE5dbFD9003bFf9dF5feB2f4F445Ca00fb121fb83"
+    },
+    {
+      "Symbol": "SXP",
+      "Name": "SXP/USD",
+      "Address": "0x47BEAd2563dCBf3bF2c9407fEa4dC236fAbA485A",
+      "Exchange": "0xE188A9875af525d25334d75F3327863B2b8cd0F1"
+    },
+    {
+      "Symbol": "LINK",
+      "Name": "LINK/USD",
+      "Address": "0xF8A0BF9cF54Bb92F17374d9e9A321E6a111a51bD",
+      "Exchange": "0xca236E327F629f9Fc2c30A4E95775EbF0B89fac8"
+    },
+    {
+      "Symbol": "BCH",
+      "Name": "BCH/USD",
+      "Address": "0x8fF795a6F4D97E7887C79beA79aba5cc76444aDf",
+      "Exchange": "0x43d80f616DAf0b0B42a928EeD32147dC59027D41"
+    },
+    {
+      "Symbol": "DAI",
+      "Name": "DAI/USD",
+      "Address": "0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3",
+      "Exchange": "0x132d3C0B1D2cEa0BC552588063bdBb210FDeecfA"
+    },
+    {
+      "Symbol": "BUSD",
+      "Name": "BUSD/USD",
+      "Address": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+      "Exchange": "0xcBb98864Ef56E9042e7d2efef76141f15731B82f"
+    },
+    {
+      "Symbol": "EOS",
+      "Name": "EOS/USD",
+      "Address": "0x56b6fB708fC5732DEC1Afc8D8556423A2EDcCbD6",
+      "Exchange": "0xd5508c8Ffdb8F15cE336e629fD4ca9AdB48f50F0"
+    },
+    {
+      "Symbol": "ATOM",
+      "Name": "ATOM/USD",
+      "Address": "0x0Eb3a705fc54725037CC9e008bDede697f62F335",
+      "Exchange": "0xb056B7C804297279A9a673289264c17E6Dc6055d"
+    },
+    {
+      "Symbol": "ONT",
+      "Name": "ONT/USD",
+      "Address": "0xFd7B3A77848f1C2D67E05E54d78d174a0C850335",
+      "Exchange": "0x887f177CBED2cf555a64e7bF125E1825EB69dB82"
+    },
+    {
+      "Symbol": "COMP",
+      "Name": "COMP/USD",
+      "Address": "0x52CE071Bd9b1C4B00A0b92D298c512478CaD67e8",
+      "Exchange": "0x0Db8945f9aEf5651fa5bd52314C5aAe78DfDe540"
+    },
+    {
+      "Symbol": "UNI",
+      "Name": "UNI/USD",
+      "Address": "0xBf5140A22578168FD562DCcF235E5D43A02ce9B1",
+      "Exchange": "0xb57f259E7C24e56a1dA00F66b55A5640d9f9E7e4"
+    },
+    {
+      "Symbol": "USDC",
+      "Name": "USDC/USD",
+      "Address": "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
+      "Exchange": "0x51597f405303C4377E36123cBc172b13269EA163"
+    },
+    {
+      "Symbol": "XTZ",
+      "Name": "XTZ/USD",
+      "Address": "0x16939ef78684453bfDFb47825F8a5F714f12623a",
+      "Exchange": "0x9A18137ADCF7b05f033ad26968Ed5a9cf0Bf8E6b"
+    },
+    {
+      "Symbol": "YFI",
+      "Name": "YFI/USD",
+      "Address": "0x88f1A5ae2A3BF98AEAF342D26B30a79438c9142e",
+      "Exchange": "0xD7eAa5Bf3013A96e3d515c055Dbd98DbdC8c620D"
+    },
+    {
+      "Symbol": "YFII",
+      "Name": "YFII/USD",
+      "Address": "0x7F70642d88cf1C4a3a7abb072B53B929b653edA5",
+      "Exchange": "0xC94580FAaF145B2FD0ab5215031833c98D3B77E4"
+    },
+    {
+      "Symbol": "DFY",
+      "Name": "DFY/USD",
+      "Address": "0xd98560689c6e748dc37bc410b4d3096b1aa3d8c2",
+      "Exchange": "0xC20e4e681E86339240459Cd86511aB9f1192fbCE"
+    },
+    {
+      "Symbol": "ALPACA",
+      "Name": "ALPACA/USD",
+      "Address": "0x8f0528ce5ef7b51152a59745befdd91d97091d2f",
+      "Exchange": "0xe0073b60833249ffd1bb2af809112c2fbf221DF6"
+    }
+  ]
 }

@@ -1844,11 +1844,7 @@
           },
           "t_enum(AssetStatus)6793": {
             "label": "enum AssetEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_address,t_array(t_uint256)dyn_storage)": {
             "label": "mapping(address => uint256[])"
@@ -2204,19 +2200,11 @@
           },
           "t_enum(LoanDurationType)11975": {
             "label": "enum IPawnNFT.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)11980": {
             "label": "enum IPawnNFT.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(CollateralOfferList)12063_storage)": {
             "label": "mapping(uint256 => struct IPawnNFT.CollateralOfferList)"
@@ -2294,12 +2282,7 @@
           },
           "t_enum(OfferStatus)11985": {
             "label": "enum IPawnNFT.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(Contract)12172_storage)": {
             "label": "mapping(uint256 => struct IPawnNFT.Contract)"
@@ -2404,11 +2387,7 @@
           },
           "t_enum(ContractStatus)11989": {
             "label": "enum IPawnNFT.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -2466,20 +2445,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)11998": {
             "label": "enum IPawnNFT.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)11994": {
             "label": "enum IPawnNFT.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_bytes32,t_struct(RoleData)43_storage)": {
             "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
@@ -3271,19 +3241,11 @@
           },
           "t_enum(LoanDurationType)14918": {
             "label": "enum IPawnNFT.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)14923": {
             "label": "enum IPawnNFT.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(CollateralOfferList)15006_storage)": {
             "label": "mapping(uint256 => struct IPawnNFT.CollateralOfferList)"
@@ -3361,12 +3323,7 @@
           },
           "t_enum(OfferStatus)14928": {
             "label": "enum IPawnNFT.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(Contract)15115_storage)": {
             "label": "mapping(uint256 => struct IPawnNFT.Contract)"
@@ -3471,11 +3428,7 @@
           },
           "t_enum(ContractStatus)14932": {
             "label": "enum IPawnNFT.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -3533,20 +3486,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)14941": {
             "label": "enum IPawnNFT.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)14937": {
             "label": "enum IPawnNFT.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_contract(IReputation)22290": {
             "label": "contract IReputation"
@@ -4043,11 +3987,7 @@
           },
           "t_enum(AssetStatus)2582": {
             "label": "enum AssetEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_address,t_array(t_uint256)dyn_storage)": {
             "label": "mapping(address => uint256[])"
@@ -4397,19 +4337,11 @@
           },
           "t_enum(LoanDurationType)15549": {
             "label": "enum IPawnNFT.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)15554": {
             "label": "enum IPawnNFT.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(CollateralOfferList)15637_storage)": {
             "label": "mapping(uint256 => struct IPawnNFT.CollateralOfferList)"
@@ -4487,12 +4419,7 @@
           },
           "t_enum(OfferStatus)15559": {
             "label": "enum IPawnNFT.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(Contract)15746_storage)": {
             "label": "mapping(uint256 => struct IPawnNFT.Contract)"
@@ -4597,11 +4524,7 @@
           },
           "t_enum(ContractStatus)15563": {
             "label": "enum IPawnNFT.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -4659,20 +4582,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)15572": {
             "label": "enum IPawnNFT.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)15568": {
             "label": "enum IPawnNFT.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_contract(IReputation)22906": {
             "label": "contract IReputation"
@@ -5103,11 +5017,7 @@
           },
           "t_enum(AssetStatus)7403": {
             "label": "enum AssetEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_address,t_array(t_uint256)dyn_storage)": {
             "label": "mapping(address => uint256[])"
@@ -5561,19 +5471,11 @@
           },
           "t_enum(LoanDurationType)7819": {
             "label": "enum IPawnNFT.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)7824": {
             "label": "enum IPawnNFT.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(CollateralOfferList)7907_storage)": {
             "label": "mapping(uint256 => struct IPawnNFT.CollateralOfferList)"
@@ -5651,12 +5553,7 @@
           },
           "t_enum(OfferStatus)7829": {
             "label": "enum IPawnNFT.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(Contract)8016_storage)": {
             "label": "mapping(uint256 => struct IPawnNFT.Contract)"
@@ -5761,11 +5658,7 @@
           },
           "t_enum(ContractStatus)7833": {
             "label": "enum IPawnNFT.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -5823,20 +5716,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)7842": {
             "label": "enum IPawnNFT.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)7838": {
             "label": "enum IPawnNFT.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_contract(IReputation)18069": {
             "label": "contract IReputation"
@@ -6251,11 +6135,7 @@
           },
           "t_enum(ContractStatus)11151": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -6265,10 +6145,7 @@
           },
           "t_enum(LoanDurationType)11018": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)11232_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -6323,23 +6200,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)11209": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)11205": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)11147_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -6927,11 +6795,7 @@
           },
           "t_enum(ContractStatus)11341": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -6941,10 +6805,7 @@
           },
           "t_enum(LoanDurationType)11208": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)11422_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -6999,23 +6860,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)11399": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)11395": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)11337_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -7488,11 +7340,7 @@
           },
           "t_enum(ContractStatus)4523": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -7502,10 +7350,7 @@
           },
           "t_enum(LoanDurationType)4390": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4604_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -7560,23 +7405,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4581": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4577": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4519_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -7945,11 +7781,7 @@
           },
           "t_enum(ContractStatus)12757": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -7959,10 +7791,7 @@
           },
           "t_enum(LoanDurationType)12624": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)12838_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -8017,23 +7846,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)12815": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)12811": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)12753_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -8506,11 +8326,7 @@
           },
           "t_enum(ContractStatus)4270": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -8520,10 +8336,7 @@
           },
           "t_enum(LoanDurationType)4137": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4351_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -8578,23 +8391,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4328": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4324": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4266_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -8963,11 +8767,7 @@
           },
           "t_enum(ContractStatus)12757": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -8977,10 +8777,7 @@
           },
           "t_enum(LoanDurationType)12624": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)12838_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -9035,23 +8832,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)12815": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)12811": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)12753_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -9420,11 +9208,7 @@
           },
           "t_enum(ContractStatus)4270": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -9434,10 +9218,7 @@
           },
           "t_enum(LoanDurationType)4137": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4351_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -9492,23 +9273,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4328": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4324": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4266_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -9877,11 +9649,7 @@
           },
           "t_enum(ContractStatus)4270": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -9891,10 +9659,7 @@
           },
           "t_enum(LoanDurationType)4137": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4351_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -9949,23 +9714,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4328": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4324": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4266_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -10334,11 +10090,7 @@
           },
           "t_enum(ContractStatus)4270": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -10348,10 +10100,7 @@
           },
           "t_enum(LoanDurationType)4137": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4351_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -10406,23 +10155,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4328": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4324": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4266_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -10791,11 +10531,7 @@
           },
           "t_enum(ContractStatus)12757": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -10805,10 +10541,7 @@
           },
           "t_enum(LoanDurationType)12624": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)12838_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -10863,23 +10596,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)12815": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)12811": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)12753_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -12808,11 +12532,7 @@
           },
           "t_enum(ContractStatus)4573": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -12822,10 +12542,7 @@
           },
           "t_enum(LoanDurationType)4440": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4654_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -12880,23 +12597,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4631": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4627": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4569_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -13262,11 +12970,7 @@
           },
           "t_enum(ContractStatus)4573": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -13276,10 +12980,7 @@
           },
           "t_enum(LoanDurationType)4440": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4654_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -13334,23 +13035,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4631": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4627": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4569_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -13716,11 +13408,7 @@
           },
           "t_enum(ContractStatus)13177": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -13730,10 +13418,7 @@
           },
           "t_enum(LoanDurationType)13044": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)13258_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -13788,23 +13473,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)13235": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)13231": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)13173_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -14378,11 +14054,7 @@
           },
           "t_enum(ContractStatus)13204": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -14392,10 +14064,7 @@
           },
           "t_enum(LoanDurationType)13071": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)13285_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -14450,23 +14119,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)13262": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)13258": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)13200_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -14936,11 +14596,7 @@
           },
           "t_enum(ContractStatus)4705": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -14950,10 +14606,7 @@
           },
           "t_enum(LoanDurationType)4572": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4786_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -15008,23 +14661,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4763": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4759": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4701_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -15390,11 +15034,7 @@
           },
           "t_enum(ContractStatus)13192": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -15404,10 +15044,7 @@
           },
           "t_enum(LoanDurationType)13059": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)13273_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -15462,23 +15099,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)13250": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)13246": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)13188_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -15948,11 +15576,7 @@
           },
           "t_enum(ContractStatus)13342": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -15962,10 +15586,7 @@
           },
           "t_enum(LoanDurationType)13209": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)13423_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -16020,23 +15641,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)13400": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)13396": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)13338_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -16506,11 +16118,7 @@
           },
           "t_enum(ContractStatus)13397": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -16520,10 +16128,7 @@
           },
           "t_enum(LoanDurationType)13264": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)13478_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -16578,23 +16183,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)13455": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)13451": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)13393_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -17272,11 +16868,7 @@
           },
           "t_enum(ContractStatus)4902": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -17286,10 +16878,7 @@
           },
           "t_enum(LoanDurationType)4769": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4983_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -17344,23 +16933,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4960": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4956": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4898_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -17830,11 +17410,7 @@
           },
           "t_enum(ContractStatus)4904": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -17844,10 +17420,7 @@
           },
           "t_enum(LoanDurationType)4771": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4985_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -17902,23 +17475,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4962": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4958": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4900_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -18284,11 +17848,7 @@
           },
           "t_enum(ContractStatus)4904": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -18298,10 +17858,7 @@
           },
           "t_enum(LoanDurationType)4771": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4985_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -18356,23 +17913,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4962": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4958": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4900_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -18738,11 +18286,7 @@
           },
           "t_enum(ContractStatus)4904": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -18752,10 +18296,7 @@
           },
           "t_enum(LoanDurationType)4771": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4985_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -18810,23 +18351,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4962": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4958": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4900_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -19528,11 +19060,7 @@
           },
           "t_enum(ContractStatus)4904": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -19542,10 +19070,7 @@
           },
           "t_enum(LoanDurationType)4771": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4985_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -19600,23 +19125,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4962": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4958": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4900_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -19982,11 +19498,7 @@
           },
           "t_enum(ContractStatus)13381": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -19996,10 +19508,7 @@
           },
           "t_enum(LoanDurationType)13248": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)13462_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -20054,23 +19563,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)13439": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)13435": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)13377_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -20540,11 +20040,7 @@
           },
           "t_enum(ContractStatus)4894": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -20554,10 +20050,7 @@
           },
           "t_enum(LoanDurationType)4761": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4975_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -20612,23 +20105,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4952": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4948": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4890_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -20994,11 +20478,7 @@
           },
           "t_enum(ContractStatus)12976": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -21008,10 +20488,7 @@
           },
           "t_enum(LoanDurationType)12843": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)13057_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -21066,23 +20543,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)13034": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)13030": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)12972_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -21552,11 +21020,7 @@
           },
           "t_enum(ContractStatus)4442": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -21566,10 +21030,7 @@
           },
           "t_enum(LoanDurationType)4309": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4523_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -21624,23 +21085,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4500": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4496": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4438_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -22006,11 +21458,7 @@
           },
           "t_enum(ContractStatus)4437": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -22020,10 +21468,7 @@
           },
           "t_enum(LoanDurationType)4304": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4518_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -22078,23 +21523,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4495": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4491": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4433_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -22439,19 +21875,11 @@
           },
           "t_enum(LoanDurationType)8637": {
             "label": "enum IPawnNFT.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)8642": {
             "label": "enum IPawnNFT.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(CollateralOfferList)8725_storage)": {
             "label": "mapping(uint256 => struct IPawnNFT.CollateralOfferList)"
@@ -22529,12 +21957,7 @@
           },
           "t_enum(OfferStatus)8647": {
             "label": "enum IPawnNFT.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(Contract)8834_storage)": {
             "label": "mapping(uint256 => struct IPawnNFT.Contract)"
@@ -22639,11 +22062,7 @@
           },
           "t_enum(ContractStatus)8651": {
             "label": "enum IPawnNFT.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -22701,20 +22120,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)8660": {
             "label": "enum IPawnNFT.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)8656": {
             "label": "enum IPawnNFT.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_contract(IReputation)19240": {
             "label": "contract IReputation"
@@ -23025,11 +22435,7 @@
           },
           "t_enum(ContractStatus)12504": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -23039,10 +22445,7 @@
           },
           "t_enum(LoanDurationType)12371": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)12585_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -23097,23 +22500,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)12562": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)12558": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)12500_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -23479,11 +22873,7 @@
           },
           "t_enum(ContractStatus)12504": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -23493,10 +22883,7 @@
           },
           "t_enum(LoanDurationType)12371": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)12585_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -23551,23 +22938,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)12562": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)12558": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)12500_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -23933,11 +23311,7 @@
           },
           "t_enum(ContractStatus)4437": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -23947,10 +23321,7 @@
           },
           "t_enum(LoanDurationType)4304": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)4518_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -24005,23 +23376,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)4495": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)4491": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)4433_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -24387,11 +23749,7 @@
           },
           "t_enum(ContractStatus)20781": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -24401,10 +23759,7 @@
           },
           "t_enum(LoanDurationType)20648": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)20862_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -24459,23 +23814,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)20839": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)20835": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)20777_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -26716,19 +26062,11 @@
           },
           "t_enum(LoanDurationType)8637": {
             "label": "enum IPawnNFT.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)8642": {
             "label": "enum IPawnNFT.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(CollateralOfferList)8725_storage)": {
             "label": "mapping(uint256 => struct IPawnNFT.CollateralOfferList)"
@@ -26806,12 +26144,7 @@
           },
           "t_enum(OfferStatus)8647": {
             "label": "enum IPawnNFT.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(Contract)8834_storage)": {
             "label": "mapping(uint256 => struct IPawnNFT.Contract)"
@@ -26916,11 +26249,7 @@
           },
           "t_enum(ContractStatus)8651": {
             "label": "enum IPawnNFT.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -26978,20 +26307,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)8660": {
             "label": "enum IPawnNFT.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)8656": {
             "label": "enum IPawnNFT.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_contract(IReputation)19620": {
             "label": "contract IReputation"
@@ -30120,19 +29440,11 @@
           },
           "t_enum(CollectionStandard)15898": {
             "label": "enum IDFY_Hard_Evaluation.CollectionStandard",
-            "members": [
-              "NFT_721",
-              "NFT_1155"
-            ]
+            "members": ["NFT_721", "NFT_1155"]
           },
           "t_enum(AssetStatus)15887": {
             "label": "enum IDFY_Hard_Evaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTMENTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTMENTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15933_storage)": {
             "label": "mapping(uint256 => struct IDFY_Hard_Evaluation.Appointment)"
@@ -31006,19 +30318,11 @@
           },
           "t_enum(CollectionStandard)15577": {
             "label": "enum IDFY_Hard_Evaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15569": {
             "label": "enum IDFY_Hard_Evaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTMENTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTMENTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15610_storage)": {
             "label": "mapping(uint256 => struct IDFY_Hard_Evaluation.Appointment)"
@@ -32351,19 +31655,11 @@
           },
           "t_enum(CollectionStandard)5023": {
             "label": "enum IDFY_Hard_Evaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)5015": {
             "label": "enum IDFY_Hard_Evaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTMENTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTMENTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)5056_storage)": {
             "label": "mapping(uint256 => struct IDFY_Hard_Evaluation.Appointment)"
@@ -32722,19 +32018,11 @@
           },
           "t_enum(CollectionStandard)5056": {
             "label": "enum IDFY_Hard_Evaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)5048": {
             "label": "enum IDFY_Hard_Evaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTMENTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTMENTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)5089_storage)": {
             "label": "mapping(uint256 => struct IDFY_Hard_Evaluation.Appointment)"
@@ -33093,19 +32381,11 @@
           },
           "t_enum(CollectionStandard)5056": {
             "label": "enum IDFY_Hard_Evaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)5048": {
             "label": "enum IDFY_Hard_Evaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTMENTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTMENTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)5089_storage)": {
             "label": "mapping(uint256 => struct IDFY_Hard_Evaluation.Appointment)"
@@ -33464,19 +32744,11 @@
           },
           "t_enum(CollectionStandard)16483": {
             "label": "enum IDFY_Hard_Evaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)16475": {
             "label": "enum IDFY_Hard_Evaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTMENTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTMENTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)16516_storage)": {
             "label": "mapping(uint256 => struct IDFY_Hard_Evaluation.Appointment)"
@@ -34311,19 +33583,11 @@
           },
           "t_enum(LoanDurationType_NFT)19579": {
             "label": "enum LoanDurationType_NFT",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus_NFT)19584": {
             "label": "enum CollateralStatus_NFT",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19638_storage)": {
             "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
@@ -34401,12 +33665,7 @@
           },
           "t_enum(OfferStatus_NFT)19589": {
             "label": "enum OfferStatus_NFT",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(Contract_NFT)19711_storage)": {
             "label": "mapping(uint256 => struct Contract_NFT)"
@@ -34511,11 +33770,7 @@
           },
           "t_enum(ContractStatus_NFT)19593": {
             "label": "enum ContractStatus_NFT",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -34573,20 +33828,11 @@
           },
           "t_enum(PaymentRequestTypeEnum_NFT)19602": {
             "label": "enum PaymentRequestTypeEnum_NFT",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum_NFT)19598": {
             "label": "enum PaymentRequestStatusEnum_NFT",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
@@ -34782,19 +34028,11 @@
           },
           "t_enum(LoanDurationType_NFT)19579": {
             "label": "enum LoanDurationType_NFT",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus_NFT)19584": {
             "label": "enum CollateralStatus_NFT",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19638_storage)": {
             "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
@@ -34872,12 +34110,7 @@
           },
           "t_enum(OfferStatus_NFT)19589": {
             "label": "enum OfferStatus_NFT",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(Contract_NFT)19711_storage)": {
             "label": "mapping(uint256 => struct Contract_NFT)"
@@ -34982,11 +34215,7 @@
           },
           "t_enum(ContractStatus_NFT)19593": {
             "label": "enum ContractStatus_NFT",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -35044,20 +34273,11 @@
           },
           "t_enum(PaymentRequestTypeEnum_NFT)19602": {
             "label": "enum PaymentRequestTypeEnum_NFT",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum_NFT)19598": {
             "label": "enum PaymentRequestStatusEnum_NFT",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
@@ -35754,19 +34974,11 @@
           },
           "t_enum(LoanDurationType_NFT)9264": {
             "label": "enum LoanDurationType_NFT",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus_NFT)9269": {
             "label": "enum CollateralStatus_NFT",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)9326_storage)": {
             "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
@@ -35844,12 +35056,7 @@
           },
           "t_enum(OfferStatus_NFT)9274": {
             "label": "enum OfferStatus_NFT",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(Contract_NFT)9399_storage)": {
             "label": "mapping(uint256 => struct Contract_NFT)"
@@ -35954,11 +35161,7 @@
           },
           "t_enum(ContractStatus_NFT)9278": {
             "label": "enum ContractStatus_NFT",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -36016,20 +35219,11 @@
           },
           "t_enum(PaymentRequestTypeEnum_NFT)9287": {
             "label": "enum PaymentRequestTypeEnum_NFT",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum_NFT)9283": {
             "label": "enum PaymentRequestStatusEnum_NFT",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
@@ -36222,19 +35416,11 @@
           },
           "t_enum(LoanDurationType_NFT)19657": {
             "label": "enum LoanDurationType_NFT",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus_NFT)19662": {
             "label": "enum CollateralStatus_NFT",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19719_storage)": {
             "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
@@ -36312,12 +35498,7 @@
           },
           "t_enum(OfferStatus_NFT)19667": {
             "label": "enum OfferStatus_NFT",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(Contract_NFT)19792_storage)": {
             "label": "mapping(uint256 => struct Contract_NFT)"
@@ -36422,11 +35603,7 @@
           },
           "t_enum(ContractStatus_NFT)19671": {
             "label": "enum ContractStatus_NFT",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -36484,20 +35661,11 @@
           },
           "t_enum(PaymentRequestTypeEnum_NFT)19680": {
             "label": "enum PaymentRequestTypeEnum_NFT",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum_NFT)19676": {
             "label": "enum PaymentRequestStatusEnum_NFT",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
@@ -36708,19 +35876,11 @@
           },
           "t_enum(LoanDurationType_NFT)19657": {
             "label": "enum LoanDurationType_NFT",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus_NFT)19662": {
             "label": "enum CollateralStatus_NFT",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19719_storage)": {
             "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
@@ -36798,12 +35958,7 @@
           },
           "t_enum(OfferStatus_NFT)19667": {
             "label": "enum OfferStatus_NFT",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(Contract_NFT)19792_storage)": {
             "label": "mapping(uint256 => struct Contract_NFT)"
@@ -36908,11 +36063,7 @@
           },
           "t_enum(ContractStatus_NFT)19671": {
             "label": "enum ContractStatus_NFT",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -36970,20 +36121,11 @@
           },
           "t_enum(PaymentRequestTypeEnum_NFT)19680": {
             "label": "enum PaymentRequestTypeEnum_NFT",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum_NFT)19676": {
             "label": "enum PaymentRequestStatusEnum_NFT",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
@@ -37194,19 +36336,11 @@
           },
           "t_enum(LoanDurationType_NFT)9264": {
             "label": "enum LoanDurationType_NFT",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus_NFT)9269": {
             "label": "enum CollateralStatus_NFT",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)9326_storage)": {
             "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
@@ -37284,12 +36418,7 @@
           },
           "t_enum(OfferStatus_NFT)9274": {
             "label": "enum OfferStatus_NFT",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(Contract_NFT)9399_storage)": {
             "label": "mapping(uint256 => struct Contract_NFT)"
@@ -37394,11 +36523,7 @@
           },
           "t_enum(ContractStatus_NFT)9278": {
             "label": "enum ContractStatus_NFT",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -37456,20 +36581,11 @@
           },
           "t_enum(PaymentRequestTypeEnum_NFT)9287": {
             "label": "enum PaymentRequestTypeEnum_NFT",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum_NFT)9283": {
             "label": "enum PaymentRequestStatusEnum_NFT",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
@@ -37680,19 +36796,11 @@
           },
           "t_enum(LoanDurationType_NFT)9264": {
             "label": "enum LoanDurationType_NFT",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus_NFT)9269": {
             "label": "enum CollateralStatus_NFT",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)9326_storage)": {
             "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
@@ -37770,12 +36878,7 @@
           },
           "t_enum(OfferStatus_NFT)9274": {
             "label": "enum OfferStatus_NFT",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(Contract_NFT)9399_storage)": {
             "label": "mapping(uint256 => struct Contract_NFT)"
@@ -37880,11 +36983,7 @@
           },
           "t_enum(ContractStatus_NFT)9278": {
             "label": "enum ContractStatus_NFT",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -37942,20 +37041,11 @@
           },
           "t_enum(PaymentRequestTypeEnum_NFT)9287": {
             "label": "enum PaymentRequestTypeEnum_NFT",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum_NFT)9283": {
             "label": "enum PaymentRequestStatusEnum_NFT",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
@@ -38166,19 +37256,11 @@
           },
           "t_enum(LoanDurationType_NFT)19674": {
             "label": "enum LoanDurationType_NFT",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus_NFT)19679": {
             "label": "enum CollateralStatus_NFT",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19736_storage)": {
             "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
@@ -38256,12 +37338,7 @@
           },
           "t_enum(OfferStatus_NFT)19684": {
             "label": "enum OfferStatus_NFT",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(Contract_NFT)19809_storage)": {
             "label": "mapping(uint256 => struct Contract_NFT)"
@@ -38366,11 +37443,7 @@
           },
           "t_enum(ContractStatus_NFT)19688": {
             "label": "enum ContractStatus_NFT",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -38428,20 +37501,11 @@
           },
           "t_enum(PaymentRequestTypeEnum_NFT)19697": {
             "label": "enum PaymentRequestTypeEnum_NFT",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum_NFT)19693": {
             "label": "enum PaymentRequestStatusEnum_NFT",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
@@ -38655,19 +37719,11 @@
           },
           "t_enum(LoanDurationType_NFT)19645": {
             "label": "enum LoanDurationType_NFT",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus_NFT)19650": {
             "label": "enum CollateralStatus_NFT",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(CollateralOfferList_NFT)19707_storage)": {
             "label": "mapping(uint256 => struct CollateralOfferList_NFT)"
@@ -38745,12 +37801,7 @@
           },
           "t_enum(OfferStatus_NFT)19655": {
             "label": "enum OfferStatus_NFT",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(Contract_NFT)19780_storage)": {
             "label": "mapping(uint256 => struct Contract_NFT)"
@@ -38855,11 +37906,7 @@
           },
           "t_enum(ContractStatus_NFT)19659": {
             "label": "enum ContractStatus_NFT",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -38917,20 +37964,11 @@
           },
           "t_enum(PaymentRequestTypeEnum_NFT)19668": {
             "label": "enum PaymentRequestTypeEnum_NFT",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum_NFT)19664": {
             "label": "enum PaymentRequestStatusEnum_NFT",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
@@ -39406,19 +38444,11 @@
           },
           "t_enum(CollectionStandard)16520": {
             "label": "enum IDFY_Hard_Evaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)16512": {
             "label": "enum IDFY_Hard_Evaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTMENTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTMENTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)16553_storage)": {
             "label": "mapping(uint256 => struct IDFY_Hard_Evaluation.Appointment)"
@@ -39750,19 +38780,11 @@
           },
           "t_enum(CollectionStandard)16517": {
             "label": "enum IDFY_Hard_Evaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)16509": {
             "label": "enum IDFY_Hard_Evaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTMENTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTMENTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)16550_storage)": {
             "label": "mapping(uint256 => struct IDFY_Hard_Evaluation.Appointment)"
@@ -40095,19 +39117,11 @@
           },
           "t_enum(CollectionStandard)18553": {
             "label": "enum IDFY_Hard_Evaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)18545": {
             "label": "enum IDFY_Hard_Evaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTMENTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTMENTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)18586_storage)": {
             "label": "mapping(uint256 => struct IDFY_Hard_Evaluation.Appointment)"
@@ -41120,19 +40134,11 @@
           },
           "t_enum(CollectionStandard)15227": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15219": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTMENTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTMENTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15260_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -42708,19 +41714,11 @@
           },
           "t_enum(CollectionStandard)15326": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15318": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15359_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -43054,19 +42052,11 @@
           },
           "t_enum(LoanDurationType)15533": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)15538": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)15611_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -43144,12 +42134,7 @@
           },
           "t_enum(OfferStatus)15543": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTLoanContract)15684_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTLoanContract)"
@@ -43254,11 +42239,7 @@
           },
           "t_enum(ContractStatus)15547": {
             "label": "enum IEnums.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -43316,20 +42297,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)15556": {
             "label": "enum IEnums.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)15552": {
             "label": "enum IEnums.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
@@ -43551,19 +42523,11 @@
           },
           "t_enum(CollectionStandard)15316": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15308": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15353_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -44266,19 +43230,11 @@
           },
           "t_enum(LoanDurationType)15590": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)15595": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)15668_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -44356,12 +43312,7 @@
           },
           "t_enum(OfferStatus)15600": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTLoanContract)15741_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTLoanContract)"
@@ -44466,11 +43417,7 @@
           },
           "t_enum(ContractStatus)15604": {
             "label": "enum IEnums.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -44528,20 +43475,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)15613": {
             "label": "enum IEnums.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)15609": {
             "label": "enum IEnums.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -44757,19 +43695,11 @@
           },
           "t_enum(CollectionStandard)15454": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15446": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15491_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -45483,19 +44413,11 @@
           },
           "t_enum(CollectionStandard)15480": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15472": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15517_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -45812,19 +44734,11 @@
           },
           "t_enum(CollectionStandard)15476": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15468": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15513_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -46163,19 +45077,11 @@
           },
           "t_enum(CollectionStandard)15541": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15533": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15578_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -46520,19 +45426,11 @@
           },
           "t_enum(CollectionStandard)15543": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15535": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15580_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -46871,19 +45769,11 @@
           },
           "t_enum(CollectionStandard)15617": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15609": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15657_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -47200,19 +46090,11 @@
           },
           "t_enum(CollectionStandard)15559": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15551": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15599_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -47529,19 +46411,11 @@
           },
           "t_enum(CollectionStandard)4814": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)4806": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)4854_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -47858,19 +46732,11 @@
           },
           "t_enum(CollectionStandard)15553": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15545": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15593_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -48180,19 +47046,11 @@
           },
           "t_enum(LoanDurationType)4106": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)4111": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)4184_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -48270,12 +47128,7 @@
           },
           "t_enum(OfferStatus)4116": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -48459,19 +47312,11 @@
           },
           "t_enum(LoanDurationType)15780": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)15785": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)15858_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -48549,12 +47394,7 @@
           },
           "t_enum(OfferStatus)15790": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTLoanContract)15931_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTLoanContract)"
@@ -48659,11 +47499,7 @@
           },
           "t_enum(ContractStatus)15794": {
             "label": "enum IEnums.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -48721,20 +47557,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)15803": {
             "label": "enum IEnums.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)15799": {
             "label": "enum IEnums.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -49076,19 +47903,11 @@
           },
           "t_enum(LoanDurationType)15780": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)15785": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)15858_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -49166,12 +47985,7 @@
           },
           "t_enum(OfferStatus)15790": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -49355,19 +48169,11 @@
           },
           "t_enum(LoanDurationType)15780": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)15785": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)15858_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -49445,12 +48251,7 @@
           },
           "t_enum(OfferStatus)15790": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTLoanContract)15931_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTLoanContract)"
@@ -49555,11 +48356,7 @@
           },
           "t_enum(ContractStatus)15794": {
             "label": "enum IEnums.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -49617,20 +48414,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)15803": {
             "label": "enum IEnums.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)15799": {
             "label": "enum IEnums.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -49814,19 +48602,11 @@
           },
           "t_enum(LoanDurationType)15780": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)15785": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)15858_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -49904,12 +48684,7 @@
           },
           "t_enum(OfferStatus)15790": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTLoanContract)15931_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTLoanContract)"
@@ -50014,11 +48789,7 @@
           },
           "t_enum(ContractStatus)15794": {
             "label": "enum IEnums.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -50076,20 +48847,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)15803": {
             "label": "enum IEnums.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)15799": {
             "label": "enum IEnums.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -50273,19 +49035,11 @@
           },
           "t_enum(LoanDurationType)15780": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)15785": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)15858_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -50363,12 +49117,7 @@
           },
           "t_enum(OfferStatus)15790": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTLoanContract)15931_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTLoanContract)"
@@ -50473,11 +49222,7 @@
           },
           "t_enum(ContractStatus)15794": {
             "label": "enum IEnums.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -50535,20 +49280,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)15803": {
             "label": "enum IEnums.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)15799": {
             "label": "enum IEnums.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -50732,19 +49468,11 @@
           },
           "t_enum(LoanDurationType)15780": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)15785": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)15858_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -50822,12 +49550,7 @@
           },
           "t_enum(OfferStatus)15790": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTLoanContract)15931_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTLoanContract)"
@@ -50932,11 +49655,7 @@
           },
           "t_enum(ContractStatus)15794": {
             "label": "enum IEnums.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -50994,20 +49713,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)15803": {
             "label": "enum IEnums.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)15799": {
             "label": "enum IEnums.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -51191,19 +49901,11 @@
           },
           "t_enum(LoanDurationType)15780": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)15785": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)15858_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -51281,12 +49983,7 @@
           },
           "t_enum(OfferStatus)15790": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTLoanContract)15931_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTLoanContract)"
@@ -51391,11 +50088,7 @@
           },
           "t_enum(ContractStatus)15794": {
             "label": "enum IEnums.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -51453,20 +50146,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)15803": {
             "label": "enum IEnums.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)15799": {
             "label": "enum IEnums.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -51653,19 +50337,11 @@
           },
           "t_enum(LoanDurationType)15780": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)15785": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)15858_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -51743,12 +50419,7 @@
           },
           "t_enum(OfferStatus)15790": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -51932,19 +50603,11 @@
           },
           "t_enum(LoanDurationType)15780": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)15785": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)15858_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -52022,12 +50685,7 @@
           },
           "t_enum(OfferStatus)15790": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTLoanContract)15931_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTLoanContract)"
@@ -52132,11 +50790,7 @@
           },
           "t_enum(ContractStatus)15794": {
             "label": "enum IEnums.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -52194,20 +50848,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)15803": {
             "label": "enum IEnums.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)15799": {
             "label": "enum IEnums.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -52401,19 +51046,11 @@
           },
           "t_enum(CollectionStandard)15553": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15545": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15593_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -52730,19 +51367,11 @@
           },
           "t_enum(CollectionStandard)15553": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15545": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15593_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -53059,19 +51688,11 @@
           },
           "t_enum(CollectionStandard)15553": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15545": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15593_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -53388,19 +52009,11 @@
           },
           "t_enum(CollectionStandard)4814": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)4806": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)4854_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -53717,19 +52330,11 @@
           },
           "t_enum(CollectionStandard)4823": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)4815": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)4863_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -54046,19 +52651,11 @@
           },
           "t_enum(CollectionStandard)4823": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)4815": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)4863_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -54375,19 +52972,11 @@
           },
           "t_enum(CollectionStandard)15711": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15703": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15751_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -54704,19 +53293,11 @@
           },
           "t_enum(CollectionStandard)15717": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15709": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15757_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -55317,19 +53898,11 @@
           },
           "t_enum(LoanDurationType)15952": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)15957": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)16030_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -55407,12 +53980,7 @@
           },
           "t_enum(OfferStatus)15962": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -55596,19 +54164,11 @@
           },
           "t_enum(LoanDurationType)4114": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)4119": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)4192_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -55686,12 +54246,7 @@
           },
           "t_enum(OfferStatus)4124": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTLoanContract)4265_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTLoanContract)"
@@ -55796,11 +54351,7 @@
           },
           "t_enum(ContractStatus)4128": {
             "label": "enum IEnums.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -55858,20 +54409,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)4137": {
             "label": "enum IEnums.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)4133": {
             "label": "enum IEnums.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -56055,19 +54597,11 @@
           },
           "t_enum(LoanDurationType)15952": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)15957": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)16030_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -56145,12 +54679,7 @@
           },
           "t_enum(OfferStatus)15962": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTLoanContract)16103_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTLoanContract)"
@@ -56255,11 +54784,7 @@
           },
           "t_enum(ContractStatus)15966": {
             "label": "enum IEnums.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -56317,20 +54842,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)15975": {
             "label": "enum IEnums.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)15971": {
             "label": "enum IEnums.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -56616,11 +55132,7 @@
           },
           "t_enum(ContractStatus)20793": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -56630,10 +55142,7 @@
           },
           "t_enum(LoanDurationType)20660": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)20874_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -56688,23 +55197,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)20851": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)20847": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)20789_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -56978,19 +55478,11 @@
           },
           "t_enum(CollectionStandard)15717": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15709": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15757_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -57307,19 +55799,11 @@
           },
           "t_enum(CollectionStandard)4978": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)4970": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)5018_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -57636,19 +56120,11 @@
           },
           "t_enum(CollectionStandard)15687": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15679": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15727_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -57965,19 +56441,11 @@
           },
           "t_enum(CollectionStandard)15692": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15684": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15732_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -58294,19 +56762,11 @@
           },
           "t_enum(CollectionStandard)15692": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15684": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15732_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -58623,19 +57083,11 @@
           },
           "t_enum(CollectionStandard)15717": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)15709": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)15757_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -58952,19 +57404,11 @@
           },
           "t_enum(CollectionStandard)16779": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)16771": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)16819_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -59373,11 +57817,7 @@
           },
           "t_enum(ContractStatus)20790": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -59387,10 +57827,7 @@
           },
           "t_enum(LoanDurationType)20657": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)20871_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -59445,23 +57882,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)20848": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)20844": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)20786_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -59734,19 +58162,11 @@
           },
           "t_enum(LoanDurationType)16801": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)16806": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)16879_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -59824,12 +58244,7 @@
           },
           "t_enum(OfferStatus)16811": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_address,t_mapping(t_uint256,t_struct(NFTOriginalInformation)17040_storage))": {
             "label": "mapping(address => mapping(uint256 => struct IPawnNFTBase.NFTOriginalInformation))"
@@ -60064,19 +58479,11 @@
           },
           "t_enum(OfferStatus)17024": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_enum(LoanDurationType)17014": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_struct(NFTLoanContract)17165_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTLoanContract)"
@@ -60181,11 +58588,7 @@
           },
           "t_enum(ContractStatus)17028": {
             "label": "enum IEnums.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -60243,20 +58646,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)17037": {
             "label": "enum IEnums.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)17033": {
             "label": "enum IEnums.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -60449,19 +58843,11 @@
           },
           "t_enum(LoanDurationType)4673": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)4678": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)4751_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -60531,12 +58917,7 @@
           },
           "t_enum(OfferStatus)4683": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_address,t_mapping(t_uint256,t_struct(NFTOriginalInformation)4904_storage))": {
             "label": "mapping(address => mapping(uint256 => struct IPawnNFTBase.NFTOriginalInformation))"
@@ -60763,19 +59144,11 @@
           },
           "t_enum(OfferStatus)16826": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_enum(LoanDurationType)16816": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_struct(NFTLoanContract)16961_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTLoanContract)"
@@ -60876,11 +59249,7 @@
           },
           "t_enum(ContractStatus)16830": {
             "label": "enum IEnums.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -60938,20 +59307,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)16839": {
             "label": "enum IEnums.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)16835": {
             "label": "enum IEnums.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -61144,19 +59504,11 @@
           },
           "t_enum(LoanDurationType)16801": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)16806": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)16879_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -61226,12 +59578,7 @@
           },
           "t_enum(OfferStatus)16811": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_address,t_mapping(t_uint256,t_struct(NFTOriginalInformation)17032_storage))": {
             "label": "mapping(address => mapping(uint256 => struct IPawnNFTBase.NFTOriginalInformation))"
@@ -61452,19 +59799,11 @@
           },
           "t_enum(CollectionStandard)16566": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)16558": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)16606_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -61881,19 +60220,11 @@
           },
           "t_enum(CollectionStandard)16560": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)16552": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)16600_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -62210,19 +60541,11 @@
           },
           "t_enum(CollectionStandard)16583": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)16575": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)16623_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -63258,19 +61581,11 @@
           },
           "t_enum(CollectionStandard)16728": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)16720": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)16768_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -63593,19 +61908,11 @@
           },
           "t_enum(OfferStatus)16826": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_enum(LoanDurationType)16816": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_struct(NFTLoanContract)16961_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTLoanContract)"
@@ -63706,11 +62013,7 @@
           },
           "t_enum(ContractStatus)16830": {
             "label": "enum IEnums.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -63768,20 +62071,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)16839": {
             "label": "enum IEnums.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)16835": {
             "label": "enum IEnums.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -63975,19 +62269,11 @@
           },
           "t_enum(CollectionStandard)16574": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)16566": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)16614_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -64304,19 +62590,11 @@
           },
           "t_enum(CollectionStandard)16556": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)16548": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)16596_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -64633,19 +62911,11 @@
           },
           "t_enum(CollectionStandard)16562": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)16554": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)16602_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -65054,11 +63324,7 @@
           },
           "t_enum(ContractStatus)21631": {
             "label": "enum ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -65068,10 +63334,7 @@
           },
           "t_enum(LoanDurationType)21498": {
             "label": "enum LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_array(t_struct(PaymentRequest)21712_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct PaymentRequest[])"
@@ -65126,23 +63389,14 @@
           },
           "t_enum(PaymentRequestTypeEnum)21689": {
             "label": "enum PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_bool": {
             "label": "bool"
           },
           "t_enum(PaymentRequestStatusEnum)21685": {
             "label": "enum PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_mapping(t_uint256,t_struct(CollateralAsLoanRequestListStruct)21627_storage)": {
             "label": "mapping(uint256 => struct CollateralAsLoanRequestListStruct)"
@@ -65383,12 +63637,7 @@
           },
           "t_enum(VotingStatus)29913": {
             "label": "enum IVoting.VotingStatus",
-            "members": [
-              "OPEN",
-              "CANCELLED",
-              "QUEUE",
-              "COMPLETE"
-            ]
+            "members": ["OPEN", "CANCELLED", "QUEUE", "COMPLETE"]
           },
           "t_mapping(t_uint256,t_struct(Voting)29940_storage)": {
             "label": "mapping(uint256 => struct IVoting.Voting)"
@@ -65712,19 +63961,11 @@
           },
           "t_enum(LoanDurationType)16852": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)16857": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)16930_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -65794,12 +64035,7 @@
           },
           "t_enum(OfferStatus)16862": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_address,t_mapping(t_uint256,t_struct(NFTOriginalInformation)17083_storage))": {
             "label": "mapping(address => mapping(uint256 => struct IPawnNFTBase.NFTOriginalInformation))"
@@ -66026,19 +64262,11 @@
           },
           "t_enum(OfferStatus)16862": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_enum(LoanDurationType)16852": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_mapping(t_uint256,t_struct(NFTLoanContract)16997_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTLoanContract)"
@@ -66139,11 +64367,7 @@
           },
           "t_enum(ContractStatus)16866": {
             "label": "enum IEnums.ContractStatus",
-            "members": [
-              "ACTIVE",
-              "COMPLETED",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "COMPLETED", "DEFAULT"]
           },
           "t_uint8": {
             "label": "uint8"
@@ -66201,20 +64425,11 @@
           },
           "t_enum(PaymentRequestTypeEnum)16875": {
             "label": "enum IEnums.PaymentRequestTypeEnum",
-            "members": [
-              "INTEREST",
-              "OVERDUE",
-              "LOAN"
-            ]
+            "members": ["INTEREST", "OVERDUE", "LOAN"]
           },
           "t_enum(PaymentRequestStatusEnum)16871": {
             "label": "enum IEnums.PaymentRequestStatusEnum",
-            "members": [
-              "ACTIVE",
-              "LATE",
-              "COMPLETE",
-              "DEFAULT"
-            ]
+            "members": ["ACTIVE", "LATE", "COMPLETE", "DEFAULT"]
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
@@ -66408,19 +64623,11 @@
           },
           "t_enum(CollectionStandard)16639": {
             "label": "enum IDFYHardEvaluation.CollectionStandard",
-            "members": [
-              "NFT_HARD_721",
-              "NFT_HARD_1155"
-            ]
+            "members": ["NFT_HARD_721", "NFT_HARD_1155"]
           },
           "t_enum(AssetStatus)16631": {
             "label": "enum IDFYHardEvaluation.AssetStatus",
-            "members": [
-              "OPEN",
-              "APPOINTED",
-              "EVALUATED",
-              "NFT_CREATED"
-            ]
+            "members": ["OPEN", "APPOINTED", "EVALUATED", "NFT_CREATED"]
           },
           "t_mapping(t_uint256,t_struct(Appointment)16679_storage)": {
             "label": "mapping(uint256 => struct IDFYHardEvaluation.Appointment)"
@@ -66821,12 +65028,7 @@
           },
           "t_enum(VotingStatus)29964": {
             "label": "enum IVoting.VotingStatus",
-            "members": [
-              "OPEN",
-              "CANCELLED",
-              "QUEUE",
-              "COMPLETE"
-            ]
+            "members": ["OPEN", "CANCELLED", "QUEUE", "COMPLETE"]
           },
           "t_mapping(t_uint256,t_struct(Voting)29991_storage)": {
             "label": "mapping(uint256 => struct IVoting.Voting)"
@@ -67017,12 +65219,7 @@
           },
           "t_enum(VotingStatus)29964": {
             "label": "enum IVoting.VotingStatus",
-            "members": [
-              "OPEN",
-              "CANCELLED",
-              "QUEUE",
-              "COMPLETE"
-            ]
+            "members": ["OPEN", "CANCELLED", "QUEUE", "COMPLETE"]
           },
           "t_mapping(t_uint256,t_struct(Voting)29991_storage)": {
             "label": "mapping(uint256 => struct IVoting.Voting)"
@@ -67213,13 +65410,7 @@
           },
           "t_enum(VotingStatus)3781": {
             "label": "enum IVoting.VotingStatus",
-            "members": [
-              "OPEN",
-              "CANCELLED",
-              "QUEUE",
-              "COMPLETE",
-              "FALSE"
-            ]
+            "members": ["OPEN", "CANCELLED", "QUEUE", "COMPLETE", "FALSE"]
           },
           "t_mapping(t_uint256,t_struct(Voting)3808_storage)": {
             "label": "mapping(uint256 => struct IVoting.Voting)"
@@ -67410,13 +65601,7 @@
           },
           "t_enum(VotingStatus)6481": {
             "label": "enum IVoting.VotingStatus",
-            "members": [
-              "OPEN",
-              "CANCELLED",
-              "QUEUE",
-              "COMPLETE",
-              "FALSE"
-            ]
+            "members": ["OPEN", "CANCELLED", "QUEUE", "COMPLETE", "FALSE"]
           },
           "t_mapping(t_uint256,t_struct(Voting)6508_storage)": {
             "label": "mapping(uint256 => struct IVoting.Voting)"
@@ -67607,13 +65792,7 @@
           },
           "t_enum(VotingStatus)29972": {
             "label": "enum IVoting.VotingStatus",
-            "members": [
-              "OPEN",
-              "CANCELLED",
-              "QUEUE",
-              "COMPLETE",
-              "FALSE"
-            ]
+            "members": ["OPEN", "CANCELLED", "QUEUE", "COMPLETE", "FALSE"]
           },
           "t_mapping(t_uint256,t_struct(Voting)29999_storage)": {
             "label": "mapping(uint256 => struct IVoting.Voting)"
@@ -67804,13 +65983,7 @@
           },
           "t_enum(VotingStatus)29972": {
             "label": "enum IVoting.VotingStatus",
-            "members": [
-              "OPEN",
-              "CANCELLED",
-              "QUEUE",
-              "COMPLETE",
-              "FALSE"
-            ]
+            "members": ["OPEN", "CANCELLED", "QUEUE", "COMPLETE", "FALSE"]
           },
           "t_mapping(t_uint256,t_struct(Voting)29999_storage)": {
             "label": "mapping(uint256 => struct IVoting.Voting)"
@@ -68001,13 +66174,7 @@
           },
           "t_enum(VotingStatus)29972": {
             "label": "enum IVoting.VotingStatus",
-            "members": [
-              "OPEN",
-              "CANCELLED",
-              "QUEUE",
-              "COMPLETE",
-              "FALSE"
-            ]
+            "members": ["OPEN", "CANCELLED", "QUEUE", "COMPLETE", "FALSE"]
           },
           "t_mapping(t_uint256,t_struct(Voting)29999_storage)": {
             "label": "mapping(uint256 => struct IVoting.Voting)"
@@ -68198,13 +66365,7 @@
           },
           "t_enum(VotingStatus)6492": {
             "label": "enum IVoting.VotingStatus",
-            "members": [
-              "OPEN",
-              "CANCELLED",
-              "QUEUE",
-              "COMPLETE",
-              "FALSE"
-            ]
+            "members": ["OPEN", "CANCELLED", "QUEUE", "COMPLETE", "FALSE"]
           },
           "t_mapping(t_uint256,t_struct(Voting)6519_storage)": {
             "label": "mapping(uint256 => struct IVoting.Voting)"
@@ -68395,13 +66556,7 @@
           },
           "t_enum(VotingStatus)6481": {
             "label": "enum IVoting.VotingStatus",
-            "members": [
-              "OPEN",
-              "CANCELLED",
-              "QUEUE",
-              "COMPLETE",
-              "FALSE"
-            ]
+            "members": ["OPEN", "CANCELLED", "QUEUE", "COMPLETE", "FALSE"]
           },
           "t_mapping(t_uint256,t_struct(Voting)6508_storage)": {
             "label": "mapping(uint256 => struct IVoting.Voting)"
@@ -68613,19 +66768,11 @@
           },
           "t_enum(LoanDurationType)4693": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)4698": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)4771_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -68695,12 +66842,7 @@
           },
           "t_enum(OfferStatus)4703": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_address,t_mapping(t_uint256,t_struct(NFTOriginalInformation)4924_storage))": {
             "label": "mapping(address => mapping(uint256 => struct IPawnNFTBase.NFTOriginalInformation))"
@@ -68920,19 +67062,11 @@
           },
           "t_enum(LoanDurationType)16937": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)16942": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)17015_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -69002,12 +67136,7 @@
           },
           "t_enum(OfferStatus)16947": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_address,t_mapping(t_uint256,t_struct(NFTOriginalInformation)17168_storage))": {
             "label": "mapping(address => mapping(uint256 => struct IPawnNFTBase.NFTOriginalInformation))"
@@ -69227,19 +67356,11 @@
           },
           "t_enum(LoanDurationType)16937": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)16942": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)17015_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -69309,12 +67430,7 @@
           },
           "t_enum(OfferStatus)16947": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_address,t_mapping(t_uint256,t_struct(NFTOriginalInformation)17168_storage))": {
             "label": "mapping(address => mapping(uint256 => struct IPawnNFTBase.NFTOriginalInformation))"
@@ -69534,19 +67650,11 @@
           },
           "t_enum(LoanDurationType)16937": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)16942": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)17015_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -69616,12 +67724,7 @@
           },
           "t_enum(OfferStatus)16947": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_address,t_mapping(t_uint256,t_struct(NFTOriginalInformation)17168_storage))": {
             "label": "mapping(address => mapping(uint256 => struct IPawnNFTBase.NFTOriginalInformation))"
@@ -69820,13 +67923,7 @@
           },
           "t_enum(VotingStatus)6481": {
             "label": "enum IVoting.VotingStatus",
-            "members": [
-              "OPEN",
-              "CANCELLED",
-              "QUEUE",
-              "COMPLETE",
-              "FALSE"
-            ]
+            "members": ["OPEN", "CANCELLED", "QUEUE", "COMPLETE", "FALSE"]
           },
           "t_mapping(t_uint256,t_struct(Voting)6508_storage)": {
             "label": "mapping(uint256 => struct IVoting.Voting)"
@@ -70017,13 +68114,7 @@
           },
           "t_enum(VotingStatus)30032": {
             "label": "enum IVoting.VotingStatus",
-            "members": [
-              "OPEN",
-              "CANCELLED",
-              "QUEUE",
-              "COMPLETE",
-              "FALSE"
-            ]
+            "members": ["OPEN", "CANCELLED", "QUEUE", "COMPLETE", "FALSE"]
           },
           "t_mapping(t_uint256,t_struct(Voting)30059_storage)": {
             "label": "mapping(uint256 => struct IVoting.Voting)"
@@ -70214,13 +68305,7 @@
           },
           "t_enum(VotingStatus)30032": {
             "label": "enum IVoting.VotingStatus",
-            "members": [
-              "OPEN",
-              "CANCELLED",
-              "QUEUE",
-              "COMPLETE",
-              "FALSE"
-            ]
+            "members": ["OPEN", "CANCELLED", "QUEUE", "COMPLETE", "FALSE"]
           },
           "t_mapping(t_uint256,t_struct(Voting)30059_storage)": {
             "label": "mapping(uint256 => struct IVoting.Voting)"
@@ -70432,19 +68517,11 @@
           },
           "t_enum(LoanDurationType)16858": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)16863": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)16936_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -70514,12 +68591,7 @@
           },
           "t_enum(OfferStatus)16868": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_address,t_mapping(t_uint256,t_struct(NFTOriginalInformation)17089_storage))": {
             "label": "mapping(address => mapping(uint256 => struct IPawnNFTBase.NFTOriginalInformation))"
@@ -70739,19 +68811,11 @@
           },
           "t_enum(LoanDurationType)16858": {
             "label": "enum IEnums.LoanDurationType",
-            "members": [
-              "WEEK",
-              "MONTH"
-            ]
+            "members": ["WEEK", "MONTH"]
           },
           "t_enum(CollateralStatus)16863": {
             "label": "enum IEnums.CollateralStatus",
-            "members": [
-              "OPEN",
-              "DOING",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["OPEN", "DOING", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_uint256,t_struct(NFTCollateralOfferList)16936_storage)": {
             "label": "mapping(uint256 => struct IPawnNFTBase.NFTCollateralOfferList)"
@@ -70821,12 +68885,7 @@
           },
           "t_enum(OfferStatus)16868": {
             "label": "enum IEnums.OfferStatus",
-            "members": [
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCEL"
-            ]
+            "members": ["PENDING", "ACCEPTED", "COMPLETED", "CANCEL"]
           },
           "t_mapping(t_address,t_mapping(t_uint256,t_struct(NFTOriginalInformation)17089_storage))": {
             "label": "mapping(address => mapping(uint256 => struct IPawnNFTBase.NFTOriginalInformation))"
@@ -71025,13 +69084,7 @@
           },
           "t_enum(VotingStatus)30032": {
             "label": "enum IVoting.VotingStatus",
-            "members": [
-              "OPEN",
-              "CANCELLED",
-              "QUEUE",
-              "COMPLETE",
-              "FALSE"
-            ]
+            "members": ["OPEN", "CANCELLED", "QUEUE", "COMPLETE", "FALSE"]
           },
           "t_mapping(t_uint256,t_struct(Voting)30059_storage)": {
             "label": "mapping(uint256 => struct IVoting.Voting)"
