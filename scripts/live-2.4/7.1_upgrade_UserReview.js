@@ -7,8 +7,8 @@ const { Proxies } = require('./.deployment_data_live.json');
 const proxies = Proxies.Live;
 
 const ReviewProxyAddr     = proxies.USERREVIEW_CONTRACT_ADDRESS;
-const ReviewBuildNameV1   = "contracts/pawn/reputation/UserReview.sol:UserReview";
-const ReviewBuildNameV2   = "contracts/pawn/reputation/UserReview.sol:UserReview";
+const ReviewBuildNameV1   = "contracts/pawn/reputation/old/UserReview.sol:UserReview";
+const ReviewBuildNameV2   = "contracts/pawn/reputation/old/UserReview.sol:UserReview";
 
 const decimals          = 10**18;
 
@@ -45,7 +45,7 @@ async function main() {
 }
 
 main()
-    .then(() => process.exit(0))
+    .then(() => {})
     .catch((error) => {
         console.error(error);
         process.exit(1);

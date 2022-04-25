@@ -7,8 +7,8 @@ const { Proxies } = require('./.deployment_data.json');
 const proxies = Proxies.Staging;
 
 const ReviewProxyAddr     = proxies.USERREVIEW_CONTRACT_ADDRESS;
-const ReviewBuildNameV1   = "contracts/pawn/reputation/UserReview.sol:UserReview";
-const ReviewBuildNameV2   = "contracts/pawn/reputation/UserReview.sol:UserReview";
+const ReviewBuildNameV1   = "contracts/pawn/reputation/old/UserReview.sol:UserReview";
+const ReviewBuildNameV2   = "contracts/pawn/reputation/old/UserReview.sol:UserReview";
 
 const decimals          = 10**18;
 
